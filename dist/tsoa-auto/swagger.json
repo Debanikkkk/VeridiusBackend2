@@ -1,0 +1,1703 @@
+{
+    "openapi": "3.0.0",
+    "components": {
+        "examples": {},
+        "headers": {},
+        "parameters": {},
+        "requestBodies": {},
+        "responses": {},
+        "schemas": {
+            "ResContent": {
+                "properties": {
+                    "id": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "content": {
+                        "type": "string"
+                    },
+                    "contentImg": {
+                        "type": "string"
+                    },
+                    "order": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "contentTitle": {
+                        "type": "string"
+                    },
+                    "subcontent": {
+                        "items": {
+                            "$ref": "#/components/schemas/ResSubContent"
+                        },
+                        "type": "array"
+                    },
+                    "blog": {
+                        "items": {
+                            "$ref": "#/components/schemas/ResBlog"
+                        },
+                        "type": "array"
+                    }
+                },
+                "type": "object",
+                "additionalProperties": false
+            },
+            "Blog": {
+                "properties": {
+                    "id": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "blog_title": {
+                        "type": "string"
+                    },
+                    "blog_description": {
+                        "type": "string"
+                    },
+                    "blog_thumbnail": {
+                        "type": "string"
+                    },
+                    "blog_subtitle": {
+                        "type": "string"
+                    },
+                    "blog_author": {
+                        "type": "string"
+                    },
+                    "status": {
+                        "type": "boolean"
+                    },
+                    "post_time": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "tags": {
+                        "items": {
+                            "$ref": "#/components/schemas/Tag"
+                        },
+                        "type": "array"
+                    },
+                    "contents": {
+                        "items": {
+                            "$ref": "#/components/schemas/Content"
+                        },
+                        "type": "array"
+                    },
+                    "comments": {
+                        "items": {
+                            "$ref": "#/components/schemas/Comments"
+                        },
+                        "type": "array"
+                    }
+                },
+                "type": "object",
+                "additionalProperties": false
+            },
+            "Tag": {
+                "properties": {
+                    "id": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "blogs": {
+                        "items": {
+                            "$ref": "#/components/schemas/Blog"
+                        },
+                        "type": "array"
+                    }
+                },
+                "type": "object",
+                "additionalProperties": false
+            },
+            "Content": {
+                "properties": {
+                    "id": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "title": {
+                        "type": "string"
+                    },
+                    "content": {
+                        "type": "string"
+                    },
+                    "content_img": {
+                        "type": "string"
+                    },
+                    "order": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "blogs": {
+                        "items": {
+                            "$ref": "#/components/schemas/Blog"
+                        },
+                        "type": "array"
+                    },
+                    "sub_contents": {
+                        "items": {
+                            "$ref": "#/components/schemas/SubContent"
+                        },
+                        "type": "array"
+                    }
+                },
+                "type": "object",
+                "additionalProperties": false
+            },
+            "Comments": {
+                "properties": {
+                    "id": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "comment_body": {
+                        "type": "string"
+                    },
+                    "author": {
+                        "type": "string"
+                    },
+                    "status": {
+                        "type": "boolean"
+                    },
+                    "post_time": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "blog": {
+                        "$ref": "#/components/schemas/Blog"
+                    }
+                },
+                "type": "object",
+                "additionalProperties": false
+            },
+            "SubContent": {
+                "properties": {
+                    "id": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "title": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "content": {
+                        "$ref": "#/components/schemas/Content"
+                    }
+                },
+                "type": "object",
+                "additionalProperties": false
+            },
+            "ResSubContent": {
+                "properties": {
+                    "id": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "subContentTitle": {
+                        "type": "string"
+                    },
+                    "content": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/components/schemas/ResContent"
+                            },
+                            {
+                                "$ref": "#/components/schemas/Content"
+                            }
+                        ]
+                    },
+                    "subContentDescription": {
+                        "type": "string"
+                    }
+                },
+                "type": "object",
+                "additionalProperties": false
+            },
+            "ResBlog": {
+                "properties": {
+                    "id": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "blogSubtitle": {
+                        "type": "string"
+                    },
+                    "blogTitle": {
+                        "type": "string"
+                    },
+                    "date": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "blogDescription": {
+                        "type": "string"
+                    },
+                    "content": {
+                        "items": {
+                            "$ref": "#/components/schemas/ResContent"
+                        },
+                        "type": "array"
+                    },
+                    "tags": {
+                        "items": {
+                            "$ref": "#/components/schemas/ResTag"
+                        },
+                        "type": "array"
+                    },
+                    "blogThumbnail": {
+                        "type": "string"
+                    },
+                    "status": {
+                        "type": "boolean"
+                    },
+                    "blogAuthor": {
+                        "type": "string"
+                    }
+                },
+                "type": "object",
+                "additionalProperties": false
+            },
+            "ResTag": {
+                "properties": {
+                    "id": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "blogs": {
+                        "anyOf": [
+                            {
+                                "items": {
+                                    "$ref": "#/components/schemas/ResBlog"
+                                },
+                                "type": "array"
+                            },
+                            {
+                                "items": {
+                                    "$ref": "#/components/schemas/Blog"
+                                },
+                                "type": "array"
+                            }
+                        ]
+                    }
+                },
+                "type": "object",
+                "additionalProperties": false
+            },
+            "ResTagN": {
+                "properties": {
+                    "id": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "blogs": {
+                        "$ref": "#/components/schemas/ResBlog"
+                    }
+                },
+                "type": "object",
+                "additionalProperties": false
+            },
+            "ReqTag": {
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    }
+                },
+                "type": "object",
+                "additionalProperties": false
+            },
+            "ResError": {
+                "properties": {
+                    "error": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "error"
+                ],
+                "type": "object",
+                "additionalProperties": false
+            },
+            "ResSuccess": {
+                "properties": {
+                    "result": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "result"
+                ],
+                "type": "object",
+                "additionalProperties": false
+            },
+            "ReqSubContent": {
+                "properties": {
+                    "subContentTitle": {
+                        "type": "string"
+                    },
+                    "subContentDescription": {
+                        "type": "string"
+                    }
+                },
+                "type": "object",
+                "additionalProperties": false
+            },
+            "ResComments": {
+                "properties": {
+                    "id": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "author": {
+                        "type": "string"
+                    },
+                    "commentBody": {
+                        "type": "string"
+                    },
+                    "postTime": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "status": {
+                        "type": "boolean"
+                    },
+                    "blog": {
+                        "$ref": "#/components/schemas/ResBlog"
+                    }
+                },
+                "type": "object",
+                "additionalProperties": false
+            },
+            "ReqComments": {
+                "properties": {
+                    "author": {
+                        "type": "string"
+                    },
+                    "commentBody": {
+                        "type": "string"
+                    },
+                    "status": {
+                        "type": "boolean"
+                    }
+                },
+                "type": "object",
+                "additionalProperties": false
+            },
+            "ReqCommentU": {
+                "properties": {
+                    "status": {
+                        "type": "boolean"
+                    }
+                },
+                "type": "object",
+                "additionalProperties": false
+            },
+            "ReqBlogStatus": {
+                "properties": {
+                    "status": {
+                        "type": "boolean"
+                    }
+                },
+                "type": "object",
+                "additionalProperties": false
+            },
+            "ReqAdminLogin": {
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "password": {
+                        "type": "string"
+                    }
+                },
+                "type": "object",
+                "additionalProperties": false
+            }
+        },
+        "securitySchemes": {
+            "Api-Token": {
+                "type": "apiKey",
+                "name": "x-api-key",
+                "in": "header"
+            }
+        }
+    },
+    "info": {
+        "title": "PestControlAPIs",
+        "version": "0.0.1",
+        "description": "PestControlAPI_Server",
+        "contact": {}
+    },
+    "paths": {
+        "/blog/{blogId}/tags": {
+            "post": {
+                "operationId": "SaveTagsIntoBlog",
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ResTagN"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Tags"
+                ],
+                "security": [],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "blogId",
+                        "required": true,
+                        "schema": {
+                            "format": "double",
+                            "type": "number"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ReqTag"
+                            }
+                        }
+                    }
+                }
+            },
+            "get": {
+                "operationId": "GetAllTagForOneBlog",
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "items": {
+                                        "$ref": "#/components/schemas/Tag"
+                                    },
+                                    "type": "array"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Tags"
+                ],
+                "security": [],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "blogId",
+                        "required": true,
+                        "schema": {
+                            "format": "double",
+                            "type": "number"
+                        }
+                    }
+                ]
+            }
+        },
+        "/blog/{blogId}/tags/{tagId}": {
+            "get": {
+                "operationId": "GetOneTag",
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "anyOf": [
+                                        {
+                                            "$ref": "#/components/schemas/ResTag"
+                                        },
+                                        {
+                                            "$ref": "#/components/schemas/ResError"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Tags"
+                ],
+                "security": [],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "tagId",
+                        "required": true,
+                        "schema": {
+                            "format": "double",
+                            "type": "number"
+                        }
+                    }
+                ]
+            },
+            "delete": {
+                "operationId": "DeleteTag",
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ResSuccess"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Tags"
+                ],
+                "security": [],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "tagId",
+                        "required": true,
+                        "schema": {
+                            "format": "double",
+                            "type": "number"
+                        }
+                    },
+                    {
+                        "in": "path",
+                        "name": "blogId",
+                        "required": true,
+                        "schema": {
+                            "format": "double",
+                            "type": "number"
+                        }
+                    }
+                ]
+            }
+        },
+        "/blog/{blogId}/content/{contentId}/subContent": {
+            "post": {
+                "operationId": "SaveSubContent",
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ResSubContent"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "SubContent"
+                ],
+                "security": [],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "blogId",
+                        "required": true,
+                        "schema": {
+                            "format": "double",
+                            "type": "number"
+                        }
+                    },
+                    {
+                        "in": "path",
+                        "name": "contentId",
+                        "required": true,
+                        "schema": {
+                            "format": "double",
+                            "type": "number"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ReqSubContent"
+                            }
+                        }
+                    }
+                }
+            },
+            "get": {
+                "operationId": "GetAllSubContent",
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "items": {
+                                        "$ref": "#/components/schemas/ResSubContent"
+                                    },
+                                    "type": "array"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "SubContent"
+                ],
+                "security": [],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "contentId",
+                        "required": true,
+                        "schema": {
+                            "format": "double",
+                            "type": "number"
+                        }
+                    },
+                    {
+                        "in": "path",
+                        "name": "blogId",
+                        "required": true,
+                        "schema": {
+                            "format": "double",
+                            "type": "number"
+                        }
+                    }
+                ]
+            }
+        },
+        "/blog/{blogId}/content/{contentId}/subContent/{subContentId}": {
+            "get": {
+                "operationId": "GetOneSubContent",
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "anyOf": [
+                                        {
+                                            "$ref": "#/components/schemas/ResSubContent"
+                                        },
+                                        {
+                                            "$ref": "#/components/schemas/ResError"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "SubContent"
+                ],
+                "security": [],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "contentId",
+                        "required": true,
+                        "schema": {
+                            "format": "double",
+                            "type": "number"
+                        }
+                    },
+                    {
+                        "in": "path",
+                        "name": "blogId",
+                        "required": true,
+                        "schema": {
+                            "format": "double",
+                            "type": "number"
+                        }
+                    },
+                    {
+                        "in": "path",
+                        "name": "subContentId",
+                        "required": true,
+                        "schema": {
+                            "format": "double",
+                            "type": "number"
+                        }
+                    }
+                ]
+            },
+            "delete": {
+                "operationId": "DeleteSubContent",
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ResSuccess"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "SubContent"
+                ],
+                "security": [],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "contentId",
+                        "required": true,
+                        "schema": {
+                            "format": "double",
+                            "type": "number"
+                        }
+                    },
+                    {
+                        "in": "path",
+                        "name": "blogId",
+                        "required": true,
+                        "schema": {
+                            "format": "double",
+                            "type": "number"
+                        }
+                    },
+                    {
+                        "in": "path",
+                        "name": "subContentId",
+                        "required": true,
+                        "schema": {
+                            "format": "double",
+                            "type": "number"
+                        }
+                    }
+                ]
+            },
+            "put": {
+                "operationId": "UpdateSubContentOfContent",
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ResSubContent"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "SubContent"
+                ],
+                "security": [],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "contentId",
+                        "required": true,
+                        "schema": {
+                            "format": "double",
+                            "type": "number"
+                        }
+                    },
+                    {
+                        "in": "path",
+                        "name": "blogId",
+                        "required": true,
+                        "schema": {
+                            "format": "double",
+                            "type": "number"
+                        }
+                    },
+                    {
+                        "in": "path",
+                        "name": "subContentId",
+                        "required": true,
+                        "schema": {
+                            "format": "double",
+                            "type": "number"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ReqSubContent"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/regex": {
+            "get": {
+                "operationId": "RegexSearch",
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "items": {
+                                        "$ref": "#/components/schemas/Blog"
+                                    },
+                                    "type": "array"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Regex"
+                ],
+                "security": [],
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "searchItem",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ]
+            }
+        },
+        "/blog/{blogId}/content": {
+            "post": {
+                "operationId": "SaveContent",
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "anyOf": [
+                                        {
+                                            "$ref": "#/components/schemas/ResContent"
+                                        },
+                                        {
+                                            "$ref": "#/components/schemas/ResError"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Content"
+                ],
+                "security": [],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "blogId",
+                        "required": true,
+                        "schema": {
+                            "format": "double",
+                            "type": "number"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "content": {
+                                        "type": "string"
+                                    },
+                                    "order": {
+                                        "type": "string"
+                                    },
+                                    "contentTitle": {
+                                        "type": "string"
+                                    },
+                                    "file": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                },
+                                "required": [
+                                    "content",
+                                    "order",
+                                    "contentTitle"
+                                ]
+                            }
+                        }
+                    }
+                }
+            },
+            "get": {
+                "operationId": "GetAllContentOfOneBlog",
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "items": {
+                                        "$ref": "#/components/schemas/ResContent"
+                                    },
+                                    "type": "array"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Content"
+                ],
+                "security": [],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "blogId",
+                        "required": true,
+                        "schema": {
+                            "format": "double",
+                            "type": "number"
+                        }
+                    }
+                ]
+            }
+        },
+        "/blog/{blogId}/content/{contentId}": {
+            "delete": {
+                "operationId": "DeleteContent",
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ResSuccess"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Content"
+                ],
+                "security": [],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "blogId",
+                        "required": true,
+                        "schema": {
+                            "format": "double",
+                            "type": "number"
+                        }
+                    },
+                    {
+                        "in": "path",
+                        "name": "contentId",
+                        "required": true,
+                        "schema": {
+                            "format": "double",
+                            "type": "number"
+                        }
+                    }
+                ]
+            },
+            "get": {
+                "operationId": "GetOneContent",
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "anyOf": [
+                                        {
+                                            "$ref": "#/components/schemas/ResContent"
+                                        },
+                                        {
+                                            "$ref": "#/components/schemas/ResError"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Content"
+                ],
+                "security": [],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "blogId",
+                        "required": true,
+                        "schema": {
+                            "format": "double",
+                            "type": "number"
+                        }
+                    },
+                    {
+                        "in": "path",
+                        "name": "contentId",
+                        "required": true,
+                        "schema": {
+                            "format": "double",
+                            "type": "number"
+                        }
+                    }
+                ]
+            },
+            "put": {
+                "operationId": "UpdateContent",
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ResContent"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Content"
+                ],
+                "security": [],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "blogId",
+                        "required": true,
+                        "schema": {
+                            "format": "double",
+                            "type": "number"
+                        }
+                    },
+                    {
+                        "in": "path",
+                        "name": "contentId",
+                        "required": true,
+                        "schema": {
+                            "format": "double",
+                            "type": "number"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "content": {
+                                        "type": "string"
+                                    },
+                                    "order": {
+                                        "type": "string"
+                                    },
+                                    "title": {
+                                        "type": "string"
+                                    },
+                                    "file": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                },
+                                "required": [
+                                    "content",
+                                    "order",
+                                    "title"
+                                ]
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/blog/{blogId}/comment": {
+            "post": {
+                "operationId": "SaveComment",
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ResComments"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Comments"
+                ],
+                "security": [],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "blogId",
+                        "required": true,
+                        "schema": {
+                            "format": "double",
+                            "type": "number"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ReqComments"
+                            }
+                        }
+                    }
+                }
+            },
+            "get": {
+                "operationId": "GetAllComment",
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "items": {
+                                        "$ref": "#/components/schemas/ResComments"
+                                    },
+                                    "type": "array"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Comments"
+                ],
+                "security": [],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "blogId",
+                        "required": true,
+                        "schema": {
+                            "format": "double",
+                            "type": "number"
+                        }
+                    }
+                ]
+            }
+        },
+        "/blog/{blogId}/comment/{commentId}": {
+            "delete": {
+                "operationId": "DeleteComment",
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ResSuccess"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Comments"
+                ],
+                "security": [],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "blogId",
+                        "required": true,
+                        "schema": {
+                            "format": "double",
+                            "type": "number"
+                        }
+                    },
+                    {
+                        "in": "path",
+                        "name": "commentId",
+                        "required": true,
+                        "schema": {
+                            "format": "double",
+                            "type": "number"
+                        }
+                    }
+                ]
+            },
+            "put": {
+                "operationId": "UpdateComment",
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ResComments"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Comments"
+                ],
+                "security": [],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "blogId",
+                        "required": true,
+                        "schema": {
+                            "format": "double",
+                            "type": "number"
+                        }
+                    },
+                    {
+                        "in": "path",
+                        "name": "commentId",
+                        "required": true,
+                        "schema": {
+                            "format": "double",
+                            "type": "number"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ReqCommentU"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/blog": {
+            "post": {
+                "operationId": "SaveBlog",
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "anyOf": [
+                                        {
+                                            "$ref": "#/components/schemas/ResBlog"
+                                        },
+                                        {
+                                            "properties": {
+                                                "result": {
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "required": [
+                                                "result"
+                                            ],
+                                            "type": "object"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                },
+                "description": "save blog",
+                "summary": "saves blog",
+                "tags": [
+                    "Blog"
+                ],
+                "security": [],
+                "parameters": [],
+                "requestBody": {
+                    "required": false,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "blogSubtitle": {
+                                        "type": "string"
+                                    },
+                                    "blogTitle": {
+                                        "type": "string"
+                                    },
+                                    "secretKey": {
+                                        "type": "string"
+                                    },
+                                    "blogDescription": {
+                                        "type": "string"
+                                    },
+                                    "blogAuthor": {
+                                        "type": "string"
+                                    },
+                                    "file": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "get": {
+                "operationId": "GetAllBlog",
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "anyOf": [
+                                        {
+                                            "items": {
+                                                "$ref": "#/components/schemas/ResBlog"
+                                            },
+                                            "type": "array"
+                                        },
+                                        {
+                                            "properties": {
+                                                "result": {
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "required": [
+                                                "result"
+                                            ],
+                                            "type": "object"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                },
+                "description": "gets all blog",
+                "summary": "gets all blog",
+                "tags": [
+                    "Blog"
+                ],
+                "security": [],
+                "parameters": []
+            }
+        },
+        "/blog/{blogId}": {
+            "get": {
+                "operationId": "GetOneBlog",
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "anyOf": [
+                                        {
+                                            "$ref": "#/components/schemas/ResBlog"
+                                        },
+                                        {
+                                            "$ref": "#/components/schemas/ResError"
+                                        },
+                                        {
+                                            "properties": {
+                                                "result": {
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "required": [
+                                                "result"
+                                            ],
+                                            "type": "object"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                },
+                "description": "get one blog",
+                "summary": "gets one blog",
+                "tags": [
+                    "Blog"
+                ],
+                "security": [],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "blogId",
+                        "required": true,
+                        "schema": {
+                            "format": "double",
+                            "type": "number"
+                        }
+                    }
+                ]
+            },
+            "delete": {
+                "operationId": "DeleteBlog",
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "anyOf": [
+                                        {
+                                            "$ref": "#/components/schemas/ResSuccess"
+                                        },
+                                        {
+                                            "properties": {
+                                                "result": {
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "required": [
+                                                "result"
+                                            ],
+                                            "type": "object"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Blog"
+                ],
+                "security": [],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "blogId",
+                        "required": true,
+                        "schema": {
+                            "format": "double",
+                            "type": "number"
+                        }
+                    },
+                    {
+                        "in": "query",
+                        "name": "secretKey",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ]
+            },
+            "put": {
+                "operationId": "UpdateBlog",
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "anyOf": [
+                                        {
+                                            "$ref": "#/components/schemas/ResBlog"
+                                        },
+                                        {
+                                            "properties": {
+                                                "result": {
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "required": [
+                                                "result"
+                                            ],
+                                            "type": "object"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Blog"
+                ],
+                "security": [],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "blogId",
+                        "required": true,
+                        "schema": {
+                            "format": "double",
+                            "type": "number"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": false,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "blogSubtitle": {
+                                        "type": "string"
+                                    },
+                                    "blogTitle": {
+                                        "type": "string"
+                                    },
+                                    "secretKey": {
+                                        "type": "string"
+                                    },
+                                    "blogDescription": {
+                                        "type": "string"
+                                    },
+                                    "blogAuthor": {
+                                        "type": "string"
+                                    },
+                                    "file": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/blog/statusUpdate/{blogId}": {
+            "put": {
+                "operationId": "UpdateBlogStatus",
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "anyOf": [
+                                        {
+                                            "$ref": "#/components/schemas/ResBlog"
+                                        },
+                                        {
+                                            "properties": {
+                                                "result": {
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "required": [
+                                                "result"
+                                            ],
+                                            "type": "object"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Blog"
+                ],
+                "security": [],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "blogId",
+                        "required": true,
+                        "schema": {
+                            "format": "double",
+                            "type": "number"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ReqBlogStatus"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/admin": {
+            "post": {
+                "operationId": "AdminLogin",
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "anyOf": [
+                                        {
+                                            "$ref": "#/components/schemas/ResSuccess"
+                                        },
+                                        {
+                                            "$ref": "#/components/schemas/ResError"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Admin"
+                ],
+                "security": [],
+                "parameters": [],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ReqAdminLogin"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "servers": [
+        {
+            "url": "/"
+        }
+    ],
+    "tagsSorter": "alpha",
+    "apisSorter": "alpha",
+    "operationsSorter": "method"
+}

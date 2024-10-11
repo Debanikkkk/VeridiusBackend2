@@ -1,0 +1,28 @@
+{
+  "entryFile": "src/index.ts",
+  "noImplicitAdditionalProperties": "throw-on-extras",
+  "controllerPathGlobs": ["src/controller/*Controller.ts"],
+  "spec": {
+    "outputDirectory": "src/tsoa-auto",
+    "specVersion": 3,
+    "securityDefinitions": {
+      "Api-Token": {
+        "type": "apiKey",
+        "name": "x-api-key",
+        "in": "header"
+      }
+    },
+    "spec": {
+      "tagsSorter": "alpha",
+      "apisSorter": "alpha",
+      "operationsSorter": "method"
+    }
+  },
+  "routes": {
+    "routesDir": "src/tsoa-auto",
+    "authenticationModule": "src/authentication.ts"
+  },
+  "compilerOptions": {
+    "baseUrl": "."
+  }
+}

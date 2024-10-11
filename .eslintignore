@@ -1,0 +1,7 @@
+dist/
+build/
+node_modules/
+.eslintrc.js
+.prettierrc.js
+eslint.config.mjs
+src/config/

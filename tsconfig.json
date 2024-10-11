@@ -1,0 +1,51 @@
+{
+   "compilerOptions": {
+     /* Basic Options */
+     "incremental": true,
+     "target": "es2021", /* lazy save will not work on es2022, keep it: es2021 */
+     "module": "Node16",
+     "outDir": "dist",
+     /* Strict Type-Checking Options */
+     // "strict": false,
+     "typeRoots": ["node_modules/@types", "path/to/other/types"],
+     "strict": true,
+     "noImplicitAny": true,
+     "strictNullChecks": true,
+     "strictFunctionTypes": true,
+     "strictBindCallApply": true,
+     "strictPropertyInitialization": true,
+     "noImplicitThis": true,
+     "alwaysStrict": true,
+     /* Additional Checks */
+     // "noUnusedLocals": true,
+     "noUnusedParameters": true,
+     "noImplicitReturns": true,
+     "noFallthroughCasesInSwitch": true,
+     /* Module Resolution Options */
+     "moduleResolution": "Node16",
+     "baseUrl": ".",
+     "esModuleInterop": true,
+     /* Experimental Options */
+     "experimentalDecorators": true,
+     // emitDecoratorMetadata is not needed by tsoa (unless you are using Custom Middlewares)
+     "emitDecoratorMetadata": true,
+     /* Advanced Options */
+     "forceConsistentCasingInFileNames": true,
+     /* Dynamicaly import/resolve json module */
+     
+     "resolveJsonModule": true,
+     // "lib": ["es5", "es6"],
+     "sourceMap": true,
+     "rootDir": "./src",
+     "paths": {
+       "*": ["./src/*"],
+       "src/*": ["./src/*"]
+     }
+   },
+   "include": ["src/**/*.ts"],
+   "exclude": ["node_modules", "build", "dist", "postgres"],
+   "ts-node": {
+     "require": ["tsconfig-paths/register"]
+   }
+ }
+ 
