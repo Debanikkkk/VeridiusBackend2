@@ -1,6 +1,7 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Device } from "./Device";
 import { Role } from "./Role";
+import { ServiceTicket } from "./ServiceTickets";
 
 @Entity()
 export class User{
@@ -33,7 +34,8 @@ export class User{
     email?: string
 
     @OneToOne(()=>(Device), (device)=>{device.user},  {onDelete: 'CASCADE', onUpdate: 'CASCADE', nullable: true})
-    device?: Promise<Device>
+    @JoinColumn({name: 'device_id'})
+    device?: Device | null
 
     @ManyToOne(()=>(Role), (role)=>{role.users},  {onDelete: 'CASCADE', onUpdate: 'CASCADE', nullable: true})
     @JoinColumn({
@@ -41,5 +43,8 @@ export class User{
     })
     role?: Promise<Role>
 
+    @OneToOne(()=>(ServiceTicket), (service_ticket)=>{service_ticket.technician},  {onDelete: 'CASCADE', onUpdate: 'CASCADE', nullable: false})
+// @JoinColumn({name: 'service_ticket_id'})
+service_ticket?: Promise<User>
     
 }

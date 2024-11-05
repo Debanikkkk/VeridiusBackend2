@@ -14,5 +14,5 @@ export class Dongle{
 
     
     @OneToOne(()=>(Device), (device)=>{device.dongle},  {onDelete: 'CASCADE', onUpdate: 'CASCADE', nullable: true})
-    device?: Promise<Device>
+    device?: Promise<Device> | null
 }

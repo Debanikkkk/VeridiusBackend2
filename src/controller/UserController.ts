@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Route, Tags } from "tsoa";
+import { Body, Controller, Path, Post, Put, Route, Tags } from "tsoa";
 import { AppDataSource } from "../data-source";
 import { User } from "../entity/User";
 import { ResUser } from "../models/res/ResUser";
@@ -11,11 +11,13 @@ import { ResPermission } from "../models/res/ResPermission";
 import { ResUserLogin } from "../models/res/ResUserLogin";
 import { ReqUserLogin } from "../models/req/ReqUserLogin";
 import { Role } from "../entity/Role";
+import { ReqDeviceAssign } from "../models/req/ReqDeviceAssign";
+import { Device } from "../entity/Device";
 @Tags('User')
 @Route('/user')
 export class UserController extends Controller{
     private userrepository=AppDataSource.getRepository(User)
-
+  private devicerepository=AppDataSource.getRepository(Device)
     private rolerepository=AppDataSource.getRepository(Role)
     
     @Post()
@@ -123,6 +125,38 @@ console.log('here are the permissions', permissions)
     return loginUser;
   }
 
+
+  @Put('userDeviceAllot/{userId}')
+  public async assignUserDevice(@Path() userId: number, @Body() request: ReqDeviceAssign){
+    const user=await this.userrepository.findOne({
+      where:{
+        id: userId
+      }
+    })
+
+    if(!user){
+      return Promise.reject(new Error('USER NOT FOUND'))
+    }
+console.log('user found is ', user)
+
+    const {id}= request
+
+    const device=await this.devicerepository.findOne({
+      where:{
+        id: id
+      }
+    })
+
+    if(!device){
+      return Promise.reject(new Error('DEVICE NOT FOUND'))
+    }
+
+    user.device=device
+    const newUser=await this.userrepository.save(user)
+    console.log("THE USER DEVICE IS", user.device)
+
+    return newUser
+  }
 }
 
 

@@ -1,4 +1,4 @@
-import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { User } from "./User";
 import { Dongle } from "./Dongle";
 
@@ -17,17 +17,19 @@ export class Device{
     })
     mac_address?: string
 
-    @Column({
-        type: 'geography',
-        spatialFeatureType: 'point',
-        srid: 4326
-    })
-    location?: string
+    // @Column({
+    //     type: 'geography',
+    //     spatialFeatureType: 'point',
+    //     srid: 4326
+    // })
+    // location?: string
 
 
     @OneToOne(()=>(User), (user)=>{user.device},  {onDelete: 'CASCADE', onUpdate: 'CASCADE', nullable: true})
-    user?: Promise<User>
+    // @JoinColumn({name: 'user_id'})
+    user?: Promise<User> | null
 
     @OneToOne(()=>(Dongle), (dongle)=>{dongle.device},  {onDelete: 'CASCADE', onUpdate: 'CASCADE', nullable: true})
-    dongle?: Promise<Dongle>
+    @JoinColumn({name: 'dongle_id'})
+    dongle?: Dongle | null 
 }

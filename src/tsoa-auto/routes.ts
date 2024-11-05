@@ -5,9 +5,13 @@ import { TsoaRoute, fetchMiddlewares, ExpressTemplateService } from '@tsoa/runti
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { UserController } from './../controller/UserController';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+import { ServiceTicketController } from './../controller/ServiceTikcetController';
+// WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { RoleController } from './../controller/RoleController';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { PermissionController } from './../controller/PermissionController';
+// WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+import { FreeDongleUserDeviceController } from './../controller/FreeDongleUserDeviceController';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { DeviceController } from './../controller/DeviceController';
 import { expressAuthentication } from './../authentication';
@@ -98,6 +102,94 @@ const models: TsoaRoute.Models = {
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "User": {
+        "dataType": "refObject",
+        "properties": {
+            "id": {"dataType":"double"},
+            "name": {"dataType":"string"},
+            "password": {"dataType":"string"},
+            "address": {"dataType":"string"},
+            "phone_number": {"dataType":"string"},
+            "email": {"dataType":"string"},
+            "device": {"dataType":"union","subSchemas":[{"ref":"Device"},{"dataType":"enum","enums":[null]}]},
+            "role": {"ref":"Role"},
+            "service_ticket": {"ref":"User"},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "Device": {
+        "dataType": "refObject",
+        "properties": {
+            "id": {"dataType":"double"},
+            "name": {"dataType":"string"},
+            "mac_address": {"dataType":"string"},
+            "user": {"dataType":"union","subSchemas":[{"ref":"User"},{"dataType":"enum","enums":[null]}]},
+            "dongle": {"dataType":"union","subSchemas":[{"ref":"Dongle"},{"dataType":"enum","enums":[null]}]},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "Dongle": {
+        "dataType": "refObject",
+        "properties": {
+            "id": {"dataType":"double"},
+            "name": {"dataType":"string"},
+            "device": {"dataType":"union","subSchemas":[{"ref":"Device"},{"dataType":"enum","enums":[null]}]},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "Role": {
+        "dataType": "refObject",
+        "properties": {
+            "id": {"dataType":"double"},
+            "name": {"dataType":"string"},
+            "description": {"dataType":"string"},
+            "permissions": {"dataType":"array","array":{"dataType":"refObject","ref":"Permission"}},
+            "users": {"dataType":"array","array":{"dataType":"refObject","ref":"User"}},
+            "sub_role": {"dataType":"array","array":{"dataType":"refObject","ref":"Role"}},
+            "role": {"dataType":"array","array":{"dataType":"refObject","ref":"Role"}},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "Permission": {
+        "dataType": "refObject",
+        "properties": {
+            "id": {"dataType":"double"},
+            "name": {"dataType":"string"},
+            "description": {"dataType":"string"},
+            "role": {"dataType":"array","array":{"dataType":"refObject","ref":"Role"}},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "ReqDeviceAssign": {
+        "dataType": "refObject",
+        "properties": {
+            "id": {"dataType":"double"},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "jobCardStatus": {
+        "dataType": "refEnum",
+        "enums": ["open","closed","new"],
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "ResServiceTicket": {
+        "dataType": "refObject",
+        "properties": {
+            "date": {"dataType":"datetime"},
+            "id": {"dataType":"double"},
+            "service_ticket_number": {"dataType":"string"},
+            "status": {"ref":"jobCardStatus"},
+            "technician": {"ref":"ResUser"},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "ReqRole": {
         "dataType": "refObject",
         "properties": {
@@ -151,69 +243,6 @@ const models: TsoaRoute.Models = {
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "Permission": {
-        "dataType": "refObject",
-        "properties": {
-            "id": {"dataType":"double"},
-            "name": {"dataType":"string"},
-            "description": {"dataType":"string"},
-            "role": {"dataType":"array","array":{"dataType":"refObject","ref":"Role"}},
-        },
-        "additionalProperties": false,
-    },
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "User": {
-        "dataType": "refObject",
-        "properties": {
-            "id": {"dataType":"double"},
-            "name": {"dataType":"string"},
-            "password": {"dataType":"string"},
-            "address": {"dataType":"string"},
-            "phone_number": {"dataType":"string"},
-            "email": {"dataType":"string"},
-            "device": {"ref":"Device"},
-            "role": {"ref":"Role"},
-        },
-        "additionalProperties": false,
-    },
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "Device": {
-        "dataType": "refObject",
-        "properties": {
-            "id": {"dataType":"double"},
-            "name": {"dataType":"string"},
-            "mac_address": {"dataType":"string"},
-            "location": {"dataType":"string"},
-            "user": {"ref":"User"},
-            "dongle": {"ref":"Dongle"},
-        },
-        "additionalProperties": false,
-    },
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "Dongle": {
-        "dataType": "refObject",
-        "properties": {
-            "id": {"dataType":"double"},
-            "name": {"dataType":"string"},
-            "device": {"ref":"Device"},
-        },
-        "additionalProperties": false,
-    },
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "Role": {
-        "dataType": "refObject",
-        "properties": {
-            "id": {"dataType":"double"},
-            "name": {"dataType":"string"},
-            "description": {"dataType":"string"},
-            "permissions": {"dataType":"array","array":{"dataType":"refObject","ref":"Permission"}},
-            "users": {"dataType":"array","array":{"dataType":"refObject","ref":"User"}},
-            "sub_role": {"dataType":"array","array":{"dataType":"refObject","ref":"Role"}},
-            "role": {"dataType":"array","array":{"dataType":"refObject","ref":"Role"}},
-        },
-        "additionalProperties": false,
-    },
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "ReqPermission": {
         "dataType": "refObject",
         "properties": {
@@ -230,6 +259,44 @@ const models: TsoaRoute.Models = {
             "deviceId": {"dataType":"double","required":true},
             "latitude": {"dataType":"double","required":true},
             "longitude": {"dataType":"double","required":true},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "ResDongle": {
+        "dataType": "refObject",
+        "properties": {
+            "id": {"dataType":"double"},
+            "name": {"dataType":"string"},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "ResDevice": {
+        "dataType": "refObject",
+        "properties": {
+            "id": {"dataType":"double"},
+            "mac_address": {"dataType":"string"},
+            "name": {"dataType":"string"},
+            "user": {"ref":"ResUser"},
+            "dongle": {"ref":"ResDongle"},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "ReqDevice": {
+        "dataType": "refObject",
+        "properties": {
+            "mac_address": {"dataType":"string"},
+            "name": {"dataType":"string"},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "ReqDongleAllot": {
+        "dataType": "refObject",
+        "properties": {
+            "id": {"dataType":"double"},
         },
         "additionalProperties": false,
     },
@@ -293,6 +360,68 @@ export function RegisterRoutes(app: Router) {
 
               await templateService.apiHandler({
                 methodName: 'userLogin',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.put('/user/userDeviceAllot/:userId',
+            ...(fetchMiddlewares<RequestHandler>(UserController)),
+            ...(fetchMiddlewares<RequestHandler>(UserController.prototype.assignUserDevice)),
+
+            async function UserController_assignUserDevice(request: ExRequest, response: ExResponse, next: any) {
+            const args: Record<string, TsoaRoute.ParameterSchema> = {
+                    userId: {"in":"path","name":"userId","required":true,"dataType":"double"},
+                    request: {"in":"body","name":"request","required":true,"ref":"ReqDeviceAssign"},
+            };
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+
+                const controller = new UserController();
+
+              await templateService.apiHandler({
+                methodName: 'assignUserDevice',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.post('/serviceTicket',
+            authenticateMiddleware([{"Api-Token":[]}]),
+            ...(fetchMiddlewares<RequestHandler>(ServiceTicketController)),
+            ...(fetchMiddlewares<RequestHandler>(ServiceTicketController.prototype.saveServiceTicket)),
+
+            async function ServiceTicketController_saveServiceTicket(request: ExRequest, response: ExResponse, next: any) {
+            const args: Record<string, TsoaRoute.ParameterSchema> = {
+                    req: {"in":"request","name":"req","required":true,"dataType":"object"},
+            };
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+
+                const controller = new ServiceTicketController();
+
+              await templateService.apiHandler({
+                methodName: 'saveServiceTicket',
                 controller,
                 response,
                 next,
@@ -484,6 +613,36 @@ export function RegisterRoutes(app: Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.put('/user/freeDongle/:userId',
+            ...(fetchMiddlewares<RequestHandler>(FreeDongleUserDeviceController)),
+            ...(fetchMiddlewares<RequestHandler>(FreeDongleUserDeviceController.prototype.freeTheDongle)),
+
+            async function FreeDongleUserDeviceController_freeTheDongle(request: ExRequest, response: ExResponse, next: any) {
+            const args: Record<string, TsoaRoute.ParameterSchema> = {
+                    userId: {"in":"path","name":"userId","required":true,"dataType":"double"},
+            };
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+
+                const controller = new FreeDongleUserDeviceController();
+
+              await templateService.apiHandler({
+                methodName: 'freeTheDongle',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         app.put('/device/update',
             ...(fetchMiddlewares<RequestHandler>(DeviceController)),
             ...(fetchMiddlewares<RequestHandler>(DeviceController.prototype.updateGeolocation)),
@@ -514,9 +673,140 @@ export function RegisterRoutes(app: Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.post('/device',
+            ...(fetchMiddlewares<RequestHandler>(DeviceController)),
+            ...(fetchMiddlewares<RequestHandler>(DeviceController.prototype.saveDevice)),
+
+            async function DeviceController_saveDevice(request: ExRequest, response: ExResponse, next: any) {
+            const args: Record<string, TsoaRoute.ParameterSchema> = {
+                    request: {"in":"body","name":"request","required":true,"ref":"ReqDevice"},
+            };
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+
+                const controller = new DeviceController();
+
+              await templateService.apiHandler({
+                methodName: 'saveDevice',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.put('/device/allotDongle/:deviceId',
+            ...(fetchMiddlewares<RequestHandler>(DeviceController)),
+            ...(fetchMiddlewares<RequestHandler>(DeviceController.prototype.allotDongleToDevice)),
+
+            async function DeviceController_allotDongleToDevice(request: ExRequest, response: ExResponse, next: any) {
+            const args: Record<string, TsoaRoute.ParameterSchema> = {
+                    deviceId: {"in":"path","name":"deviceId","required":true,"dataType":"double"},
+                    request: {"in":"body","name":"request","required":true,"ref":"ReqDongleAllot"},
+            };
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+
+                const controller = new DeviceController();
+
+              await templateService.apiHandler({
+                methodName: 'allotDongleToDevice',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
+
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+    function authenticateMiddleware(security: TsoaRoute.Security[] = []) {
+        return async function runAuthenticationMiddleware(request: any, response: any, next: any) {
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            // keep track of failed auth attempts so we can hand back the most
+            // recent one.  This behavior was previously existing so preserving it
+            // here
+            const failedAttempts: any[] = [];
+            const pushAndRethrow = (error: any) => {
+                failedAttempts.push(error);
+                throw error;
+            };
+
+            const secMethodOrPromises: Promise<any>[] = [];
+            for (const secMethod of security) {
+                if (Object.keys(secMethod).length > 1) {
+                    const secMethodAndPromises: Promise<any>[] = [];
+
+                    for (const name in secMethod) {
+                        secMethodAndPromises.push(
+                            expressAuthenticationRecasted(request, name, secMethod[name], response)
+                                .catch(pushAndRethrow)
+                        );
+                    }
+
+                    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+                    secMethodOrPromises.push(Promise.all(secMethodAndPromises)
+                        .then(users => { return users[0]; }));
+                } else {
+                    for (const name in secMethod) {
+                        secMethodOrPromises.push(
+                            expressAuthenticationRecasted(request, name, secMethod[name], response)
+                                .catch(pushAndRethrow)
+                        );
+                    }
+                }
+            }
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            try {
+                request['user'] = await Promise.any(secMethodOrPromises);
+
+                // Response was sent in middleware, abort
+                if (response.writableEnded) {
+                    return;
+                }
+
+                next();
+            }
+            catch(err) {
+                // Show most recent error as response
+                const error = failedAttempts.pop();
+                error.status = error.status || 401;
+
+                // Response was sent in middleware, abort
+                if (response.writableEnded) {
+                    return;
+                }
+                next(error);
+            }
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        }
+    }
 
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 }

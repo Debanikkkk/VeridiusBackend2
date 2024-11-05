@@ -163,6 +163,201 @@
 				"type": "object",
 				"additionalProperties": false
 			},
+			"User": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"name": {
+						"type": "string"
+					},
+					"password": {
+						"type": "string"
+					},
+					"address": {
+						"type": "string"
+					},
+					"phone_number": {
+						"type": "string"
+					},
+					"email": {
+						"type": "string"
+					},
+					"device": {
+						"allOf": [
+							{
+								"$ref": "#/components/schemas/Device"
+							}
+						],
+						"nullable": true
+					},
+					"role": {
+						"$ref": "#/components/schemas/Role"
+					},
+					"service_ticket": {
+						"$ref": "#/components/schemas/User"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"Device": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"name": {
+						"type": "string"
+					},
+					"mac_address": {
+						"type": "string"
+					},
+					"user": {
+						"allOf": [
+							{
+								"$ref": "#/components/schemas/User"
+							}
+						],
+						"nullable": true
+					},
+					"dongle": {
+						"allOf": [
+							{
+								"$ref": "#/components/schemas/Dongle"
+							}
+						],
+						"nullable": true
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"Dongle": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"name": {
+						"type": "string"
+					},
+					"device": {
+						"allOf": [
+							{
+								"$ref": "#/components/schemas/Device"
+							}
+						],
+						"nullable": true
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"Role": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"name": {
+						"type": "string"
+					},
+					"description": {
+						"type": "string"
+					},
+					"permissions": {
+						"items": {
+							"$ref": "#/components/schemas/Permission"
+						},
+						"type": "array"
+					},
+					"users": {
+						"items": {
+							"$ref": "#/components/schemas/User"
+						},
+						"type": "array"
+					},
+					"sub_role": {
+						"items": {
+							"$ref": "#/components/schemas/Role"
+						},
+						"type": "array"
+					},
+					"role": {
+						"items": {
+							"$ref": "#/components/schemas/Role"
+						},
+						"type": "array"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"Permission": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"name": {
+						"type": "string"
+					},
+					"description": {
+						"type": "string"
+					},
+					"role": {
+						"items": {
+							"$ref": "#/components/schemas/Role"
+						},
+						"type": "array"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ReqDeviceAssign": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"jobCardStatus": {
+				"enum": [
+					"open",
+					"closed",
+					"new"
+				],
+				"type": "string"
+			},
+			"ResServiceTicket": {
+				"properties": {
+					"date": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"service_ticket_number": {
+						"type": "string"
+					},
+					"status": {
+						"$ref": "#/components/schemas/jobCardStatus"
+					},
+					"technician": {
+						"$ref": "#/components/schemas/ResUser"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
 			"ReqRole": {
 				"properties": {
 					"name": {
@@ -249,140 +444,6 @@
 				"type": "object",
 				"additionalProperties": false
 			},
-			"Permission": {
-				"properties": {
-					"id": {
-						"type": "number",
-						"format": "double"
-					},
-					"name": {
-						"type": "string"
-					},
-					"description": {
-						"type": "string"
-					},
-					"role": {
-						"items": {
-							"$ref": "#/components/schemas/Role"
-						},
-						"type": "array"
-					}
-				},
-				"type": "object",
-				"additionalProperties": false
-			},
-			"User": {
-				"properties": {
-					"id": {
-						"type": "number",
-						"format": "double"
-					},
-					"name": {
-						"type": "string"
-					},
-					"password": {
-						"type": "string"
-					},
-					"address": {
-						"type": "string"
-					},
-					"phone_number": {
-						"type": "string"
-					},
-					"email": {
-						"type": "string"
-					},
-					"device": {
-						"$ref": "#/components/schemas/Device"
-					},
-					"role": {
-						"$ref": "#/components/schemas/Role"
-					}
-				},
-				"type": "object",
-				"additionalProperties": false
-			},
-			"Device": {
-				"properties": {
-					"id": {
-						"type": "number",
-						"format": "double"
-					},
-					"name": {
-						"type": "string"
-					},
-					"mac_address": {
-						"type": "string"
-					},
-					"location": {
-						"type": "string"
-					},
-					"user": {
-						"$ref": "#/components/schemas/User"
-					},
-					"dongle": {
-						"$ref": "#/components/schemas/Dongle"
-					}
-				},
-				"type": "object",
-				"additionalProperties": false
-			},
-			"Dongle": {
-				"properties": {
-					"id": {
-						"type": "number",
-						"format": "double"
-					},
-					"name": {
-						"type": "string"
-					},
-					"device": {
-						"$ref": "#/components/schemas/Device"
-					}
-				},
-				"type": "object",
-				"additionalProperties": false
-			},
-			"Role": {
-				"properties": {
-					"id": {
-						"type": "number",
-						"format": "double"
-					},
-					"name": {
-						"type": "string"
-					},
-					"description": {
-						"type": "string"
-					},
-					"permissions": {
-						"items": {
-							"$ref": "#/components/schemas/Permission"
-						},
-						"type": "array"
-					},
-					"users": {
-						"items": {
-							"$ref": "#/components/schemas/User"
-						},
-						"type": "array"
-					},
-					"sub_role": {
-						"items": {
-							"$ref": "#/components/schemas/Role"
-						},
-						"type": "array"
-					},
-					"role": {
-						"items": {
-							"$ref": "#/components/schemas/Role"
-						},
-						"type": "array"
-					}
-				},
-				"type": "object",
-				"additionalProperties": false
-			},
 			"ReqPermission": {
 				"properties": {
 					"description": {
@@ -422,6 +483,63 @@
 					"latitude",
 					"longitude"
 				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ResDongle": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"name": {
+						"type": "string"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ResDevice": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"mac_address": {
+						"type": "string"
+					},
+					"name": {
+						"type": "string"
+					},
+					"user": {
+						"$ref": "#/components/schemas/ResUser"
+					},
+					"dongle": {
+						"$ref": "#/components/schemas/ResDongle"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ReqDevice": {
+				"properties": {
+					"mac_address": {
+						"type": "string"
+					},
+					"name": {
+						"type": "string"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ReqDongleAllot": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					}
+				},
 				"type": "object",
 				"additionalProperties": false
 			}
@@ -505,6 +623,74 @@
 						}
 					}
 				}
+			}
+		},
+		"/user/userDeviceAllot/{userId}": {
+			"put": {
+				"operationId": "AssignUserDevice",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/User"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"User"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "userId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/ReqDeviceAssign"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/serviceTicket": {
+			"post": {
+				"operationId": "SaveServiceTicket",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ResServiceTicket"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Service Ticket"
+				],
+				"security": [
+					{
+						"Api-Token": []
+					}
+				],
+				"parameters": []
 			}
 		},
 		"/role": {
@@ -709,6 +895,38 @@
 				}
 			}
 		},
+		"/user/freeDongle/{userId}": {
+			"put": {
+				"operationId": "FreeTheDongle",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "string"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"FREE DONGLE"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "userId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			}
+		},
 		"/device/update": {
 			"put": {
 				"operationId": "UpdateGeolocation",
@@ -728,6 +946,82 @@
 						"application/json": {
 							"schema": {
 								"$ref": "#/components/schemas/GeolocationUpdate"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/device": {
+			"post": {
+				"operationId": "SaveDevice",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ResDevice"
+								}
+							}
+						}
+					}
+				},
+				"description": "SAVES DEVICE",
+				"summary": "SAVES A DEVICE",
+				"tags": [
+					"Device"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/ReqDevice"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/device/allotDongle/{deviceId}": {
+			"put": {
+				"operationId": "AllotDongleToDevice",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Device"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Device"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "deviceId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/ReqDongleAllot"
 							}
 						}
 					}
