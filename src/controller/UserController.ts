@@ -124,3 +124,25 @@ console.log('here are the permissions', permissions)
   }
 
 }
+
+
+// export class ItemService {
+//   public async getItems(page: number = 1, limit: number = 10): Promise<{ data: Item[], page: number, limit: number, total: number, totalPages: number }> {
+//     const itemRepository = getRepository(Item);
+    
+//     const [items, total] = await itemRepository.findAndCount({
+//       take: limit,
+//       skip: (page - 1) * limit,
+//     });
+
+//     const totalPages = Math.ceil(total / limit);
+    
+//     return {
+//       data: items,
+//       page,
+//       limit,
+//       total,
+//       totalPages
+//     };
+//   }
+// }
