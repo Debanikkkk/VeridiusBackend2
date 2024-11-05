@@ -5,7 +5,7 @@ enum jobCardStatus{
  new='new'
 }
 @Entity()
-export class JobCard{
+export class ServiceTickets{
 @PrimaryGeneratedColumn()
 id?: number
 

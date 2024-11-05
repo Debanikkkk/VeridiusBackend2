@@ -185,6 +185,17 @@ const models: TsoaRoute.Models = {
             "mac_address": {"dataType":"string"},
             "location": {"dataType":"string"},
             "user": {"ref":"User"},
+            "dongle": {"ref":"Dongle"},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "Dongle": {
+        "dataType": "refObject",
+        "properties": {
+            "id": {"dataType":"double"},
+            "name": {"dataType":"string"},
+            "device": {"ref":"Device"},
         },
         "additionalProperties": false,
     },

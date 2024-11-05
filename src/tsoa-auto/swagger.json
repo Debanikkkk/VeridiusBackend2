@@ -319,6 +319,25 @@
 					},
 					"user": {
 						"$ref": "#/components/schemas/User"
+					},
+					"dongle": {
+						"$ref": "#/components/schemas/Dongle"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"Dongle": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"name": {
+						"type": "string"
+					},
+					"device": {
+						"$ref": "#/components/schemas/Device"
 					}
 				},
 				"type": "object",
