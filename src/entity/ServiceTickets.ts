@@ -1,10 +1,12 @@
 import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { User } from "./User";
+
 export enum jobCardStatus{
  open='open',
  closed='closed',
  new='new'
 }
+
 @Entity()
 export class ServiceTicket{
 @PrimaryGeneratedColumn()

@@ -20,4 +20,6 @@ export class DeviceHistory{
 
     @Column()
     dongle_id?: number
+
+    
 }
