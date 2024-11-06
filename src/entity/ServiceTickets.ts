@@ -1,7 +1,7 @@
-import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { User } from "./User";
 
-export enum jobCardStatus{
+export enum serviceTicketStatus{
  open='open',
  closed='closed',
  new='new'
@@ -18,8 +18,14 @@ id?: number
 })
 date?: Date
 
+@CreateDateColumn()
+created_on?: Date
+
+@UpdateDateColumn()
+updated_on?: Date
+
 @Column()
-status?: jobCardStatus
+status?: serviceTicketStatus
 
 @Column({
     length: 17

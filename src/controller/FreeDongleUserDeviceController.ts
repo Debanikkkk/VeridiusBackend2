@@ -1,10 +1,11 @@
-import { Controller, Path, Put, Route, Tags } from "tsoa";
+import { Controller, Path, Put, Request, Route, Security, Tags } from "tsoa";
 import { AppDataSource } from "../data-source";
 import { Dongle } from "../entity/Dongle";
 import { Device } from "../entity/Device";
 import { User } from "../entity/User";
 import { DeviceHistory } from "../entity/DeviceHistory";
 import { object } from "joi";
+import { JWTRequest } from "../models/req/JWTRequest";
 @Tags('FREE DONGLE')
 @Route('/user')
 export class FreeDongleUserDeviceController extends Controller{
@@ -13,7 +14,9 @@ export class FreeDongleUserDeviceController extends Controller{
  private userrepository=AppDataSource.getRepository(User)
 private devicehistoryrepository=AppDataSource.getRepository(DeviceHistory)
  @Put('freeDongle/{userId}')
- public async freeTheDongle(@Path() userId: number){
+ @Security('Api-Token', [])
+ public async freeTheDongle(@Request() req: JWTRequest, @Path() userId: number){
+    // const {}=req
     const user =await this.userrepository.findOne({
         where:{
             id: userId
@@ -50,8 +53,8 @@ console.log('this is the device from the db from user relation', device)
         device_id: device.id,
         dongle_id: device.dongle?.id,
         mac_address: device.mac_address,
-        name: device.name
-
+        name: device.name,
+        user_id: req.user.id,
     }
 
     const devicehistorySaver=Object.assign(new DeviceHistory, deviceHistory)

@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Put, Route, Tags } from "tsoa";
+import { Body, Controller, Delete, Get, Path, Post, Put, Route, Tags } from "tsoa";
 import { Role } from "../entity/Role";
 import { AppDataSource } from "../data-source";
 import { ReqRole } from "../models/req/ReqRole";
@@ -11,13 +11,79 @@ import { ResPermission } from "../models/res/ResPermission";
 import { ReqRoleSubRole } from "../models/req/ReqRoleSubRole";
 import { ResRoleSubRole } from "../models/res/ResRoleSubRole";
 import { ReqRoleBody } from "../models/req/ReqRoleBody";
+import { ResError, ResSuccess } from "../models/res/Responses";
 @Tags('Role')
 @Route('/role')
 export class RoleController extends Controller{
     private rolerepository=AppDataSource.getRepository(Role)
     private permissionrepository=AppDataSource.getRepository(Permission)
 
+
+    @Get('/{roleId}')
+    public async getOneRole(@Path() roleId: number): Promise<ResRole | ResError>{
+        const role=await this.rolerepository.findOne({
+            where:{
+                id: roleId
+            }
+        }).then((role)=>{
+            if(!role){
+                return Promise.reject(new Error('ROLE CANNOT BE FOUND'))
+            }
+
+            const resRole: ResRole={
+                description: role.description,
+                id: role.id,
+                name: role.name
+            }
+
+            return resRole
+        },
+    ()=>{
+        return {error:'there was a problem in finding the role'}
+    })
+    return role
+    }
+     /**
+     * get all the roles
+     * @summary get all the roles
+     */
+    @Get()
+    public async getAllRole(): Promise<ResRole[]>{
+        const roles=await this.rolerepository.find()
+
+        const roleArr: ResRole[]=[]
+
+        for(const role of roles){
+            roleArr.push({
+                description:  role.description,
+                id:  role.id,
+                name:  role.name
+
+            })
+        }
+
+        return roleArr
+    }
     
+   @Delete('/{roleId}')
+   public async deleteRole(@Path() roleId: number): Promise<ResSuccess>{
+    const roletodelete=await this.rolerepository.findOne({
+        where:{
+            id: roleId 
+        }
+    })
+
+    if(!roletodelete){
+        return Promise.reject(new Error('ROLE CANNOT BE FOUND'))
+    }
+
+    await this.rolerepository.remove(roletodelete)
+    return {result: "THE ROLE WAS DELETED SUCCESSFULLY"}
+   }
+    /**
+     * save role
+     * @summary save role
+     */
     @Post()
     public async saveRole(@Body() request: ReqRole): Promise<ResRole>{
             const {name, description}=request;
@@ -55,7 +121,10 @@ export class RoleController extends Controller{
     }   
 
     
-
+    /**
+     * allot permissions to a role
+     * @summary allot permissions to a role
+     */
     @Put('/setPermissions')
     public async givePermissionToRole(@Body() request: SetPermisisons): Promise<GetSetPermisisons>{
         const {role, permissions}=request
@@ -104,99 +173,9 @@ const rPerm=updatedRole.permissions
 
             
     }
-    /**
-     * setting role subrole 
-     * @summary setting role subRole
-     */
-    @Put('/subRoleSet')
-    public async setSubRole(@Body() request: ReqRoleSubRole): Promise<ResRoleSubRole>{
-        const {role,subrole}=request
+   
 
-        const db_role=await this.rolerepository.findOne({
-            where:{
-                id: role,
-            }
-        })
-
-        if(!db_role){
-            return Promise.reject(new Error('ROLE WAS NOT FOUND'))
-        }
-        let db_sub_roles
-        if(subrole){
-             db_sub_roles=await this.rolerepository.find({
-                where:{
-                    id: In(subrole)
-                }
-            })
-        }
-        console.log(db_sub_roles)
-        if(!db_sub_roles){
-            return Promise.reject(new Error('THIS DOES NOT HAVE ANY ROLES'))
-        }
-
-        db_role.sub_role=Promise.resolve(db_sub_roles)
-        
-        const updatedRole=await this.rolerepository.save(db_role)
-        console.log('updated role is: ', updatedRole)
-        const resRoleSubRole: ResRoleSubRole={
-            role: db_role,
-            subrole: []
-        }
-        if(!updatedRole.sub_role){
-            return Promise.reject(new Error('NOT FOUND'))
-        }
-        updatedRole.sub_role.then((subrole)=>{
-            resRoleSubRole.subrole=subrole.map((r)=>{
-                return {
-                    description: r.description,
-                    id: r.id,
-                    name: r.name
-                }
-            })
-        })
-        return resRoleSubRole
-    }
-
-    @Post('/getSubRole')
-    public async getSubRole(@Body() request: ReqRoleBody): Promise<ResRole[]>{
-        const {id}=request
-
-        const roles=await this.rolerepository.find({
-            where:{
-                id: id
-            },
-            relations:{
-                sub_role: true
-            }
-        })
-        if(!roles){
-            return Promise.reject(new Error('ROLE NOT FOUND'))
-        }
-
-        const subRoleArr: ResRole[]=[]
-
-        for(const role of roles){
-            const subrole=await role.sub_role
-            const subroleArr: ResRole[]=[]
-            subrole?.forEach((d)=>{
-                const resSubRole: ResRole={
-                    description: d.description,
-                    id: d.id,
-                    name: d.name
-                }
-                subroleArr.push(resSubRole)
-
-            })
-
-            subRoleArr.push({
-              
-                subRole: subroleArr                
-            })
-
-        }
-
-        return subRoleArr
-    }
+   
     /**
      * getting permissions from subrole 
      *  @summary getting permissions from subrole 
@@ -214,42 +193,9 @@ const rPerm=updatedRole.permissions
         if(!ogperms){
             return Promise.reject(new Error('OG PERMS NOT FOUND '))
         }
-        const subRoleInstance=await this.getSubRole(request)
-        console.log("this is role", subRoleInstance)
-        const roleIdArr: number[]=[]
-        if(!subRoleInstance){
-            return Promise.reject(new Error('NOT FOUND'))
-        }
-        for(const subrole of subRoleInstance){
-            if(! subrole.subRole){
-                return Promise.reject(new Error('SUBROLE SUBROLE NOT FOUND'))
-            }
-          for(const subrolee of subrole.subRole){
-
-            roleIdArr.push(subrolee.id!)
-          }
-            // if()
-         
-        }
-
-
-        console.log("subroles found", roleIdArr)
-
-        const permissions=await this.permissionrepository.find({
-            where:{
-                role:{
-                    id: In(roleIdArr)
-                }
-            }
-        })
-
-        if(!permissions){
-            return Promise.reject(new Error('NOT FOUND'))
-        }
+       
         const permissionsArr: Permission[]=[]
-        for(const permission of permissions ){
-            permissionsArr.push(permission)
-        }
+      
 
         for(const ogperm of ogperms ){
             permissionsArr.push(ogperm)

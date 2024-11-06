@@ -1,4 +1,4 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm"
+import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from "typeorm"
 @Entity()
 export class DeviceHistory{
     @PrimaryGeneratedColumn()
@@ -18,8 +18,14 @@ export class DeviceHistory{
     })
     mac_address?: string
 
+    @CreateDateColumn()
+    updatedOn?: Date
+
     @Column()
     dongle_id?: number
 
-    
+    @Column()
+    user_id?: number
+
+
 }

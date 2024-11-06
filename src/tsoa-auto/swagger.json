@@ -68,12 +68,6 @@
 					},
 					"description": {
 						"type": "string"
-					},
-					"subRole": {
-						"items": {
-							"$ref": "#/components/schemas/ResRole"
-						},
-						"type": "array"
 					}
 				},
 				"type": "object",
@@ -278,18 +272,6 @@
 							"$ref": "#/components/schemas/User"
 						},
 						"type": "array"
-					},
-					"sub_role": {
-						"items": {
-							"$ref": "#/components/schemas/Role"
-						},
-						"type": "array"
-					},
-					"role": {
-						"items": {
-							"$ref": "#/components/schemas/Role"
-						},
-						"type": "array"
 					}
 				},
 				"type": "object",
@@ -357,7 +339,7 @@
 				"type": "object",
 				"additionalProperties": false
 			},
-			"jobCardStatus": {
+			"serviceTicketStatus": {
 				"enum": [
 					"open",
 					"closed",
@@ -379,12 +361,79 @@
 						"type": "string"
 					},
 					"status": {
-						"$ref": "#/components/schemas/jobCardStatus"
+						"$ref": "#/components/schemas/serviceTicketStatus"
 					},
 					"technician": {
 						"$ref": "#/components/schemas/ResUser"
 					}
 				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ServiceTicket": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"date": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"created_on": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"updated_on": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"status": {
+						"$ref": "#/components/schemas/serviceTicketStatus"
+					},
+					"service_ticket_number": {
+						"type": "string"
+					},
+					"technician": {
+						"$ref": "#/components/schemas/User"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ReqSTstatus": {
+				"properties": {
+					"status": {
+						"$ref": "#/components/schemas/serviceTicketStatus"
+					}
+				},
+				"required": [
+					"status"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ResError": {
+				"properties": {
+					"error": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"error"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ResSuccess": {
+				"properties": {
+					"result": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"result"
+				],
 				"type": "object",
 				"additionalProperties": false
 			},
@@ -422,38 +471,6 @@
 						"format": "double"
 					},
 					"permissions": {
-						"items": {
-							"type": "number",
-							"format": "double"
-						},
-						"type": "array"
-					}
-				},
-				"type": "object",
-				"additionalProperties": false
-			},
-			"ResRoleSubRole": {
-				"properties": {
-					"role": {
-						"$ref": "#/components/schemas/ResRole"
-					},
-					"subrole": {
-						"items": {
-							"$ref": "#/components/schemas/ResRole"
-						},
-						"type": "array"
-					}
-				},
-				"type": "object",
-				"additionalProperties": false
-			},
-			"ReqRoleSubRole": {
-				"properties": {
-					"role": {
-						"type": "number",
-						"format": "double"
-					},
-					"subrole": {
 						"items": {
 							"type": "number",
 							"format": "double"
@@ -756,6 +773,8 @@
 						}
 					}
 				},
+				"description": "generates service ticket",
+				"summary": "generates service ticket",
 				"tags": [
 					"Service Ticket"
 				],
@@ -767,7 +786,145 @@
 				"parameters": []
 			}
 		},
+		"/serviceTicket/{serviceTicketId}": {
+			"put": {
+				"operationId": "UpdateServiceTicketStatus",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ServiceTicket"
+								}
+							}
+						}
+					}
+				},
+				"description": "UPDATE SERVICE TICKET STATUS",
+				"summary": "UPDATE SERVICE TICKET STATUS",
+				"tags": [
+					"Service Ticket"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "serviceTicketId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/ReqSTstatus"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/role/{roleId}": {
+			"get": {
+				"operationId": "GetOneRole",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"$ref": "#/components/schemas/ResRole"
+										},
+										{
+											"$ref": "#/components/schemas/ResError"
+										}
+									]
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Role"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "roleId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			},
+			"delete": {
+				"operationId": "DeleteRole",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ResSuccess"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Role"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "roleId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			}
+		},
 		"/role": {
+			"get": {
+				"operationId": "GetAllRole",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/ResRole"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"description": "get all the roles",
+				"summary": "get all the roles",
+				"tags": [
+					"Role"
+				],
+				"security": [],
+				"parameters": []
+			},
 			"post": {
 				"operationId": "SaveRole",
 				"responses": {
@@ -782,6 +939,8 @@
 						}
 					}
 				},
+				"description": "save role",
+				"summary": "save role",
 				"tags": [
 					"Role"
 				],
@@ -814,6 +973,8 @@
 						}
 					}
 				},
+				"description": "allot permissions to a role",
+				"summary": "allot permissions to a role",
 				"tags": [
 					"Role"
 				],
@@ -825,75 +986,6 @@
 						"application/json": {
 							"schema": {
 								"$ref": "#/components/schemas/SetPermisisons"
-							}
-						}
-					}
-				}
-			}
-		},
-		"/role/subRoleSet": {
-			"put": {
-				"operationId": "SetSubRole",
-				"responses": {
-					"200": {
-						"description": "Ok",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/ResRoleSubRole"
-								}
-							}
-						}
-					}
-				},
-				"description": "setting role subrole",
-				"summary": "setting role subRole",
-				"tags": [
-					"Role"
-				],
-				"security": [],
-				"parameters": [],
-				"requestBody": {
-					"required": true,
-					"content": {
-						"application/json": {
-							"schema": {
-								"$ref": "#/components/schemas/ReqRoleSubRole"
-							}
-						}
-					}
-				}
-			}
-		},
-		"/role/getSubRole": {
-			"post": {
-				"operationId": "GetSubRole",
-				"responses": {
-					"200": {
-						"description": "Ok",
-						"content": {
-							"application/json": {
-								"schema": {
-									"items": {
-										"$ref": "#/components/schemas/ResRole"
-									},
-									"type": "array"
-								}
-							}
-						}
-					}
-				},
-				"tags": [
-					"Role"
-				],
-				"security": [],
-				"parameters": [],
-				"requestBody": {
-					"required": true,
-					"content": {
-						"application/json": {
-							"schema": {
-								"$ref": "#/components/schemas/ReqRoleBody"
 							}
 						}
 					}
@@ -938,6 +1030,31 @@
 			}
 		},
 		"/role/{roleId}/permission/{permissionId}": {
+			"get": {
+				"operationId": "GetAllPermissions",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/ResPermission"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"description": "get all permissions",
+				"summary": "get all permissions",
+				"tags": [
+					"Permission"
+				],
+				"security": [],
+				"parameters": []
+			},
 			"post": {
 				"operationId": "SavePermission",
 				"responses": {
@@ -969,6 +1086,40 @@
 				}
 			}
 		},
+		"/role/{roleId}/permission/{permissionId}/{permissionId}": {
+			"delete": {
+				"operationId": "DeletePermission",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ResSuccess"
+								}
+							}
+						}
+					}
+				},
+				"description": "delete role",
+				"summary": "delete role",
+				"tags": [
+					"Permission"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "permissionId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			}
+		},
 		"/user/freeDongle/{userId}": {
 			"put": {
 				"operationId": "FreeTheDongle",
@@ -987,7 +1138,11 @@
 				"tags": [
 					"FREE DONGLE"
 				],
-				"security": [],
+				"security": [
+					{
+						"Api-Token": []
+					}
+				],
 				"parameters": [
 					{
 						"in": "path",
@@ -1009,6 +1164,8 @@
 						"description": "No content"
 					}
 				},
+				"description": "get all device (history enabled)",
+				"summary": "get all device (history enabled)",
 				"tags": [
 					"Device"
 				],
@@ -1075,6 +1232,8 @@
 						}
 					}
 				},
+				"description": "allot dongle to a device",
+				"summary": "allot dongle to a device",
 				"tags": [
 					"Device"
 				],

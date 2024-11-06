@@ -1,9 +1,10 @@
-import { Controller, Post, Request, Route, Security, Tags } from "tsoa";
+import { Body, Controller, Path, Post, Put, Request, Route, Security, Tags } from "tsoa";
 import { AppDataSource } from "../data-source";
-import { jobCardStatus, ServiceTicket } from "../entity/ServiceTickets";
+import { serviceTicketStatus, ServiceTicket } from "../entity/ServiceTickets";
 import { JWTRequest } from "../models/req/JWTRequest";
 import { User } from "../entity/User";
 import { ResServiceTicket } from "../models/res/ResServiceTicket";
+import { ReqSTstatus } from "../models/req/ReqSTstatus";
 function generateRandomString(length: number) {
     const characters = 'abcdefghijklmnopqrstuvwxyz0123456789';
     let result = '';
@@ -18,6 +19,11 @@ export class ServiceTicketController extends Controller{
     private serviceticketrepository=AppDataSource.getRepository(ServiceTicket)
     private userrepository=AppDataSource.getRepository(User)
 
+
+    /** 
+     * generates service ticket
+     * @summary generates service ticket 
+    */
     @Post()
     @Security('Api-Token', [])
     public async saveServiceTicket(@Request() req: JWTRequest): Promise<ResServiceTicket>{
@@ -34,7 +40,7 @@ export class ServiceTicketController extends Controller{
             // date:,
             // id,
             service_ticket_number: serviceTicketNumber,
-            status: jobCardStatus.new,
+            status: serviceTicketStatus.new,
             technician: Promise.resolve(user)
         }
 
@@ -50,4 +56,32 @@ export class ServiceTicketController extends Controller{
         }
         return resServiceTicket
     }
+
+     /**
+     * UPDATE SERVICE TICKET STATUS
+     * @summary UPDATE SERVICE TICKET STATUS
+     */
+    @Put('/{serviceTicketId}')
+    public async updateServiceTicketStatus(@Path() serviceTicketId: number, @Body() request: ReqSTstatus){
+        const {status}=request
+        const currentSt=await this.serviceticketrepository.findOne({
+            where:{
+                id: serviceTicketId
+            }
+        })
+
+
+        if(!currentSt){
+            return Promise.reject(new Error('SERVICE TICEKR WAS NOT FOUND'))
+        }
+
+        currentSt.status=status
+
+        const newST=Object.assign(new ServiceTicket(), currentSt)
+
+        const updatedST=await this.serviceticketrepository.save(newST)
+
+        return updatedST
+    }
+
 }

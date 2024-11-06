@@ -18,6 +18,11 @@ interface GeolocationUpdate {
 export class DeviceController extends Controller{
     private devicerepository=AppDataSource.getRepository(Device)
     private donglerepository=AppDataSource.getRepository(Dongle)
+
+     /**
+     *  get all device (history enabled)
+     * @summary get all device (history enabled)
+     */
     @Put('/update')
     public async updateGeolocation(@Body() body: GeolocationUpdate): Promise<void> {
         const deviceRepository = getRepository(Device);
@@ -66,6 +71,10 @@ public async saveDevice(@Body() request: ReqDevice): Promise<ResDevice>{
   return resDevice
 }
 
+ /**
+     * allot dongle to a device
+     * @summary allot dongle to a device
+     */
     @Put('allotDongle/{deviceId}')
     public async allotDongleToDevice(@Path() deviceId: number, @Body() request: ReqDongleAllot){
         const {id}=request
