@@ -1,4 +1,4 @@
-import { Body, Controller, Path, Post, Put, Route, Tags } from "tsoa";
+import { Body, Controller, Delete, Get, Path, Post, Put, Route, Tags } from "tsoa";
 import { getRepository } from "typeorm";
 import { Device } from "../entity/Device";
 import { AppDataSource } from "../data-source";
@@ -6,6 +6,9 @@ import { Dongle } from "../entity/Dongle";
 import { ReqDongleAllot } from "../models/req/ReqDongleAllot";
 import { ReqDevice } from "../models/req/ReqDevice";
 import { ResDevice } from "../models/res/ResDevice";
+import { ResSuccess } from "../models/res/Responses";
+import { DeviceHistory } from "../entity/DeviceHistory";
+import { User } from "../entity/User";
 
 interface GeolocationUpdate {
     deviceId: number;
@@ -18,11 +21,45 @@ interface GeolocationUpdate {
 export class DeviceController extends Controller{
     private devicerepository=AppDataSource.getRepository(Device)
     private donglerepository=AppDataSource.getRepository(Dongle)
-
+    private devicehistoryrepository=AppDataSource.getRepository(DeviceHistory)
+    private userrepository=AppDataSource.getRepository(User)
      /**
      *  get all device (history enabled)
      * @summary get all device (history enabled)
      */
+    @Get()
+    public async getAllDevice(){
+        const devices=await this.devicerepository.find({
+            relations:{
+                dongle: true
+            }
+        })
+
+        if(!devices){
+            return Promise.reject(new Error('DEVICES WERE NOT FOUND'))
+        }
+
+        
+        const resDevice: ResDevice[]=[]
+        for(const device of devices){
+
+            const dongle=await device.dongle
+            // if(!dongle){
+            //     return Promise.reject(new Error('THIS DONGLE WAS NOT FOUND'))
+            // }
+            resDevice.push({
+                dongle: {
+                    id: dongle?.id,
+                    name: dongle?.name
+                },
+                id: device.id,
+                mac_address: device.mac_address,
+                name: device.name,
+                // user: device.user
+            })
+        }
+        return resDevice
+    }
     @Put('/update')
     public async updateGeolocation(@Body() body: GeolocationUpdate): Promise<void> {
         const deviceRepository = getRepository(Device);
@@ -70,8 +107,47 @@ public async saveDevice(@Body() request: ReqDevice): Promise<ResDevice>{
   }
   return resDevice
 }
+/**
+     * delete device
+     * @summary delete device
+     */
+@Delete('/{deviceId}')
+public async deleteDevice(@Path() deviceId: number): Promise<ResSuccess>{
+    const devicetodelete=await this.devicerepository.findOne({
+        where:{
+            id: deviceId
+        },
+        relations:{
+            dongle: true,
+        }
+    })
+const user=await this.userrepository.findOne({
+    where:{
+        device:{
+            id: deviceId
+        }
+    }
+})
+    if(!devicetodelete){
+        return Promise.reject(new Error('DEVICE NOT FOUND'))
+    }
 
- /**
+    const device: DeviceHistory={
+        device_id: devicetodelete.id,
+        dongle_id: devicetodelete.dongle?.id,
+        id: devicetodelete.id,
+        mac_address: devicetodelete.mac_address,
+        name: devicetodelete.name,
+        user_id: (await devicetodelete.user)?.id
+    }
+
+    await this.devicehistoryrepository.save(device)
+    await this.devicerepository.remove(devicetodelete)
+
+    return {result: "DEVICE WAS DELETED SUCCESSFULLY"}
+}
+
+/**
      * allot dongle to a device
      * @summary allot dongle to a device
      */

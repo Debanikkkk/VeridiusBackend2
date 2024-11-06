@@ -281,16 +281,6 @@ const models: TsoaRoute.Models = {
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "GeolocationUpdate": {
-        "dataType": "refObject",
-        "properties": {
-            "deviceId": {"dataType":"double","required":true},
-            "latitude": {"dataType":"double","required":true},
-            "longitude": {"dataType":"double","required":true},
-        },
-        "additionalProperties": false,
-    },
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "ResDongle": {
         "dataType": "refObject",
         "properties": {
@@ -307,7 +297,17 @@ const models: TsoaRoute.Models = {
             "mac_address": {"dataType":"string"},
             "name": {"dataType":"string"},
             "user": {"ref":"ResUser"},
-            "dongle": {"ref":"ResDongle"},
+            "dongle": {"dataType":"union","subSchemas":[{"ref":"ResDongle"},{"dataType":"enum","enums":[null]}]},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "GeolocationUpdate": {
+        "dataType": "refObject",
+        "properties": {
+            "deviceId": {"dataType":"double","required":true},
+            "latitude": {"dataType":"double","required":true},
+            "longitude": {"dataType":"double","required":true},
         },
         "additionalProperties": false,
     },
@@ -823,6 +823,35 @@ export function RegisterRoutes(app: Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.get('/device',
+            ...(fetchMiddlewares<RequestHandler>(DeviceController)),
+            ...(fetchMiddlewares<RequestHandler>(DeviceController.prototype.getAllDevice)),
+
+            async function DeviceController_getAllDevice(request: ExRequest, response: ExResponse, next: any) {
+            const args: Record<string, TsoaRoute.ParameterSchema> = {
+            };
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+
+                const controller = new DeviceController();
+
+              await templateService.apiHandler({
+                methodName: 'getAllDevice',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         app.put('/device/update',
             ...(fetchMiddlewares<RequestHandler>(DeviceController)),
             ...(fetchMiddlewares<RequestHandler>(DeviceController.prototype.updateGeolocation)),
@@ -872,6 +901,36 @@ export function RegisterRoutes(app: Router) {
 
               await templateService.apiHandler({
                 methodName: 'saveDevice',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.delete('/device/:deviceId',
+            ...(fetchMiddlewares<RequestHandler>(DeviceController)),
+            ...(fetchMiddlewares<RequestHandler>(DeviceController.prototype.deleteDevice)),
+
+            async function DeviceController_deleteDevice(request: ExRequest, response: ExResponse, next: any) {
+            const args: Record<string, TsoaRoute.ParameterSchema> = {
+                    deviceId: {"in":"path","name":"deviceId","required":true,"dataType":"double"},
+            };
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+
+                const controller = new DeviceController();
+
+              await templateService.apiHandler({
+                methodName: 'deleteDevice',
                 controller,
                 response,
                 next,

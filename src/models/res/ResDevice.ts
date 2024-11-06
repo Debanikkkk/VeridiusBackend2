@@ -6,5 +6,5 @@ export interface ResDevice{
        mac_address?: string,
        name?: string,
        user?: ResUser,
-       dongle?: ResDongle
+       dongle?: ResDongle | null
 }

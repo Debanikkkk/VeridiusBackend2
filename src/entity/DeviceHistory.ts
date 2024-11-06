@@ -21,10 +21,14 @@ export class DeviceHistory{
     @CreateDateColumn()
     updatedOn?: Date
 
-    @Column()
+    @Column({
+        nullable:true
+    })
     dongle_id?: number
 
-    @Column()
+    @Column({
+        nullable:true
+    })
     user_id?: number
 
 

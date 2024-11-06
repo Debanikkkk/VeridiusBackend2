@@ -18,13 +18,21 @@ id?: number
 })
 date?: Date
 
-@CreateDateColumn()
+@CreateDateColumn({
+    name: 'createdAt'
+})
 created_on?: Date
 
-@UpdateDateColumn()
+@UpdateDateColumn({
+    name: 'updatedAt'
+})
 updated_on?: Date
 
-@Column()
+@Column({
+    type: 'enum',
+    enum: serviceTicketStatus,
+    default: serviceTicketStatus.new,
+})
 status?: serviceTicketStatus
 
 @Column({

@@ -510,29 +510,6 @@
 				"type": "object",
 				"additionalProperties": false
 			},
-			"GeolocationUpdate": {
-				"properties": {
-					"deviceId": {
-						"type": "number",
-						"format": "double"
-					},
-					"latitude": {
-						"type": "number",
-						"format": "double"
-					},
-					"longitude": {
-						"type": "number",
-						"format": "double"
-					}
-				},
-				"required": [
-					"deviceId",
-					"latitude",
-					"longitude"
-				],
-				"type": "object",
-				"additionalProperties": false
-			},
 			"ResDongle": {
 				"properties": {
 					"id": {
@@ -562,9 +539,37 @@
 						"$ref": "#/components/schemas/ResUser"
 					},
 					"dongle": {
-						"$ref": "#/components/schemas/ResDongle"
+						"allOf": [
+							{
+								"$ref": "#/components/schemas/ResDongle"
+							}
+						],
+						"nullable": true
 					}
 				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"GeolocationUpdate": {
+				"properties": {
+					"deviceId": {
+						"type": "number",
+						"format": "double"
+					},
+					"latitude": {
+						"type": "number",
+						"format": "double"
+					},
+					"longitude": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"required": [
+					"deviceId",
+					"latitude",
+					"longitude"
+				],
 				"type": "object",
 				"additionalProperties": false
 			},
@@ -1156,12 +1161,22 @@
 				]
 			}
 		},
-		"/device/update": {
-			"put": {
-				"operationId": "UpdateGeolocation",
+		"/device": {
+			"get": {
+				"operationId": "GetAllDevice",
 				"responses": {
-					"204": {
-						"description": "No content"
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/ResDevice"
+									},
+									"type": "array"
+								}
+							}
+						}
 					}
 				},
 				"description": "get all device (history enabled)",
@@ -1170,20 +1185,8 @@
 					"Device"
 				],
 				"security": [],
-				"parameters": [],
-				"requestBody": {
-					"required": true,
-					"content": {
-						"application/json": {
-							"schema": {
-								"$ref": "#/components/schemas/GeolocationUpdate"
-							}
-						}
-					}
-				}
-			}
-		},
-		"/device": {
+				"parameters": []
+			},
 			"post": {
 				"operationId": "SaveDevice",
 				"responses": {
@@ -1215,6 +1218,65 @@
 						}
 					}
 				}
+			}
+		},
+		"/device/update": {
+			"put": {
+				"operationId": "UpdateGeolocation",
+				"responses": {
+					"204": {
+						"description": "No content"
+					}
+				},
+				"tags": [
+					"Device"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/GeolocationUpdate"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/device/{deviceId}": {
+			"delete": {
+				"operationId": "DeleteDevice",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ResSuccess"
+								}
+							}
+						}
+					}
+				},
+				"description": "delete device",
+				"summary": "delete device",
+				"tags": [
+					"Device"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "deviceId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
 			}
 		},
 		"/device/allotDongle/{deviceId}": {
