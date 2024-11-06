@@ -1,4 +1,4 @@
-import { Body, Controller, Path, Post, Put, Route, Tags } from "tsoa";
+import { Body, Controller, Get, Path, Post, Put, Query, Route, Tags } from "tsoa";
 import { AppDataSource } from "../data-source";
 import { User } from "../entity/User";
 import { ResUser } from "../models/res/ResUser";
@@ -13,6 +13,7 @@ import { ReqUserLogin } from "../models/req/ReqUserLogin";
 import { Role } from "../entity/Role";
 import { ReqDeviceAssign } from "../models/req/ReqDeviceAssign";
 import { Device } from "../entity/Device";
+import { PaginatedResponse } from "../models/res/PaginatedResponse";
 @Tags('User')
 @Route('/user')
 export class UserController extends Controller{
@@ -157,6 +158,44 @@ console.log('user found is ', user)
 
     return newUser
   }
+
+
+  public  async getUsersPagination(page: number, pageSize: number): Promise<{ items: User[], totalCount: number }> {
+    // Replace with actual DB call, for example with TypeORM or Sequelize
+    const offset = (page - 1) * pageSize;
+    const limit = pageSize;
+
+    // Mock data for illustration purposes
+    const allUsers: User[] = await this.userrepository.find()
+
+    const paginatedUsers = allUsers.slice(offset, offset + limit);
+
+    return {
+      items: paginatedUsers,
+      totalCount: allUsers.length,
+    };
+  }
+
+
+   /**
+   * Get all users with pagination
+   * @param page The page number (default: 1)
+   * @param pageSize The number of users per page (default: 10)
+   * @returns A paginated list of users
+   */
+   @Get('/')
+   public async getUsers(
+     @Query('page') page: number = 1,
+     @Query('pageSize') pageSize: number = 10
+   ): Promise<PaginatedResponse<User>> {
+     const users = await this.getUsersPagination(page, pageSize);
+     return {
+       items: users.items,
+       totalCount: users.totalCount,
+       page,
+       pageSize,
+     };
+   }
 }
 
 
