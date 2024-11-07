@@ -7,6 +7,30 @@
 		"requestBodies": {},
 		"responses": {},
 		"schemas": {
+			"ResRole": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"name": {
+						"type": "string"
+					},
+					"description": {
+						"type": "string"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"serviceTicketStatus": {
+				"enum": [
+					"open",
+					"closed",
+					"new"
+				],
+				"type": "string"
+			},
 			"ResUser": {
 				"properties": {
 					"id": {
@@ -27,6 +51,78 @@
 					},
 					"phone_number": {
 						"type": "string"
+					},
+					"role": {
+						"$ref": "#/components/schemas/ResRole"
+					},
+					"service_ticket": {
+						"$ref": "#/components/schemas/ResServiceTicket"
+					},
+					"device": {
+						"$ref": "#/components/schemas/ResDevice"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ResServiceTicket": {
+				"properties": {
+					"date": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"service_ticket_number": {
+						"type": "string"
+					},
+					"status": {
+						"$ref": "#/components/schemas/serviceTicketStatus"
+					},
+					"technician": {
+						"$ref": "#/components/schemas/ResUser"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ResDongle": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"name": {
+						"type": "string"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ResDevice": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"mac_address": {
+						"type": "string"
+					},
+					"name": {
+						"type": "string"
+					},
+					"user": {
+						"$ref": "#/components/schemas/ResUser"
+					},
+					"dongle": {
+						"allOf": [
+							{
+								"$ref": "#/components/schemas/ResDongle"
+							}
+						],
+						"nullable": true
 					}
 				},
 				"type": "object",
@@ -52,22 +148,6 @@
 					"role": {
 						"type": "number",
 						"format": "double"
-					}
-				},
-				"type": "object",
-				"additionalProperties": false
-			},
-			"ResRole": {
-				"properties": {
-					"id": {
-						"type": "number",
-						"format": "double"
-					},
-					"name": {
-						"type": "string"
-					},
-					"description": {
-						"type": "string"
 					}
 				},
 				"type": "object",
@@ -190,7 +270,7 @@
 						"$ref": "#/components/schemas/Role"
 					},
 					"service_ticket": {
-						"$ref": "#/components/schemas/User"
+						"$ref": "#/components/schemas/ServiceTicket"
 					}
 				},
 				"type": "object",
@@ -299,6 +379,37 @@
 				"type": "object",
 				"additionalProperties": false
 			},
+			"ServiceTicket": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"date": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"created_on": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"updated_on": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"status": {
+						"$ref": "#/components/schemas/serviceTicketStatus"
+					},
+					"service_ticket_number": {
+						"type": "string"
+					},
+					"technician": {
+						"$ref": "#/components/schemas/User"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
 			"ReqDeviceAssign": {
 				"properties": {
 					"id": {
@@ -336,68 +447,6 @@
 					"page",
 					"pageSize"
 				],
-				"type": "object",
-				"additionalProperties": false
-			},
-			"serviceTicketStatus": {
-				"enum": [
-					"open",
-					"closed",
-					"new"
-				],
-				"type": "string"
-			},
-			"ResServiceTicket": {
-				"properties": {
-					"date": {
-						"type": "string",
-						"format": "date-time"
-					},
-					"id": {
-						"type": "number",
-						"format": "double"
-					},
-					"service_ticket_number": {
-						"type": "string"
-					},
-					"status": {
-						"$ref": "#/components/schemas/serviceTicketStatus"
-					},
-					"technician": {
-						"$ref": "#/components/schemas/ResUser"
-					}
-				},
-				"type": "object",
-				"additionalProperties": false
-			},
-			"ServiceTicket": {
-				"properties": {
-					"id": {
-						"type": "number",
-						"format": "double"
-					},
-					"date": {
-						"type": "string",
-						"format": "date-time"
-					},
-					"created_on": {
-						"type": "string",
-						"format": "date-time"
-					},
-					"updated_on": {
-						"type": "string",
-						"format": "date-time"
-					},
-					"status": {
-						"$ref": "#/components/schemas/serviceTicketStatus"
-					},
-					"service_ticket_number": {
-						"type": "string"
-					},
-					"technician": {
-						"$ref": "#/components/schemas/User"
-					}
-				},
 				"type": "object",
 				"additionalProperties": false
 			},
@@ -505,46 +554,6 @@
 							"format": "double"
 						},
 						"type": "array"
-					}
-				},
-				"type": "object",
-				"additionalProperties": false
-			},
-			"ResDongle": {
-				"properties": {
-					"id": {
-						"type": "number",
-						"format": "double"
-					},
-					"name": {
-						"type": "string"
-					}
-				},
-				"type": "object",
-				"additionalProperties": false
-			},
-			"ResDevice": {
-				"properties": {
-					"id": {
-						"type": "number",
-						"format": "double"
-					},
-					"mac_address": {
-						"type": "string"
-					},
-					"name": {
-						"type": "string"
-					},
-					"user": {
-						"$ref": "#/components/schemas/ResUser"
-					},
-					"dongle": {
-						"allOf": [
-							{
-								"$ref": "#/components/schemas/ResDongle"
-							}
-						],
-						"nullable": true
 					}
 				},
 				"type": "object",
@@ -763,7 +772,77 @@
 				}
 			}
 		},
+		"/user/{userId}": {
+			"get": {
+				"operationId": "GetOneUser",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"$ref": "#/components/schemas/ResUser"
+										},
+										{
+											"properties": {
+												"error": {
+													"type": "string"
+												}
+											},
+											"required": [
+												"error"
+											],
+											"type": "object"
+										}
+									]
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"User"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "userId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			}
+		},
 		"/serviceTicket": {
+			"get": {
+				"operationId": "GetAllServiceTickets",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/ResServiceTicket"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Service Ticket"
+				],
+				"security": [],
+				"parameters": []
+			},
 			"post": {
 				"operationId": "SaveServiceTicket",
 				"responses": {
@@ -1140,6 +1219,8 @@
 						}
 					}
 				},
+				"description": "FREE THE DONGLE-DEVICE-USER CONNECTION",
+				"summary": "FREE THE DONGLE-DEVICE-USER CONNECTION",
 				"tags": [
 					"FREE DONGLE"
 				],

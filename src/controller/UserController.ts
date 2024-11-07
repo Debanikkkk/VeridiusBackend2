@@ -14,6 +14,7 @@ import { Role } from "../entity/Role";
 import { ReqDeviceAssign } from "../models/req/ReqDeviceAssign";
 import { Device } from "../entity/Device";
 import { PaginatedResponse } from "../models/res/PaginatedResponse";
+import { serviceTicketStatus } from "../entity/ServiceTickets";
 @Tags('User')
 @Route('/user')
 export class UserController extends Controller{
@@ -196,6 +197,67 @@ console.log('user found is ', user)
        pageSize,
      };
    }
+
+   
+ @Get('/{userId}')
+ public async getOneUser(@Path() userId: number){
+  const user=await this.userrepository.findOne({
+    where:{
+      id: userId
+    },
+    relations:{
+      service_ticket: true,
+      device: true,
+      role: true,
+    }
+  }).then(async (user)=>{
+      if(!user){
+        return Promise.reject(new Error('THERE WAS A PROBLEM IN FINDING THE USER'))
+      }
+      const serviceTicket=user.service_ticket
+      const device=user.device
+      const role=await this.rolerepository.findOne({
+        where:{
+          users:{
+            id: userId
+          }
+          
+        }
+      })
+
+
+      const resUser: ResUser={
+        address: user.address,
+        email: user.email,
+        id: user.id,
+        name: user.name,
+        password: user.password,
+        phone_number: user.phone_number, 
+        device: {
+          id: device?.id,
+          mac_address: device?.mac_address,
+          name: device?.name,
+          
+        },
+        role:{
+          description: role?.description,
+          id: role?.id,
+          name: role?.name
+        },
+        service_ticket: {
+          // date: serviceTicket.,
+          id: (await serviceTicket)?.id,
+          // service_ticket_number,
+          // status
+          // serviceTicketStatus
+        }
+      }
+      return resUser
+  }, ()=>{
+    return {error: 'THERE WAS AN ERROR IN LOADING THE USER'}
+  })
+  return user
+ }
 }
 
 

@@ -45,6 +45,6 @@ export class User{
 
     @OneToOne(()=>(ServiceTicket), (service_ticket)=>{service_ticket.technician},  {onDelete: 'CASCADE', onUpdate: 'CASCADE', nullable: false})
 // @JoinColumn({name: 'service_ticket_id'})
-service_ticket?: Promise<User>
+service_ticket?: Promise<ServiceTicket>
     
 }

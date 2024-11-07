@@ -1,4 +1,4 @@
-import { Controller, Path, Put, Request, Route, Security, Tags } from "tsoa";
+import { Controller, Get, Path, Put, Request, Route, Security, Tags } from "tsoa";
 import { AppDataSource } from "../data-source";
 import { Dongle } from "../entity/Dongle";
 import { Device } from "../entity/Device";
@@ -13,6 +13,11 @@ export class FreeDongleUserDeviceController extends Controller{
  private devicerepository=AppDataSource.getRepository(Device)
  private userrepository=AppDataSource.getRepository(User)
 private devicehistoryrepository=AppDataSource.getRepository(DeviceHistory)
+
+/**
+ * FREE THE DONGLE-DEVICE-USER CONNECTION
+ *  @summary FREE THE DONGLE-DEVICE-USER CONNECTION
+ */
  @Put('freeDongle/{userId}')
  @Security('Api-Token', [])
  public async freeTheDongle(@Request() req: JWTRequest, @Path() userId: number){
