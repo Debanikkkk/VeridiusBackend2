@@ -1,3 +1,3 @@
-export interface ReqDeviceAssign{
-    id?: number
+export interface ReqDeviceAssign {
+  id?: number;
 }

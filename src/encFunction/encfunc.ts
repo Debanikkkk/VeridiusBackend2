@@ -1,4 +1,4 @@
-import * as crypto from 'crypto'
+import * as crypto from 'crypto';
 // export function encryptPassword(password: string, encryptionKey: string): string {
 //     const iv = crypto.randomBytes(16); // Generate a random IV (Initialization Vector)
 //     const cipher = crypto.createCipheriv('aes-256-cbc', Buffer.from(encryptionKey), iv);
@@ -6,7 +6,6 @@ import * as crypto from 'crypto'
 //     encryptedPassword += cipher.final('hex');
 //     return encryptedPassword;
 //   }
-
 
 // Function to encrypt a message with a fixed IV
 export function encryptMessageFixedIV(message: string, encryptionKey: Buffer, iv: Buffer): string {

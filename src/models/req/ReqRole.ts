@@ -1,4 +1,4 @@
-export interface ReqRole{
-    name?: string,
-    description?: string,
+export interface ReqRole {
+  name?: string;
+  description?: string;
 }

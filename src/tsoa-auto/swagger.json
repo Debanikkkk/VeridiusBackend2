@@ -88,19 +88,6 @@
 				"type": "object",
 				"additionalProperties": false
 			},
-			"ResDongle": {
-				"properties": {
-					"id": {
-						"type": "number",
-						"format": "double"
-					},
-					"name": {
-						"type": "string"
-					}
-				},
-				"type": "object",
-				"additionalProperties": false
-			},
 			"ResDevice": {
 				"properties": {
 					"id": {
@@ -123,6 +110,22 @@
 							}
 						],
 						"nullable": true
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ResDongle": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"name": {
+						"type": "string"
+					},
+					"device": {
+						"$ref": "#/components/schemas/ResDevice"
 					}
 				},
 				"type": "object",
@@ -153,6 +156,13 @@
 				"type": "object",
 				"additionalProperties": false
 			},
+			"permType": {
+				"enum": [
+					"user",
+					"product"
+				],
+				"type": "string"
+			},
 			"ResPermission": {
 				"properties": {
 					"id": {
@@ -161,6 +171,9 @@
 					},
 					"description": {
 						"type": "string"
+					},
+					"type": {
+						"$ref": "#/components/schemas/permType"
 					},
 					"name": {
 						"type": "string"
@@ -172,6 +185,9 @@
 						"type": "array"
 					}
 				},
+				"required": [
+					"type"
+				],
 				"type": "object",
 				"additionalProperties": false
 			},
@@ -369,6 +385,9 @@
 					"description": {
 						"type": "string"
 					},
+					"type": {
+						"$ref": "#/components/schemas/permType"
+					},
 					"role": {
 						"items": {
 							"$ref": "#/components/schemas/Role"
@@ -545,6 +564,9 @@
 					"description": {
 						"type": "string"
 					},
+					"type": {
+						"$ref": "#/components/schemas/permType"
+					},
 					"name": {
 						"type": "string"
 					},
@@ -559,26 +581,12 @@
 				"type": "object",
 				"additionalProperties": false
 			},
-			"GeolocationUpdate": {
+			"ReqDongle": {
 				"properties": {
-					"deviceId": {
-						"type": "number",
-						"format": "double"
-					},
-					"latitude": {
-						"type": "number",
-						"format": "double"
-					},
-					"longitude": {
-						"type": "number",
-						"format": "double"
+					"name": {
+						"type": "string"
 					}
 				},
-				"required": [
-					"deviceId",
-					"latitude",
-					"longitude"
-				],
 				"type": "object",
 				"additionalProperties": false
 			},
@@ -1242,6 +1250,99 @@
 				]
 			}
 		},
+		"/dongle": {
+			"post": {
+				"operationId": "SaveDongle",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ResDongle"
+								}
+							}
+						}
+					}
+				},
+				"description": "save dongle",
+				"summary": "save dongle",
+				"tags": [
+					"Dongle"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/ReqDongle"
+							}
+						}
+					}
+				}
+			},
+			"get": {
+				"operationId": "GetAllDongle",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/ResDongle"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"description": "get all dongle",
+				"summary": "get all dongle",
+				"tags": [
+					"Dongle"
+				],
+				"security": [],
+				"parameters": []
+			}
+		},
+		"/dongle/{dongleId}": {
+			"delete": {
+				"operationId": "DeleteDongle",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ResSuccess"
+								}
+							}
+						}
+					}
+				},
+				"description": "delete dongle",
+				"summary": "delete dongle",
+				"tags": [
+					"Dongle"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "dongleId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			}
+		},
 		"/device": {
 			"get": {
 				"operationId": "GetAllDevice",
@@ -1295,31 +1396,6 @@
 						"application/json": {
 							"schema": {
 								"$ref": "#/components/schemas/ReqDevice"
-							}
-						}
-					}
-				}
-			}
-		},
-		"/device/update": {
-			"put": {
-				"operationId": "UpdateGeolocation",
-				"responses": {
-					"204": {
-						"description": "No content"
-					}
-				},
-				"tags": [
-					"Device"
-				],
-				"security": [],
-				"parameters": [],
-				"requestBody": {
-					"required": true,
-					"content": {
-						"application/json": {
-							"schema": {
-								"$ref": "#/components/schemas/GeolocationUpdate"
 							}
 						}
 					}

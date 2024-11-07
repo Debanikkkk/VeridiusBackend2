@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 module.exports = {
   parser: '@typescript-eslint/parser',
   extends: ['plugin:prettier/recommended', 'prettier', 'eslint:recommended'],
@@ -13,6 +15,7 @@ module.exports = {
   },
   rules: {
     'no-var': 'error',
+    'prettier/prettier': 'error',
     semi: 'error',
     indent: [
       'error',
@@ -26,6 +29,7 @@ module.exports = {
         ],
       },
     ],
+
     'no-multi-spaces': 'error',
     'space-in-parens': 'error',
     'no-multiple-empty-lines': 'error',

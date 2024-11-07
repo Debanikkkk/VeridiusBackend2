@@ -1,76 +1,77 @@
-import { Controller, Get, Path, Put, Request, Route, Security, Tags } from "tsoa";
-import { AppDataSource } from "../data-source";
-import { Dongle } from "../entity/Dongle";
-import { Device } from "../entity/Device";
-import { User } from "../entity/User";
-import { DeviceHistory } from "../entity/DeviceHistory";
-import { object } from "joi";
-import { JWTRequest } from "../models/req/JWTRequest";
+import { Controller, Path, Put, Request, Route, Security, Tags } from 'tsoa';
+import { AppDataSource } from '../data-source';
+import { Dongle } from '../entity/Dongle';
+import { Device } from '../entity/Device';
+import { User } from '../entity/User';
+import { DeviceHistory } from '../entity/DeviceHistory';
+// import { object } from "joi";
+import { JWTRequest } from '../models/req/JWTRequest';
 @Tags('FREE DONGLE')
 @Route('/user')
-export class FreeDongleUserDeviceController extends Controller{
- private donglerepository=AppDataSource.getRepository(Dongle)
- private devicerepository=AppDataSource.getRepository(Device)
- private userrepository=AppDataSource.getRepository(User)
-private devicehistoryrepository=AppDataSource.getRepository(DeviceHistory)
+export class FreeDongleUserDeviceController extends Controller {
+  private donglerepository = AppDataSource.getRepository(Dongle);
+  private devicerepository = AppDataSource.getRepository(Device);
+  private userrepository = AppDataSource.getRepository(User);
+  private devicehistoryrepository = AppDataSource.getRepository(DeviceHistory);
 
-/**
- * FREE THE DONGLE-DEVICE-USER CONNECTION
- *  @summary FREE THE DONGLE-DEVICE-USER CONNECTION
- */
- @Put('freeDongle/{userId}')
- @Security('Api-Token', [])
- public async freeTheDongle(@Request() req: JWTRequest, @Path() userId: number){
+  /**
+   * FREE THE DONGLE-DEVICE-USER CONNECTION
+   *  @summary FREE THE DONGLE-DEVICE-USER CONNECTION
+   */
+  @Put('freeDongle/{userId}')
+  @Security('Api-Token', [])
+  public async freeTheDongle(@Request() req: JWTRequest, @Path() userId: number) {
     // const {}=req
-    const user =await this.userrepository.findOne({
-        where:{
-            id: userId
-        },
-        // relations:{
-        //     // dongle: true,
-        //     user: true
-        // }
-    })
-    if(!user){
-        return Promise.reject(new Error('USER NOT FOUND'))
+    const user = await this.userrepository.findOne({
+      where: {
+        id: userId,
+      },
+      // relations:{
+      //     // dongle: true,
+      //     user: true
+      // }
+    });
+    if (!user) {
+      return Promise.reject(new Error('USER NOT FOUND'));
     }
-// console.log("the user foudn linked to the device", device?.user)
-// console.log("the dongle foudn linked to the user", device?.dongle)
-const device=await this.devicerepository.findOne({
-    where:{
-      id: user.device?.id
-    },
-    relations:{
-        dongle: true
-    }
-})
+    // console.log("the user foudn linked to the device", device?.user)
+    // console.log("the dongle foudn linked to the user", device?.dongle)
+    const device = await this.devicerepository.findOne({
+      where: {
+        id: user.device?.id,
+      },
+      relations: {
+        dongle: true,
+      },
+    });
 
-if(!user){
-   return Promise.resolve('USER NOT FOUND') 
-}
-
-console.log('this is the device from the db from user relation', device)
-    if(!device){
-        return Promise.reject(new Error('DONGLE NOT FOUND'))
+    if (!user) {
+      return Promise.resolve('USER NOT FOUND');
     }
 
-    const deviceHistory: DeviceHistory={
-        device_id: device.id,
-        dongle_id: device.dongle?.id,
-        mac_address: device.mac_address,
-        name: device.name,
-        user_id: req.user.id,
+    console.log('this is the device from the db from user relation', device);
+    if (!device) {
+      return Promise.reject(new Error('DONGLE NOT FOUND'));
     }
 
-    const devicehistorySaver=Object.assign(new DeviceHistory, deviceHistory)
+    const deviceHistory: DeviceHistory = {
+      device_id: device.id,
+      dongle_id: device.dongle?.id,
+      mac_address: device.mac_address,
+      name: device.name,
+      user_id: req.user.id,
+    };
 
-    const savedDeviceHistory=await this.devicehistoryrepository.save(devicehistorySaver)
-    console.log('this is the user found in the device', device.user)
-    device.dongle=null
-    await this.devicerepository.save(device)
-    user.device=null
-await this.userrepository.save(user)
+    const devicehistorySaver = Object.assign(new DeviceHistory(), deviceHistory);
 
-    return "success"
- }
+    const savedDeviceHistory = await this.devicehistoryrepository.save(devicehistorySaver);
+    console.log(savedDeviceHistory);
+    console.log('this is the user found in the device', device.user);
+    device.dongle = null;
+    await this.devicerepository.save(device);
+    user.device = null;
+    await this.userrepository.save(user);
+
+    return 'success';
+  }
 }

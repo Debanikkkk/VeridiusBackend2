@@ -1,4 +1,4 @@
-import { ResPermission } from "./ResPermission";
+import { ResPermission } from './ResPermission';
 
 interface UserLoginRole {
   id: number;

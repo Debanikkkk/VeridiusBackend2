@@ -1,5 +1,5 @@
-import { serviceTicketStatus } from "../../entity/ServiceTickets";
+import { serviceTicketStatus } from '../../entity/ServiceTickets';
 
-export interface ReqSTstatus{
-    status: serviceTicketStatus
+export interface ReqSTstatus {
+  status: serviceTicketStatus;
 }

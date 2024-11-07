@@ -1,6 +1,6 @@
-import { ResRole } from "./ResRole";
+import { ResRole } from './ResRole';
 
-export interface ResRoleSubRole{
-    role?: ResRole,
-    subrole?: ResRole[]
+export interface ResRoleSubRole {
+  role?: ResRole;
+  subrole?: ResRole[];
 }

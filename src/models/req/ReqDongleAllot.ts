@@ -1,3 +1,3 @@
-export interface ReqDongleAllot{
-    id?: number
+export interface ReqDongleAllot {
+  id?: number;
 }
