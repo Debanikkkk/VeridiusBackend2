@@ -469,6 +469,35 @@
 				"type": "object",
 				"additionalProperties": false
 			},
+			"ResUserUpdate": {
+				"properties": {
+					"name": {
+						"type": "string"
+					},
+					"address": {
+						"type": "string"
+					},
+					"password": {
+						"type": "string"
+					},
+					"email": {
+						"type": "string"
+					},
+					"phone_number": {
+						"type": "string"
+					},
+					"role": {
+						"type": "number",
+						"format": "double"
+					},
+					"device": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
 			"ReqSTstatus": {
 				"properties": {
 					"status": {
@@ -825,6 +854,46 @@
 						}
 					}
 				]
+			},
+			"put": {
+				"operationId": "UpdateUser",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ResUser"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"User"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "userId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/ResUserUpdate"
+							}
+						}
+					}
+				}
 			}
 		},
 		"/serviceTicket": {
@@ -1310,6 +1379,45 @@
 			}
 		},
 		"/dongle/{dongleId}": {
+			"get": {
+				"operationId": "GetOneDongle",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"$ref": "#/components/schemas/ResDongle"
+										},
+										{
+											"$ref": "#/components/schemas/ResError"
+										}
+									]
+								}
+							}
+						}
+					}
+				},
+				"description": "get all dongle",
+				"summary": "get all dongle",
+				"tags": [
+					"Dongle"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "dongleId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			},
 			"delete": {
 				"operationId": "DeleteDongle",
 				"responses": {

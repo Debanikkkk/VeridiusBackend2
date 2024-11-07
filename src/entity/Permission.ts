@@ -23,6 +23,7 @@ export class Permission {
   @Column({
     type: 'enum',
     enum: permType,
+    nullable: true,
     // default: permType,
   })
   type?: permType;

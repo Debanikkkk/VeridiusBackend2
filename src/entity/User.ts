@@ -60,7 +60,7 @@ export class User {
     (service_ticket) => {
       service_ticket.technician;
     },
-    { onDelete: 'CASCADE', onUpdate: 'CASCADE', nullable: false },
+    { onDelete: 'CASCADE', onUpdate: 'CASCADE', nullable: true },
   )
   // @JoinColumn({name: 'service_ticket_id'})
   service_ticket?: Promise<ServiceTicket>;

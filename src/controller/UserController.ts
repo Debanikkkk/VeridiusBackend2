@@ -14,6 +14,7 @@ import { Role } from '../entity/Role';
 import { ReqDeviceAssign } from '../models/req/ReqDeviceAssign';
 import { Device } from '../entity/Device';
 import { PaginatedResponse } from '../models/res/PaginatedResponse';
+import { ResUserUpdate } from '../models/req/ReqUserUpdate';
 // import { serviceTicketStatus } from "../entity/ServiceTickets";
 @Tags('User')
 @Route('/user')
@@ -253,6 +254,78 @@ export class UserController extends Controller {
         },
       );
     return user;
+  }
+
+  @Put('/{userId}')
+  public async updateUser(@Path() userId: number, @Body() request: ResUserUpdate): Promise<ResUser> {
+    const existingUser = await this.userrepository.findOne({
+      where: {
+        id: userId,
+      },
+      relations: {
+        device: true,
+        role: true,
+        service_ticket: true,
+      },
+    });
+
+    if (!existingUser) {
+      return Promise.reject(new Error('THERE WAS A PROBLEM IN FETCHING THIS USER'));
+    }
+
+    const { address, device, email, name, password, phone_number, role } = request;
+
+    const db_device = await this.devicerepository.findOne({
+      where: {
+        id: device,
+      },
+    });
+    if (!db_device) {
+      return Promise.reject(new Error('DB DEVICE NOT FOUND'));
+    }
+
+    const db_role = await this.rolerepository.findOne({
+      where: {
+        id: role,
+      },
+    });
+    if (!db_role) {
+      return Promise.reject(new Error('DB ROLE NOT FOUND'));
+    }
+    existingUser.address = address;
+    existingUser.device = db_device;
+    existingUser.email = email;
+    existingUser.name = name;
+    existingUser.password = password;
+    existingUser.phone_number = phone_number;
+    existingUser.role = Promise.resolve(db_role);
+
+    const savedUser = await this.userrepository.save(existingUser);
+
+    const resUser: ResUser = {
+      address: savedUser.address,
+      device: {
+        // dongle: db_device.,
+        id: db_device.id,
+        mac_address: db_device.mac_address,
+        name: db_device.name,
+        // user: db_device.user
+      },
+      email: savedUser.email,
+      id: savedUser.id,
+      name: savedUser.name,
+      password: savedUser.password,
+      phone_number: savedUser.phone_number,
+      role: {
+        description: db_role.description,
+        id: db_role.id,
+        name: db_role.name,
+      },
+      // service_ticket: savedUser.service_ticket,
+    };
+    return resUser;
+
+    // existingUser.service_ticket=service_ticket
   }
 }
 

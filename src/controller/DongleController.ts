@@ -6,7 +6,7 @@ import { ReqDongle } from '../models/req/ReqDongle';
 import { Dongle } from '../entity/Dongle';
 import { ResDongle } from '../models/res/ResDongle';
 import { ResDevice } from '../models/res/ResDevice';
-import { ResSuccess } from '../models/res/Responses';
+import { ResError, ResSuccess } from '../models/res/Responses';
 import { DongleHistory } from '../entity/DongleHistory';
 @Tags('Dongle')
 @Route('/dongle')
@@ -81,6 +81,50 @@ export class DongleController extends Controller {
     }
     return dongleArr;
   }
+
+  /**
+   * get all dongle
+   * @summary get all dongle
+   */
+  @Get('/{dongleId}')
+  public async getOneDongle(@Path() dongleId: number): Promise<ResDongle | ResError> {
+    const dongle = await this.donglerepository
+      .findOne({
+        where: {
+          id: dongleId,
+        },
+      })
+      .then(
+        (dongle) => {
+          if (!dongle) {
+            return Promise.reject(new Error('DONGLE NOT FOUND'));
+          }
+
+          const device = this.devicerepository.findOne({
+            where: {
+              dongle: {
+                id: dongle.id,
+              },
+            },
+          });
+          if (!device) {
+            return Promise.reject(new Error('THIS DEVICE WAS NOT FOUND FOR THE DONGLE'));
+          }
+          const resDongle: ResDongle = {
+            // device: device,
+            id: dongle.id,
+            name: dongle.name,
+          };
+
+          return resDongle;
+        },
+        () => {
+          return { error: 'there was a problem in retrieving the dongle details' };
+        },
+      );
+    return dongle;
+  }
+
   /**
    * delete dongle
    * @summary delete dongle
