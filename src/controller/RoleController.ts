@@ -9,6 +9,8 @@ import { In } from 'typeorm';
 import { Permission } from '../entity/Permission';
 import { ReqRoleBody } from '../models/req/ReqRoleBody';
 import { ResError, ResSuccess } from '../models/res/Responses';
+import { ReqPermission } from '../models/req/ReqPermission';
+import { ResPermission } from '../models/res/ResPermission';
 @Tags('Role')
 @Route('/role')
 export class RoleController extends Controller {
@@ -17,105 +19,118 @@ export class RoleController extends Controller {
 
   @Get('/{roleId}')
   public async getOneRole(@Path() roleId: number): Promise<ResRole | ResError> {
-    const role = await this.rolerepository
-      .findOne({
+    try {
+      const role = await this.rolerepository.findOne({
         where: {
           id: roleId,
         },
-      })
-      .then(
-        (role) => {
-          if (!role) {
-            return Promise.reject(new Error('ROLE CANNOT BE FOUND'));
-          }
+      });
 
-          const resRole: ResRole = {
-            description: role.description,
-            id: role.id,
-            name: role.name,
-          };
+      if (!role) {
+        return Promise.reject(new Error('ROLE CANNOT BE FOUND'));
+      }
 
-          return resRole;
-        },
-        () => {
-          return { error: 'there was a problem in finding the role' };
-        },
-      );
-    return role;
+      const resRole: ResRole = {
+        description: role.description,
+        id: role.id,
+        name: role.name,
+      };
+
+      return resRole;
+    } catch (error) {
+      console.log('there was an errror in fetching the role', error);
+      return { error: 'failed to load the role' };
+    }
   }
+
   /**
    * get all the roles
    * @summary get all the roles
    */
   @Get()
-  public async getAllRole(): Promise<ResRole[]> {
-    const roles = await this.rolerepository.find();
+  public async getAllRole(): Promise<ResRole[] | ResError> {
+    try {
+      const roles = await this.rolerepository.find();
 
-    const roleArr: ResRole[] = [];
+      const roleArr: ResRole[] = [];
 
-    for (const role of roles) {
-      roleArr.push({
-        description: role.description,
-        id: role.id,
-        name: role.name,
-      });
+      for (const role of roles) {
+        roleArr.push({
+          description: role.description,
+          id: role.id,
+          name: role.name,
+        });
+      }
+
+      return roleArr;
+    } catch (error) {
+      console.log('there was an errror in fetching the ', error);
+      return { error: 'failed to load the ' };
     }
-
-    return roleArr;
   }
 
   @Delete('/{roleId}')
-  public async deleteRole(@Path() roleId: number): Promise<ResSuccess> {
-    const roletodelete = await this.rolerepository.findOne({
-      where: {
-        id: roleId,
-      },
-    });
+  public async deleteRole(@Path() roleId: number): Promise<ResSuccess | ResError> {
+    try {
+      const roletodelete = await this.rolerepository.findOne({
+        where: {
+          id: roleId,
+        },
+      });
 
-    if (!roletodelete) {
-      return Promise.reject(new Error('ROLE CANNOT BE FOUND'));
+      if (!roletodelete) {
+        return Promise.reject(new Error('ROLE CANNOT BE FOUND'));
+      }
+
+      await this.rolerepository.remove(roletodelete);
+      return { result: 'THE ROLE WAS DELETED SUCCESSFULLY' };
+    } catch (error) {
+      console.log('there was an errror in delete the role', error);
+      return { error: 'failed to delete the role ' };
     }
-
-    await this.rolerepository.remove(roletodelete);
-    return { result: 'THE ROLE WAS DELETED SUCCESSFULLY' };
   }
   /**
    * save role
    * @summary save role
    */
   @Post()
-  public async saveRole(@Body() request: ReqRole): Promise<ResRole> {
-    const { name, description } = request;
+  public async saveRole(@Body() request: ReqRole): Promise<ResRole | ResError> {
+    try {
+      const { name, description } = request;
 
-    const roleToSave: Role = {
-      description: description,
-      name: name,
-    };
+      const roleToSave: Role = {
+        description: description,
+        name: name,
+      };
 
-    const roleSaver = Object.assign(new Role(), roleToSave);
-    const savedRole = await this.rolerepository.save(roleSaver);
+      const roleSaver = Object.assign(new Role(), roleToSave);
+      const savedRole = await this.rolerepository.save(roleSaver);
 
-    const roleArr: Role[] = [];
-    roleArr.push(savedRole);
-    const permissionToSaveManage: Permission = {
-      name: 'manage' + name,
-      description: 'management permissions of ' + name,
-      role: Promise.resolve(roleArr),
-    };
+      const roleArr: Role[] = [];
+      roleArr.push(savedRole);
+      const permissionToSaveManage: Permission = {
+        name: 'manage' + name,
+        description: 'management permissions of ' + name,
+        role: Promise.resolve(roleArr),
+      };
 
-    const permissionToSaveView: Permission = {
-      name: 'view' + name,
-      description: 'view related permissions of ' + name,
-      role: Promise.resolve(roleArr),
-    };
-    await this.permissionrepository.save(permissionToSaveManage);
-    await this.permissionrepository.save(permissionToSaveView);
-    const resRole: ResRole = {
-      description,
-      id: savedRole.id,
-      name: savedRole.name,
-    };
-    return resRole;
+      const permissionToSaveView: Permission = {
+        name: 'view' + name,
+        description: 'view related permissions of ' + name,
+        role: Promise.resolve(roleArr),
+      };
+      await this.permissionrepository.save(permissionToSaveManage);
+      await this.permissionrepository.save(permissionToSaveView);
+      const resRole: ResRole = {
+        description,
+        id: savedRole.id,
+        name: savedRole.name,
+      };
+      return resRole;
+    } catch (error) {
+      console.log('there was an errror in saving the role', error);
+      return { error: 'failed to save the role' };
+    }
   }
 
   /**
@@ -123,48 +138,53 @@ export class RoleController extends Controller {
    * @summary allot permissions to a role
    */
   @Put('/setPermissions')
-  public async givePermissionToRole(@Body() request: SetPermisisons): Promise<GetSetPermisisons> {
-    const { role, permissions } = request;
+  public async givePermissionToRole(@Body() request: SetPermisisons): Promise<GetSetPermisisons | ResError> {
+    try {
+      const { role, permissions } = request;
 
-    const db_role = await this.rolerepository.findOne({
-      where: {
-        id: role,
-      },
-    });
-    if (!db_role) {
-      return Promise.reject(new Error('ROLE NOT FOUND'));
-    }
-    let db_permission;
-    if (permissions) {
-      db_permission = await this.permissionrepository.find({
+      const db_role = await this.rolerepository.findOne({
         where: {
-          id: In(permissions),
+          id: role,
         },
       });
+      if (!db_role) {
+        return Promise.reject(new Error('ROLE NOT FOUND'));
+      }
+      let db_permission;
+      if (permissions) {
+        db_permission = await this.permissionrepository.find({
+          where: {
+            id: In(permissions),
+          },
+        });
+      }
+      if (!db_permission) {
+        return Promise.reject(new Error('PERMISSION NOT FOUND'));
+      }
+
+      db_role.permissions = Promise.resolve(db_permission);
+
+      const updatedRole = await this.rolerepository.save(db_role);
+
+      const rPerm = updatedRole.permissions;
+      const resRole: GetSetPermisisons = {
+        role: {
+          id: updatedRole.id,
+          name: updatedRole.name,
+          description: updatedRole.description,
+        },
+        permissions: (await rPerm)?.map((permission) => ({
+          description: permission.description,
+          id: permission.id,
+          name: permission.name,
+          type: permission.type!,
+        })),
+      };
+      return resRole;
+    } catch (error) {
+      console.log('there was an errror in setting the permissions to the given role ', error);
+      return { error: 'failed to set the permissions to the role' };
     }
-    if (!db_permission) {
-      return Promise.reject(new Error('PERMISSION NOT FOUND'));
-    }
-
-    db_role.permissions = Promise.resolve(db_permission);
-
-    const updatedRole = await this.rolerepository.save(db_role);
-
-    const rPerm = updatedRole.permissions;
-    const resRole: GetSetPermisisons = {
-      role: {
-        id: updatedRole.id,
-        name: updatedRole.name,
-        description: updatedRole.description,
-      },
-      permissions: (await rPerm)?.map((permission) => ({
-        description: permission.description,
-        id: permission.id,
-        name: permission.name,
-        type: permission.type!,
-      })),
-    };
-    return resRole;
   }
 
   /**
@@ -173,24 +193,69 @@ export class RoleController extends Controller {
    */
   @Post('/getPermissionFromRole')
   public async getPermissionsFromRole(@Body() request: ReqRoleBody) {
-    const { id } = request;
-    const ogperms = await this.permissionrepository.find({
-      where: {
-        role: {
-          id: id,
+    try {
+      const { id } = request;
+      const ogperms = await this.permissionrepository.find({
+        where: {
+          role: {
+            id: id,
+          },
         },
-      },
-    });
-    if (!ogperms) {
-      return Promise.reject(new Error('OG PERMS NOT FOUND '));
+      });
+      if (!ogperms) {
+        return Promise.reject(new Error('OG PERMS NOT FOUND '));
+      }
+
+      const permissionsArr: Permission[] = [];
+
+      for (const ogperm of ogperms) {
+        permissionsArr.push(ogperm);
+      }
+
+      return permissionsArr;
+    } catch (error) {
+      console.log('there was an errror in fetching the permissions from the role');
+      return { error: 'failed to load the permissions from the role' };
     }
+  }
 
-    const permissionsArr: Permission[] = [];
+  @Put('/{permissionId}')
+  public async updatePermission(@Path() permissionId: number, @Body() request: ReqPermission): Promise<ResPermission | ResError> {
+    try {
+      const existingpermission = await this.permissionrepository.findOne({
+        where: {
+          id: permissionId,
+        },
+      });
+      if (!existingpermission) {
+        return Promise.reject(new Error('PERMS NOT FOUND '));
+      }
 
-    for (const ogperm of ogperms) {
-      permissionsArr.push(ogperm);
+      const { description, name, type } = request;
+
+      // const db_role= await this.rolerepository.findOne({
+      //   where:{
+      //     id: role
+      //   }
+      // })
+      existingpermission.description = description;
+      existingpermission.name = name;
+      // existingpermission.role=role
+      existingpermission.type = type;
+
+      const updatedPermission = await this.rolerepository.save(existingpermission);
+
+      const resPermission: ResPermission = {
+        description: updatedPermission.description,
+        id: updatedPermission.id,
+        name: updatedPermission.name,
+        type: updatedPermission.type!,
+      };
+
+      return resPermission;
+    } catch (error) {
+      console.log('there was an error in updating the permission', error);
+      return { error: 'FAILED TO LOAD THE PERMISSIONS' };
     }
-
-    return permissionsArr;
   }
 }

@@ -83,8 +83,8 @@ export class DongleController extends Controller {
   }
 
   /**
-   * get all dongle
-   * @summary get all dongle
+   * get one dongle
+   * @summary get one dongle
    */
   @Get('/{dongleId}')
   public async getOneDongle(@Path() dongleId: number): Promise<ResDongle | ResError> {

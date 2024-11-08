@@ -1037,7 +1037,14 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/ResSuccess"
+									"anyOf": [
+										{
+											"$ref": "#/components/schemas/ResSuccess"
+										},
+										{
+											"$ref": "#/components/schemas/ResError"
+										}
+									]
 								}
 							}
 						}
@@ -1069,10 +1076,17 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"items": {
-										"$ref": "#/components/schemas/ResRole"
-									},
-									"type": "array"
+									"anyOf": [
+										{
+											"items": {
+												"$ref": "#/components/schemas/ResRole"
+											},
+											"type": "array"
+										},
+										{
+											"$ref": "#/components/schemas/ResError"
+										}
+									]
 								}
 							}
 						}
@@ -1094,7 +1108,14 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/ResRole"
+									"anyOf": [
+										{
+											"$ref": "#/components/schemas/ResRole"
+										},
+										{
+											"$ref": "#/components/schemas/ResError"
+										}
+									]
 								}
 							}
 						}
@@ -1128,7 +1149,14 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/GetSetPermisisons"
+									"anyOf": [
+										{
+											"$ref": "#/components/schemas/GetSetPermisisons"
+										},
+										{
+											"$ref": "#/components/schemas/ResError"
+										}
+									]
 								}
 							}
 						}
@@ -1162,10 +1190,25 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"items": {
-										"$ref": "#/components/schemas/Permission"
-									},
-									"type": "array"
+									"anyOf": [
+										{
+											"items": {
+												"$ref": "#/components/schemas/Permission"
+											},
+											"type": "array"
+										},
+										{
+											"properties": {
+												"error": {
+													"type": "string"
+												}
+											},
+											"required": [
+												"error"
+											],
+											"type": "object"
+										}
+									]
 								}
 							}
 						}
@@ -1190,7 +1233,56 @@
 				}
 			}
 		},
-		"/role/{roleId}/permission/{permissionId}": {
+		"/role/{permissionId}": {
+			"put": {
+				"operationId": "UpdatePermission",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"$ref": "#/components/schemas/ResPermission"
+										},
+										{
+											"$ref": "#/components/schemas/ResError"
+										}
+									]
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Role"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "permissionId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/ReqPermission"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/permission": {
 			"get": {
 				"operationId": "GetAllPermissions",
 				"responses": {
@@ -1199,10 +1291,25 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"items": {
-										"$ref": "#/components/schemas/ResPermission"
-									},
-									"type": "array"
+									"anyOf": [
+										{
+											"items": {
+												"$ref": "#/components/schemas/ResPermission"
+											},
+											"type": "array"
+										},
+										{
+											"properties": {
+												"error": {
+													"type": "string"
+												}
+											},
+											"required": [
+												"error"
+											],
+											"type": "object"
+										}
+									]
 								}
 							}
 						}
@@ -1247,7 +1354,7 @@
 				}
 			}
 		},
-		"/role/{roleId}/permission/{permissionId}/{permissionId}": {
+		"/permission/{permissionId}": {
 			"delete": {
 				"operationId": "DeletePermission",
 				"responses": {
@@ -1272,6 +1379,41 @@
 					{
 						"in": "path",
 						"name": "permissionId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			}
+		},
+		"/permission/getUserPerms/{userId}": {
+			"get": {
+				"operationId": "GetPermissionsOfUser",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/ResPermission"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Permission"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "userId",
 						"required": true,
 						"schema": {
 							"format": "double",
@@ -1400,8 +1542,8 @@
 						}
 					}
 				},
-				"description": "get all dongle",
-				"summary": "get all dongle",
+				"description": "get one dongle",
+				"summary": "get one dongle",
 				"tags": [
 					"Dongle"
 				],

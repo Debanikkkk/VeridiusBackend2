@@ -9,7 +9,7 @@ import { In } from 'typeorm';
 import { ResSuccess } from '../models/res/Responses';
 // import { In } from "typeorm";
 @Tags('Permission')
-@Route('role/{roleId}/permission/{permissionId}')
+@Route('/permission')
 export class PermissionController extends Controller {
   private permissionrepository = AppDataSource.getRepository(Permission);
   private rolerepository = AppDataSource.getRepository(Role);
@@ -20,27 +20,32 @@ export class PermissionController extends Controller {
    */
   @Get()
   public async getAllPermissions() {
-    const permissions = await this.permissionrepository.find();
+    try {
+      const permissions = await this.permissionrepository.find();
 
-    if (!permissions) {
-      return Promise.reject(new Error('THERE WAS AN ERROR IN LOADING THE PERMISSIONS'));
-    }
-
-    const permissionArr: ResPermission[] = [];
-
-    for (const permission of permissions) {
-      if (!permission.type) {
-        return Promise.reject(new Error('permission type not found'));
+      if (!permissions) {
+        return Promise.reject(new Error('THERE WAS AN ERROR IN LOADING THE PERMISSIONS'));
       }
-      permissionArr.push({
-        description: permission.description,
-        id: permission.id,
-        name: permission.name,
-        type: permission.type,
-      });
-    }
 
-    return permissionArr;
+      const permissionArr: ResPermission[] = [];
+
+      for (const permission of permissions) {
+        if (!permission.type) {
+          return Promise.reject(new Error('permission type not found'));
+        }
+        permissionArr.push({
+          description: permission.description,
+          id: permission.id,
+          name: permission.name,
+          type: permission.type,
+        });
+      }
+
+      return permissionArr;
+    } catch (error) {
+      console.log('there was an errror in fetching the ', error);
+      return { error: 'failed to load the ' };
+    }
   }
   /**
    * delete role
@@ -111,5 +116,34 @@ export class PermissionController extends Controller {
     });
 
     return resPermission;
+  }
+
+  @Get('getUserPerms/{userId}')
+  public async getPermissionsOfUser(@Path() userId: number) {
+    const permissions = await this.permissionrepository.find({
+      where: {
+        role: {
+          users: {
+            id: userId,
+          },
+        },
+      },
+      relations: {
+        role: true,
+      },
+    });
+
+    const permissionArr: ResPermission[] = [];
+
+    for (const permission of permissions) {
+      permissionArr.push({
+        type: permission.type!,
+        description: permission.description,
+        id: permission.id,
+        name: permission.name,
+      });
+    }
+
+    return permissionArr;
   }
 }
