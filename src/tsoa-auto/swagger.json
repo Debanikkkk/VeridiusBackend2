@@ -131,6 +131,18 @@
 				"type": "object",
 				"additionalProperties": false
 			},
+			"ResError": {
+				"properties": {
+					"error": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"error"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
 			"ReqUser": {
 				"properties": {
 					"name": {
@@ -510,18 +522,6 @@
 				"type": "object",
 				"additionalProperties": false
 			},
-			"ResError": {
-				"properties": {
-					"error": {
-						"type": "string"
-					}
-				},
-				"required": [
-					"error"
-				],
-				"type": "object",
-				"additionalProperties": false
-			},
 			"ResSuccess": {
 				"properties": {
 					"result": {
@@ -666,7 +666,14 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/ResUser"
+									"anyOf": [
+										{
+											"$ref": "#/components/schemas/ResUser"
+										},
+										{
+											"$ref": "#/components/schemas/ResError"
+										}
+									]
 								}
 							}
 						}
@@ -742,7 +749,14 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/ResUserLogin"
+									"anyOf": [
+										{
+											"$ref": "#/components/schemas/ResUserLogin"
+										},
+										{
+											"$ref": "#/components/schemas/ResError"
+										}
+									]
 								}
 							}
 						}
@@ -776,7 +790,22 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/User"
+									"anyOf": [
+										{
+											"$ref": "#/components/schemas/User"
+										},
+										{
+											"properties": {
+												"error": {
+													"type": "string"
+												}
+											},
+											"required": [
+												"error"
+											],
+											"type": "object"
+										}
+									]
 								}
 							}
 						}
@@ -905,10 +934,17 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"items": {
-										"$ref": "#/components/schemas/ResServiceTicket"
-									},
-									"type": "array"
+									"anyOf": [
+										{
+											"items": {
+												"$ref": "#/components/schemas/ResServiceTicket"
+											},
+											"type": "array"
+										},
+										{
+											"$ref": "#/components/schemas/ResError"
+										}
+									]
 								}
 							}
 						}
@@ -928,7 +964,14 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/ResServiceTicket"
+									"anyOf": [
+										{
+											"$ref": "#/components/schemas/ResServiceTicket"
+										},
+										{
+											"$ref": "#/components/schemas/ResError"
+										}
+									]
 								}
 							}
 						}
@@ -956,7 +999,22 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/ServiceTicket"
+									"anyOf": [
+										{
+											"$ref": "#/components/schemas/ServiceTicket"
+										},
+										{
+											"properties": {
+												"error": {
+													"type": "string"
+												}
+											},
+											"required": [
+												"error"
+											],
+											"type": "object"
+										}
+									]
 								}
 							}
 						}
@@ -1331,7 +1389,14 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/ResPermission"
+									"anyOf": [
+										{
+											"$ref": "#/components/schemas/ResPermission"
+										},
+										{
+											"$ref": "#/components/schemas/ResError"
+										}
+									]
 								}
 							}
 						}
@@ -1363,7 +1428,14 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/ResSuccess"
+									"anyOf": [
+										{
+											"$ref": "#/components/schemas/ResSuccess"
+										},
+										{
+											"$ref": "#/components/schemas/ResError"
+										}
+									]
 								}
 							}
 						}
@@ -1397,10 +1469,25 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"items": {
-										"$ref": "#/components/schemas/ResPermission"
-									},
-									"type": "array"
+									"anyOf": [
+										{
+											"items": {
+												"$ref": "#/components/schemas/ResPermission"
+											},
+											"type": "array"
+										},
+										{
+											"properties": {
+												"error": {
+													"type": "string"
+												}
+											},
+											"required": [
+												"error"
+											],
+											"type": "object"
+										}
+									]
 								}
 							}
 						}
@@ -1432,7 +1519,22 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"type": "string"
+									"anyOf": [
+										{
+											"type": "string"
+										},
+										{
+											"properties": {
+												"error": {
+													"type": "string"
+												}
+											},
+											"required": [
+												"error"
+											],
+											"type": "object"
+										}
+									]
 								}
 							}
 						}
@@ -1470,7 +1572,14 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/ResDongle"
+									"anyOf": [
+										{
+											"$ref": "#/components/schemas/ResDongle"
+										},
+										{
+											"$ref": "#/components/schemas/ResError"
+										}
+									]
 								}
 							}
 						}
@@ -1502,10 +1611,17 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"items": {
-										"$ref": "#/components/schemas/ResDongle"
-									},
-									"type": "array"
+									"anyOf": [
+										{
+											"items": {
+												"$ref": "#/components/schemas/ResDongle"
+											},
+											"type": "array"
+										},
+										{
+											"$ref": "#/components/schemas/ResError"
+										}
+									]
 								}
 							}
 						}
@@ -1568,7 +1684,14 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/ResSuccess"
+									"anyOf": [
+										{
+											"$ref": "#/components/schemas/ResSuccess"
+										},
+										{
+											"$ref": "#/components/schemas/ResError"
+										}
+									]
 								}
 							}
 						}
@@ -1602,10 +1725,25 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"items": {
-										"$ref": "#/components/schemas/ResDevice"
-									},
-									"type": "array"
+									"anyOf": [
+										{
+											"items": {
+												"$ref": "#/components/schemas/ResDevice"
+											},
+											"type": "array"
+										},
+										{
+											"properties": {
+												"error": {
+													"type": "string"
+												}
+											},
+											"required": [
+												"error"
+											],
+											"type": "object"
+										}
+									]
 								}
 							}
 						}
@@ -1627,7 +1765,14 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/ResDevice"
+									"anyOf": [
+										{
+											"$ref": "#/components/schemas/ResDevice"
+										},
+										{
+											"$ref": "#/components/schemas/ResError"
+										}
+									]
 								}
 							}
 						}
@@ -1661,7 +1806,14 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/ResSuccess"
+									"anyOf": [
+										{
+											"$ref": "#/components/schemas/ResSuccess"
+										},
+										{
+											"$ref": "#/components/schemas/ResError"
+										}
+									]
 								}
 							}
 						}
@@ -1695,7 +1847,22 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/Device"
+									"anyOf": [
+										{
+											"$ref": "#/components/schemas/Device"
+										},
+										{
+											"properties": {
+												"error": {
+													"type": "string"
+												}
+											},
+											"required": [
+												"error"
+											],
+											"type": "object"
+										}
+									]
 								}
 							}
 						}

@@ -15,6 +15,7 @@ import { ReqDeviceAssign } from '../models/req/ReqDeviceAssign';
 import { Device } from '../entity/Device';
 import { PaginatedResponse } from '../models/res/PaginatedResponse';
 import { ResUserUpdate } from '../models/req/ReqUserUpdate';
+import { ResError } from '../models/res/Responses';
 // import { serviceTicketStatus } from "../entity/ServiceTickets";
 @Tags('User')
 @Route('/user')
@@ -24,38 +25,43 @@ export class UserController extends Controller {
   private rolerepository = AppDataSource.getRepository(Role);
 
   @Post()
-  public async saveUser(@Body() req: ReqUser): Promise<ResUser> {
-    const { address, email, password, name, phone_number, role } = req;
+  public async saveUser(@Body() req: ReqUser): Promise<ResUser | ResError> {
+    try {
+      const { address, email, password, name, phone_number, role } = req;
 
-    const db_role = await this.rolerepository.findOne({
-      where: {
-        id: role,
-      },
-    });
-    if (!db_role) {
-      return Promise.reject(new Error('PLEASE INSERT ROLE'));
+      const db_role = await this.rolerepository.findOne({
+        where: {
+          id: role,
+        },
+      });
+      if (!db_role) {
+        return Promise.reject(new Error('PLEASE INSERT ROLE'));
+      }
+      const userToSave: User = {
+        password: password,
+        address: address,
+        email: email,
+        name: name,
+        phone_number: phone_number,
+        role: Promise.resolve(db_role),
+      };
+
+      const userSaver = Object.assign(new User(), userToSave);
+      const savedUser = await this.userrepository.save(userSaver);
+
+      const resUser: ResUser = {
+        id: savedUser.id,
+        address: savedUser.address,
+        email: savedUser.email,
+        name: savedUser.name,
+        phone_number: savedUser.phone_number,
+        password: savedUser.password,
+      };
+      return resUser;
+    } catch (error) {
+      console.log('there was an errror in saving the user', error);
+      return { error: 'failed to save the user' };
     }
-    const userToSave: User = {
-      password: password,
-      address: address,
-      email: email,
-      name: name,
-      phone_number: phone_number,
-      role: Promise.resolve(db_role),
-    };
-
-    const userSaver = Object.assign(new User(), userToSave);
-    const savedUser = await this.userrepository.save(userSaver);
-
-    const resUser: ResUser = {
-      id: savedUser.id,
-      address: savedUser.address,
-      email: savedUser.email,
-      name: savedUser.name,
-      phone_number: savedUser.phone_number,
-      password: savedUser.password,
-    };
-    return resUser;
   }
 
   /**
@@ -63,106 +69,115 @@ export class UserController extends Controller {
    * @summary user login
    */
   @Post('/login')
-  public async userLogin(@Body() loginBody: ReqUserLogin): Promise<ResUserLogin> {
-    console.log({ MESSAGE: 'THIS API WAS FIRED' });
-    const { username, password } = loginBody;
-    console.log('api reached here');
-    const users = await this.userrepository.find({
-      where: {
-        name: username,
-        password: password,
-      },
-      relations: {
-        role: {
-          permissions: true,
+  public async userLogin(@Body() loginBody: ReqUserLogin): Promise<ResUserLogin | ResError> {
+    try {
+      console.log({ MESSAGE: 'THIS API WAS FIRED' });
+      const { username, password } = loginBody;
+      console.log('api reached here');
+      const users = await this.userrepository.find({
+        where: {
+          name: username,
+          password: password,
         },
-      },
-    });
-    console.log('api found everything just check', users);
+        relations: {
+          role: {
+            permissions: true,
+          },
+        },
+      });
+      console.log('api found everything just check', users);
 
-    if (!users || users.length == 0) {
-      return Promise.reject(new Error('Invalid credentials'));
+      if (!users || users.length == 0) {
+        return Promise.reject(new Error('Invalid credentials'));
+      }
+      const user: User = users[0];
+
+      // if (!user.oem) {
+      //   return Promise.reject(new Error('OEM Not found'));
+      // }
+
+      if (!user.role) {
+        return Promise.reject(new Error('Role Not found'));
+      }
+      const perm_result = (await user.role)!.permissions;
+
+      const permissions: ResPermission[] = (await perm_result)!.map((item) => ({
+        id: item.id,
+        perm_name: item.name,
+        description: item.description,
+        type: item.type!,
+      }));
+      console.log('here are the permissions', permissions);
+      const loginUser: ResUserLogin = {
+        //   name: (user.first_name ? user.first_name : '') + ' ' + (user.last_name ? user.last_name : ''),
+        name: user.name!,
+        role: {
+          id: (await user.role).id!,
+          role_name: (await user.role).name!,
+          role_description: (await user.role).description!,
+        },
+        permissions: permissions,
+      };
+
+      const tokenData: JWTTokenData = {
+        id: user.id!,
+        //   pincode: user.pincode,
+        role: {
+          permissions: (await perm_result)!.map<string>((p) => {
+            return p.name!;
+          }),
+        },
+      };
+      // let jsonWebtoken
+
+      const jsonWebtoken = jwt.sign(tokenData, envs.JWT_SECRET_KEY, { expiresIn: '7d' });
+
+      loginUser.token = jsonWebtoken;
+      return loginUser;
+    } catch (error) {
+      console.log('there was an errror in logging in ', error);
+      return { error: 'failed to login' };
     }
-    const user: User = users[0];
-
-    // if (!user.oem) {
-    //   return Promise.reject(new Error('OEM Not found'));
-    // }
-
-    if (!user.role) {
-      return Promise.reject(new Error('Role Not found'));
-    }
-    const perm_result = (await user.role)!.permissions;
-
-    const permissions: ResPermission[] = (await perm_result)!.map((item) => ({
-      id: item.id,
-      perm_name: item.name,
-      description: item.description,
-      type: item.type!,
-    }));
-    console.log('here are the permissions', permissions);
-    const loginUser: ResUserLogin = {
-      //   name: (user.first_name ? user.first_name : '') + ' ' + (user.last_name ? user.last_name : ''),
-      name: user.name!,
-      role: {
-        id: (await user.role).id!,
-        role_name: (await user.role).name!,
-        role_description: (await user.role).description!,
-      },
-      permissions: permissions,
-    };
-
-    const tokenData: JWTTokenData = {
-      id: user.id!,
-      //   pincode: user.pincode,
-      role: {
-        permissions: (await perm_result)!.map<string>((p) => {
-          return p.name!;
-        }),
-      },
-    };
-    // let jsonWebtoken
-
-    const jsonWebtoken = jwt.sign(tokenData, envs.JWT_SECRET_KEY, { expiresIn: '7d' });
-
-    loginUser.token = jsonWebtoken;
-    return loginUser;
   }
 
   @Put('userDeviceAllot/{userId}')
   public async assignUserDevice(@Path() userId: number, @Body() request: ReqDeviceAssign) {
-    const user = await this.userrepository.findOne({
-      where: {
-        id: userId,
-      },
-    });
+    try {
+      const user = await this.userrepository.findOne({
+        where: {
+          id: userId,
+        },
+      });
 
-    if (!user) {
-      return Promise.reject(new Error('USER NOT FOUND'));
+      if (!user) {
+        return Promise.reject(new Error('USER NOT FOUND'));
+      }
+      console.log('user found is ', user);
+
+      const { id } = request;
+
+      const device = await this.devicerepository.findOne({
+        where: {
+          id: id,
+        },
+      });
+
+      if (!device) {
+        return Promise.reject(new Error('DEVICE NOT FOUND'));
+      }
+
+      user.device = device;
+      const newUser = await this.userrepository.save(user);
+      console.log('THE USER DEVICE IS', user.device);
+
+      return newUser;
+    } catch (error) {
+      console.log('there was an errror in assigning the device to the user', error);
+      return { error: 'failed to assign te device to the user' };
     }
-    console.log('user found is ', user);
-
-    const { id } = request;
-
-    const device = await this.devicerepository.findOne({
-      where: {
-        id: id,
-      },
-    });
-
-    if (!device) {
-      return Promise.reject(new Error('DEVICE NOT FOUND'));
-    }
-
-    user.device = device;
-    const newUser = await this.userrepository.save(user);
-    console.log('THE USER DEVICE IS', user.device);
-
-    return newUser;
   }
 
   public async getUsersPagination(page: number, pageSize: number): Promise<{ items: User[]; totalCount: number }> {
-    // Replace with actual DB call, for example with TypeORM or Sequelize
     const offset = (page - 1) * pageSize;
     const limit = pageSize;
 
@@ -175,8 +190,10 @@ export class UserController extends Controller {
       items: paginatedUsers,
       totalCount: allUsers.length,
     };
-  }
 
+    // Replace with actual DB call, for example with TypeORM or Sequelize
+  }
+  // SGDct1l
   /**
    * Get all users with pagination
    * @param page The page number (default: 1)

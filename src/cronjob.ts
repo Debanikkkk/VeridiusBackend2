@@ -5,7 +5,7 @@ import { ServiceTicket } from './entity/ServiceTickets';
 import { serviceTicketStatus } from './entity/ServiceTickets';
 import { AppDataSource } from './data-source';
 console.log('the cron job is being entered******');
-const updateStatusCron = cron.schedule('*/20 * * * * *', async () => {
+const updateStatusCron = cron.schedule('0 * * * *', async () => {
   console.log('Cron job triggered at:', new Date().toISOString());
 
   try {
