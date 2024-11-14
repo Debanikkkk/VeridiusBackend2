@@ -1,0 +1,23 @@
+# version: '3'
+services:
+  tsoa-app:
+    build: .
+    depends_on:
+      - db
+    ports:
+      - '3010:3010'
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_USERNAME: postgres
+      DB_PASSWORD: root
+      DB_DBNAME: telematics_backend
+
+  db:
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: telematics_backend
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: root
+    ports:
+      - '5432:5432'

@@ -23,7 +23,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.expressAuthentication = expressAuthentication;
+exports.expressAuthentication = void 0;
 const jwt = __importStar(require("jsonwebtoken"));
 // import { AuthorizationError, ResponseError } from './models/res/ResErrors';
 const ResErrors_1 = require("./models/res/ResErrors");
@@ -56,5 +56,6 @@ function expressAuthentication(request, securityName, scopes) {
     }
     return Promise.reject(new ResErrors_1.AuthorizationError('Invalid Authentication'));
 }
+exports.expressAuthentication = expressAuthentication;
 // "monitor": "concurrently \"nodemon\" \"nodemon -x tsoa spec-and-routes\""
 //# sourceMappingURL=authentication.js.map

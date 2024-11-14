@@ -17,7 +17,7 @@ dotenv.config({ path: `.env${pathExt}` });
 
 export const envs: EnvVars = {
   PORT: parseInt(process.env.PORT || '3010'),
-  DB_HOST: process.env.DB_HOST || 'localhost',
+  DB_HOST: process.env.DB_HOST || 'db',
   DB_PORT: parseInt(process.env.DB_PORT || '5432'),
   DB_USERNAME: process.env.DB_USERNAME || 'postgres',
   DB_PASSWORD: process.env.DB_PASSWORD || 'root',
