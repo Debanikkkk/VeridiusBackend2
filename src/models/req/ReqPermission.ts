@@ -5,5 +5,5 @@ export interface ReqPermission {
   description?: string;
   type?: permType;
   name?: string;
-  role?: number[];
+  // role?: number[];
 }

@@ -1,10 +1,10 @@
-import { Body, Controller, Delete, Get, Path, Post, Route, Tags } from 'tsoa';
+import { Body, Controller, Delete, Get, Path, Post, Put, Route, Tags } from 'tsoa';
 import { AppDataSource } from '../data-source';
 import { Permission } from '../entity/Permission';
 import { ResPermission } from '../models/res/ResPermission';
 import { ReqPermission } from '../models/req/ReqPermission';
 import { Role } from '../entity/Role';
-import { In } from 'typeorm';
+// import { In } from 'typeorm';
 
 import { ResError, ResSuccess } from '../models/res/Responses';
 // import { In } from "typeorm";
@@ -76,26 +76,26 @@ export class PermissionController extends Controller {
   @Post()
   public async savePermission(@Body() request: ReqPermission): Promise<ResPermission | ResError> {
     try {
-      const { description, name, role, type } = request;
-      let db_role;
-      if (role) {
-        db_role = await this.rolerepository.find({
-          where: {
-            id: In(role),
-          },
-        });
-      }
-      if (!db_role) {
-        return Promise.reject(new Error('ROLE NOT FOUND'));
-      }
-      console.log({ 'this is the role from the database': db_role });
-      if (!db_role) {
-        return Promise.reject(new Error('DB ROLE NOT FOUND'));
-      }
+      const { description, name, type } = request;
+      // let db_role;
+      // if (role) {
+      //   db_role = await this.rolerepository.find({
+      //     where: {
+      //       id: In(role),
+      //     },
+      //   });
+      // }
+      // if (!db_role) {
+      //   return Promise.reject(new Error('ROLE NOT FOUND'));
+      // }
+      // console.log({ 'this is the role from the database': db_role });
+      // if (!db_role) {
+      //   return Promise.reject(new Error('DB ROLE NOT FOUND'));
+      // }
       const permissionSaver: Permission = {
         name: name,
         description: description,
-        role: Promise.resolve(db_role),
+        // role: Promise.resolve(db_role),
         type: type,
       };
       console.log({ 'this is the role permission i got': Promise.resolve(permissionSaver.role) });
@@ -160,6 +160,46 @@ export class PermissionController extends Controller {
     } catch (error) {
       console.log('there was an errror in fetching the permissions for the user', userId, error);
       return { error: 'failed to load the permissions for the user' };
+    }
+  }
+
+  @Put('/{permissionId}')
+  public async updatePermission(@Path() permissionId: number, @Body() request: ReqPermission): Promise<ResPermission | ResError> {
+    try {
+      const existingpermission = await this.permissionrepository.findOne({
+        where: {
+          id: permissionId,
+        },
+      });
+      if (!existingpermission) {
+        return Promise.reject(new Error('PERMS NOT FOUND '));
+      }
+
+      const { description, name, type } = request;
+
+      // const db_role= await this.rolerepository.findOne({
+      //   where:{
+      //     id: role
+      //   }
+      // })
+      existingpermission.description = description;
+      existingpermission.name = name;
+      // existingpermission.role=role
+      existingpermission.type = type;
+
+      const updatedPermission = await this.rolerepository.save(existingpermission);
+
+      const resPermission: ResPermission = {
+        description: updatedPermission.description,
+        id: updatedPermission.id,
+        name: updatedPermission.name,
+        type: updatedPermission.type!,
+      };
+
+      return resPermission;
+    } catch (error) {
+      console.log('there was an error in updating the permission', error);
+      return { error: 'FAILED TO LOAD THE PERMISSIONS' };
     }
   }
 }

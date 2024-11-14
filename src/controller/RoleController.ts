@@ -9,8 +9,6 @@ import { In } from 'typeorm';
 import { Permission, permType } from '../entity/Permission';
 import { ReqRoleBody } from '../models/req/ReqRoleBody';
 import { ResError, ResSuccess } from '../models/res/Responses';
-import { ReqPermission } from '../models/req/ReqPermission';
-import { ResPermission } from '../models/res/ResPermission';
 @Tags('Role')
 @Route('/role')
 export class RoleController extends Controller {
@@ -218,46 +216,6 @@ export class RoleController extends Controller {
     } catch (error) {
       console.log('there was an errror in fetching the permissions from the role');
       return { error: 'failed to load the permissions from the role' };
-    }
-  }
-
-  @Put('/{permissionId}')
-  public async updatePermission(@Path() permissionId: number, @Body() request: ReqPermission): Promise<ResPermission | ResError> {
-    try {
-      const existingpermission = await this.permissionrepository.findOne({
-        where: {
-          id: permissionId,
-        },
-      });
-      if (!existingpermission) {
-        return Promise.reject(new Error('PERMS NOT FOUND '));
-      }
-
-      const { description, name, type } = request;
-
-      // const db_role= await this.rolerepository.findOne({
-      //   where:{
-      //     id: role
-      //   }
-      // })
-      existingpermission.description = description;
-      existingpermission.name = name;
-      // existingpermission.role=role
-      existingpermission.type = type;
-
-      const updatedPermission = await this.rolerepository.save(existingpermission);
-
-      const resPermission: ResPermission = {
-        description: updatedPermission.description,
-        id: updatedPermission.id,
-        name: updatedPermission.name,
-        type: updatedPermission.type!,
-      };
-
-      return resPermission;
-    } catch (error) {
-      console.log('there was an error in updating the permission', error);
-      return { error: 'FAILED TO LOAD THE PERMISSIONS' };
     }
   }
 }

@@ -325,7 +325,6 @@ const models: TsoaRoute.Models = {
             "description": {"dataType":"string"},
             "type": {"ref":"permType"},
             "name": {"dataType":"string"},
-            "role": {"dataType":"array","array":{"dataType":"double"}},
         },
         "additionalProperties": false,
     },
@@ -818,37 +817,6 @@ export function RegisterRoutes(app: Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        app.put('/role/:permissionId',
-            ...(fetchMiddlewares<RequestHandler>(RoleController)),
-            ...(fetchMiddlewares<RequestHandler>(RoleController.prototype.updatePermission)),
-
-            async function RoleController_updatePermission(request: ExRequest, response: ExResponse, next: any) {
-            const args: Record<string, TsoaRoute.ParameterSchema> = {
-                    permissionId: {"in":"path","name":"permissionId","required":true,"dataType":"double"},
-                    request: {"in":"body","name":"request","required":true,"ref":"ReqPermission"},
-            };
-
-            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-
-            let validatedArgs: any[] = [];
-            try {
-                validatedArgs = templateService.getValidatedArgs({ args, request, response });
-
-                const controller = new RoleController();
-
-              await templateService.apiHandler({
-                methodName: 'updatePermission',
-                controller,
-                response,
-                next,
-                validatedArgs,
-                successStatus: undefined,
-              });
-            } catch (err) {
-                return next(err);
-            }
-        });
-        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         app.get('/permission',
             ...(fetchMiddlewares<RequestHandler>(PermissionController)),
             ...(fetchMiddlewares<RequestHandler>(PermissionController.prototype.getAllPermissions)),
@@ -957,6 +925,37 @@ export function RegisterRoutes(app: Router) {
 
               await templateService.apiHandler({
                 methodName: 'getPermissionsOfUser',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.put('/permission/:permissionId',
+            ...(fetchMiddlewares<RequestHandler>(PermissionController)),
+            ...(fetchMiddlewares<RequestHandler>(PermissionController.prototype.updatePermission)),
+
+            async function PermissionController_updatePermission(request: ExRequest, response: ExResponse, next: any) {
+            const args: Record<string, TsoaRoute.ParameterSchema> = {
+                    permissionId: {"in":"path","name":"permissionId","required":true,"dataType":"double"},
+                    request: {"in":"body","name":"request","required":true,"ref":"ReqPermission"},
+            };
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+
+                const controller = new PermissionController();
+
+              await templateService.apiHandler({
+                methodName: 'updatePermission',
                 controller,
                 response,
                 next,
