@@ -6,7 +6,7 @@ import { ResRole } from '../models/res/ResRole';
 import { SetPermisisons } from '../models/req/SetPermisisons';
 import { GetSetPermisisons } from '../models/res/GetSetPermissions';
 import { In } from 'typeorm';
-import { Permission } from '../entity/Permission';
+import { Permission, permType } from '../entity/Permission';
 import { ReqRoleBody } from '../models/req/ReqRoleBody';
 import { ResError, ResSuccess } from '../models/res/Responses';
 import { ReqPermission } from '../models/req/ReqPermission';
@@ -112,12 +112,14 @@ export class RoleController extends Controller {
         name: 'manage' + name,
         description: 'management permissions of ' + name,
         role: Promise.resolve(roleArr),
+        type: permType.user,
       };
 
       const permissionToSaveView: Permission = {
         name: 'view' + name,
         description: 'view related permissions of ' + name,
         role: Promise.resolve(roleArr),
+        type: permType.user,
       };
       await this.permissionrepository.save(permissionToSaveManage);
       await this.permissionrepository.save(permissionToSaveView);
