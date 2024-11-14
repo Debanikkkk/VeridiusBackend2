@@ -96,6 +96,7 @@ export class PermissionController extends Controller {
         name: name,
         description: description,
         role: Promise.resolve(db_role),
+        type: type,
       };
       console.log({ 'this is the role permission i got': Promise.resolve(permissionSaver.role) });
       const permissiontosave = Object.assign(new Permission(), permissionSaver);
