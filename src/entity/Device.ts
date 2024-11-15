@@ -14,9 +14,15 @@ export class Device {
 
   @Column({
     length: 17,
+    nullable: true,
   })
   mac_address?: string;
 
+  @Column({
+    nullable: true,
+    length: 15,
+  })
+  imei?: string;
   // @Column({
   //     type: 'geography',
   //     spatialFeatureType: 'point',
