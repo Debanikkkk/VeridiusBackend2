@@ -105,11 +105,13 @@ let RoleController = class RoleController extends tsoa_1.Controller {
                 name: 'manage' + name,
                 description: 'management permissions of ' + name,
                 role: Promise.resolve(roleArr),
+                type: Permission_1.permType.user,
             };
             const permissionToSaveView = {
                 name: 'view' + name,
                 description: 'view related permissions of ' + name,
                 role: Promise.resolve(roleArr),
+                type: Permission_1.permType.user,
             };
             await this.permissionrepository.save(permissionToSaveManage);
             await this.permissionrepository.save(permissionToSaveView);
@@ -175,6 +177,29 @@ let RoleController = class RoleController extends tsoa_1.Controller {
         }
     }
     /**
+     * update role API
+     * @summary UPDATE ROLE
+     */
+    async updateRole(req, roleId) {
+        const { description, name } = req;
+        const role = await this.rolerepository.findOne({
+            where: {
+                id: roleId,
+            },
+        });
+        if (!role) {
+            return Promise.reject(new Error('ROLE NOT FOUND'));
+        }
+        (role.description = description), (role.name = name);
+        const updatedRole = await this.rolerepository.save(role);
+        const resUpdatedRole = {
+            description: updatedRole.description,
+            id: updatedRole.id,
+            name: updatedRole.name,
+        };
+        return resUpdatedRole;
+    }
+    /**
      * getting permissions from subrole
      *  @summary getting permissions from subrole
      */
@@ -200,40 +225,6 @@ let RoleController = class RoleController extends tsoa_1.Controller {
         catch (error) {
             console.log('there was an errror in fetching the permissions from the role');
             return { error: 'failed to load the permissions from the role' };
-        }
-    }
-    async updatePermission(permissionId, request) {
-        try {
-            const existingpermission = await this.permissionrepository.findOne({
-                where: {
-                    id: permissionId,
-                },
-            });
-            if (!existingpermission) {
-                return Promise.reject(new Error('PERMS NOT FOUND '));
-            }
-            const { description, name, type } = request;
-            // const db_role= await this.rolerepository.findOne({
-            //   where:{
-            //     id: role
-            //   }
-            // })
-            existingpermission.description = description;
-            existingpermission.name = name;
-            // existingpermission.role=role
-            existingpermission.type = type;
-            const updatedPermission = await this.rolerepository.save(existingpermission);
-            const resPermission = {
-                description: updatedPermission.description,
-                id: updatedPermission.id,
-                name: updatedPermission.name,
-                type: updatedPermission.type,
-            };
-            return resPermission;
-        }
-        catch (error) {
-            console.log('there was an error in updating the permission', error);
-            return { error: 'FAILED TO LOAD THE PERMISSIONS' };
         }
     }
 };
@@ -272,20 +263,20 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], RoleController.prototype, "givePermissionToRole", null);
 __decorate([
+    (0, tsoa_1.Put)('/{roleId}'),
+    __param(0, (0, tsoa_1.Body)()),
+    __param(1, (0, tsoa_1.Path)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Number]),
+    __metadata("design:returntype", Promise)
+], RoleController.prototype, "updateRole", null);
+__decorate([
     (0, tsoa_1.Post)('/getPermissionFromRole'),
     __param(0, (0, tsoa_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], RoleController.prototype, "getPermissionsFromRole", null);
-__decorate([
-    (0, tsoa_1.Put)('/{permissionId}'),
-    __param(0, (0, tsoa_1.Path)()),
-    __param(1, (0, tsoa_1.Body)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number, Object]),
-    __metadata("design:returntype", Promise)
-], RoleController.prototype, "updatePermission", null);
 RoleController = __decorate([
     (0, tsoa_1.Tags)('Role'),
     (0, tsoa_1.Route)('/role')

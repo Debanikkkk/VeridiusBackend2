@@ -28,9 +28,17 @@ __decorate([
 __decorate([
     (0, typeorm_1.Column)({
         length: 17,
+        nullable: true,
     }),
     __metadata("design:type", String)
 ], Device.prototype, "mac_address", void 0);
+__decorate([
+    (0, typeorm_1.Column)({
+        nullable: true,
+        length: 15,
+    }),
+    __metadata("design:type", String)
+], Device.prototype, "imei", void 0);
 __decorate([
     (0, typeorm_1.OneToOne)(() => User_1.User, (user) => {
         user.device;

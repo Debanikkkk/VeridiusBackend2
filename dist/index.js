@@ -39,6 +39,9 @@ const swagger_json_1 = __importDefault(require("./tsoa-auto/swagger.json"));
 const ResErrors_1 = require("./models/res/ResErrors");
 const fs = __importStar(require("fs"));
 const cronjob_1 = require("./cronjob");
+// import { tcpServer } from '../tcp-server';
+const net_1 = __importDefault(require("net"));
+const tcp_server_1 = require("./tcp-server");
 // Initialize database and start server
 data_source_1.AppDataSource.initialize()
     .then(async () => {
@@ -47,6 +50,7 @@ data_source_1.AppDataSource.initialize()
     // CORS options
     const allowedOrigins = [...envVars_1.envs.CORS_ALLOWED_ORIGINS, 'http://localhost:3000', 'http://localhost:3001', 'https://chronicpestcontrolagencies.org'];
     const options = { origin: allowedOrigins };
+    (0, tcp_server_1.tcpServer)(net_1.default);
     // Create uploads directory if it doesn’t exist
     const dir = './public/uploads/';
     if (!fs.existsSync(dir))

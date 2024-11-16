@@ -11,6 +11,8 @@ import { RoleController } from './../controller/RoleController';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { PermissionController } from './../controller/PermissionController';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+import { LoginPacketController } from './../controller/LoginPacketController';
+// WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { FreeDongleUserDeviceController } from './../controller/FreeDongleUserDeviceController';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { DongleController } from './../controller/DongleController';
@@ -181,6 +183,7 @@ const models: TsoaRoute.Models = {
             "id": {"dataType":"double"},
             "name": {"dataType":"string"},
             "mac_address": {"dataType":"string"},
+            "imei": {"dataType":"string"},
             "user": {"dataType":"union","subSchemas":[{"ref":"User"},{"dataType":"enum","enums":[null]}]},
             "dongle": {"dataType":"union","subSchemas":[{"ref":"Dongle"},{"dataType":"enum","enums":[null]}]},
         },
@@ -325,6 +328,41 @@ const models: TsoaRoute.Models = {
             "description": {"dataType":"string"},
             "type": {"ref":"permType"},
             "name": {"dataType":"string"},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "LoginPacket": {
+        "dataType": "refObject",
+        "properties": {
+            "id": {"dataType":"double"},
+            "packetHeader": {"dataType":"string"},
+            "vendorId": {"dataType":"string"},
+            "vehicleRegNo": {"dataType":"string"},
+            "imei": {"dataType":"string"},
+            "firmwareVersion": {"dataType":"string"},
+            "protocolVersion": {"dataType":"string"},
+            "device_type": {"dataType":"string"},
+            "latitude": {"dataType":"double"},
+            "longitude": {"dataType":"double"},
+            "checksum": {"dataType":"string"},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "ReqLoginPacket": {
+        "dataType": "refObject",
+        "properties": {
+            "checksum": {"dataType":"string","required":true},
+            "firmwareVersion": {"dataType":"string","required":true},
+            "imei": {"dataType":"string","required":true},
+            "latitude": {"dataType":"double","required":true},
+            "longitude": {"dataType":"double","required":true},
+            "packetHeader": {"dataType":"string","required":true},
+            "protocolVersion": {"dataType":"string","required":true},
+            "vehicleRegNo": {"dataType":"string","required":true},
+            "vendorId": {"dataType":"string","required":true},
+            "deviceType": {"dataType":"string","required":true},
         },
         "additionalProperties": false,
     },
@@ -787,6 +825,37 @@ export function RegisterRoutes(app: Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.put('/role/:roleId',
+            ...(fetchMiddlewares<RequestHandler>(RoleController)),
+            ...(fetchMiddlewares<RequestHandler>(RoleController.prototype.updateRole)),
+
+            async function RoleController_updateRole(request: ExRequest, response: ExResponse, next: any) {
+            const args: Record<string, TsoaRoute.ParameterSchema> = {
+                    req: {"in":"body","name":"req","required":true,"ref":"ReqRole"},
+                    roleId: {"in":"path","name":"roleId","required":true,"dataType":"double"},
+            };
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+
+                const controller = new RoleController();
+
+              await templateService.apiHandler({
+                methodName: 'updateRole',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         app.post('/role/getPermissionFromRole',
             ...(fetchMiddlewares<RequestHandler>(RoleController)),
             ...(fetchMiddlewares<RequestHandler>(RoleController.prototype.getPermissionsFromRole)),
@@ -956,6 +1025,36 @@ export function RegisterRoutes(app: Router) {
 
               await templateService.apiHandler({
                 methodName: 'updatePermission',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.post('/loginpacket',
+            ...(fetchMiddlewares<RequestHandler>(LoginPacketController)),
+            ...(fetchMiddlewares<RequestHandler>(LoginPacketController.prototype.saveLoginPacket)),
+
+            async function LoginPacketController_saveLoginPacket(request: ExRequest, response: ExResponse, next: any) {
+            const args: Record<string, TsoaRoute.ParameterSchema> = {
+                    req: {"in":"body","name":"req","required":true,"ref":"ReqLoginPacket"},
+            };
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+
+                const controller = new LoginPacketController();
+
+              await templateService.apiHandler({
+                methodName: 'saveLoginPacket',
                 controller,
                 response,
                 next,

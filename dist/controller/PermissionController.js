@@ -17,7 +17,6 @@ const tsoa_1 = require("tsoa");
 const data_source_1 = require("../data-source");
 const Permission_1 = require("../entity/Permission");
 const Role_1 = require("../entity/Role");
-const typeorm_1 = require("typeorm");
 // import { In } from "typeorm";
 let PermissionController = class PermissionController extends tsoa_1.Controller {
     constructor() {
@@ -78,26 +77,27 @@ let PermissionController = class PermissionController extends tsoa_1.Controller 
     }
     async savePermission(request) {
         try {
-            const { description, name, role, type } = request;
-            let db_role;
-            if (role) {
-                db_role = await this.rolerepository.find({
-                    where: {
-                        id: (0, typeorm_1.In)(role),
-                    },
-                });
-            }
-            if (!db_role) {
-                return Promise.reject(new Error('ROLE NOT FOUND'));
-            }
-            console.log({ 'this is the role from the database': db_role });
-            if (!db_role) {
-                return Promise.reject(new Error('DB ROLE NOT FOUND'));
-            }
+            const { description, name, type } = request;
+            // let db_role;
+            // if (role) {
+            //   db_role = await this.rolerepository.find({
+            //     where: {
+            //       id: In(role),
+            //     },
+            //   });
+            // }
+            // if (!db_role) {
+            //   return Promise.reject(new Error('ROLE NOT FOUND'));
+            // }
+            // console.log({ 'this is the role from the database': db_role });
+            // if (!db_role) {
+            //   return Promise.reject(new Error('DB ROLE NOT FOUND'));
+            // }
             const permissionSaver = {
                 name: name,
                 description: description,
-                role: Promise.resolve(db_role),
+                // role: Promise.resolve(db_role),
+                type: type,
             };
             console.log({ 'this is the role permission i got': Promise.resolve(permissionSaver.role) });
             const permissiontosave = Object.assign(new Permission_1.Permission(), permissionSaver);
@@ -158,6 +158,40 @@ let PermissionController = class PermissionController extends tsoa_1.Controller 
             return { error: 'failed to load the permissions for the user' };
         }
     }
+    async updatePermission(permissionId, request) {
+        try {
+            const existingpermission = await this.permissionrepository.findOne({
+                where: {
+                    id: permissionId,
+                },
+            });
+            if (!existingpermission) {
+                return Promise.reject(new Error('PERMS NOT FOUND '));
+            }
+            const { description, name, type } = request;
+            // const db_role= await this.rolerepository.findOne({
+            //   where:{
+            //     id: role
+            //   }
+            // })
+            existingpermission.description = description;
+            existingpermission.name = name;
+            // existingpermission.role=role
+            existingpermission.type = type;
+            const updatedPermission = await this.rolerepository.save(existingpermission);
+            const resPermission = {
+                description: updatedPermission.description,
+                id: updatedPermission.id,
+                name: updatedPermission.name,
+                type: updatedPermission.type,
+            };
+            return resPermission;
+        }
+        catch (error) {
+            console.log('there was an error in updating the permission', error);
+            return { error: 'FAILED TO LOAD THE PERMISSIONS' };
+        }
+    }
 };
 __decorate([
     (0, tsoa_1.Get)(),
@@ -186,6 +220,14 @@ __decorate([
     __metadata("design:paramtypes", [Number]),
     __metadata("design:returntype", Promise)
 ], PermissionController.prototype, "getPermissionsOfUser", null);
+__decorate([
+    (0, tsoa_1.Put)('/{permissionId}'),
+    __param(0, (0, tsoa_1.Path)()),
+    __param(1, (0, tsoa_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number, Object]),
+    __metadata("design:returntype", Promise)
+], PermissionController.prototype, "updatePermission", null);
 PermissionController = __decorate([
     (0, tsoa_1.Tags)('Permission'),
     (0, tsoa_1.Route)('/permission')

@@ -316,6 +316,9 @@
 					"mac_address": {
 						"type": "string"
 					},
+					"imei": {
+						"type": "string"
+					},
 					"user": {
 						"allOf": [
 							{
@@ -600,6 +603,98 @@
 						"type": "string"
 					}
 				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"LoginPacket": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"packetHeader": {
+						"type": "string"
+					},
+					"vendorId": {
+						"type": "string"
+					},
+					"vehicleRegNo": {
+						"type": "string"
+					},
+					"imei": {
+						"type": "string"
+					},
+					"firmwareVersion": {
+						"type": "string"
+					},
+					"protocolVersion": {
+						"type": "string"
+					},
+					"device_type": {
+						"type": "string"
+					},
+					"latitude": {
+						"type": "number",
+						"format": "double"
+					},
+					"longitude": {
+						"type": "number",
+						"format": "double"
+					},
+					"checksum": {
+						"type": "string"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ReqLoginPacket": {
+				"properties": {
+					"checksum": {
+						"type": "string"
+					},
+					"firmwareVersion": {
+						"type": "string"
+					},
+					"imei": {
+						"type": "string"
+					},
+					"latitude": {
+						"type": "number",
+						"format": "double"
+					},
+					"longitude": {
+						"type": "number",
+						"format": "double"
+					},
+					"packetHeader": {
+						"type": "string"
+					},
+					"protocolVersion": {
+						"type": "string"
+					},
+					"vehicleRegNo": {
+						"type": "string"
+					},
+					"vendorId": {
+						"type": "string"
+					},
+					"deviceType": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"checksum",
+					"firmwareVersion",
+					"imei",
+					"latitude",
+					"longitude",
+					"packetHeader",
+					"protocolVersion",
+					"vehicleRegNo",
+					"vendorId",
+					"deviceType"
+				],
 				"type": "object",
 				"additionalProperties": false
 			},
@@ -1116,6 +1211,48 @@
 						}
 					}
 				]
+			},
+			"put": {
+				"operationId": "UpdateRole",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ResRole"
+								}
+							}
+						}
+					}
+				},
+				"description": "update role API",
+				"summary": "UPDATE ROLE",
+				"tags": [
+					"Role"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "roleId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/ReqRole"
+							}
+						}
+					}
+				}
 			}
 		},
 		"/role": {
@@ -1499,6 +1636,38 @@
 						}
 					}
 				]
+			}
+		},
+		"/loginpacket": {
+			"post": {
+				"operationId": "SaveLoginPacket",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/LoginPacket"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Login Packet"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/ReqLoginPacket"
+							}
+						}
+					}
+				}
 			}
 		},
 		"/user/freeDongle/{userId}": {

@@ -188,6 +188,36 @@ export class RoleController extends Controller {
   }
 
   /**
+   * update role API
+   * @summary UPDATE ROLE
+   */
+  @Put('/{roleId}')
+  public async updateRole(@Body() req: ReqRole, @Path() roleId: number): Promise<ResRole> {
+    const { description, name } = req;
+
+    const role = await this.rolerepository.findOne({
+      where: {
+        id: roleId,
+      },
+    });
+
+    if (!role) {
+      return Promise.reject(new Error('ROLE NOT FOUND'));
+    }
+
+    (role.description = description), (role.name = name);
+
+    const updatedRole = await this.rolerepository.save(role);
+
+    const resUpdatedRole: ResRole = {
+      description: updatedRole.description,
+      id: updatedRole.id,
+      name: updatedRole.name,
+    };
+    return resUpdatedRole;
+  }
+
+  /**
    * getting permissions from subrole
    *  @summary getting permissions from subrole
    */

@@ -14,6 +14,8 @@ const RoleController_1 = require("./../controller/RoleController");
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 const PermissionController_1 = require("./../controller/PermissionController");
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+const LoginPacketController_1 = require("./../controller/LoginPacketController");
+// WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 const FreeDongleUserDeviceController_1 = require("./../controller/FreeDongleUserDeviceController");
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 const DongleController_1 = require("./../controller/DongleController");
@@ -178,6 +180,7 @@ const models = {
             "id": { "dataType": "double" },
             "name": { "dataType": "string" },
             "mac_address": { "dataType": "string" },
+            "imei": { "dataType": "string" },
             "user": { "dataType": "union", "subSchemas": [{ "ref": "User" }, { "dataType": "enum", "enums": [null] }] },
             "dongle": { "dataType": "union", "subSchemas": [{ "ref": "Dongle" }, { "dataType": "enum", "enums": [null] }] },
         },
@@ -322,7 +325,41 @@ const models = {
             "description": { "dataType": "string" },
             "type": { "ref": "permType" },
             "name": { "dataType": "string" },
-            "role": { "dataType": "array", "array": { "dataType": "double" } },
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "LoginPacket": {
+        "dataType": "refObject",
+        "properties": {
+            "id": { "dataType": "double" },
+            "packetHeader": { "dataType": "string" },
+            "vendorId": { "dataType": "string" },
+            "vehicleRegNo": { "dataType": "string" },
+            "imei": { "dataType": "string" },
+            "firmwareVersion": { "dataType": "string" },
+            "protocolVersion": { "dataType": "string" },
+            "device_type": { "dataType": "string" },
+            "latitude": { "dataType": "double" },
+            "longitude": { "dataType": "double" },
+            "checksum": { "dataType": "string" },
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "ReqLoginPacket": {
+        "dataType": "refObject",
+        "properties": {
+            "checksum": { "dataType": "string", "required": true },
+            "firmwareVersion": { "dataType": "string", "required": true },
+            "imei": { "dataType": "string", "required": true },
+            "latitude": { "dataType": "double", "required": true },
+            "longitude": { "dataType": "double", "required": true },
+            "packetHeader": { "dataType": "string", "required": true },
+            "protocolVersion": { "dataType": "string", "required": true },
+            "vehicleRegNo": { "dataType": "string", "required": true },
+            "vendorId": { "dataType": "string", "required": true },
+            "deviceType": { "dataType": "string", "required": true },
         },
         "additionalProperties": false,
     },
@@ -682,9 +719,10 @@ function RegisterRoutes(app) {
         }
     });
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    app.post('/role/getPermissionFromRole', ...((0, runtime_1.fetchMiddlewares)(RoleController_1.RoleController)), ...((0, runtime_1.fetchMiddlewares)(RoleController_1.RoleController.prototype.getPermissionsFromRole)), async function RoleController_getPermissionsFromRole(request, response, next) {
+    app.put('/role/:roleId', ...((0, runtime_1.fetchMiddlewares)(RoleController_1.RoleController)), ...((0, runtime_1.fetchMiddlewares)(RoleController_1.RoleController.prototype.updateRole)), async function RoleController_updateRole(request, response, next) {
         const args = {
-            request: { "in": "body", "name": "request", "required": true, "ref": "ReqRoleBody" },
+            req: { "in": "body", "name": "req", "required": true, "ref": "ReqRole" },
+            roleId: { "in": "path", "name": "roleId", "required": true, "dataType": "double" },
         };
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         let validatedArgs = [];
@@ -692,7 +730,7 @@ function RegisterRoutes(app) {
             validatedArgs = templateService.getValidatedArgs({ args, request, response });
             const controller = new RoleController_1.RoleController();
             await templateService.apiHandler({
-                methodName: 'getPermissionsFromRole',
+                methodName: 'updateRole',
                 controller,
                 response,
                 next,
@@ -705,10 +743,9 @@ function RegisterRoutes(app) {
         }
     });
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    app.put('/role/:permissionId', ...((0, runtime_1.fetchMiddlewares)(RoleController_1.RoleController)), ...((0, runtime_1.fetchMiddlewares)(RoleController_1.RoleController.prototype.updatePermission)), async function RoleController_updatePermission(request, response, next) {
+    app.post('/role/getPermissionFromRole', ...((0, runtime_1.fetchMiddlewares)(RoleController_1.RoleController)), ...((0, runtime_1.fetchMiddlewares)(RoleController_1.RoleController.prototype.getPermissionsFromRole)), async function RoleController_getPermissionsFromRole(request, response, next) {
         const args = {
-            permissionId: { "in": "path", "name": "permissionId", "required": true, "dataType": "double" },
-            request: { "in": "body", "name": "request", "required": true, "ref": "ReqPermission" },
+            request: { "in": "body", "name": "request", "required": true, "ref": "ReqRoleBody" },
         };
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         let validatedArgs = [];
@@ -716,7 +753,7 @@ function RegisterRoutes(app) {
             validatedArgs = templateService.getValidatedArgs({ args, request, response });
             const controller = new RoleController_1.RoleController();
             await templateService.apiHandler({
-                methodName: 'updatePermission',
+                methodName: 'getPermissionsFromRole',
                 controller,
                 response,
                 next,
@@ -807,6 +844,53 @@ function RegisterRoutes(app) {
             const controller = new PermissionController_1.PermissionController();
             await templateService.apiHandler({
                 methodName: 'getPermissionsOfUser',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+            });
+        }
+        catch (err) {
+            return next(err);
+        }
+    });
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    app.put('/permission/:permissionId', ...((0, runtime_1.fetchMiddlewares)(PermissionController_1.PermissionController)), ...((0, runtime_1.fetchMiddlewares)(PermissionController_1.PermissionController.prototype.updatePermission)), async function PermissionController_updatePermission(request, response, next) {
+        const args = {
+            permissionId: { "in": "path", "name": "permissionId", "required": true, "dataType": "double" },
+            request: { "in": "body", "name": "request", "required": true, "ref": "ReqPermission" },
+        };
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        let validatedArgs = [];
+        try {
+            validatedArgs = templateService.getValidatedArgs({ args, request, response });
+            const controller = new PermissionController_1.PermissionController();
+            await templateService.apiHandler({
+                methodName: 'updatePermission',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+            });
+        }
+        catch (err) {
+            return next(err);
+        }
+    });
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    app.post('/loginpacket', ...((0, runtime_1.fetchMiddlewares)(LoginPacketController_1.LoginPacketController)), ...((0, runtime_1.fetchMiddlewares)(LoginPacketController_1.LoginPacketController.prototype.saveLoginPacket)), async function LoginPacketController_saveLoginPacket(request, response, next) {
+        const args = {
+            req: { "in": "body", "name": "req", "required": true, "ref": "ReqLoginPacket" },
+        };
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        let validatedArgs = [];
+        try {
+            validatedArgs = templateService.getValidatedArgs({ args, request, response });
+            const controller = new LoginPacketController_1.LoginPacketController();
+            await templateService.apiHandler({
+                methodName: 'saveLoginPacket',
                 controller,
                 response,
                 next,
