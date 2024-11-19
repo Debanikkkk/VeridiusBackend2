@@ -155,6 +155,18 @@ let UserController = class UserController extends tsoa_1.Controller {
             return { error: 'failed to login' };
         }
     }
+    async deleteUser(userId) {
+        const usertodelete = await this.userrepository.findOne({
+            where: {
+                id: userId,
+            },
+        });
+        if (!usertodelete) {
+            return Promise.reject(new Error('USER NOT FOUND'));
+        }
+        await this.userrepository.remove(usertodelete);
+        return { result: 'ROLE DELETED SUCCESSFULLY' };
+    }
     async assignUserDevice(userId, request) {
         try {
             const user = await this.userrepository.findOne({
@@ -347,6 +359,13 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], UserController.prototype, "userLogin", null);
+__decorate([
+    (0, tsoa_1.Delete)('/{userId}'),
+    __param(0, (0, tsoa_1.Path)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number]),
+    __metadata("design:returntype", Promise)
+], UserController.prototype, "deleteUser", null);
 __decorate([
     (0, tsoa_1.Put)('userDeviceAllot/{userId}'),
     __param(0, (0, tsoa_1.Path)()),

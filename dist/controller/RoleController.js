@@ -271,7 +271,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], RoleController.prototype, "updateRole", null);
 __decorate([
-    (0, tsoa_1.Post)('/getPermissionFromRole'),
+    (0, tsoa_1.Post)('/{roleId}'),
     __param(0, (0, tsoa_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),

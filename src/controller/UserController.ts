@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Path, Post, Put, Query, Route, Tags } from 'tsoa';
+import { Body, Controller, Delete, Get, Path, Post, Put, Query, Route, Tags } from 'tsoa';
 import { AppDataSource } from '../data-source';
 import { User } from '../entity/User';
 import { ResUser } from '../models/res/ResUser';
@@ -15,7 +15,7 @@ import { ReqDeviceAssign } from '../models/req/ReqDeviceAssign';
 import { Device } from '../entity/Device';
 import { PaginatedResponse } from '../models/res/PaginatedResponse';
 import { ResUserUpdate } from '../models/req/ReqUserUpdate';
-import { ResError } from '../models/res/Responses';
+import { ResError, ResSuccess } from '../models/res/Responses';
 // import { serviceTicketStatus } from "../entity/ServiceTickets";
 @Tags('User')
 @Route('/user')
@@ -138,6 +138,23 @@ export class UserController extends Controller {
       console.log('there was an errror in logging in ', error);
       return { error: 'failed to login' };
     }
+  }
+
+  @Delete('/{userId}')
+  public async deleteUser(@Path() userId: number): Promise<ResSuccess> {
+    const usertodelete = await this.userrepository.findOne({
+      where: {
+        id: userId,
+      },
+    });
+
+    if (!usertodelete) {
+      return Promise.reject(new Error('USER NOT FOUND'));
+    }
+
+    await this.userrepository.remove(usertodelete);
+
+    return { result: 'ROLE DELETED SUCCESSFULLY' };
   }
 
   @Put('userDeviceAllot/{userId}')

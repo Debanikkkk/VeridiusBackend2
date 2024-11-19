@@ -221,7 +221,7 @@ export class RoleController extends Controller {
    * getting permissions from subrole
    *  @summary getting permissions from subrole
    */
-  @Post('/getPermissionFromRole')
+  @Post('/{roleId}')
   public async getPermissionsFromRole(@Body() request: ReqRoleBody) {
     try {
       const { id } = request;

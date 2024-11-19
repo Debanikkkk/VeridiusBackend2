@@ -158,6 +158,14 @@ const models = {
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "ResSuccess": {
+        "dataType": "refObject",
+        "properties": {
+            "result": { "dataType": "string", "required": true },
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "User": {
         "dataType": "refObject",
         "properties": {
@@ -272,14 +280,6 @@ const models = {
         "dataType": "refObject",
         "properties": {
             "status": { "ref": "serviceTicketStatus", "required": true },
-        },
-        "additionalProperties": false,
-    },
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "ResSuccess": {
-        "dataType": "refObject",
-        "properties": {
-            "result": { "dataType": "string", "required": true },
         },
         "additionalProperties": false,
     },
@@ -431,6 +431,29 @@ function RegisterRoutes(app) {
             const controller = new UserController_1.UserController();
             await templateService.apiHandler({
                 methodName: 'userLogin',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+            });
+        }
+        catch (err) {
+            return next(err);
+        }
+    });
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    app.delete('/user/:userId', ...((0, runtime_1.fetchMiddlewares)(UserController_1.UserController)), ...((0, runtime_1.fetchMiddlewares)(UserController_1.UserController.prototype.deleteUser)), async function UserController_deleteUser(request, response, next) {
+        const args = {
+            userId: { "in": "path", "name": "userId", "required": true, "dataType": "double" },
+        };
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        let validatedArgs = [];
+        try {
+            validatedArgs = templateService.getValidatedArgs({ args, request, response });
+            const controller = new UserController_1.UserController();
+            await templateService.apiHandler({
+                methodName: 'deleteUser',
                 controller,
                 response,
                 next,
@@ -743,7 +766,7 @@ function RegisterRoutes(app) {
         }
     });
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    app.post('/role/getPermissionFromRole', ...((0, runtime_1.fetchMiddlewares)(RoleController_1.RoleController)), ...((0, runtime_1.fetchMiddlewares)(RoleController_1.RoleController.prototype.getPermissionsFromRole)), async function RoleController_getPermissionsFromRole(request, response, next) {
+    app.post('/role/:roleId', ...((0, runtime_1.fetchMiddlewares)(RoleController_1.RoleController)), ...((0, runtime_1.fetchMiddlewares)(RoleController_1.RoleController.prototype.getPermissionsFromRole)), async function RoleController_getPermissionsFromRole(request, response, next) {
         const args = {
             request: { "in": "body", "name": "request", "required": true, "ref": "ReqRoleBody" },
         };

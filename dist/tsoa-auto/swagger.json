@@ -265,6 +265,18 @@
                 "type": "object",
                 "additionalProperties": false
             },
+            "ResSuccess": {
+                "properties": {
+                    "result": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "result"
+                ],
+                "type": "object",
+                "additionalProperties": false
+            },
             "User": {
                 "properties": {
                     "id": {
@@ -521,18 +533,6 @@
                 },
                 "required": [
                     "status"
-                ],
-                "type": "object",
-                "additionalProperties": false
-            },
-            "ResSuccess": {
-                "properties": {
-                    "result": {
-                        "type": "string"
-                    }
-                },
-                "required": [
-                    "result"
                 ],
                 "type": "object",
                 "additionalProperties": false
@@ -869,31 +869,16 @@
                 }
             }
         },
-        "/user/userDeviceAllot/{userId}": {
-            "put": {
-                "operationId": "AssignUserDevice",
+        "/user/{userId}": {
+            "delete": {
+                "operationId": "DeleteUser",
                 "responses": {
                     "200": {
                         "description": "Ok",
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "anyOf": [
-                                        {
-                                            "$ref": "#/components/schemas/User"
-                                        },
-                                        {
-                                            "properties": {
-                                                "error": {
-                                                    "type": "string"
-                                                }
-                                            },
-                                            "required": [
-                                                "error"
-                                            ],
-                                            "type": "object"
-                                        }
-                                    ]
+                                    "$ref": "#/components/schemas/ResSuccess"
                                 }
                             }
                         }
@@ -913,20 +898,8 @@
                             "type": "number"
                         }
                     }
-                ],
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "$ref": "#/components/schemas/ReqDeviceAssign"
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/user/{userId}": {
+                ]
+            },
             "get": {
                 "operationId": "GetOneUser",
                 "responses": {
@@ -1007,6 +980,63 @@
                         "application/json": {
                             "schema": {
                                 "$ref": "#/components/schemas/ResUserUpdate"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/user/userDeviceAllot/{userId}": {
+            "put": {
+                "operationId": "AssignUserDevice",
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "anyOf": [
+                                        {
+                                            "$ref": "#/components/schemas/User"
+                                        },
+                                        {
+                                            "properties": {
+                                                "error": {
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "required": [
+                                                "error"
+                                            ],
+                                            "type": "object"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "User"
+                ],
+                "security": [],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "userId",
+                        "required": true,
+                        "schema": {
+                            "format": "double",
+                            "type": "number"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ReqDeviceAssign"
                             }
                         }
                     }
@@ -1253,6 +1283,56 @@
                         }
                     }
                 }
+            },
+            "post": {
+                "operationId": "GetPermissionsFromRole",
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "anyOf": [
+                                        {
+                                            "items": {
+                                                "$ref": "#/components/schemas/Permission"
+                                            },
+                                            "type": "array"
+                                        },
+                                        {
+                                            "properties": {
+                                                "error": {
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "required": [
+                                                "error"
+                                            ],
+                                            "type": "object"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                },
+                "description": "getting permissions from subrole",
+                "summary": "getting permissions from subrole",
+                "tags": [
+                    "Role"
+                ],
+                "security": [],
+                "parameters": [],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ReqRoleBody"
+                            }
+                        }
+                    }
+                }
             }
         },
         "/role": {
@@ -1363,58 +1443,6 @@
                         "application/json": {
                             "schema": {
                                 "$ref": "#/components/schemas/SetPermisisons"
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/role/getPermissionFromRole": {
-            "post": {
-                "operationId": "GetPermissionsFromRole",
-                "responses": {
-                    "200": {
-                        "description": "Ok",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "anyOf": [
-                                        {
-                                            "items": {
-                                                "$ref": "#/components/schemas/Permission"
-                                            },
-                                            "type": "array"
-                                        },
-                                        {
-                                            "properties": {
-                                                "error": {
-                                                    "type": "string"
-                                                }
-                                            },
-                                            "required": [
-                                                "error"
-                                            ],
-                                            "type": "object"
-                                        }
-                                    ]
-                                }
-                            }
-                        }
-                    }
-                },
-                "description": "getting permissions from subrole",
-                "summary": "getting permissions from subrole",
-                "tags": [
-                    "Role"
-                ],
-                "security": [],
-                "parameters": [],
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "$ref": "#/components/schemas/ReqRoleBody"
                             }
                         }
                     }

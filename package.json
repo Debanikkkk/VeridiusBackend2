@@ -14,7 +14,7 @@
     "typeorm:revert": "typeorm-ts-node-commonjs migration:revert -d src/data-source.ts",
     "typeorm:generate": "typeorm-ts-node-commonjs migration:generate -d src/data-source.ts",
     "typeorm:create": "typeorm-ts-node-commonjs migration:create",
-    "monitor": "concurrently \"nodemon\" \"nodemon -x tsoa spec-and-routes\" \"node src/receive.ts\" \"npm run lint:fix\"",
+    "monitor": "concurrently \"nodemon\" \"nodemon -x tsoa spec-and-routes\" \"node src/receive.ts\" \"npm run lint:fix\" \"node src/sio-server.ts\"",
     "watch": "onchange 'src/**/*.ts' -- npm run monitor",
     "monitor:debug": "concurrently \"nodemon --inspect\" \"nodemon -x tsoa spec-and-routes\""
   },
@@ -58,6 +58,8 @@
     "node-cron": "^3.0.3",
     "pg": "^8.11.3",
     "reflect-metadata": "^0.1.13",
+    "socket.io": "^4.8.1",
+    "socket.io-client": "^4.8.1",
     "swagger-ui-express": "^5.0.0",
     "tsoa": "^6.3.1",
     "typeorm": "0.3.19"
