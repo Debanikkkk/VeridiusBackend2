@@ -1,161 +1,91 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.RegisterRoutes = RegisterRoutes;
+exports.RegisterRoutes = void 0;
 /* tslint:disable */
 /* eslint-disable */
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 const runtime_1 = require("@tsoa/runtime");
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-const TagsController_1 = require("./../controller/TagsController");
+const UserController_1 = require("./../controller/UserController");
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-const SubContentController_1 = require("./../controller/SubContentController");
+const ServiceTikcetController_1 = require("./../controller/ServiceTikcetController");
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-const regExController_1 = require("./../controller/regExController");
+const RoleController_1 = require("./../controller/RoleController");
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-const ContentController_1 = require("./../controller/ContentController");
+const PermissionController_1 = require("./../controller/PermissionController");
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-const CommentsController_1 = require("./../controller/CommentsController");
+const LoginPacketController_1 = require("./../controller/LoginPacketController");
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-const BlogController_1 = require("./../controller/BlogController");
+const FreeDongleUserDeviceController_1 = require("./../controller/FreeDongleUserDeviceController");
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-const AdminController_1 = require("./../controller/AdminController");
+const DongleController_1 = require("./../controller/DongleController");
+// WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+const DeviceController_1 = require("./../controller/DeviceController");
 const authentication_1 = require("./../authentication");
-const multer = require('multer');
 const expressAuthenticationRecasted = authentication_1.expressAuthentication;
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 const models = {
-    "ResContent": {
-        "dataType": "refObject",
-        "properties": {
-            "id": { "dataType": "double" },
-            "content": { "dataType": "string" },
-            "contentImg": { "dataType": "string" },
-            "order": { "dataType": "double" },
-            "contentTitle": { "dataType": "string" },
-            "subcontent": { "dataType": "array", "array": { "dataType": "refObject", "ref": "ResSubContent" } },
-            "blog": { "dataType": "array", "array": { "dataType": "refObject", "ref": "ResBlog" } },
-        },
-        "additionalProperties": false,
-    },
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "Blog": {
-        "dataType": "refObject",
-        "properties": {
-            "id": { "dataType": "double" },
-            "blog_title": { "dataType": "string" },
-            "blog_description": { "dataType": "string" },
-            "blog_thumbnail": { "dataType": "string" },
-            "blog_subtitle": { "dataType": "string" },
-            "blog_author": { "dataType": "string" },
-            "status": { "dataType": "boolean" },
-            "post_time": { "dataType": "datetime" },
-            "tags": { "dataType": "array", "array": { "dataType": "refObject", "ref": "Tag" } },
-            "contents": { "dataType": "array", "array": { "dataType": "refObject", "ref": "Content" } },
-            "comments": { "dataType": "array", "array": { "dataType": "refObject", "ref": "Comments" } },
-        },
-        "additionalProperties": false,
-    },
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "Tag": {
+    "ResRole": {
         "dataType": "refObject",
         "properties": {
             "id": { "dataType": "double" },
             "name": { "dataType": "string" },
-            "blogs": { "dataType": "array", "array": { "dataType": "refObject", "ref": "Blog" } },
-        },
-        "additionalProperties": false,
-    },
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "Content": {
-        "dataType": "refObject",
-        "properties": {
-            "id": { "dataType": "double" },
-            "title": { "dataType": "string" },
-            "content": { "dataType": "string" },
-            "content_img": { "dataType": "string" },
-            "order": { "dataType": "double" },
-            "blogs": { "dataType": "array", "array": { "dataType": "refObject", "ref": "Blog" } },
-            "sub_contents": { "dataType": "array", "array": { "dataType": "refObject", "ref": "SubContent" } },
-        },
-        "additionalProperties": false,
-    },
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "Comments": {
-        "dataType": "refObject",
-        "properties": {
-            "id": { "dataType": "double" },
-            "comment_body": { "dataType": "string" },
-            "author": { "dataType": "string" },
-            "status": { "dataType": "boolean" },
-            "post_time": { "dataType": "datetime" },
-            "blog": { "ref": "Blog" },
-        },
-        "additionalProperties": false,
-    },
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "SubContent": {
-        "dataType": "refObject",
-        "properties": {
-            "id": { "dataType": "double" },
-            "title": { "dataType": "string" },
             "description": { "dataType": "string" },
-            "content": { "ref": "Content" },
         },
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "ResSubContent": {
+    "serviceTicketStatus": {
+        "dataType": "refEnum",
+        "enums": ["open", "closed", "new"],
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "ResUser": {
         "dataType": "refObject",
         "properties": {
             "id": { "dataType": "double" },
-            "subContentTitle": { "dataType": "string" },
-            "content": { "dataType": "union", "subSchemas": [{ "ref": "ResContent" }, { "ref": "Content" }] },
-            "subContentDescription": { "dataType": "string" },
+            "name": { "dataType": "string" },
+            "address": { "dataType": "string" },
+            "password": { "dataType": "string" },
+            "email": { "dataType": "string" },
+            "phone_number": { "dataType": "string" },
+            "role": { "ref": "ResRole" },
+            "service_ticket": { "ref": "ResServiceTicket" },
+            "device": { "ref": "ResDevice" },
         },
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "ResBlog": {
+    "ResServiceTicket": {
         "dataType": "refObject",
         "properties": {
-            "id": { "dataType": "double" },
-            "blogSubtitle": { "dataType": "string" },
-            "blogTitle": { "dataType": "string" },
             "date": { "dataType": "datetime" },
-            "blogDescription": { "dataType": "string" },
-            "content": { "dataType": "array", "array": { "dataType": "refObject", "ref": "ResContent" } },
-            "tags": { "dataType": "array", "array": { "dataType": "refObject", "ref": "ResTag" } },
-            "blogThumbnail": { "dataType": "string" },
-            "status": { "dataType": "boolean" },
-            "blogAuthor": { "dataType": "string" },
+            "id": { "dataType": "double" },
+            "service_ticket_number": { "dataType": "string" },
+            "status": { "ref": "serviceTicketStatus" },
+            "technician": { "ref": "ResUser" },
         },
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "ResTag": {
+    "ResDevice": {
+        "dataType": "refObject",
+        "properties": {
+            "id": { "dataType": "double" },
+            "mac_address": { "dataType": "string" },
+            "name": { "dataType": "string" },
+            "user": { "ref": "ResUser" },
+            "dongle": { "dataType": "union", "subSchemas": [{ "ref": "ResDongle" }, { "dataType": "enum", "enums": [null] }] },
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "ResDongle": {
         "dataType": "refObject",
         "properties": {
             "id": { "dataType": "double" },
             "name": { "dataType": "string" },
-            "blogs": { "dataType": "union", "subSchemas": [{ "dataType": "array", "array": { "dataType": "refObject", "ref": "ResBlog" } }, { "dataType": "array", "array": { "dataType": "refObject", "ref": "Blog" } }] },
-        },
-        "additionalProperties": false,
-    },
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "ResTagN": {
-        "dataType": "refObject",
-        "properties": {
-            "id": { "dataType": "double" },
-            "name": { "dataType": "string" },
-            "blogs": { "ref": "ResBlog" },
-        },
-        "additionalProperties": false,
-    },
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "ReqTag": {
-        "dataType": "refObject",
-        "properties": {
-            "name": { "dataType": "string" },
+            "device": { "ref": "ResDevice" },
         },
         "additionalProperties": false,
     },
@@ -168,6 +98,66 @@ const models = {
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "ReqUser": {
+        "dataType": "refObject",
+        "properties": {
+            "name": { "dataType": "string" },
+            "password": { "dataType": "string" },
+            "address": { "dataType": "string" },
+            "email": { "dataType": "string" },
+            "phone_number": { "dataType": "string" },
+            "role": { "dataType": "double" },
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "permType": {
+        "dataType": "refEnum",
+        "enums": ["user", "product"],
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "ResPermission": {
+        "dataType": "refObject",
+        "properties": {
+            "id": { "dataType": "double" },
+            "description": { "dataType": "string" },
+            "type": { "ref": "permType", "required": true },
+            "name": { "dataType": "string" },
+            "roles": { "dataType": "array", "array": { "dataType": "refObject", "ref": "ResRole" } },
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "UserLoginRole": {
+        "dataType": "refObject",
+        "properties": {
+            "id": { "dataType": "double", "required": true },
+            "role_name": { "dataType": "string", "required": true },
+            "role_description": { "dataType": "string", "required": true },
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "ResUserLogin": {
+        "dataType": "refObject",
+        "properties": {
+            "name": { "dataType": "string", "required": true },
+            "permissions": { "dataType": "array", "array": { "dataType": "refObject", "ref": "ResPermission" } },
+            "role": { "ref": "UserLoginRole", "required": true },
+            "token": { "dataType": "string" },
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "ReqUserLogin": {
+        "dataType": "refObject",
+        "properties": {
+            "username": { "dataType": "string", "required": true },
+            "password": { "dataType": "string", "required": true },
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "ResSuccess": {
         "dataType": "refObject",
         "properties": {
@@ -176,59 +166,225 @@ const models = {
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "ReqSubContent": {
-        "dataType": "refObject",
-        "properties": {
-            "subContentTitle": { "dataType": "string" },
-            "subContentDescription": { "dataType": "string" },
-        },
-        "additionalProperties": false,
-    },
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "ResComments": {
+    "User": {
         "dataType": "refObject",
         "properties": {
             "id": { "dataType": "double" },
-            "author": { "dataType": "string" },
-            "commentBody": { "dataType": "string" },
-            "postTime": { "dataType": "datetime" },
-            "status": { "dataType": "boolean" },
-            "blog": { "ref": "ResBlog" },
+            "name": { "dataType": "string" },
+            "password": { "dataType": "string" },
+            "address": { "dataType": "string" },
+            "phone_number": { "dataType": "string" },
+            "email": { "dataType": "string" },
+            "device": { "dataType": "union", "subSchemas": [{ "ref": "Device" }, { "dataType": "enum", "enums": [null] }] },
+            "role": { "ref": "Role" },
+            "service_ticket": { "ref": "ServiceTicket" },
         },
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "ReqComments": {
+    "Device": {
         "dataType": "refObject",
         "properties": {
-            "author": { "dataType": "string" },
-            "commentBody": { "dataType": "string" },
-            "status": { "dataType": "boolean" },
+            "id": { "dataType": "double" },
+            "name": { "dataType": "string" },
+            "mac_address": { "dataType": "string" },
+            "imei": { "dataType": "string" },
+            "user": { "dataType": "union", "subSchemas": [{ "ref": "User" }, { "dataType": "enum", "enums": [null] }] },
+            "dongle": { "dataType": "union", "subSchemas": [{ "ref": "Dongle" }, { "dataType": "enum", "enums": [null] }] },
         },
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "ReqCommentU": {
+    "Dongle": {
         "dataType": "refObject",
         "properties": {
-            "status": { "dataType": "boolean" },
+            "id": { "dataType": "double" },
+            "name": { "dataType": "string" },
+            "device": { "dataType": "union", "subSchemas": [{ "ref": "Device" }, { "dataType": "enum", "enums": [null] }] },
         },
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "ReqBlogStatus": {
+    "Role": {
         "dataType": "refObject",
         "properties": {
-            "status": { "dataType": "boolean" },
+            "id": { "dataType": "double" },
+            "name": { "dataType": "string" },
+            "description": { "dataType": "string" },
+            "permissions": { "dataType": "array", "array": { "dataType": "refObject", "ref": "Permission" } },
+            "users": { "dataType": "array", "array": { "dataType": "refObject", "ref": "User" } },
         },
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "ReqAdminLogin": {
+    "Permission": {
+        "dataType": "refObject",
+        "properties": {
+            "id": { "dataType": "double" },
+            "name": { "dataType": "string" },
+            "description": { "dataType": "string" },
+            "type": { "ref": "permType" },
+            "role": { "dataType": "array", "array": { "dataType": "refObject", "ref": "Role" } },
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "ServiceTicket": {
+        "dataType": "refObject",
+        "properties": {
+            "id": { "dataType": "double" },
+            "date": { "dataType": "datetime" },
+            "created_on": { "dataType": "datetime" },
+            "updated_on": { "dataType": "datetime" },
+            "status": { "ref": "serviceTicketStatus" },
+            "service_ticket_number": { "dataType": "string" },
+            "technician": { "ref": "User" },
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "ReqDeviceAssign": {
+        "dataType": "refObject",
+        "properties": {
+            "id": { "dataType": "double" },
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "PaginatedResponse_User_": {
+        "dataType": "refObject",
+        "properties": {
+            "items": { "dataType": "array", "array": { "dataType": "refObject", "ref": "User" }, "required": true },
+            "totalCount": { "dataType": "double", "required": true },
+            "page": { "dataType": "double", "required": true },
+            "pageSize": { "dataType": "double", "required": true },
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "ResUserUpdate": {
         "dataType": "refObject",
         "properties": {
             "name": { "dataType": "string" },
+            "address": { "dataType": "string" },
             "password": { "dataType": "string" },
+            "email": { "dataType": "string" },
+            "phone_number": { "dataType": "string" },
+            "role": { "dataType": "double" },
+            "device": { "dataType": "double" },
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "ReqSTstatus": {
+        "dataType": "refObject",
+        "properties": {
+            "status": { "ref": "serviceTicketStatus", "required": true },
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "ReqRole": {
+        "dataType": "refObject",
+        "properties": {
+            "name": { "dataType": "string" },
+            "description": { "dataType": "string" },
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "GetSetPermisisons": {
+        "dataType": "refObject",
+        "properties": {
+            "role": { "ref": "ResRole" },
+            "permissions": { "dataType": "array", "array": { "dataType": "refObject", "ref": "ResPermission" } },
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "SetPermisisons": {
+        "dataType": "refObject",
+        "properties": {
+            "role": { "dataType": "double" },
+            "permissions": { "dataType": "array", "array": { "dataType": "double" } },
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "ReqRoleBody": {
+        "dataType": "refObject",
+        "properties": {
+            "id": { "dataType": "double" },
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "ReqPermission": {
+        "dataType": "refObject",
+        "properties": {
+            "description": { "dataType": "string" },
+            "type": { "ref": "permType" },
+            "name": { "dataType": "string" },
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "LoginPacket": {
+        "dataType": "refObject",
+        "properties": {
+            "id": { "dataType": "double" },
+            "packetHeader": { "dataType": "string" },
+            "vendorId": { "dataType": "string" },
+            "vehicleRegNo": { "dataType": "string" },
+            "imei": { "dataType": "string" },
+            "firmwareVersion": { "dataType": "string" },
+            "protocolVersion": { "dataType": "string" },
+            "device_type": { "dataType": "string" },
+            "latitude": { "dataType": "double" },
+            "longitude": { "dataType": "double" },
+            "checksum": { "dataType": "string" },
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "ReqLoginPacket": {
+        "dataType": "refObject",
+        "properties": {
+            "checksum": { "dataType": "string", "required": true },
+            "firmwareVersion": { "dataType": "string", "required": true },
+            "imei": { "dataType": "string", "required": true },
+            "latitude": { "dataType": "double", "required": true },
+            "longitude": { "dataType": "double", "required": true },
+            "packetHeader": { "dataType": "string", "required": true },
+            "protocolVersion": { "dataType": "string", "required": true },
+            "vehicleRegNo": { "dataType": "string", "required": true },
+            "vendorId": { "dataType": "string", "required": true },
+            "deviceType": { "dataType": "string", "required": true },
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "ReqDongle": {
+        "dataType": "refObject",
+        "properties": {
+            "name": { "dataType": "string" },
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "ReqDevice": {
+        "dataType": "refObject",
+        "properties": {
+            "mac_address": { "dataType": "string" },
+            "name": { "dataType": "string" },
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "ReqDongleAllot": {
+        "dataType": "refObject",
+        "properties": {
+            "id": { "dataType": "double" },
         },
         "additionalProperties": false,
     },
@@ -236,24 +392,22 @@ const models = {
 };
 const templateService = new runtime_1.ExpressTemplateService(models, { "noImplicitAdditionalProperties": "throw-on-extras", "bodyCoercion": true });
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-function RegisterRoutes(app, opts) {
+function RegisterRoutes(app) {
     // ###########################################################################################################
     //  NOTE: If you do not see routes for all of your controllers in this file, then you might not have informed tsoa of where to look
     //      Please look into the "controllerPathGlobs" config option described in the readme: https://github.com/lukeautry/tsoa
     // ###########################################################################################################
-    const upload = opts?.multer || multer({ "limits": { "fileSize": 8388608 } });
-    app.post('/blog/:blogId/tags', ...((0, runtime_1.fetchMiddlewares)(TagsController_1.TagsController)), ...((0, runtime_1.fetchMiddlewares)(TagsController_1.TagsController.prototype.saveTagsIntoBlog)), async function TagsController_saveTagsIntoBlog(request, response, next) {
+    app.post('/user', ...((0, runtime_1.fetchMiddlewares)(UserController_1.UserController)), ...((0, runtime_1.fetchMiddlewares)(UserController_1.UserController.prototype.saveUser)), async function UserController_saveUser(request, response, next) {
         const args = {
-            blogId: { "in": "path", "name": "blogId", "required": true, "dataType": "double" },
-            request: { "in": "body", "name": "request", "required": true, "ref": "ReqTag" },
+            req: { "in": "body", "name": "req", "required": true, "ref": "ReqUser" },
         };
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         let validatedArgs = [];
         try {
             validatedArgs = templateService.getValidatedArgs({ args, request, response });
-            const controller = new TagsController_1.TagsController();
+            const controller = new UserController_1.UserController();
             await templateService.apiHandler({
-                methodName: 'saveTagsIntoBlog',
+                methodName: 'saveUser',
                 controller,
                 response,
                 next,
@@ -266,17 +420,17 @@ function RegisterRoutes(app, opts) {
         }
     });
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    app.get('/blog/:blogId/tags', ...((0, runtime_1.fetchMiddlewares)(TagsController_1.TagsController)), ...((0, runtime_1.fetchMiddlewares)(TagsController_1.TagsController.prototype.getAllTagForOneBlog)), async function TagsController_getAllTagForOneBlog(request, response, next) {
+    app.post('/user/login', ...((0, runtime_1.fetchMiddlewares)(UserController_1.UserController)), ...((0, runtime_1.fetchMiddlewares)(UserController_1.UserController.prototype.userLogin)), async function UserController_userLogin(request, response, next) {
         const args = {
-            blogId: { "in": "path", "name": "blogId", "required": true, "dataType": "double" },
+            loginBody: { "in": "body", "name": "loginBody", "required": true, "ref": "ReqUserLogin" },
         };
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         let validatedArgs = [];
         try {
             validatedArgs = templateService.getValidatedArgs({ args, request, response });
-            const controller = new TagsController_1.TagsController();
+            const controller = new UserController_1.UserController();
             await templateService.apiHandler({
-                methodName: 'getAllTagForOneBlog',
+                methodName: 'userLogin',
                 controller,
                 response,
                 next,
@@ -289,17 +443,17 @@ function RegisterRoutes(app, opts) {
         }
     });
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    app.get('/blog/:blogId/tags/:tagId', ...((0, runtime_1.fetchMiddlewares)(TagsController_1.TagsController)), ...((0, runtime_1.fetchMiddlewares)(TagsController_1.TagsController.prototype.getOneTag)), async function TagsController_getOneTag(request, response, next) {
+    app.delete('/user/:userId', ...((0, runtime_1.fetchMiddlewares)(UserController_1.UserController)), ...((0, runtime_1.fetchMiddlewares)(UserController_1.UserController.prototype.deleteUser)), async function UserController_deleteUser(request, response, next) {
         const args = {
-            tagId: { "in": "path", "name": "tagId", "required": true, "dataType": "double" },
+            userId: { "in": "path", "name": "userId", "required": true, "dataType": "double" },
         };
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         let validatedArgs = [];
         try {
             validatedArgs = templateService.getValidatedArgs({ args, request, response });
-            const controller = new TagsController_1.TagsController();
+            const controller = new UserController_1.UserController();
             await templateService.apiHandler({
-                methodName: 'getOneTag',
+                methodName: 'deleteUser',
                 controller,
                 response,
                 next,
@@ -312,18 +466,18 @@ function RegisterRoutes(app, opts) {
         }
     });
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    app.delete('/blog/:blogId/tags/:tagId', ...((0, runtime_1.fetchMiddlewares)(TagsController_1.TagsController)), ...((0, runtime_1.fetchMiddlewares)(TagsController_1.TagsController.prototype.deleteTag)), async function TagsController_deleteTag(request, response, next) {
+    app.put('/user/userDeviceAllot/:userId', ...((0, runtime_1.fetchMiddlewares)(UserController_1.UserController)), ...((0, runtime_1.fetchMiddlewares)(UserController_1.UserController.prototype.assignUserDevice)), async function UserController_assignUserDevice(request, response, next) {
         const args = {
-            tagId: { "in": "path", "name": "tagId", "required": true, "dataType": "double" },
-            blogId: { "in": "path", "name": "blogId", "required": true, "dataType": "double" },
+            userId: { "in": "path", "name": "userId", "required": true, "dataType": "double" },
+            request: { "in": "body", "name": "request", "required": true, "ref": "ReqDeviceAssign" },
         };
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         let validatedArgs = [];
         try {
             validatedArgs = templateService.getValidatedArgs({ args, request, response });
-            const controller = new TagsController_1.TagsController();
+            const controller = new UserController_1.UserController();
             await templateService.apiHandler({
-                methodName: 'deleteTag',
+                methodName: 'assignUserDevice',
                 controller,
                 response,
                 next,
@@ -336,19 +490,18 @@ function RegisterRoutes(app, opts) {
         }
     });
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    app.post('/blog/:blogId/content/:contentId/subContent', ...((0, runtime_1.fetchMiddlewares)(SubContentController_1.SubContentController)), ...((0, runtime_1.fetchMiddlewares)(SubContentController_1.SubContentController.prototype.saveSubContent)), async function SubContentController_saveSubContent(request, response, next) {
+    app.get('/user', ...((0, runtime_1.fetchMiddlewares)(UserController_1.UserController)), ...((0, runtime_1.fetchMiddlewares)(UserController_1.UserController.prototype.getUsers)), async function UserController_getUsers(request, response, next) {
         const args = {
-            blogId: { "in": "path", "name": "blogId", "required": true, "dataType": "double" },
-            contentId: { "in": "path", "name": "contentId", "required": true, "dataType": "double" },
-            request: { "in": "body", "name": "request", "required": true, "ref": "ReqSubContent" },
+            page: { "default": 1, "in": "query", "name": "page", "dataType": "double" },
+            pageSize: { "default": 10, "in": "query", "name": "pageSize", "dataType": "double" },
         };
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         let validatedArgs = [];
         try {
             validatedArgs = templateService.getValidatedArgs({ args, request, response });
-            const controller = new SubContentController_1.SubContentController();
+            const controller = new UserController_1.UserController();
             await templateService.apiHandler({
-                methodName: 'saveSubContent',
+                methodName: 'getUsers',
                 controller,
                 response,
                 next,
@@ -361,18 +514,17 @@ function RegisterRoutes(app, opts) {
         }
     });
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    app.get('/blog/:blogId/content/:contentId/subContent', ...((0, runtime_1.fetchMiddlewares)(SubContentController_1.SubContentController)), ...((0, runtime_1.fetchMiddlewares)(SubContentController_1.SubContentController.prototype.getAllSubContent)), async function SubContentController_getAllSubContent(request, response, next) {
+    app.get('/user/:userId', ...((0, runtime_1.fetchMiddlewares)(UserController_1.UserController)), ...((0, runtime_1.fetchMiddlewares)(UserController_1.UserController.prototype.getOneUser)), async function UserController_getOneUser(request, response, next) {
         const args = {
-            contentId: { "in": "path", "name": "contentId", "required": true, "dataType": "double" },
-            blogId: { "in": "path", "name": "blogId", "required": true, "dataType": "double" },
+            userId: { "in": "path", "name": "userId", "required": true, "dataType": "double" },
         };
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         let validatedArgs = [];
         try {
             validatedArgs = templateService.getValidatedArgs({ args, request, response });
-            const controller = new SubContentController_1.SubContentController();
+            const controller = new UserController_1.UserController();
             await templateService.apiHandler({
-                methodName: 'getAllSubContent',
+                methodName: 'getOneUser',
                 controller,
                 response,
                 next,
@@ -385,19 +537,18 @@ function RegisterRoutes(app, opts) {
         }
     });
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    app.get('/blog/:blogId/content/:contentId/subContent/:subContentId', ...((0, runtime_1.fetchMiddlewares)(SubContentController_1.SubContentController)), ...((0, runtime_1.fetchMiddlewares)(SubContentController_1.SubContentController.prototype.getOneSubContent)), async function SubContentController_getOneSubContent(request, response, next) {
+    app.put('/user/:userId', ...((0, runtime_1.fetchMiddlewares)(UserController_1.UserController)), ...((0, runtime_1.fetchMiddlewares)(UserController_1.UserController.prototype.updateUser)), async function UserController_updateUser(request, response, next) {
         const args = {
-            contentId: { "in": "path", "name": "contentId", "required": true, "dataType": "double" },
-            blogId: { "in": "path", "name": "blogId", "required": true, "dataType": "double" },
-            subContentId: { "in": "path", "name": "subContentId", "required": true, "dataType": "double" },
+            userId: { "in": "path", "name": "userId", "required": true, "dataType": "double" },
+            request: { "in": "body", "name": "request", "required": true, "ref": "ResUserUpdate" },
         };
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         let validatedArgs = [];
         try {
             validatedArgs = templateService.getValidatedArgs({ args, request, response });
-            const controller = new SubContentController_1.SubContentController();
+            const controller = new UserController_1.UserController();
             await templateService.apiHandler({
-                methodName: 'getOneSubContent',
+                methodName: 'updateUser',
                 controller,
                 response,
                 next,
@@ -410,339 +561,15 @@ function RegisterRoutes(app, opts) {
         }
     });
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    app.delete('/blog/:blogId/content/:contentId/subContent/:subContentId', ...((0, runtime_1.fetchMiddlewares)(SubContentController_1.SubContentController)), ...((0, runtime_1.fetchMiddlewares)(SubContentController_1.SubContentController.prototype.deleteSubContent)), async function SubContentController_deleteSubContent(request, response, next) {
-        const args = {
-            contentId: { "in": "path", "name": "contentId", "required": true, "dataType": "double" },
-            blogId: { "in": "path", "name": "blogId", "required": true, "dataType": "double" },
-            subContentId: { "in": "path", "name": "subContentId", "required": true, "dataType": "double" },
-        };
-        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        let validatedArgs = [];
-        try {
-            validatedArgs = templateService.getValidatedArgs({ args, request, response });
-            const controller = new SubContentController_1.SubContentController();
-            await templateService.apiHandler({
-                methodName: 'deleteSubContent',
-                controller,
-                response,
-                next,
-                validatedArgs,
-                successStatus: undefined,
-            });
-        }
-        catch (err) {
-            return next(err);
-        }
-    });
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    app.put('/blog/:blogId/content/:contentId/subContent/:subContentId', ...((0, runtime_1.fetchMiddlewares)(SubContentController_1.SubContentController)), ...((0, runtime_1.fetchMiddlewares)(SubContentController_1.SubContentController.prototype.updateSubContentOfContent)), async function SubContentController_updateSubContentOfContent(request, response, next) {
-        const args = {
-            contentId: { "in": "path", "name": "contentId", "required": true, "dataType": "double" },
-            blogId: { "in": "path", "name": "blogId", "required": true, "dataType": "double" },
-            request: { "in": "body", "name": "request", "required": true, "ref": "ReqSubContent" },
-            subContentId: { "in": "path", "name": "subContentId", "required": true, "dataType": "double" },
-        };
-        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        let validatedArgs = [];
-        try {
-            validatedArgs = templateService.getValidatedArgs({ args, request, response });
-            const controller = new SubContentController_1.SubContentController();
-            await templateService.apiHandler({
-                methodName: 'updateSubContentOfContent',
-                controller,
-                response,
-                next,
-                validatedArgs,
-                successStatus: undefined,
-            });
-        }
-        catch (err) {
-            return next(err);
-        }
-    });
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    app.get('/regex', ...((0, runtime_1.fetchMiddlewares)(regExController_1.resExController)), ...((0, runtime_1.fetchMiddlewares)(regExController_1.resExController.prototype.regexSearch)), async function resExController_regexSearch(request, response, next) {
-        const args = {
-            searchItem: { "in": "query", "name": "searchItem", "dataType": "string" },
-        };
-        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        let validatedArgs = [];
-        try {
-            validatedArgs = templateService.getValidatedArgs({ args, request, response });
-            const controller = new regExController_1.resExController();
-            await templateService.apiHandler({
-                methodName: 'regexSearch',
-                controller,
-                response,
-                next,
-                validatedArgs,
-                successStatus: undefined,
-            });
-        }
-        catch (err) {
-            return next(err);
-        }
-    });
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    app.post('/blog/:blogId/content', upload.fields([{ "name": "file", "maxCount": 1, "multiple": false }]), ...((0, runtime_1.fetchMiddlewares)(ContentController_1.ContentController)), ...((0, runtime_1.fetchMiddlewares)(ContentController_1.ContentController.prototype.saveContent)), async function ContentController_saveContent(request, response, next) {
-        const args = {
-            blogId: { "in": "path", "name": "blogId", "required": true, "dataType": "double" },
-            content: { "in": "formData", "name": "content", "required": true, "dataType": "string" },
-            order: { "in": "formData", "name": "order", "required": true, "dataType": "string" },
-            contentTitle: { "in": "formData", "name": "contentTitle", "required": true, "dataType": "string" },
-            file: { "in": "formData", "name": "file", "dataType": "file" },
-        };
-        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        let validatedArgs = [];
-        try {
-            validatedArgs = templateService.getValidatedArgs({ args, request, response });
-            const controller = new ContentController_1.ContentController();
-            await templateService.apiHandler({
-                methodName: 'saveContent',
-                controller,
-                response,
-                next,
-                validatedArgs,
-                successStatus: undefined,
-            });
-        }
-        catch (err) {
-            return next(err);
-        }
-    });
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    app.delete('/blog/:blogId/content/:contentId', ...((0, runtime_1.fetchMiddlewares)(ContentController_1.ContentController)), ...((0, runtime_1.fetchMiddlewares)(ContentController_1.ContentController.prototype.deleteContent)), async function ContentController_deleteContent(request, response, next) {
-        const args = {
-            blogId: { "in": "path", "name": "blogId", "required": true, "dataType": "double" },
-            contentId: { "in": "path", "name": "contentId", "required": true, "dataType": "double" },
-        };
-        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        let validatedArgs = [];
-        try {
-            validatedArgs = templateService.getValidatedArgs({ args, request, response });
-            const controller = new ContentController_1.ContentController();
-            await templateService.apiHandler({
-                methodName: 'deleteContent',
-                controller,
-                response,
-                next,
-                validatedArgs,
-                successStatus: undefined,
-            });
-        }
-        catch (err) {
-            return next(err);
-        }
-    });
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    app.get('/blog/:blogId/content', ...((0, runtime_1.fetchMiddlewares)(ContentController_1.ContentController)), ...((0, runtime_1.fetchMiddlewares)(ContentController_1.ContentController.prototype.getAllContentOfOneBlog)), async function ContentController_getAllContentOfOneBlog(request, response, next) {
-        const args = {
-            blogId: { "in": "path", "name": "blogId", "required": true, "dataType": "double" },
-        };
-        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        let validatedArgs = [];
-        try {
-            validatedArgs = templateService.getValidatedArgs({ args, request, response });
-            const controller = new ContentController_1.ContentController();
-            await templateService.apiHandler({
-                methodName: 'getAllContentOfOneBlog',
-                controller,
-                response,
-                next,
-                validatedArgs,
-                successStatus: undefined,
-            });
-        }
-        catch (err) {
-            return next(err);
-        }
-    });
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    app.get('/blog/:blogId/content/:contentId', ...((0, runtime_1.fetchMiddlewares)(ContentController_1.ContentController)), ...((0, runtime_1.fetchMiddlewares)(ContentController_1.ContentController.prototype.getOneContent)), async function ContentController_getOneContent(request, response, next) {
-        const args = {
-            blogId: { "in": "path", "name": "blogId", "required": true, "dataType": "double" },
-            contentId: { "in": "path", "name": "contentId", "required": true, "dataType": "double" },
-        };
-        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        let validatedArgs = [];
-        try {
-            validatedArgs = templateService.getValidatedArgs({ args, request, response });
-            const controller = new ContentController_1.ContentController();
-            await templateService.apiHandler({
-                methodName: 'getOneContent',
-                controller,
-                response,
-                next,
-                validatedArgs,
-                successStatus: undefined,
-            });
-        }
-        catch (err) {
-            return next(err);
-        }
-    });
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    app.put('/blog/:blogId/content/:contentId', upload.fields([{ "name": "file", "maxCount": 1, "multiple": false }]), ...((0, runtime_1.fetchMiddlewares)(ContentController_1.ContentController)), ...((0, runtime_1.fetchMiddlewares)(ContentController_1.ContentController.prototype.updateContent)), async function ContentController_updateContent(request, response, next) {
-        const args = {
-            blogId: { "in": "path", "name": "blogId", "required": true, "dataType": "double" },
-            contentId: { "in": "path", "name": "contentId", "required": true, "dataType": "double" },
-            content: { "in": "formData", "name": "content", "required": true, "dataType": "string" },
-            order: { "in": "formData", "name": "order", "required": true, "dataType": "string" },
-            title: { "in": "formData", "name": "title", "required": true, "dataType": "string" },
-            file: { "in": "formData", "name": "file", "dataType": "file" },
-        };
-        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        let validatedArgs = [];
-        try {
-            validatedArgs = templateService.getValidatedArgs({ args, request, response });
-            const controller = new ContentController_1.ContentController();
-            await templateService.apiHandler({
-                methodName: 'updateContent',
-                controller,
-                response,
-                next,
-                validatedArgs,
-                successStatus: undefined,
-            });
-        }
-        catch (err) {
-            return next(err);
-        }
-    });
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    app.post('/blog/:blogId/comment', ...((0, runtime_1.fetchMiddlewares)(CommentsController_1.CommentController)), ...((0, runtime_1.fetchMiddlewares)(CommentsController_1.CommentController.prototype.saveComment)), async function CommentController_saveComment(request, response, next) {
-        const args = {
-            blogId: { "in": "path", "name": "blogId", "required": true, "dataType": "double" },
-            request: { "in": "body", "name": "request", "required": true, "ref": "ReqComments" },
-        };
-        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        let validatedArgs = [];
-        try {
-            validatedArgs = templateService.getValidatedArgs({ args, request, response });
-            const controller = new CommentsController_1.CommentController();
-            await templateService.apiHandler({
-                methodName: 'saveComment',
-                controller,
-                response,
-                next,
-                validatedArgs,
-                successStatus: undefined,
-            });
-        }
-        catch (err) {
-            return next(err);
-        }
-    });
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    app.get('/blog/:blogId/comment', ...((0, runtime_1.fetchMiddlewares)(CommentsController_1.CommentController)), ...((0, runtime_1.fetchMiddlewares)(CommentsController_1.CommentController.prototype.getAllComment)), async function CommentController_getAllComment(request, response, next) {
-        const args = {
-            blogId: { "in": "path", "name": "blogId", "required": true, "dataType": "double" },
-        };
-        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        let validatedArgs = [];
-        try {
-            validatedArgs = templateService.getValidatedArgs({ args, request, response });
-            const controller = new CommentsController_1.CommentController();
-            await templateService.apiHandler({
-                methodName: 'getAllComment',
-                controller,
-                response,
-                next,
-                validatedArgs,
-                successStatus: undefined,
-            });
-        }
-        catch (err) {
-            return next(err);
-        }
-    });
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    app.delete('/blog/:blogId/comment/:commentId', ...((0, runtime_1.fetchMiddlewares)(CommentsController_1.CommentController)), ...((0, runtime_1.fetchMiddlewares)(CommentsController_1.CommentController.prototype.deleteComment)), async function CommentController_deleteComment(request, response, next) {
-        const args = {
-            blogId: { "in": "path", "name": "blogId", "required": true, "dataType": "double" },
-            commentId: { "in": "path", "name": "commentId", "required": true, "dataType": "double" },
-        };
-        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        let validatedArgs = [];
-        try {
-            validatedArgs = templateService.getValidatedArgs({ args, request, response });
-            const controller = new CommentsController_1.CommentController();
-            await templateService.apiHandler({
-                methodName: 'deleteComment',
-                controller,
-                response,
-                next,
-                validatedArgs,
-                successStatus: undefined,
-            });
-        }
-        catch (err) {
-            return next(err);
-        }
-    });
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    app.put('/blog/:blogId/comment/:commentId', ...((0, runtime_1.fetchMiddlewares)(CommentsController_1.CommentController)), ...((0, runtime_1.fetchMiddlewares)(CommentsController_1.CommentController.prototype.updateComment)), async function CommentController_updateComment(request, response, next) {
-        const args = {
-            blogId: { "in": "path", "name": "blogId", "required": true, "dataType": "double" },
-            commentId: { "in": "path", "name": "commentId", "required": true, "dataType": "double" },
-            request: { "in": "body", "name": "request", "required": true, "ref": "ReqCommentU" },
-        };
-        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        let validatedArgs = [];
-        try {
-            validatedArgs = templateService.getValidatedArgs({ args, request, response });
-            const controller = new CommentsController_1.CommentController();
-            await templateService.apiHandler({
-                methodName: 'updateComment',
-                controller,
-                response,
-                next,
-                validatedArgs,
-                successStatus: undefined,
-            });
-        }
-        catch (err) {
-            return next(err);
-        }
-    });
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    app.post('/blog', upload.fields([{ "name": "file", "maxCount": 1, "multiple": false }]), ...((0, runtime_1.fetchMiddlewares)(BlogController_1.BlogController)), ...((0, runtime_1.fetchMiddlewares)(BlogController_1.BlogController.prototype.saveBlog)), async function BlogController_saveBlog(request, response, next) {
-        const args = {
-            blogSubtitle: { "in": "formData", "name": "blogSubtitle", "dataType": "string" },
-            blogTitle: { "in": "formData", "name": "blogTitle", "dataType": "string" },
-            secretKey: { "in": "formData", "name": "secretKey", "dataType": "string" },
-            blogDescription: { "in": "formData", "name": "blogDescription", "dataType": "string" },
-            blogAuthor: { "in": "formData", "name": "blogAuthor", "dataType": "string" },
-            file: { "in": "formData", "name": "file", "dataType": "file" },
-        };
-        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        let validatedArgs = [];
-        try {
-            validatedArgs = templateService.getValidatedArgs({ args, request, response });
-            const controller = new BlogController_1.BlogController();
-            await templateService.apiHandler({
-                methodName: 'saveBlog',
-                controller,
-                response,
-                next,
-                validatedArgs,
-                successStatus: undefined,
-            });
-        }
-        catch (err) {
-            return next(err);
-        }
-    });
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    app.get('/blog', ...((0, runtime_1.fetchMiddlewares)(BlogController_1.BlogController)), ...((0, runtime_1.fetchMiddlewares)(BlogController_1.BlogController.prototype.getAllBlog)), async function BlogController_getAllBlog(request, response, next) {
+    app.get('/serviceTicket', ...((0, runtime_1.fetchMiddlewares)(ServiceTikcetController_1.ServiceTicketController)), ...((0, runtime_1.fetchMiddlewares)(ServiceTikcetController_1.ServiceTicketController.prototype.getAllServiceTickets)), async function ServiceTicketController_getAllServiceTickets(request, response, next) {
         const args = {};
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         let validatedArgs = [];
         try {
             validatedArgs = templateService.getValidatedArgs({ args, request, response });
-            const controller = new BlogController_1.BlogController();
+            const controller = new ServiceTikcetController_1.ServiceTicketController();
             await templateService.apiHandler({
-                methodName: 'getAllBlog',
+                methodName: 'getAllServiceTickets',
                 controller,
                 response,
                 next,
@@ -755,17 +582,17 @@ function RegisterRoutes(app, opts) {
         }
     });
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    app.get('/blog/:blogId', ...((0, runtime_1.fetchMiddlewares)(BlogController_1.BlogController)), ...((0, runtime_1.fetchMiddlewares)(BlogController_1.BlogController.prototype.getOneBlog)), async function BlogController_getOneBlog(request, response, next) {
+    app.post('/serviceTicket', authenticateMiddleware([{ "Api-Token": [] }]), ...((0, runtime_1.fetchMiddlewares)(ServiceTikcetController_1.ServiceTicketController)), ...((0, runtime_1.fetchMiddlewares)(ServiceTikcetController_1.ServiceTicketController.prototype.saveServiceTicket)), async function ServiceTicketController_saveServiceTicket(request, response, next) {
         const args = {
-            blogId: { "in": "path", "name": "blogId", "required": true, "dataType": "double" },
+            req: { "in": "request", "name": "req", "required": true, "dataType": "object" },
         };
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         let validatedArgs = [];
         try {
             validatedArgs = templateService.getValidatedArgs({ args, request, response });
-            const controller = new BlogController_1.BlogController();
+            const controller = new ServiceTikcetController_1.ServiceTicketController();
             await templateService.apiHandler({
-                methodName: 'getOneBlog',
+                methodName: 'saveServiceTicket',
                 controller,
                 response,
                 next,
@@ -778,18 +605,18 @@ function RegisterRoutes(app, opts) {
         }
     });
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    app.delete('/blog/:blogId', ...((0, runtime_1.fetchMiddlewares)(BlogController_1.BlogController)), ...((0, runtime_1.fetchMiddlewares)(BlogController_1.BlogController.prototype.deleteBlog)), async function BlogController_deleteBlog(request, response, next) {
+    app.put('/serviceTicket/:serviceTicketId', ...((0, runtime_1.fetchMiddlewares)(ServiceTikcetController_1.ServiceTicketController)), ...((0, runtime_1.fetchMiddlewares)(ServiceTikcetController_1.ServiceTicketController.prototype.updateServiceTicketStatus)), async function ServiceTicketController_updateServiceTicketStatus(request, response, next) {
         const args = {
-            blogId: { "in": "path", "name": "blogId", "required": true, "dataType": "double" },
-            secretKey: { "in": "query", "name": "secretKey", "required": true, "dataType": "string" },
+            serviceTicketId: { "in": "path", "name": "serviceTicketId", "required": true, "dataType": "double" },
+            request: { "in": "body", "name": "request", "required": true, "ref": "ReqSTstatus" },
         };
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         let validatedArgs = [];
         try {
             validatedArgs = templateService.getValidatedArgs({ args, request, response });
-            const controller = new BlogController_1.BlogController();
+            const controller = new ServiceTikcetController_1.ServiceTicketController();
             await templateService.apiHandler({
-                methodName: 'deleteBlog',
+                methodName: 'updateServiceTicketStatus',
                 controller,
                 response,
                 next,
@@ -802,23 +629,17 @@ function RegisterRoutes(app, opts) {
         }
     });
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    app.put('/blog/:blogId', upload.fields([{ "name": "file", "maxCount": 1, "multiple": false }]), ...((0, runtime_1.fetchMiddlewares)(BlogController_1.BlogController)), ...((0, runtime_1.fetchMiddlewares)(BlogController_1.BlogController.prototype.updateBlog)), async function BlogController_updateBlog(request, response, next) {
+    app.get('/role/:roleId', ...((0, runtime_1.fetchMiddlewares)(RoleController_1.RoleController)), ...((0, runtime_1.fetchMiddlewares)(RoleController_1.RoleController.prototype.getOneRole)), async function RoleController_getOneRole(request, response, next) {
         const args = {
-            blogId: { "in": "path", "name": "blogId", "required": true, "dataType": "double" },
-            blogSubtitle: { "in": "formData", "name": "blogSubtitle", "dataType": "string" },
-            blogTitle: { "in": "formData", "name": "blogTitle", "dataType": "string" },
-            secretKey: { "in": "formData", "name": "secretKey", "dataType": "string" },
-            blogDescription: { "in": "formData", "name": "blogDescription", "dataType": "string" },
-            blogAuthor: { "in": "formData", "name": "blogAuthor", "dataType": "string" },
-            file: { "in": "formData", "name": "file", "dataType": "file" },
+            roleId: { "in": "path", "name": "roleId", "required": true, "dataType": "double" },
         };
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         let validatedArgs = [];
         try {
             validatedArgs = templateService.getValidatedArgs({ args, request, response });
-            const controller = new BlogController_1.BlogController();
+            const controller = new RoleController_1.RoleController();
             await templateService.apiHandler({
-                methodName: 'updateBlog',
+                methodName: 'getOneRole',
                 controller,
                 response,
                 next,
@@ -831,18 +652,38 @@ function RegisterRoutes(app, opts) {
         }
     });
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    app.put('/blog/statusUpdate/:blogId', ...((0, runtime_1.fetchMiddlewares)(BlogController_1.BlogController)), ...((0, runtime_1.fetchMiddlewares)(BlogController_1.BlogController.prototype.updateBlogStatus)), async function BlogController_updateBlogStatus(request, response, next) {
+    app.get('/role', ...((0, runtime_1.fetchMiddlewares)(RoleController_1.RoleController)), ...((0, runtime_1.fetchMiddlewares)(RoleController_1.RoleController.prototype.getAllRole)), async function RoleController_getAllRole(request, response, next) {
+        const args = {};
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        let validatedArgs = [];
+        try {
+            validatedArgs = templateService.getValidatedArgs({ args, request, response });
+            const controller = new RoleController_1.RoleController();
+            await templateService.apiHandler({
+                methodName: 'getAllRole',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+            });
+        }
+        catch (err) {
+            return next(err);
+        }
+    });
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    app.delete('/role/:roleId', ...((0, runtime_1.fetchMiddlewares)(RoleController_1.RoleController)), ...((0, runtime_1.fetchMiddlewares)(RoleController_1.RoleController.prototype.deleteRole)), async function RoleController_deleteRole(request, response, next) {
         const args = {
-            blogId: { "in": "path", "name": "blogId", "required": true, "dataType": "double" },
-            request: { "in": "body", "name": "request", "required": true, "ref": "ReqBlogStatus" },
+            roleId: { "in": "path", "name": "roleId", "required": true, "dataType": "double" },
         };
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         let validatedArgs = [];
         try {
             validatedArgs = templateService.getValidatedArgs({ args, request, response });
-            const controller = new BlogController_1.BlogController();
+            const controller = new RoleController_1.RoleController();
             await templateService.apiHandler({
-                methodName: 'updateBlogStatus',
+                methodName: 'deleteRole',
                 controller,
                 response,
                 next,
@@ -855,17 +696,429 @@ function RegisterRoutes(app, opts) {
         }
     });
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    app.post('/admin', ...((0, runtime_1.fetchMiddlewares)(AdminController_1.AdminController)), ...((0, runtime_1.fetchMiddlewares)(AdminController_1.AdminController.prototype.adminLogin)), async function AdminController_adminLogin(request, response, next) {
+    app.post('/role', ...((0, runtime_1.fetchMiddlewares)(RoleController_1.RoleController)), ...((0, runtime_1.fetchMiddlewares)(RoleController_1.RoleController.prototype.saveRole)), async function RoleController_saveRole(request, response, next) {
         const args = {
-            req: { "in": "body", "name": "req", "required": true, "ref": "ReqAdminLogin" },
+            request: { "in": "body", "name": "request", "required": true, "ref": "ReqRole" },
         };
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         let validatedArgs = [];
         try {
             validatedArgs = templateService.getValidatedArgs({ args, request, response });
-            const controller = new AdminController_1.AdminController();
+            const controller = new RoleController_1.RoleController();
             await templateService.apiHandler({
-                methodName: 'adminLogin',
+                methodName: 'saveRole',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+            });
+        }
+        catch (err) {
+            return next(err);
+        }
+    });
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    app.put('/role/setPermissions', ...((0, runtime_1.fetchMiddlewares)(RoleController_1.RoleController)), ...((0, runtime_1.fetchMiddlewares)(RoleController_1.RoleController.prototype.givePermissionToRole)), async function RoleController_givePermissionToRole(request, response, next) {
+        const args = {
+            request: { "in": "body", "name": "request", "required": true, "ref": "SetPermisisons" },
+        };
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        let validatedArgs = [];
+        try {
+            validatedArgs = templateService.getValidatedArgs({ args, request, response });
+            const controller = new RoleController_1.RoleController();
+            await templateService.apiHandler({
+                methodName: 'givePermissionToRole',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+            });
+        }
+        catch (err) {
+            return next(err);
+        }
+    });
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    app.put('/role/:roleId', ...((0, runtime_1.fetchMiddlewares)(RoleController_1.RoleController)), ...((0, runtime_1.fetchMiddlewares)(RoleController_1.RoleController.prototype.updateRole)), async function RoleController_updateRole(request, response, next) {
+        const args = {
+            req: { "in": "body", "name": "req", "required": true, "ref": "ReqRole" },
+            roleId: { "in": "path", "name": "roleId", "required": true, "dataType": "double" },
+        };
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        let validatedArgs = [];
+        try {
+            validatedArgs = templateService.getValidatedArgs({ args, request, response });
+            const controller = new RoleController_1.RoleController();
+            await templateService.apiHandler({
+                methodName: 'updateRole',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+            });
+        }
+        catch (err) {
+            return next(err);
+        }
+    });
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    app.post('/role/:roleId', ...((0, runtime_1.fetchMiddlewares)(RoleController_1.RoleController)), ...((0, runtime_1.fetchMiddlewares)(RoleController_1.RoleController.prototype.getPermissionsFromRole)), async function RoleController_getPermissionsFromRole(request, response, next) {
+        const args = {
+            request: { "in": "body", "name": "request", "required": true, "ref": "ReqRoleBody" },
+        };
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        let validatedArgs = [];
+        try {
+            validatedArgs = templateService.getValidatedArgs({ args, request, response });
+            const controller = new RoleController_1.RoleController();
+            await templateService.apiHandler({
+                methodName: 'getPermissionsFromRole',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+            });
+        }
+        catch (err) {
+            return next(err);
+        }
+    });
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    app.get('/permission', ...((0, runtime_1.fetchMiddlewares)(PermissionController_1.PermissionController)), ...((0, runtime_1.fetchMiddlewares)(PermissionController_1.PermissionController.prototype.getAllPermissions)), async function PermissionController_getAllPermissions(request, response, next) {
+        const args = {};
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        let validatedArgs = [];
+        try {
+            validatedArgs = templateService.getValidatedArgs({ args, request, response });
+            const controller = new PermissionController_1.PermissionController();
+            await templateService.apiHandler({
+                methodName: 'getAllPermissions',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+            });
+        }
+        catch (err) {
+            return next(err);
+        }
+    });
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    app.delete('/permission/:permissionId', ...((0, runtime_1.fetchMiddlewares)(PermissionController_1.PermissionController)), ...((0, runtime_1.fetchMiddlewares)(PermissionController_1.PermissionController.prototype.deletePermission)), async function PermissionController_deletePermission(request, response, next) {
+        const args = {
+            permissionId: { "in": "path", "name": "permissionId", "required": true, "dataType": "double" },
+        };
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        let validatedArgs = [];
+        try {
+            validatedArgs = templateService.getValidatedArgs({ args, request, response });
+            const controller = new PermissionController_1.PermissionController();
+            await templateService.apiHandler({
+                methodName: 'deletePermission',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+            });
+        }
+        catch (err) {
+            return next(err);
+        }
+    });
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    app.post('/permission', ...((0, runtime_1.fetchMiddlewares)(PermissionController_1.PermissionController)), ...((0, runtime_1.fetchMiddlewares)(PermissionController_1.PermissionController.prototype.savePermission)), async function PermissionController_savePermission(request, response, next) {
+        const args = {
+            request: { "in": "body", "name": "request", "required": true, "ref": "ReqPermission" },
+        };
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        let validatedArgs = [];
+        try {
+            validatedArgs = templateService.getValidatedArgs({ args, request, response });
+            const controller = new PermissionController_1.PermissionController();
+            await templateService.apiHandler({
+                methodName: 'savePermission',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+            });
+        }
+        catch (err) {
+            return next(err);
+        }
+    });
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    app.get('/permission/getUserPerms/:userId', ...((0, runtime_1.fetchMiddlewares)(PermissionController_1.PermissionController)), ...((0, runtime_1.fetchMiddlewares)(PermissionController_1.PermissionController.prototype.getPermissionsOfUser)), async function PermissionController_getPermissionsOfUser(request, response, next) {
+        const args = {
+            userId: { "in": "path", "name": "userId", "required": true, "dataType": "double" },
+        };
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        let validatedArgs = [];
+        try {
+            validatedArgs = templateService.getValidatedArgs({ args, request, response });
+            const controller = new PermissionController_1.PermissionController();
+            await templateService.apiHandler({
+                methodName: 'getPermissionsOfUser',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+            });
+        }
+        catch (err) {
+            return next(err);
+        }
+    });
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    app.put('/permission/:permissionId', ...((0, runtime_1.fetchMiddlewares)(PermissionController_1.PermissionController)), ...((0, runtime_1.fetchMiddlewares)(PermissionController_1.PermissionController.prototype.updatePermission)), async function PermissionController_updatePermission(request, response, next) {
+        const args = {
+            permissionId: { "in": "path", "name": "permissionId", "required": true, "dataType": "double" },
+            request: { "in": "body", "name": "request", "required": true, "ref": "ReqPermission" },
+        };
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        let validatedArgs = [];
+        try {
+            validatedArgs = templateService.getValidatedArgs({ args, request, response });
+            const controller = new PermissionController_1.PermissionController();
+            await templateService.apiHandler({
+                methodName: 'updatePermission',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+            });
+        }
+        catch (err) {
+            return next(err);
+        }
+    });
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    app.post('/loginpacket', ...((0, runtime_1.fetchMiddlewares)(LoginPacketController_1.LoginPacketController)), ...((0, runtime_1.fetchMiddlewares)(LoginPacketController_1.LoginPacketController.prototype.saveLoginPacket)), async function LoginPacketController_saveLoginPacket(request, response, next) {
+        const args = {
+            req: { "in": "body", "name": "req", "required": true, "ref": "ReqLoginPacket" },
+        };
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        let validatedArgs = [];
+        try {
+            validatedArgs = templateService.getValidatedArgs({ args, request, response });
+            const controller = new LoginPacketController_1.LoginPacketController();
+            await templateService.apiHandler({
+                methodName: 'saveLoginPacket',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+            });
+        }
+        catch (err) {
+            return next(err);
+        }
+    });
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    app.put('/user/freeDongle/:userId', authenticateMiddleware([{ "Api-Token": [] }]), ...((0, runtime_1.fetchMiddlewares)(FreeDongleUserDeviceController_1.FreeDongleUserDeviceController)), ...((0, runtime_1.fetchMiddlewares)(FreeDongleUserDeviceController_1.FreeDongleUserDeviceController.prototype.freeTheDongle)), async function FreeDongleUserDeviceController_freeTheDongle(request, response, next) {
+        const args = {
+            req: { "in": "request", "name": "req", "required": true, "dataType": "object" },
+            userId: { "in": "path", "name": "userId", "required": true, "dataType": "double" },
+        };
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        let validatedArgs = [];
+        try {
+            validatedArgs = templateService.getValidatedArgs({ args, request, response });
+            const controller = new FreeDongleUserDeviceController_1.FreeDongleUserDeviceController();
+            await templateService.apiHandler({
+                methodName: 'freeTheDongle',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+            });
+        }
+        catch (err) {
+            return next(err);
+        }
+    });
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    app.post('/dongle', ...((0, runtime_1.fetchMiddlewares)(DongleController_1.DongleController)), ...((0, runtime_1.fetchMiddlewares)(DongleController_1.DongleController.prototype.saveDongle)), async function DongleController_saveDongle(request, response, next) {
+        const args = {
+            request: { "in": "body", "name": "request", "required": true, "ref": "ReqDongle" },
+        };
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        let validatedArgs = [];
+        try {
+            validatedArgs = templateService.getValidatedArgs({ args, request, response });
+            const controller = new DongleController_1.DongleController();
+            await templateService.apiHandler({
+                methodName: 'saveDongle',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+            });
+        }
+        catch (err) {
+            return next(err);
+        }
+    });
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    app.get('/dongle', ...((0, runtime_1.fetchMiddlewares)(DongleController_1.DongleController)), ...((0, runtime_1.fetchMiddlewares)(DongleController_1.DongleController.prototype.getAllDongle)), async function DongleController_getAllDongle(request, response, next) {
+        const args = {};
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        let validatedArgs = [];
+        try {
+            validatedArgs = templateService.getValidatedArgs({ args, request, response });
+            const controller = new DongleController_1.DongleController();
+            await templateService.apiHandler({
+                methodName: 'getAllDongle',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+            });
+        }
+        catch (err) {
+            return next(err);
+        }
+    });
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    app.get('/dongle/:dongleId', ...((0, runtime_1.fetchMiddlewares)(DongleController_1.DongleController)), ...((0, runtime_1.fetchMiddlewares)(DongleController_1.DongleController.prototype.getOneDongle)), async function DongleController_getOneDongle(request, response, next) {
+        const args = {
+            dongleId: { "in": "path", "name": "dongleId", "required": true, "dataType": "double" },
+        };
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        let validatedArgs = [];
+        try {
+            validatedArgs = templateService.getValidatedArgs({ args, request, response });
+            const controller = new DongleController_1.DongleController();
+            await templateService.apiHandler({
+                methodName: 'getOneDongle',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+            });
+        }
+        catch (err) {
+            return next(err);
+        }
+    });
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    app.delete('/dongle/:dongleId', ...((0, runtime_1.fetchMiddlewares)(DongleController_1.DongleController)), ...((0, runtime_1.fetchMiddlewares)(DongleController_1.DongleController.prototype.deleteDongle)), async function DongleController_deleteDongle(request, response, next) {
+        const args = {
+            dongleId: { "in": "path", "name": "dongleId", "required": true, "dataType": "double" },
+        };
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        let validatedArgs = [];
+        try {
+            validatedArgs = templateService.getValidatedArgs({ args, request, response });
+            const controller = new DongleController_1.DongleController();
+            await templateService.apiHandler({
+                methodName: 'deleteDongle',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+            });
+        }
+        catch (err) {
+            return next(err);
+        }
+    });
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    app.get('/device', ...((0, runtime_1.fetchMiddlewares)(DeviceController_1.DeviceController)), ...((0, runtime_1.fetchMiddlewares)(DeviceController_1.DeviceController.prototype.getAllDevice)), async function DeviceController_getAllDevice(request, response, next) {
+        const args = {};
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        let validatedArgs = [];
+        try {
+            validatedArgs = templateService.getValidatedArgs({ args, request, response });
+            const controller = new DeviceController_1.DeviceController();
+            await templateService.apiHandler({
+                methodName: 'getAllDevice',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+            });
+        }
+        catch (err) {
+            return next(err);
+        }
+    });
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    app.post('/device', ...((0, runtime_1.fetchMiddlewares)(DeviceController_1.DeviceController)), ...((0, runtime_1.fetchMiddlewares)(DeviceController_1.DeviceController.prototype.saveDevice)), async function DeviceController_saveDevice(request, response, next) {
+        const args = {
+            request: { "in": "body", "name": "request", "required": true, "ref": "ReqDevice" },
+        };
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        let validatedArgs = [];
+        try {
+            validatedArgs = templateService.getValidatedArgs({ args, request, response });
+            const controller = new DeviceController_1.DeviceController();
+            await templateService.apiHandler({
+                methodName: 'saveDevice',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+            });
+        }
+        catch (err) {
+            return next(err);
+        }
+    });
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    app.delete('/device/:deviceId', ...((0, runtime_1.fetchMiddlewares)(DeviceController_1.DeviceController)), ...((0, runtime_1.fetchMiddlewares)(DeviceController_1.DeviceController.prototype.deleteDevice)), async function DeviceController_deleteDevice(request, response, next) {
+        const args = {
+            deviceId: { "in": "path", "name": "deviceId", "required": true, "dataType": "double" },
+        };
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        let validatedArgs = [];
+        try {
+            validatedArgs = templateService.getValidatedArgs({ args, request, response });
+            const controller = new DeviceController_1.DeviceController();
+            await templateService.apiHandler({
+                methodName: 'deleteDevice',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+            });
+        }
+        catch (err) {
+            return next(err);
+        }
+    });
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    app.put('/device/allotDongle/:deviceId', ...((0, runtime_1.fetchMiddlewares)(DeviceController_1.DeviceController)), ...((0, runtime_1.fetchMiddlewares)(DeviceController_1.DeviceController.prototype.allotDongleToDevice)), async function DeviceController_allotDongleToDevice(request, response, next) {
+        const args = {
+            deviceId: { "in": "path", "name": "deviceId", "required": true, "dataType": "double" },
+            request: { "in": "body", "name": "request", "required": true, "ref": "ReqDongleAllot" },
+        };
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        let validatedArgs = [];
+        try {
+            validatedArgs = templateService.getValidatedArgs({ args, request, response });
+            const controller = new DeviceController_1.DeviceController();
+            await templateService.apiHandler({
+                methodName: 'allotDongleToDevice',
                 controller,
                 response,
                 next,
@@ -879,7 +1132,61 @@ function RegisterRoutes(app, opts) {
     });
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    function authenticateMiddleware(security = []) {
+        return async function runAuthenticationMiddleware(request, response, next) {
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+            // keep track of failed auth attempts so we can hand back the most
+            // recent one.  This behavior was previously existing so preserving it
+            // here
+            const failedAttempts = [];
+            const pushAndRethrow = (error) => {
+                failedAttempts.push(error);
+                throw error;
+            };
+            const secMethodOrPromises = [];
+            for (const secMethod of security) {
+                if (Object.keys(secMethod).length > 1) {
+                    const secMethodAndPromises = [];
+                    for (const name in secMethod) {
+                        secMethodAndPromises.push(expressAuthenticationRecasted(request, name, secMethod[name], response)
+                            .catch(pushAndRethrow));
+                    }
+                    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+                    secMethodOrPromises.push(Promise.all(secMethodAndPromises)
+                        .then(users => { return users[0]; }));
+                }
+                else {
+                    for (const name in secMethod) {
+                        secMethodOrPromises.push(expressAuthenticationRecasted(request, name, secMethod[name], response)
+                            .catch(pushAndRethrow));
+                    }
+                }
+            }
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+            try {
+                request['user'] = await Promise.any(secMethodOrPromises);
+                // Response was sent in middleware, abort
+                if (response.writableEnded) {
+                    return;
+                }
+                next();
+            }
+            catch (err) {
+                // Show most recent error as response
+                const error = failedAttempts.pop();
+                error.status = error.status || 401;
+                // Response was sent in middleware, abort
+                if (response.writableEnded) {
+                    return;
+                }
+                next(error);
+            }
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        };
+    }
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 }
+exports.RegisterRoutes = RegisterRoutes;
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 //# sourceMappingURL=routes.js.map

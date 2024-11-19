@@ -1,9 +1,10 @@
-import { ResRole } from "./ResRole";
+import { permType } from '../../entity/Permission';
+import { ResRole } from './ResRole';
 
-export interface ResPermission{
-    id?: number,
-    description?: string,
-    
-    name?: string,
-    roles?: ResRole[]
+export interface ResPermission {
+  id?: number;
+  description?: string;
+  type: permType;
+  name?: string;
+  roles?: ResRole[];
 }

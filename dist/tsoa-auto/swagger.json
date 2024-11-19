@@ -7,290 +7,115 @@
         "requestBodies": {},
         "responses": {},
         "schemas": {
-            "ResContent": {
-                "properties": {
-                    "id": {
-                        "type": "number",
-                        "format": "double"
-                    },
-                    "content": {
-                        "type": "string"
-                    },
-                    "contentImg": {
-                        "type": "string"
-                    },
-                    "order": {
-                        "type": "number",
-                        "format": "double"
-                    },
-                    "contentTitle": {
-                        "type": "string"
-                    },
-                    "subcontent": {
-                        "items": {
-                            "$ref": "#/components/schemas/ResSubContent"
-                        },
-                        "type": "array"
-                    },
-                    "blog": {
-                        "items": {
-                            "$ref": "#/components/schemas/ResBlog"
-                        },
-                        "type": "array"
-                    }
-                },
-                "type": "object",
-                "additionalProperties": false
-            },
-            "Blog": {
-                "properties": {
-                    "id": {
-                        "type": "number",
-                        "format": "double"
-                    },
-                    "blog_title": {
-                        "type": "string"
-                    },
-                    "blog_description": {
-                        "type": "string"
-                    },
-                    "blog_thumbnail": {
-                        "type": "string"
-                    },
-                    "blog_subtitle": {
-                        "type": "string"
-                    },
-                    "blog_author": {
-                        "type": "string"
-                    },
-                    "status": {
-                        "type": "boolean"
-                    },
-                    "post_time": {
-                        "type": "string",
-                        "format": "date-time"
-                    },
-                    "tags": {
-                        "items": {
-                            "$ref": "#/components/schemas/Tag"
-                        },
-                        "type": "array"
-                    },
-                    "contents": {
-                        "items": {
-                            "$ref": "#/components/schemas/Content"
-                        },
-                        "type": "array"
-                    },
-                    "comments": {
-                        "items": {
-                            "$ref": "#/components/schemas/Comments"
-                        },
-                        "type": "array"
-                    }
-                },
-                "type": "object",
-                "additionalProperties": false
-            },
-            "Tag": {
+            "ResRole": {
                 "properties": {
                     "id": {
                         "type": "number",
                         "format": "double"
                     },
                     "name": {
-                        "type": "string"
-                    },
-                    "blogs": {
-                        "items": {
-                            "$ref": "#/components/schemas/Blog"
-                        },
-                        "type": "array"
-                    }
-                },
-                "type": "object",
-                "additionalProperties": false
-            },
-            "Content": {
-                "properties": {
-                    "id": {
-                        "type": "number",
-                        "format": "double"
-                    },
-                    "title": {
-                        "type": "string"
-                    },
-                    "content": {
-                        "type": "string"
-                    },
-                    "content_img": {
-                        "type": "string"
-                    },
-                    "order": {
-                        "type": "number",
-                        "format": "double"
-                    },
-                    "blogs": {
-                        "items": {
-                            "$ref": "#/components/schemas/Blog"
-                        },
-                        "type": "array"
-                    },
-                    "sub_contents": {
-                        "items": {
-                            "$ref": "#/components/schemas/SubContent"
-                        },
-                        "type": "array"
-                    }
-                },
-                "type": "object",
-                "additionalProperties": false
-            },
-            "Comments": {
-                "properties": {
-                    "id": {
-                        "type": "number",
-                        "format": "double"
-                    },
-                    "comment_body": {
-                        "type": "string"
-                    },
-                    "author": {
-                        "type": "string"
-                    },
-                    "status": {
-                        "type": "boolean"
-                    },
-                    "post_time": {
-                        "type": "string",
-                        "format": "date-time"
-                    },
-                    "blog": {
-                        "$ref": "#/components/schemas/Blog"
-                    }
-                },
-                "type": "object",
-                "additionalProperties": false
-            },
-            "SubContent": {
-                "properties": {
-                    "id": {
-                        "type": "number",
-                        "format": "double"
-                    },
-                    "title": {
                         "type": "string"
                     },
                     "description": {
                         "type": "string"
-                    },
-                    "content": {
-                        "$ref": "#/components/schemas/Content"
                     }
                 },
                 "type": "object",
                 "additionalProperties": false
             },
-            "ResSubContent": {
+            "serviceTicketStatus": {
+                "enum": [
+                    "open",
+                    "closed",
+                    "new"
+                ],
+                "type": "string"
+            },
+            "ResUser": {
                 "properties": {
                     "id": {
                         "type": "number",
                         "format": "double"
                     },
-                    "subContentTitle": {
+                    "name": {
                         "type": "string"
                     },
-                    "content": {
-                        "anyOf": [
-                            {
-                                "$ref": "#/components/schemas/ResContent"
-                            },
-                            {
-                                "$ref": "#/components/schemas/Content"
-                            }
-                        ]
-                    },
-                    "subContentDescription": {
+                    "address": {
                         "type": "string"
+                    },
+                    "password": {
+                        "type": "string"
+                    },
+                    "email": {
+                        "type": "string"
+                    },
+                    "phone_number": {
+                        "type": "string"
+                    },
+                    "role": {
+                        "$ref": "#/components/schemas/ResRole"
+                    },
+                    "service_ticket": {
+                        "$ref": "#/components/schemas/ResServiceTicket"
+                    },
+                    "device": {
+                        "$ref": "#/components/schemas/ResDevice"
                     }
                 },
                 "type": "object",
                 "additionalProperties": false
             },
-            "ResBlog": {
+            "ResServiceTicket": {
                 "properties": {
-                    "id": {
-                        "type": "number",
-                        "format": "double"
-                    },
-                    "blogSubtitle": {
-                        "type": "string"
-                    },
-                    "blogTitle": {
-                        "type": "string"
-                    },
                     "date": {
                         "type": "string",
                         "format": "date-time"
                     },
-                    "blogDescription": {
-                        "type": "string"
+                    "id": {
+                        "type": "number",
+                        "format": "double"
                     },
-                    "content": {
-                        "items": {
-                            "$ref": "#/components/schemas/ResContent"
-                        },
-                        "type": "array"
-                    },
-                    "tags": {
-                        "items": {
-                            "$ref": "#/components/schemas/ResTag"
-                        },
-                        "type": "array"
-                    },
-                    "blogThumbnail": {
+                    "service_ticket_number": {
                         "type": "string"
                     },
                     "status": {
-                        "type": "boolean"
+                        "$ref": "#/components/schemas/serviceTicketStatus"
                     },
-                    "blogAuthor": {
-                        "type": "string"
+                    "technician": {
+                        "$ref": "#/components/schemas/ResUser"
                     }
                 },
                 "type": "object",
                 "additionalProperties": false
             },
-            "ResTag": {
+            "ResDevice": {
                 "properties": {
                     "id": {
                         "type": "number",
                         "format": "double"
                     },
+                    "mac_address": {
+                        "type": "string"
+                    },
                     "name": {
                         "type": "string"
                     },
-                    "blogs": {
-                        "anyOf": [
+                    "user": {
+                        "$ref": "#/components/schemas/ResUser"
+                    },
+                    "dongle": {
+                        "allOf": [
                             {
-                                "items": {
-                                    "$ref": "#/components/schemas/ResBlog"
-                                },
-                                "type": "array"
-                            },
-                            {
-                                "items": {
-                                    "$ref": "#/components/schemas/Blog"
-                                },
-                                "type": "array"
+                                "$ref": "#/components/schemas/ResDongle"
                             }
-                        ]
+                        ],
+                        "nullable": true
                     }
                 },
                 "type": "object",
                 "additionalProperties": false
             },
-            "ResTagN": {
+            "ResDongle": {
                 "properties": {
                     "id": {
                         "type": "number",
@@ -299,17 +124,8 @@
                     "name": {
                         "type": "string"
                     },
-                    "blogs": {
-                        "$ref": "#/components/schemas/ResBlog"
-                    }
-                },
-                "type": "object",
-                "additionalProperties": false
-            },
-            "ReqTag": {
-                "properties": {
-                    "name": {
-                        "type": "string"
+                    "device": {
+                        "$ref": "#/components/schemas/ResDevice"
                     }
                 },
                 "type": "object",
@@ -327,6 +143,128 @@
                 "type": "object",
                 "additionalProperties": false
             },
+            "ReqUser": {
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "password": {
+                        "type": "string"
+                    },
+                    "address": {
+                        "type": "string"
+                    },
+                    "email": {
+                        "type": "string"
+                    },
+                    "phone_number": {
+                        "type": "string"
+                    },
+                    "role": {
+                        "type": "number",
+                        "format": "double"
+                    }
+                },
+                "type": "object",
+                "additionalProperties": false
+            },
+            "permType": {
+                "enum": [
+                    "user",
+                    "product"
+                ],
+                "type": "string"
+            },
+            "ResPermission": {
+                "properties": {
+                    "id": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "type": {
+                        "$ref": "#/components/schemas/permType"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "roles": {
+                        "items": {
+                            "$ref": "#/components/schemas/ResRole"
+                        },
+                        "type": "array"
+                    }
+                },
+                "required": [
+                    "type"
+                ],
+                "type": "object",
+                "additionalProperties": false
+            },
+            "UserLoginRole": {
+                "properties": {
+                    "id": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "role_name": {
+                        "type": "string"
+                    },
+                    "role_description": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "id",
+                    "role_name",
+                    "role_description"
+                ],
+                "type": "object",
+                "additionalProperties": false
+            },
+            "ResUserLogin": {
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "permissions": {
+                        "items": {
+                            "$ref": "#/components/schemas/ResPermission"
+                        },
+                        "type": "array"
+                    },
+                    "role": {
+                        "$ref": "#/components/schemas/UserLoginRole"
+                    },
+                    "token": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "name",
+                    "role"
+                ],
+                "type": "object",
+                "additionalProperties": false
+            },
+            "ReqUserLogin": {
+                "properties": {
+                    "username": {
+                        "type": "string"
+                    },
+                    "password": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "username",
+                    "password"
+                ],
+                "type": "object",
+                "additionalProperties": false
+            },
             "ResSuccess": {
                 "properties": {
                     "result": {
@@ -339,84 +277,453 @@
                 "type": "object",
                 "additionalProperties": false
             },
-            "ReqSubContent": {
-                "properties": {
-                    "subContentTitle": {
-                        "type": "string"
-                    },
-                    "subContentDescription": {
-                        "type": "string"
-                    }
-                },
-                "type": "object",
-                "additionalProperties": false
-            },
-            "ResComments": {
+            "User": {
                 "properties": {
                     "id": {
                         "type": "number",
                         "format": "double"
                     },
-                    "author": {
-                        "type": "string"
-                    },
-                    "commentBody": {
-                        "type": "string"
-                    },
-                    "postTime": {
-                        "type": "string",
-                        "format": "date-time"
-                    },
-                    "status": {
-                        "type": "boolean"
-                    },
-                    "blog": {
-                        "$ref": "#/components/schemas/ResBlog"
-                    }
-                },
-                "type": "object",
-                "additionalProperties": false
-            },
-            "ReqComments": {
-                "properties": {
-                    "author": {
-                        "type": "string"
-                    },
-                    "commentBody": {
-                        "type": "string"
-                    },
-                    "status": {
-                        "type": "boolean"
-                    }
-                },
-                "type": "object",
-                "additionalProperties": false
-            },
-            "ReqCommentU": {
-                "properties": {
-                    "status": {
-                        "type": "boolean"
-                    }
-                },
-                "type": "object",
-                "additionalProperties": false
-            },
-            "ReqBlogStatus": {
-                "properties": {
-                    "status": {
-                        "type": "boolean"
-                    }
-                },
-                "type": "object",
-                "additionalProperties": false
-            },
-            "ReqAdminLogin": {
-                "properties": {
                     "name": {
                         "type": "string"
                     },
                     "password": {
                         "type": "string"
+                    },
+                    "address": {
+                        "type": "string"
+                    },
+                    "phone_number": {
+                        "type": "string"
+                    },
+                    "email": {
+                        "type": "string"
+                    },
+                    "device": {
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/Device"
+                            }
+                        ],
+                        "nullable": true
+                    },
+                    "role": {
+                        "$ref": "#/components/schemas/Role"
+                    },
+                    "service_ticket": {
+                        "$ref": "#/components/schemas/ServiceTicket"
+                    }
+                },
+                "type": "object",
+                "additionalProperties": false
+            },
+            "Device": {
+                "properties": {
+                    "id": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "mac_address": {
+                        "type": "string"
+                    },
+                    "imei": {
+                        "type": "string"
+                    },
+                    "user": {
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/User"
+                            }
+                        ],
+                        "nullable": true
+                    },
+                    "dongle": {
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/Dongle"
+                            }
+                        ],
+                        "nullable": true
+                    }
+                },
+                "type": "object",
+                "additionalProperties": false
+            },
+            "Dongle": {
+                "properties": {
+                    "id": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "device": {
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/Device"
+                            }
+                        ],
+                        "nullable": true
+                    }
+                },
+                "type": "object",
+                "additionalProperties": false
+            },
+            "Role": {
+                "properties": {
+                    "id": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "permissions": {
+                        "items": {
+                            "$ref": "#/components/schemas/Permission"
+                        },
+                        "type": "array"
+                    },
+                    "users": {
+                        "items": {
+                            "$ref": "#/components/schemas/User"
+                        },
+                        "type": "array"
+                    }
+                },
+                "type": "object",
+                "additionalProperties": false
+            },
+            "Permission": {
+                "properties": {
+                    "id": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "type": {
+                        "$ref": "#/components/schemas/permType"
+                    },
+                    "role": {
+                        "items": {
+                            "$ref": "#/components/schemas/Role"
+                        },
+                        "type": "array"
+                    }
+                },
+                "type": "object",
+                "additionalProperties": false
+            },
+            "ServiceTicket": {
+                "properties": {
+                    "id": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "date": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "created_on": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updated_on": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "status": {
+                        "$ref": "#/components/schemas/serviceTicketStatus"
+                    },
+                    "service_ticket_number": {
+                        "type": "string"
+                    },
+                    "technician": {
+                        "$ref": "#/components/schemas/User"
+                    }
+                },
+                "type": "object",
+                "additionalProperties": false
+            },
+            "ReqDeviceAssign": {
+                "properties": {
+                    "id": {
+                        "type": "number",
+                        "format": "double"
+                    }
+                },
+                "type": "object",
+                "additionalProperties": false
+            },
+            "PaginatedResponse_User_": {
+                "properties": {
+                    "items": {
+                        "items": {
+                            "$ref": "#/components/schemas/User"
+                        },
+                        "type": "array"
+                    },
+                    "totalCount": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "page": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "pageSize": {
+                        "type": "number",
+                        "format": "double"
+                    }
+                },
+                "required": [
+                    "items",
+                    "totalCount",
+                    "page",
+                    "pageSize"
+                ],
+                "type": "object",
+                "additionalProperties": false
+            },
+            "ResUserUpdate": {
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "address": {
+                        "type": "string"
+                    },
+                    "password": {
+                        "type": "string"
+                    },
+                    "email": {
+                        "type": "string"
+                    },
+                    "phone_number": {
+                        "type": "string"
+                    },
+                    "role": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "device": {
+                        "type": "number",
+                        "format": "double"
+                    }
+                },
+                "type": "object",
+                "additionalProperties": false
+            },
+            "ReqSTstatus": {
+                "properties": {
+                    "status": {
+                        "$ref": "#/components/schemas/serviceTicketStatus"
+                    }
+                },
+                "required": [
+                    "status"
+                ],
+                "type": "object",
+                "additionalProperties": false
+            },
+            "ReqRole": {
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string"
+                    }
+                },
+                "type": "object",
+                "additionalProperties": false
+            },
+            "GetSetPermisisons": {
+                "properties": {
+                    "role": {
+                        "$ref": "#/components/schemas/ResRole"
+                    },
+                    "permissions": {
+                        "items": {
+                            "$ref": "#/components/schemas/ResPermission"
+                        },
+                        "type": "array"
+                    }
+                },
+                "type": "object",
+                "additionalProperties": false
+            },
+            "SetPermisisons": {
+                "properties": {
+                    "role": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "permissions": {
+                        "items": {
+                            "type": "number",
+                            "format": "double"
+                        },
+                        "type": "array"
+                    }
+                },
+                "type": "object",
+                "additionalProperties": false
+            },
+            "ReqRoleBody": {
+                "properties": {
+                    "id": {
+                        "type": "number",
+                        "format": "double"
+                    }
+                },
+                "type": "object",
+                "additionalProperties": false
+            },
+            "ReqPermission": {
+                "properties": {
+                    "description": {
+                        "type": "string"
+                    },
+                    "type": {
+                        "$ref": "#/components/schemas/permType"
+                    },
+                    "name": {
+                        "type": "string"
+                    }
+                },
+                "type": "object",
+                "additionalProperties": false
+            },
+            "LoginPacket": {
+                "properties": {
+                    "id": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "packetHeader": {
+                        "type": "string"
+                    },
+                    "vendorId": {
+                        "type": "string"
+                    },
+                    "vehicleRegNo": {
+                        "type": "string"
+                    },
+                    "imei": {
+                        "type": "string"
+                    },
+                    "firmwareVersion": {
+                        "type": "string"
+                    },
+                    "protocolVersion": {
+                        "type": "string"
+                    },
+                    "device_type": {
+                        "type": "string"
+                    },
+                    "latitude": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "longitude": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "checksum": {
+                        "type": "string"
+                    }
+                },
+                "type": "object",
+                "additionalProperties": false
+            },
+            "ReqLoginPacket": {
+                "properties": {
+                    "checksum": {
+                        "type": "string"
+                    },
+                    "firmwareVersion": {
+                        "type": "string"
+                    },
+                    "imei": {
+                        "type": "string"
+                    },
+                    "latitude": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "longitude": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "packetHeader": {
+                        "type": "string"
+                    },
+                    "protocolVersion": {
+                        "type": "string"
+                    },
+                    "vehicleRegNo": {
+                        "type": "string"
+                    },
+                    "vendorId": {
+                        "type": "string"
+                    },
+                    "deviceType": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "checksum",
+                    "firmwareVersion",
+                    "imei",
+                    "latitude",
+                    "longitude",
+                    "packetHeader",
+                    "protocolVersion",
+                    "vehicleRegNo",
+                    "vendorId",
+                    "deviceType"
+                ],
+                "type": "object",
+                "additionalProperties": false
+            },
+            "ReqDongle": {
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    }
+                },
+                "type": "object",
+                "additionalProperties": false
+            },
+            "ReqDevice": {
+                "properties": {
+                    "mac_address": {
+                        "type": "string"
+                    },
+                    "name": {
+                        "type": "string"
+                    }
+                },
+                "type": "object",
+                "additionalProperties": false
+            },
+            "ReqDongleAllot": {
+                "properties": {
+                    "id": {
+                        "type": "number",
+                        "format": "double"
                     }
                 },
                 "type": "object",
@@ -438,84 +745,9 @@
         "contact": {}
     },
     "paths": {
-        "/blog/{blogId}/tags": {
+        "/user": {
             "post": {
-                "operationId": "SaveTagsIntoBlog",
-                "responses": {
-                    "200": {
-                        "description": "Ok",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ResTagN"
-                                }
-                            }
-                        }
-                    }
-                },
-                "tags": [
-                    "Tags"
-                ],
-                "security": [],
-                "parameters": [
-                    {
-                        "in": "path",
-                        "name": "blogId",
-                        "required": true,
-                        "schema": {
-                            "format": "double",
-                            "type": "number"
-                        }
-                    }
-                ],
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "$ref": "#/components/schemas/ReqTag"
-                            }
-                        }
-                    }
-                }
-            },
-            "get": {
-                "operationId": "GetAllTagForOneBlog",
-                "responses": {
-                    "200": {
-                        "description": "Ok",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "items": {
-                                        "$ref": "#/components/schemas/Tag"
-                                    },
-                                    "type": "array"
-                                }
-                            }
-                        }
-                    }
-                },
-                "tags": [
-                    "Tags"
-                ],
-                "security": [],
-                "parameters": [
-                    {
-                        "in": "path",
-                        "name": "blogId",
-                        "required": true,
-                        "schema": {
-                            "format": "double",
-                            "type": "number"
-                        }
-                    }
-                ]
-            }
-        },
-        "/blog/{blogId}/tags/{tagId}": {
-            "get": {
-                "operationId": "GetOneTag",
+                "operationId": "SaveUser",
                 "responses": {
                     "200": {
                         "description": "Ok",
@@ -524,7 +756,7 @@
                                 "schema": {
                                     "anyOf": [
                                         {
-                                            "$ref": "#/components/schemas/ResTag"
+                                            "$ref": "#/components/schemas/ResUser"
                                         },
                                         {
                                             "$ref": "#/components/schemas/ResError"
@@ -536,354 +768,69 @@
                     }
                 },
                 "tags": [
-                    "Tags"
+                    "User"
                 ],
                 "security": [],
-                "parameters": [
-                    {
-                        "in": "path",
-                        "name": "tagId",
-                        "required": true,
-                        "schema": {
-                            "format": "double",
-                            "type": "number"
-                        }
-                    }
-                ]
-            },
-            "delete": {
-                "operationId": "DeleteTag",
-                "responses": {
-                    "200": {
-                        "description": "Ok",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ResSuccess"
-                                }
-                            }
-                        }
-                    }
-                },
-                "tags": [
-                    "Tags"
-                ],
-                "security": [],
-                "parameters": [
-                    {
-                        "in": "path",
-                        "name": "tagId",
-                        "required": true,
-                        "schema": {
-                            "format": "double",
-                            "type": "number"
-                        }
-                    },
-                    {
-                        "in": "path",
-                        "name": "blogId",
-                        "required": true,
-                        "schema": {
-                            "format": "double",
-                            "type": "number"
-                        }
-                    }
-                ]
-            }
-        },
-        "/blog/{blogId}/content/{contentId}/subContent": {
-            "post": {
-                "operationId": "SaveSubContent",
-                "responses": {
-                    "200": {
-                        "description": "Ok",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ResSubContent"
-                                }
-                            }
-                        }
-                    }
-                },
-                "tags": [
-                    "SubContent"
-                ],
-                "security": [],
-                "parameters": [
-                    {
-                        "in": "path",
-                        "name": "blogId",
-                        "required": true,
-                        "schema": {
-                            "format": "double",
-                            "type": "number"
-                        }
-                    },
-                    {
-                        "in": "path",
-                        "name": "contentId",
-                        "required": true,
-                        "schema": {
-                            "format": "double",
-                            "type": "number"
-                        }
-                    }
-                ],
+                "parameters": [],
                 "requestBody": {
                     "required": true,
                     "content": {
                         "application/json": {
                             "schema": {
-                                "$ref": "#/components/schemas/ReqSubContent"
+                                "$ref": "#/components/schemas/ReqUser"
                             }
                         }
                     }
                 }
             },
             "get": {
-                "operationId": "GetAllSubContent",
+                "operationId": "GetUsers",
                 "responses": {
                     "200": {
-                        "description": "Ok",
+                        "description": "A paginated list of users",
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "items": {
-                                        "$ref": "#/components/schemas/ResSubContent"
-                                    },
-                                    "type": "array"
+                                    "$ref": "#/components/schemas/PaginatedResponse_User_"
                                 }
                             }
                         }
                     }
                 },
+                "description": "Get all users with pagination",
                 "tags": [
-                    "SubContent"
+                    "User"
                 ],
                 "security": [],
                 "parameters": [
                     {
-                        "in": "path",
-                        "name": "contentId",
-                        "required": true,
-                        "schema": {
-                            "format": "double",
-                            "type": "number"
-                        }
-                    },
-                    {
-                        "in": "path",
-                        "name": "blogId",
-                        "required": true,
-                        "schema": {
-                            "format": "double",
-                            "type": "number"
-                        }
-                    }
-                ]
-            }
-        },
-        "/blog/{blogId}/content/{contentId}/subContent/{subContentId}": {
-            "get": {
-                "operationId": "GetOneSubContent",
-                "responses": {
-                    "200": {
-                        "description": "Ok",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "anyOf": [
-                                        {
-                                            "$ref": "#/components/schemas/ResSubContent"
-                                        },
-                                        {
-                                            "$ref": "#/components/schemas/ResError"
-                                        }
-                                    ]
-                                }
-                            }
-                        }
-                    }
-                },
-                "tags": [
-                    "SubContent"
-                ],
-                "security": [],
-                "parameters": [
-                    {
-                        "in": "path",
-                        "name": "contentId",
-                        "required": true,
-                        "schema": {
-                            "format": "double",
-                            "type": "number"
-                        }
-                    },
-                    {
-                        "in": "path",
-                        "name": "blogId",
-                        "required": true,
-                        "schema": {
-                            "format": "double",
-                            "type": "number"
-                        }
-                    },
-                    {
-                        "in": "path",
-                        "name": "subContentId",
-                        "required": true,
-                        "schema": {
-                            "format": "double",
-                            "type": "number"
-                        }
-                    }
-                ]
-            },
-            "delete": {
-                "operationId": "DeleteSubContent",
-                "responses": {
-                    "200": {
-                        "description": "Ok",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ResSuccess"
-                                }
-                            }
-                        }
-                    }
-                },
-                "tags": [
-                    "SubContent"
-                ],
-                "security": [],
-                "parameters": [
-                    {
-                        "in": "path",
-                        "name": "contentId",
-                        "required": true,
-                        "schema": {
-                            "format": "double",
-                            "type": "number"
-                        }
-                    },
-                    {
-                        "in": "path",
-                        "name": "blogId",
-                        "required": true,
-                        "schema": {
-                            "format": "double",
-                            "type": "number"
-                        }
-                    },
-                    {
-                        "in": "path",
-                        "name": "subContentId",
-                        "required": true,
-                        "schema": {
-                            "format": "double",
-                            "type": "number"
-                        }
-                    }
-                ]
-            },
-            "put": {
-                "operationId": "UpdateSubContentOfContent",
-                "responses": {
-                    "200": {
-                        "description": "Ok",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ResSubContent"
-                                }
-                            }
-                        }
-                    }
-                },
-                "tags": [
-                    "SubContent"
-                ],
-                "security": [],
-                "parameters": [
-                    {
-                        "in": "path",
-                        "name": "contentId",
-                        "required": true,
-                        "schema": {
-                            "format": "double",
-                            "type": "number"
-                        }
-                    },
-                    {
-                        "in": "path",
-                        "name": "blogId",
-                        "required": true,
-                        "schema": {
-                            "format": "double",
-                            "type": "number"
-                        }
-                    },
-                    {
-                        "in": "path",
-                        "name": "subContentId",
-                        "required": true,
-                        "schema": {
-                            "format": "double",
-                            "type": "number"
-                        }
-                    }
-                ],
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "$ref": "#/components/schemas/ReqSubContent"
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/regex": {
-            "get": {
-                "operationId": "RegexSearch",
-                "responses": {
-                    "200": {
-                        "description": "Ok",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "items": {
-                                        "$ref": "#/components/schemas/Blog"
-                                    },
-                                    "type": "array"
-                                }
-                            }
-                        }
-                    }
-                },
-                "tags": [
-                    "Regex"
-                ],
-                "security": [],
-                "parameters": [
-                    {
+                        "description": "The page number (default: 1)",
                         "in": "query",
-                        "name": "searchItem",
+                        "name": "page",
                         "required": false,
                         "schema": {
-                            "type": "string"
+                            "default": 1,
+                            "format": "double",
+                            "type": "number"
+                        }
+                    },
+                    {
+                        "description": "The number of users per page (default: 10)",
+                        "in": "query",
+                        "name": "pageSize",
+                        "required": false,
+                        "schema": {
+                            "default": 10,
+                            "format": "double",
+                            "type": "number"
                         }
                     }
                 ]
             }
         },
-        "/blog/{blogId}/content": {
+        "/user/login": {
             "post": {
-                "operationId": "SaveContent",
+                "operationId": "UserLogin",
                 "responses": {
                     "200": {
                         "description": "Ok",
@@ -892,7 +839,7 @@
                                 "schema": {
                                     "anyOf": [
                                         {
-                                            "$ref": "#/components/schemas/ResContent"
+                                            "$ref": "#/components/schemas/ResUserLogin"
                                         },
                                         {
                                             "$ref": "#/components/schemas/ResError"
@@ -903,89 +850,28 @@
                         }
                     }
                 },
+                "description": "user login",
+                "summary": "user login",
                 "tags": [
-                    "Content"
+                    "User"
                 ],
                 "security": [],
-                "parameters": [
-                    {
-                        "in": "path",
-                        "name": "blogId",
-                        "required": true,
-                        "schema": {
-                            "format": "double",
-                            "type": "number"
-                        }
-                    }
-                ],
+                "parameters": [],
                 "requestBody": {
                     "required": true,
                     "content": {
-                        "multipart/form-data": {
+                        "application/json": {
                             "schema": {
-                                "type": "object",
-                                "properties": {
-                                    "content": {
-                                        "type": "string"
-                                    },
-                                    "order": {
-                                        "type": "string"
-                                    },
-                                    "contentTitle": {
-                                        "type": "string"
-                                    },
-                                    "file": {
-                                        "type": "string",
-                                        "format": "binary"
-                                    }
-                                },
-                                "required": [
-                                    "content",
-                                    "order",
-                                    "contentTitle"
-                                ]
+                                "$ref": "#/components/schemas/ReqUserLogin"
                             }
                         }
                     }
                 }
-            },
-            "get": {
-                "operationId": "GetAllContentOfOneBlog",
-                "responses": {
-                    "200": {
-                        "description": "Ok",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "items": {
-                                        "$ref": "#/components/schemas/ResContent"
-                                    },
-                                    "type": "array"
-                                }
-                            }
-                        }
-                    }
-                },
-                "tags": [
-                    "Content"
-                ],
-                "security": [],
-                "parameters": [
-                    {
-                        "in": "path",
-                        "name": "blogId",
-                        "required": true,
-                        "schema": {
-                            "format": "double",
-                            "type": "number"
-                        }
-                    }
-                ]
             }
         },
-        "/blog/{blogId}/content/{contentId}": {
+        "/user/{userId}": {
             "delete": {
-                "operationId": "DeleteContent",
+                "operationId": "DeleteUser",
                 "responses": {
                     "200": {
                         "description": "Ok",
@@ -999,22 +885,13 @@
                     }
                 },
                 "tags": [
-                    "Content"
+                    "User"
                 ],
                 "security": [],
                 "parameters": [
                     {
                         "in": "path",
-                        "name": "blogId",
-                        "required": true,
-                        "schema": {
-                            "format": "double",
-                            "type": "number"
-                        }
-                    },
-                    {
-                        "in": "path",
-                        "name": "contentId",
+                        "name": "userId",
                         "required": true,
                         "schema": {
                             "format": "double",
@@ -1024,7 +901,7 @@
                 ]
             },
             "get": {
-                "operationId": "GetOneContent",
+                "operationId": "GetOneUser",
                 "responses": {
                     "200": {
                         "description": "Ok",
@@ -1033,298 +910,16 @@
                                 "schema": {
                                     "anyOf": [
                                         {
-                                            "$ref": "#/components/schemas/ResContent"
-                                        },
-                                        {
-                                            "$ref": "#/components/schemas/ResError"
-                                        }
-                                    ]
-                                }
-                            }
-                        }
-                    }
-                },
-                "tags": [
-                    "Content"
-                ],
-                "security": [],
-                "parameters": [
-                    {
-                        "in": "path",
-                        "name": "blogId",
-                        "required": true,
-                        "schema": {
-                            "format": "double",
-                            "type": "number"
-                        }
-                    },
-                    {
-                        "in": "path",
-                        "name": "contentId",
-                        "required": true,
-                        "schema": {
-                            "format": "double",
-                            "type": "number"
-                        }
-                    }
-                ]
-            },
-            "put": {
-                "operationId": "UpdateContent",
-                "responses": {
-                    "200": {
-                        "description": "Ok",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ResContent"
-                                }
-                            }
-                        }
-                    }
-                },
-                "tags": [
-                    "Content"
-                ],
-                "security": [],
-                "parameters": [
-                    {
-                        "in": "path",
-                        "name": "blogId",
-                        "required": true,
-                        "schema": {
-                            "format": "double",
-                            "type": "number"
-                        }
-                    },
-                    {
-                        "in": "path",
-                        "name": "contentId",
-                        "required": true,
-                        "schema": {
-                            "format": "double",
-                            "type": "number"
-                        }
-                    }
-                ],
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "multipart/form-data": {
-                            "schema": {
-                                "type": "object",
-                                "properties": {
-                                    "content": {
-                                        "type": "string"
-                                    },
-                                    "order": {
-                                        "type": "string"
-                                    },
-                                    "title": {
-                                        "type": "string"
-                                    },
-                                    "file": {
-                                        "type": "string",
-                                        "format": "binary"
-                                    }
-                                },
-                                "required": [
-                                    "content",
-                                    "order",
-                                    "title"
-                                ]
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/blog/{blogId}/comment": {
-            "post": {
-                "operationId": "SaveComment",
-                "responses": {
-                    "200": {
-                        "description": "Ok",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ResComments"
-                                }
-                            }
-                        }
-                    }
-                },
-                "tags": [
-                    "Comments"
-                ],
-                "security": [],
-                "parameters": [
-                    {
-                        "in": "path",
-                        "name": "blogId",
-                        "required": true,
-                        "schema": {
-                            "format": "double",
-                            "type": "number"
-                        }
-                    }
-                ],
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "$ref": "#/components/schemas/ReqComments"
-                            }
-                        }
-                    }
-                }
-            },
-            "get": {
-                "operationId": "GetAllComment",
-                "responses": {
-                    "200": {
-                        "description": "Ok",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "items": {
-                                        "$ref": "#/components/schemas/ResComments"
-                                    },
-                                    "type": "array"
-                                }
-                            }
-                        }
-                    }
-                },
-                "tags": [
-                    "Comments"
-                ],
-                "security": [],
-                "parameters": [
-                    {
-                        "in": "path",
-                        "name": "blogId",
-                        "required": true,
-                        "schema": {
-                            "format": "double",
-                            "type": "number"
-                        }
-                    }
-                ]
-            }
-        },
-        "/blog/{blogId}/comment/{commentId}": {
-            "delete": {
-                "operationId": "DeleteComment",
-                "responses": {
-                    "200": {
-                        "description": "Ok",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ResSuccess"
-                                }
-                            }
-                        }
-                    }
-                },
-                "tags": [
-                    "Comments"
-                ],
-                "security": [],
-                "parameters": [
-                    {
-                        "in": "path",
-                        "name": "blogId",
-                        "required": true,
-                        "schema": {
-                            "format": "double",
-                            "type": "number"
-                        }
-                    },
-                    {
-                        "in": "path",
-                        "name": "commentId",
-                        "required": true,
-                        "schema": {
-                            "format": "double",
-                            "type": "number"
-                        }
-                    }
-                ]
-            },
-            "put": {
-                "operationId": "UpdateComment",
-                "responses": {
-                    "200": {
-                        "description": "Ok",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ResComments"
-                                }
-                            }
-                        }
-                    }
-                },
-                "tags": [
-                    "Comments"
-                ],
-                "security": [],
-                "parameters": [
-                    {
-                        "in": "path",
-                        "name": "blogId",
-                        "required": true,
-                        "schema": {
-                            "format": "double",
-                            "type": "number"
-                        }
-                    },
-                    {
-                        "in": "path",
-                        "name": "commentId",
-                        "required": true,
-                        "schema": {
-                            "format": "double",
-                            "type": "number"
-                        }
-                    }
-                ],
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "$ref": "#/components/schemas/ReqCommentU"
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/blog": {
-            "post": {
-                "operationId": "SaveBlog",
-                "responses": {
-                    "200": {
-                        "description": "Ok",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "anyOf": [
-                                        {
-                                            "$ref": "#/components/schemas/ResBlog"
+                                            "$ref": "#/components/schemas/ResUser"
                                         },
                                         {
                                             "properties": {
-                                                "result": {
+                                                "error": {
                                                     "type": "string"
                                                 }
                                             },
                                             "required": [
-                                                "result"
+                                                "error"
                                             ],
                                             "type": "object"
                                         }
@@ -1334,47 +929,123 @@
                         }
                     }
                 },
-                "description": "save blog",
-                "summary": "saves blog",
                 "tags": [
-                    "Blog"
+                    "User"
                 ],
                 "security": [],
-                "parameters": [],
-                "requestBody": {
-                    "required": false,
-                    "content": {
-                        "multipart/form-data": {
-                            "schema": {
-                                "type": "object",
-                                "properties": {
-                                    "blogSubtitle": {
-                                        "type": "string"
-                                    },
-                                    "blogTitle": {
-                                        "type": "string"
-                                    },
-                                    "secretKey": {
-                                        "type": "string"
-                                    },
-                                    "blogDescription": {
-                                        "type": "string"
-                                    },
-                                    "blogAuthor": {
-                                        "type": "string"
-                                    },
-                                    "file": {
-                                        "type": "string",
-                                        "format": "binary"
-                                    }
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "userId",
+                        "required": true,
+                        "schema": {
+                            "format": "double",
+                            "type": "number"
+                        }
+                    }
+                ]
+            },
+            "put": {
+                "operationId": "UpdateUser",
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ResUser"
                                 }
                             }
                         }
                     }
+                },
+                "tags": [
+                    "User"
+                ],
+                "security": [],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "userId",
+                        "required": true,
+                        "schema": {
+                            "format": "double",
+                            "type": "number"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ResUserUpdate"
+                            }
+                        }
+                    }
                 }
-            },
+            }
+        },
+        "/user/userDeviceAllot/{userId}": {
+            "put": {
+                "operationId": "AssignUserDevice",
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "anyOf": [
+                                        {
+                                            "$ref": "#/components/schemas/User"
+                                        },
+                                        {
+                                            "properties": {
+                                                "error": {
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "required": [
+                                                "error"
+                                            ],
+                                            "type": "object"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "User"
+                ],
+                "security": [],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "userId",
+                        "required": true,
+                        "schema": {
+                            "format": "double",
+                            "type": "number"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ReqDeviceAssign"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/serviceTicket": {
             "get": {
-                "operationId": "GetAllBlog",
+                "operationId": "GetAllServiceTickets",
                 "responses": {
                     "200": {
                         "description": "Ok",
@@ -1384,20 +1055,12 @@
                                     "anyOf": [
                                         {
                                             "items": {
-                                                "$ref": "#/components/schemas/ResBlog"
+                                                "$ref": "#/components/schemas/ResServiceTicket"
                                             },
                                             "type": "array"
                                         },
                                         {
-                                            "properties": {
-                                                "result": {
-                                                    "type": "string"
-                                                }
-                                            },
-                                            "required": [
-                                                "result"
-                                            ],
-                                            "type": "object"
+                                            "$ref": "#/components/schemas/ResError"
                                         }
                                     ]
                                 }
@@ -1405,18 +1068,14 @@
                         }
                     }
                 },
-                "description": "gets all blog",
-                "summary": "gets all blog",
                 "tags": [
-                    "Blog"
+                    "Service Ticket"
                 ],
                 "security": [],
                 "parameters": []
-            }
-        },
-        "/blog/{blogId}": {
-            "get": {
-                "operationId": "GetOneBlog",
+            },
+            "post": {
+                "operationId": "SaveServiceTicket",
                 "responses": {
                     "200": {
                         "description": "Ok",
@@ -1425,19 +1084,51 @@
                                 "schema": {
                                     "anyOf": [
                                         {
-                                            "$ref": "#/components/schemas/ResBlog"
+                                            "$ref": "#/components/schemas/ResServiceTicket"
                                         },
                                         {
                                             "$ref": "#/components/schemas/ResError"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                },
+                "description": "generates service ticket",
+                "summary": "generates service ticket",
+                "tags": [
+                    "Service Ticket"
+                ],
+                "security": [
+                    {
+                        "Api-Token": []
+                    }
+                ],
+                "parameters": []
+            }
+        },
+        "/serviceTicket/{serviceTicketId}": {
+            "put": {
+                "operationId": "UpdateServiceTicketStatus",
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "anyOf": [
+                                        {
+                                            "$ref": "#/components/schemas/ServiceTicket"
                                         },
                                         {
                                             "properties": {
-                                                "result": {
+                                                "error": {
                                                     "type": "string"
                                                 }
                                             },
                                             "required": [
-                                                "result"
+                                                "error"
                                             ],
                                             "type": "object"
                                         }
@@ -1447,16 +1138,65 @@
                         }
                     }
                 },
-                "description": "get one blog",
-                "summary": "gets one blog",
+                "description": "UPDATE SERVICE TICKET STATUS",
+                "summary": "UPDATE SERVICE TICKET STATUS",
                 "tags": [
-                    "Blog"
+                    "Service Ticket"
                 ],
                 "security": [],
                 "parameters": [
                     {
                         "in": "path",
-                        "name": "blogId",
+                        "name": "serviceTicketId",
+                        "required": true,
+                        "schema": {
+                            "format": "double",
+                            "type": "number"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ReqSTstatus"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/role/{roleId}": {
+            "get": {
+                "operationId": "GetOneRole",
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "anyOf": [
+                                        {
+                                            "$ref": "#/components/schemas/ResRole"
+                                        },
+                                        {
+                                            "$ref": "#/components/schemas/ResError"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Role"
+                ],
+                "security": [],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "roleId",
                         "required": true,
                         "schema": {
                             "format": "double",
@@ -1466,195 +1206,7 @@
                 ]
             },
             "delete": {
-                "operationId": "DeleteBlog",
-                "responses": {
-                    "200": {
-                        "description": "Ok",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "anyOf": [
-                                        {
-                                            "$ref": "#/components/schemas/ResSuccess"
-                                        },
-                                        {
-                                            "properties": {
-                                                "result": {
-                                                    "type": "string"
-                                                }
-                                            },
-                                            "required": [
-                                                "result"
-                                            ],
-                                            "type": "object"
-                                        }
-                                    ]
-                                }
-                            }
-                        }
-                    }
-                },
-                "tags": [
-                    "Blog"
-                ],
-                "security": [],
-                "parameters": [
-                    {
-                        "in": "path",
-                        "name": "blogId",
-                        "required": true,
-                        "schema": {
-                            "format": "double",
-                            "type": "number"
-                        }
-                    },
-                    {
-                        "in": "query",
-                        "name": "secretKey",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ]
-            },
-            "put": {
-                "operationId": "UpdateBlog",
-                "responses": {
-                    "200": {
-                        "description": "Ok",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "anyOf": [
-                                        {
-                                            "$ref": "#/components/schemas/ResBlog"
-                                        },
-                                        {
-                                            "properties": {
-                                                "result": {
-                                                    "type": "string"
-                                                }
-                                            },
-                                            "required": [
-                                                "result"
-                                            ],
-                                            "type": "object"
-                                        }
-                                    ]
-                                }
-                            }
-                        }
-                    }
-                },
-                "tags": [
-                    "Blog"
-                ],
-                "security": [],
-                "parameters": [
-                    {
-                        "in": "path",
-                        "name": "blogId",
-                        "required": true,
-                        "schema": {
-                            "format": "double",
-                            "type": "number"
-                        }
-                    }
-                ],
-                "requestBody": {
-                    "required": false,
-                    "content": {
-                        "multipart/form-data": {
-                            "schema": {
-                                "type": "object",
-                                "properties": {
-                                    "blogSubtitle": {
-                                        "type": "string"
-                                    },
-                                    "blogTitle": {
-                                        "type": "string"
-                                    },
-                                    "secretKey": {
-                                        "type": "string"
-                                    },
-                                    "blogDescription": {
-                                        "type": "string"
-                                    },
-                                    "blogAuthor": {
-                                        "type": "string"
-                                    },
-                                    "file": {
-                                        "type": "string",
-                                        "format": "binary"
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/blog/statusUpdate/{blogId}": {
-            "put": {
-                "operationId": "UpdateBlogStatus",
-                "responses": {
-                    "200": {
-                        "description": "Ok",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "anyOf": [
-                                        {
-                                            "$ref": "#/components/schemas/ResBlog"
-                                        },
-                                        {
-                                            "properties": {
-                                                "result": {
-                                                    "type": "string"
-                                                }
-                                            },
-                                            "required": [
-                                                "result"
-                                            ],
-                                            "type": "object"
-                                        }
-                                    ]
-                                }
-                            }
-                        }
-                    }
-                },
-                "tags": [
-                    "Blog"
-                ],
-                "security": [],
-                "parameters": [
-                    {
-                        "in": "path",
-                        "name": "blogId",
-                        "required": true,
-                        "schema": {
-                            "format": "double",
-                            "type": "number"
-                        }
-                    }
-                ],
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "$ref": "#/components/schemas/ReqBlogStatus"
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/admin": {
-            "post": {
-                "operationId": "AdminLogin",
+                "operationId": "DeleteRole",
                 "responses": {
                     "200": {
                         "description": "Ok",
@@ -1675,7 +1227,99 @@
                     }
                 },
                 "tags": [
-                    "Admin"
+                    "Role"
+                ],
+                "security": [],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "roleId",
+                        "required": true,
+                        "schema": {
+                            "format": "double",
+                            "type": "number"
+                        }
+                    }
+                ]
+            },
+            "put": {
+                "operationId": "UpdateRole",
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ResRole"
+                                }
+                            }
+                        }
+                    }
+                },
+                "description": "update role API",
+                "summary": "UPDATE ROLE",
+                "tags": [
+                    "Role"
+                ],
+                "security": [],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "roleId",
+                        "required": true,
+                        "schema": {
+                            "format": "double",
+                            "type": "number"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ReqRole"
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "operationId": "GetPermissionsFromRole",
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "anyOf": [
+                                        {
+                                            "items": {
+                                                "$ref": "#/components/schemas/Permission"
+                                            },
+                                            "type": "array"
+                                        },
+                                        {
+                                            "properties": {
+                                                "error": {
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "required": [
+                                                "error"
+                                            ],
+                                            "type": "object"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                },
+                "description": "getting permissions from subrole",
+                "summary": "getting permissions from subrole",
+                "tags": [
+                    "Role"
                 ],
                 "security": [],
                 "parameters": [],
@@ -1684,7 +1328,757 @@
                     "content": {
                         "application/json": {
                             "schema": {
-                                "$ref": "#/components/schemas/ReqAdminLogin"
+                                "$ref": "#/components/schemas/ReqRoleBody"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/role": {
+            "get": {
+                "operationId": "GetAllRole",
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "anyOf": [
+                                        {
+                                            "items": {
+                                                "$ref": "#/components/schemas/ResRole"
+                                            },
+                                            "type": "array"
+                                        },
+                                        {
+                                            "$ref": "#/components/schemas/ResError"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                },
+                "description": "get all the roles",
+                "summary": "get all the roles",
+                "tags": [
+                    "Role"
+                ],
+                "security": [],
+                "parameters": []
+            },
+            "post": {
+                "operationId": "SaveRole",
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "anyOf": [
+                                        {
+                                            "$ref": "#/components/schemas/ResRole"
+                                        },
+                                        {
+                                            "$ref": "#/components/schemas/ResError"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                },
+                "description": "save role",
+                "summary": "save role",
+                "tags": [
+                    "Role"
+                ],
+                "security": [],
+                "parameters": [],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ReqRole"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/role/setPermissions": {
+            "put": {
+                "operationId": "GivePermissionToRole",
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "anyOf": [
+                                        {
+                                            "$ref": "#/components/schemas/GetSetPermisisons"
+                                        },
+                                        {
+                                            "$ref": "#/components/schemas/ResError"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                },
+                "description": "allot permissions to a role",
+                "summary": "allot permissions to a role",
+                "tags": [
+                    "Role"
+                ],
+                "security": [],
+                "parameters": [],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/SetPermisisons"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/permission": {
+            "get": {
+                "operationId": "GetAllPermissions",
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "anyOf": [
+                                        {
+                                            "items": {
+                                                "$ref": "#/components/schemas/ResPermission"
+                                            },
+                                            "type": "array"
+                                        },
+                                        {
+                                            "properties": {
+                                                "error": {
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "required": [
+                                                "error"
+                                            ],
+                                            "type": "object"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                },
+                "description": "get all permissions",
+                "summary": "get all permissions",
+                "tags": [
+                    "Permission"
+                ],
+                "security": [],
+                "parameters": []
+            },
+            "post": {
+                "operationId": "SavePermission",
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "anyOf": [
+                                        {
+                                            "$ref": "#/components/schemas/ResPermission"
+                                        },
+                                        {
+                                            "$ref": "#/components/schemas/ResError"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Permission"
+                ],
+                "security": [],
+                "parameters": [],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ReqPermission"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/permission/{permissionId}": {
+            "delete": {
+                "operationId": "DeletePermission",
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "anyOf": [
+                                        {
+                                            "$ref": "#/components/schemas/ResSuccess"
+                                        },
+                                        {
+                                            "$ref": "#/components/schemas/ResError"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                },
+                "description": "delete role",
+                "summary": "delete role",
+                "tags": [
+                    "Permission"
+                ],
+                "security": [],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "permissionId",
+                        "required": true,
+                        "schema": {
+                            "format": "double",
+                            "type": "number"
+                        }
+                    }
+                ]
+            },
+            "put": {
+                "operationId": "UpdatePermission",
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "anyOf": [
+                                        {
+                                            "$ref": "#/components/schemas/ResPermission"
+                                        },
+                                        {
+                                            "$ref": "#/components/schemas/ResError"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Permission"
+                ],
+                "security": [],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "permissionId",
+                        "required": true,
+                        "schema": {
+                            "format": "double",
+                            "type": "number"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ReqPermission"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/permission/getUserPerms/{userId}": {
+            "get": {
+                "operationId": "GetPermissionsOfUser",
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "anyOf": [
+                                        {
+                                            "items": {
+                                                "$ref": "#/components/schemas/ResPermission"
+                                            },
+                                            "type": "array"
+                                        },
+                                        {
+                                            "properties": {
+                                                "error": {
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "required": [
+                                                "error"
+                                            ],
+                                            "type": "object"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Permission"
+                ],
+                "security": [],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "userId",
+                        "required": true,
+                        "schema": {
+                            "format": "double",
+                            "type": "number"
+                        }
+                    }
+                ]
+            }
+        },
+        "/loginpacket": {
+            "post": {
+                "operationId": "SaveLoginPacket",
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/LoginPacket"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Login Packet"
+                ],
+                "security": [],
+                "parameters": [],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ReqLoginPacket"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/user/freeDongle/{userId}": {
+            "put": {
+                "operationId": "FreeTheDongle",
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "anyOf": [
+                                        {
+                                            "type": "string"
+                                        },
+                                        {
+                                            "properties": {
+                                                "error": {
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "required": [
+                                                "error"
+                                            ],
+                                            "type": "object"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                },
+                "description": "FREE THE DONGLE-DEVICE-USER CONNECTION",
+                "summary": "FREE THE DONGLE-DEVICE-USER CONNECTION",
+                "tags": [
+                    "FREE DONGLE"
+                ],
+                "security": [
+                    {
+                        "Api-Token": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "userId",
+                        "required": true,
+                        "schema": {
+                            "format": "double",
+                            "type": "number"
+                        }
+                    }
+                ]
+            }
+        },
+        "/dongle": {
+            "post": {
+                "operationId": "SaveDongle",
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "anyOf": [
+                                        {
+                                            "$ref": "#/components/schemas/ResDongle"
+                                        },
+                                        {
+                                            "$ref": "#/components/schemas/ResError"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                },
+                "description": "save dongle",
+                "summary": "save dongle",
+                "tags": [
+                    "Dongle"
+                ],
+                "security": [],
+                "parameters": [],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ReqDongle"
+                            }
+                        }
+                    }
+                }
+            },
+            "get": {
+                "operationId": "GetAllDongle",
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "anyOf": [
+                                        {
+                                            "items": {
+                                                "$ref": "#/components/schemas/ResDongle"
+                                            },
+                                            "type": "array"
+                                        },
+                                        {
+                                            "$ref": "#/components/schemas/ResError"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                },
+                "description": "get all dongle",
+                "summary": "get all dongle",
+                "tags": [
+                    "Dongle"
+                ],
+                "security": [],
+                "parameters": []
+            }
+        },
+        "/dongle/{dongleId}": {
+            "get": {
+                "operationId": "GetOneDongle",
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "anyOf": [
+                                        {
+                                            "$ref": "#/components/schemas/ResDongle"
+                                        },
+                                        {
+                                            "$ref": "#/components/schemas/ResError"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                },
+                "description": "get one dongle",
+                "summary": "get one dongle",
+                "tags": [
+                    "Dongle"
+                ],
+                "security": [],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "dongleId",
+                        "required": true,
+                        "schema": {
+                            "format": "double",
+                            "type": "number"
+                        }
+                    }
+                ]
+            },
+            "delete": {
+                "operationId": "DeleteDongle",
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "anyOf": [
+                                        {
+                                            "$ref": "#/components/schemas/ResSuccess"
+                                        },
+                                        {
+                                            "$ref": "#/components/schemas/ResError"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                },
+                "description": "delete dongle",
+                "summary": "delete dongle",
+                "tags": [
+                    "Dongle"
+                ],
+                "security": [],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "dongleId",
+                        "required": true,
+                        "schema": {
+                            "format": "double",
+                            "type": "number"
+                        }
+                    }
+                ]
+            }
+        },
+        "/device": {
+            "get": {
+                "operationId": "GetAllDevice",
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "anyOf": [
+                                        {
+                                            "items": {
+                                                "$ref": "#/components/schemas/ResDevice"
+                                            },
+                                            "type": "array"
+                                        },
+                                        {
+                                            "properties": {
+                                                "error": {
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "required": [
+                                                "error"
+                                            ],
+                                            "type": "object"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                },
+                "description": "get all device (history enabled)",
+                "summary": "get all device (history enabled)",
+                "tags": [
+                    "Device"
+                ],
+                "security": [],
+                "parameters": []
+            },
+            "post": {
+                "operationId": "SaveDevice",
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "anyOf": [
+                                        {
+                                            "$ref": "#/components/schemas/ResDevice"
+                                        },
+                                        {
+                                            "$ref": "#/components/schemas/ResError"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                },
+                "description": "SAVES DEVICE",
+                "summary": "SAVES A DEVICE",
+                "tags": [
+                    "Device"
+                ],
+                "security": [],
+                "parameters": [],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ReqDevice"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/device/{deviceId}": {
+            "delete": {
+                "operationId": "DeleteDevice",
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "anyOf": [
+                                        {
+                                            "$ref": "#/components/schemas/ResSuccess"
+                                        },
+                                        {
+                                            "$ref": "#/components/schemas/ResError"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                },
+                "description": "delete device",
+                "summary": "delete device",
+                "tags": [
+                    "Device"
+                ],
+                "security": [],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "deviceId",
+                        "required": true,
+                        "schema": {
+                            "format": "double",
+                            "type": "number"
+                        }
+                    }
+                ]
+            }
+        },
+        "/device/allotDongle/{deviceId}": {
+            "put": {
+                "operationId": "AllotDongleToDevice",
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "anyOf": [
+                                        {
+                                            "$ref": "#/components/schemas/Device"
+                                        },
+                                        {
+                                            "properties": {
+                                                "error": {
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "required": [
+                                                "error"
+                                            ],
+                                            "type": "object"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                },
+                "description": "allot dongle to a device",
+                "summary": "allot dongle to a device",
+                "tags": [
+                    "Device"
+                ],
+                "security": [],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "deviceId",
+                        "required": true,
+                        "schema": {
+                            "format": "double",
+                            "type": "number"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ReqDongleAllot"
                             }
                         }
                     }

@@ -1,3 +1,3 @@
-export interface ReqRoleBody{
-    id?: number
+export interface ReqRoleBody {
+  id?: number;
 }

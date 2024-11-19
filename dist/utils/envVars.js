@@ -29,13 +29,13 @@ const dotenv = __importStar(require("dotenv"));
 const pathExt = process.env.NODE_ENV ? '.' + process.env.NODE_ENV : '';
 dotenv.config({ path: `.env${pathExt}` });
 exports.envs = {
-    PORT: parseInt(process.env.PORT || '3003'),
+    PORT: parseInt(process.env.PORT || '3010'),
     DB_HOST: process.env.DB_HOST || 'localhost',
     DB_PORT: parseInt(process.env.DB_PORT || '5432'),
     DB_USERNAME: process.env.DB_USERNAME || 'postgres',
     DB_PASSWORD: process.env.DB_PASSWORD || 'root',
-    DB_DBNAME: process.env.DB_DBNAME || 'pc_backend',
-    CORS_ALLOWED_ORIGINS: process.env.CORS_ALLOWED_ORIGINS?.split(',') || ['http://localhost:3000', 'https://chronicpestcontrolagencies.org'],
+    DB_DBNAME: process.env.DB_DBNAME || 'telematics_backend',
+    CORS_ALLOWED_ORIGINS: process.env.CORS_ALLOWED_ORIGINS?.split(',') || ['localhost:3010'] || ['localhost:3000'],
     JWT_SECRET_KEY: process.env.JWT_SECRET_KEY || 'jwtsecretkey',
 };
 //# sourceMappingURL=envVars.js.map

@@ -1,7 +1,7 @@
-import { ResPermission } from "./ResPermission";
-import { ResRole } from "./ResRole";
+import { ResPermission } from './ResPermission';
+import { ResRole } from './ResRole';
 
-export interface GetSetPermisisons{
-    role?: ResRole;
-    permissions?: ResPermission[] 
+export interface GetSetPermisisons {
+  role?: ResRole;
+  permissions?: ResPermission[];
 }

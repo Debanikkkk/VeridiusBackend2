@@ -23,8 +23,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.encryptMessageFixedIV = encryptMessageFixedIV;
-exports.decryptMessageFixedIV = decryptMessageFixedIV;
+exports.decryptMessageFixedIV = exports.encryptMessageFixedIV = void 0;
 const crypto = __importStar(require("crypto"));
 // export function encryptPassword(password: string, encryptionKey: string): string {
 //     const iv = crypto.randomBytes(16); // Generate a random IV (Initialization Vector)
@@ -40,6 +39,7 @@ function encryptMessageFixedIV(message, encryptionKey, iv) {
     encryptedMessage += cipher.final('hex');
     return encryptedMessage;
 }
+exports.encryptMessageFixedIV = encryptMessageFixedIV;
 // Function to decrypt a message with a fixed IV
 function decryptMessageFixedIV(encryptedMessage, encryptionKey, iv) {
     const decipher = crypto.createDecipheriv('aes-256-cbc', encryptionKey, iv);
@@ -47,4 +47,5 @@ function decryptMessageFixedIV(encryptedMessage, encryptionKey, iv) {
     decryptedMessage += decipher.final('utf8');
     return decryptedMessage;
 }
+exports.decryptMessageFixedIV = decryptMessageFixedIV;
 //# sourceMappingURL=encfunc.js.map

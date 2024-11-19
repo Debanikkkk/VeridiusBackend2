@@ -1,4 +1,4 @@
-export interface ReqRoleSubRole{
-    role?: number,
-    subrole?: number[]
+export interface ReqRoleSubRole {
+  role?: number;
+  subrole?: number[];
 }

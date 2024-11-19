@@ -7,6 +7,30 @@
 		"requestBodies": {},
 		"responses": {},
 		"schemas": {
+			"ResRole": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"name": {
+						"type": "string"
+					},
+					"description": {
+						"type": "string"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"serviceTicketStatus": {
+				"enum": [
+					"open",
+					"closed",
+					"new"
+				],
+				"type": "string"
+			},
 			"ResUser": {
 				"properties": {
 					"id": {
@@ -27,8 +51,95 @@
 					},
 					"phone_number": {
 						"type": "string"
+					},
+					"role": {
+						"$ref": "#/components/schemas/ResRole"
+					},
+					"service_ticket": {
+						"$ref": "#/components/schemas/ResServiceTicket"
+					},
+					"device": {
+						"$ref": "#/components/schemas/ResDevice"
 					}
 				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ResServiceTicket": {
+				"properties": {
+					"date": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"service_ticket_number": {
+						"type": "string"
+					},
+					"status": {
+						"$ref": "#/components/schemas/serviceTicketStatus"
+					},
+					"technician": {
+						"$ref": "#/components/schemas/ResUser"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ResDevice": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"mac_address": {
+						"type": "string"
+					},
+					"name": {
+						"type": "string"
+					},
+					"user": {
+						"$ref": "#/components/schemas/ResUser"
+					},
+					"dongle": {
+						"allOf": [
+							{
+								"$ref": "#/components/schemas/ResDongle"
+							}
+						],
+						"nullable": true
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ResDongle": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"name": {
+						"type": "string"
+					},
+					"device": {
+						"$ref": "#/components/schemas/ResDevice"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ResError": {
+				"properties": {
+					"error": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"error"
+				],
 				"type": "object",
 				"additionalProperties": false
 			},
@@ -57,27 +168,12 @@
 				"type": "object",
 				"additionalProperties": false
 			},
-			"ResRole": {
-				"properties": {
-					"id": {
-						"type": "number",
-						"format": "double"
-					},
-					"name": {
-						"type": "string"
-					},
-					"description": {
-						"type": "string"
-					},
-					"subRole": {
-						"items": {
-							"$ref": "#/components/schemas/ResRole"
-						},
-						"type": "array"
-					}
-				},
-				"type": "object",
-				"additionalProperties": false
+			"permType": {
+				"enum": [
+					"user",
+					"product"
+				],
+				"type": "string"
 			},
 			"ResPermission": {
 				"properties": {
@@ -87,6 +183,9 @@
 					},
 					"description": {
 						"type": "string"
+					},
+					"type": {
+						"$ref": "#/components/schemas/permType"
 					},
 					"name": {
 						"type": "string"
@@ -98,6 +197,9 @@
 						"type": "array"
 					}
 				},
+				"required": [
+					"type"
+				],
 				"type": "object",
 				"additionalProperties": false
 			},
@@ -163,6 +265,297 @@
 				"type": "object",
 				"additionalProperties": false
 			},
+			"ResSuccess": {
+				"properties": {
+					"result": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"result"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"User": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"name": {
+						"type": "string"
+					},
+					"password": {
+						"type": "string"
+					},
+					"address": {
+						"type": "string"
+					},
+					"phone_number": {
+						"type": "string"
+					},
+					"email": {
+						"type": "string"
+					},
+					"device": {
+						"allOf": [
+							{
+								"$ref": "#/components/schemas/Device"
+							}
+						],
+						"nullable": true
+					},
+					"role": {
+						"$ref": "#/components/schemas/Role"
+					},
+					"service_ticket": {
+						"$ref": "#/components/schemas/ServiceTicket"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"Device": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"name": {
+						"type": "string"
+					},
+					"mac_address": {
+						"type": "string"
+					},
+					"imei": {
+						"type": "string"
+					},
+					"user": {
+						"allOf": [
+							{
+								"$ref": "#/components/schemas/User"
+							}
+						],
+						"nullable": true
+					},
+					"dongle": {
+						"allOf": [
+							{
+								"$ref": "#/components/schemas/Dongle"
+							}
+						],
+						"nullable": true
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"Dongle": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"name": {
+						"type": "string"
+					},
+					"device": {
+						"allOf": [
+							{
+								"$ref": "#/components/schemas/Device"
+							}
+						],
+						"nullable": true
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"Role": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"name": {
+						"type": "string"
+					},
+					"description": {
+						"type": "string"
+					},
+					"permissions": {
+						"items": {
+							"$ref": "#/components/schemas/Permission"
+						},
+						"type": "array"
+					},
+					"users": {
+						"items": {
+							"$ref": "#/components/schemas/User"
+						},
+						"type": "array"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"Permission": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"name": {
+						"type": "string"
+					},
+					"description": {
+						"type": "string"
+					},
+					"type": {
+						"$ref": "#/components/schemas/permType"
+					},
+					"role": {
+						"items": {
+							"$ref": "#/components/schemas/Role"
+						},
+						"type": "array"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ServiceTicket": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"date": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"created_on": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"updated_on": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"status": {
+						"$ref": "#/components/schemas/serviceTicketStatus"
+					},
+					"service_ticket_number": {
+						"type": "string"
+					},
+					"technician": {
+						"$ref": "#/components/schemas/User"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ReqDeviceAssign": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"PaginatedResponse_User_": {
+				"properties": {
+					"items": {
+						"items": {
+							"$ref": "#/components/schemas/User"
+						},
+						"type": "array"
+					},
+					"totalCount": {
+						"type": "number",
+						"format": "double"
+					},
+					"page": {
+						"type": "number",
+						"format": "double"
+					},
+					"pageSize": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"required": [
+					"items",
+					"totalCount",
+					"page",
+					"pageSize"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ResUserUpdate": {
+				"properties": {
+					"name": {
+						"type": "string"
+					},
+					"address": {
+						"type": "string"
+					},
+					"password": {
+						"type": "string"
+					},
+					"email": {
+						"type": "string"
+					},
+					"phone_number": {
+						"type": "string"
+					},
+					"role": {
+						"type": "number",
+						"format": "double"
+					},
+					"device": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"Error": {
+				"properties": {
+					"name": {
+						"type": "string"
+					},
+					"message": {
+						"type": "string"
+					},
+					"stack": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"name",
+					"message"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ReqSTstatus": {
+				"properties": {
+					"status": {
+						"$ref": "#/components/schemas/serviceTicketStatus"
+					}
+				},
+				"required": [
+					"status"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
 			"ReqRole": {
 				"properties": {
 					"name": {
@@ -207,187 +600,47 @@
 				"type": "object",
 				"additionalProperties": false
 			},
-			"ResRoleSubRole": {
-				"properties": {
-					"role": {
-						"$ref": "#/components/schemas/ResRole"
-					},
-					"subrole": {
-						"items": {
-							"$ref": "#/components/schemas/ResRole"
-						},
-						"type": "array"
-					}
-				},
-				"type": "object",
-				"additionalProperties": false
-			},
-			"ReqRoleSubRole": {
-				"properties": {
-					"role": {
-						"type": "number",
-						"format": "double"
-					},
-					"subrole": {
-						"items": {
-							"type": "number",
-							"format": "double"
-						},
-						"type": "array"
-					}
-				},
-				"type": "object",
-				"additionalProperties": false
-			},
-			"ReqRoleBody": {
-				"properties": {
-					"id": {
-						"type": "number",
-						"format": "double"
-					}
-				},
-				"type": "object",
-				"additionalProperties": false
-			},
-			"Permission": {
-				"properties": {
-					"id": {
-						"type": "number",
-						"format": "double"
-					},
-					"name": {
-						"type": "string"
-					},
-					"description": {
-						"type": "string"
-					},
-					"role": {
-						"items": {
-							"$ref": "#/components/schemas/Role"
-						},
-						"type": "array"
-					}
-				},
-				"type": "object",
-				"additionalProperties": false
-			},
-			"User": {
-				"properties": {
-					"id": {
-						"type": "number",
-						"format": "double"
-					},
-					"name": {
-						"type": "string"
-					},
-					"password": {
-						"type": "string"
-					},
-					"address": {
-						"type": "string"
-					},
-					"phone_number": {
-						"type": "string"
-					},
-					"email": {
-						"type": "string"
-					},
-					"device": {
-						"$ref": "#/components/schemas/Device"
-					},
-					"role": {
-						"$ref": "#/components/schemas/Role"
-					}
-				},
-				"type": "object",
-				"additionalProperties": false
-			},
-			"Device": {
-				"properties": {
-					"id": {
-						"type": "number",
-						"format": "double"
-					},
-					"name": {
-						"type": "string"
-					},
-					"mac_address": {
-						"type": "string"
-					},
-					"location": {
-						"type": "string"
-					},
-					"user": {
-						"$ref": "#/components/schemas/User"
-					}
-				},
-				"type": "object",
-				"additionalProperties": false
-			},
-			"Role": {
-				"properties": {
-					"id": {
-						"type": "number",
-						"format": "double"
-					},
-					"name": {
-						"type": "string"
-					},
-					"description": {
-						"type": "string"
-					},
-					"permissions": {
-						"items": {
-							"$ref": "#/components/schemas/Permission"
-						},
-						"type": "array"
-					},
-					"users": {
-						"items": {
-							"$ref": "#/components/schemas/User"
-						},
-						"type": "array"
-					},
-					"sub_role": {
-						"items": {
-							"$ref": "#/components/schemas/Role"
-						},
-						"type": "array"
-					},
-					"role": {
-						"items": {
-							"$ref": "#/components/schemas/Role"
-						},
-						"type": "array"
-					}
-				},
-				"type": "object",
-				"additionalProperties": false
-			},
 			"ReqPermission": {
 				"properties": {
 					"description": {
 						"type": "string"
 					},
+					"type": {
+						"$ref": "#/components/schemas/permType"
+					},
 					"name": {
 						"type": "string"
-					},
-					"role": {
-						"items": {
-							"type": "number",
-							"format": "double"
-						},
-						"type": "array"
 					}
 				},
 				"type": "object",
 				"additionalProperties": false
 			},
-			"GeolocationUpdate": {
+			"LoginPacket": {
 				"properties": {
-					"deviceId": {
+					"id": {
 						"type": "number",
 						"format": "double"
+					},
+					"packetHeader": {
+						"type": "string"
+					},
+					"vendorId": {
+						"type": "string"
+					},
+					"vehicleRegNo": {
+						"type": "string"
+					},
+					"imei": {
+						"type": "string"
+					},
+					"firmwareVersion": {
+						"type": "string"
+					},
+					"protocolVersion": {
+						"type": "string"
+					},
+					"device_type": {
+						"type": "string"
 					},
 					"latitude": {
 						"type": "number",
@@ -396,13 +649,92 @@
 					"longitude": {
 						"type": "number",
 						"format": "double"
+					},
+					"checksum": {
+						"type": "string"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ReqLoginPacket": {
+				"properties": {
+					"checksum": {
+						"type": "string"
+					},
+					"firmwareVersion": {
+						"type": "string"
+					},
+					"imei": {
+						"type": "string"
+					},
+					"latitude": {
+						"type": "number",
+						"format": "double"
+					},
+					"longitude": {
+						"type": "number",
+						"format": "double"
+					},
+					"packetHeader": {
+						"type": "string"
+					},
+					"protocolVersion": {
+						"type": "string"
+					},
+					"vehicleRegNo": {
+						"type": "string"
+					},
+					"vendorId": {
+						"type": "string"
+					},
+					"deviceType": {
+						"type": "string"
 					}
 				},
 				"required": [
-					"deviceId",
+					"checksum",
+					"firmwareVersion",
+					"imei",
 					"latitude",
-					"longitude"
+					"longitude",
+					"packetHeader",
+					"protocolVersion",
+					"vehicleRegNo",
+					"vendorId",
+					"deviceType"
 				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ReqDongle": {
+				"properties": {
+					"name": {
+						"type": "string"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ReqDevice": {
+				"properties": {
+					"mac_address": {
+						"type": "string"
+					},
+					"name": {
+						"type": "string"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ReqDongleAllot": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					}
+				},
 				"type": "object",
 				"additionalProperties": false
 			}
@@ -431,7 +763,14 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/ResUser"
+									"anyOf": [
+										{
+											"$ref": "#/components/schemas/ResUser"
+										},
+										{
+											"$ref": "#/components/schemas/ResError"
+										}
+									]
 								}
 							}
 						}
@@ -452,6 +791,50 @@
 						}
 					}
 				}
+			},
+			"get": {
+				"operationId": "GetUsers",
+				"responses": {
+					"200": {
+						"description": "A paginated list of users",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/PaginatedResponse_User_"
+								}
+							}
+						}
+					}
+				},
+				"description": "Get all users with pagination",
+				"tags": [
+					"User"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"description": "The page number (default: 1)",
+						"in": "query",
+						"name": "page",
+						"required": false,
+						"schema": {
+							"default": 1,
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"description": "The number of users per page (default: 10)",
+						"in": "query",
+						"name": "pageSize",
+						"required": false,
+						"schema": {
+							"default": 10,
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
 			}
 		},
 		"/user/login": {
@@ -463,7 +846,14 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/ResUserLogin"
+									"anyOf": [
+										{
+											"$ref": "#/components/schemas/ResUserLogin"
+										},
+										{
+											"$ref": "#/components/schemas/ResError"
+										}
+									]
 								}
 							}
 						}
@@ -488,9 +878,450 @@
 				}
 			}
 		},
-		"/role": {
+		"/user/{userId}": {
+			"delete": {
+				"operationId": "DeleteUser",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ResSuccess"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"User"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "userId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			},
+			"get": {
+				"operationId": "GetOneUser",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"$ref": "#/components/schemas/ResUser"
+										},
+										{
+											"properties": {
+												"error": {
+													"type": "string"
+												}
+											},
+											"required": [
+												"error"
+											],
+											"type": "object"
+										}
+									]
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"User"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "userId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			},
+			"put": {
+				"operationId": "UpdateUser",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ResUser"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"User"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "userId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/ResUserUpdate"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/user/userDeviceAllot/{userId}": {
+			"put": {
+				"operationId": "AssignUserDevice",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"$ref": "#/components/schemas/User"
+										},
+										{
+											"properties": {
+												"error": {
+													"type": "string"
+												}
+											},
+											"required": [
+												"error"
+											],
+											"type": "object"
+										}
+									]
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"User"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "userId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/ReqDeviceAssign"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/user/getAllUser": {
 			"post": {
-				"operationId": "SaveRole",
+				"operationId": "GetAllUsers",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/ResUser"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"User"
+				],
+				"security": [],
+				"parameters": []
+			}
+		},
+		"/user/getUserFromRole/{roleId}": {
+			"post": {
+				"operationId": "GetUsersFromRole",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"$ref": "#/components/schemas/Error"
+										},
+										{
+											"items": {
+												"$ref": "#/components/schemas/ResUser"
+											},
+											"type": "array"
+										}
+									]
+								}
+							}
+						}
+					}
+				},
+				"description": "get users from role",
+				"summary": "get users from role",
+				"tags": [
+					"User"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "roleId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			}
+		},
+		"/serviceTicket": {
+			"get": {
+				"operationId": "GetAllServiceTickets",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"items": {
+												"$ref": "#/components/schemas/ResServiceTicket"
+											},
+											"type": "array"
+										},
+										{
+											"$ref": "#/components/schemas/ResError"
+										}
+									]
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Service Ticket"
+				],
+				"security": [],
+				"parameters": []
+			},
+			"post": {
+				"operationId": "SaveServiceTicket",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"$ref": "#/components/schemas/ResServiceTicket"
+										},
+										{
+											"$ref": "#/components/schemas/ResError"
+										}
+									]
+								}
+							}
+						}
+					}
+				},
+				"description": "generates service ticket",
+				"summary": "generates service ticket",
+				"tags": [
+					"Service Ticket"
+				],
+				"security": [
+					{
+						"Api-Token": []
+					}
+				],
+				"parameters": []
+			}
+		},
+		"/serviceTicket/{serviceTicketId}": {
+			"put": {
+				"operationId": "UpdateServiceTicketStatus",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"$ref": "#/components/schemas/ServiceTicket"
+										},
+										{
+											"properties": {
+												"error": {
+													"type": "string"
+												}
+											},
+											"required": [
+												"error"
+											],
+											"type": "object"
+										}
+									]
+								}
+							}
+						}
+					}
+				},
+				"description": "UPDATE SERVICE TICKET STATUS",
+				"summary": "UPDATE SERVICE TICKET STATUS",
+				"tags": [
+					"Service Ticket"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "serviceTicketId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/ReqSTstatus"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/role/{roleId}": {
+			"get": {
+				"operationId": "GetOneRole",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"$ref": "#/components/schemas/ResRole"
+										},
+										{
+											"$ref": "#/components/schemas/ResError"
+										}
+									]
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Role"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "roleId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			},
+			"delete": {
+				"operationId": "DeleteRole",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"$ref": "#/components/schemas/ResSuccess"
+										},
+										{
+											"$ref": "#/components/schemas/ResError"
+										}
+									]
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Role"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "roleId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			},
+			"put": {
+				"operationId": "UpdateRole",
 				"responses": {
 					"200": {
 						"description": "Ok",
@@ -503,6 +1334,141 @@
 						}
 					}
 				},
+				"description": "update role API",
+				"summary": "UPDATE ROLE",
+				"tags": [
+					"Role"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "roleId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/ReqRole"
+							}
+						}
+					}
+				}
+			},
+			"post": {
+				"operationId": "GetPermissionsFromRole",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"items": {
+												"$ref": "#/components/schemas/Permission"
+											},
+											"type": "array"
+										},
+										{
+											"properties": {
+												"error": {
+													"type": "string"
+												}
+											},
+											"required": [
+												"error"
+											],
+											"type": "object"
+										}
+									]
+								}
+							}
+						}
+					}
+				},
+				"description": "getting permissions from subrole",
+				"summary": "getting permissions from subrole",
+				"tags": [
+					"Role"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "roleId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			}
+		},
+		"/role": {
+			"get": {
+				"operationId": "GetAllRole",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"items": {
+												"$ref": "#/components/schemas/ResRole"
+											},
+											"type": "array"
+										},
+										{
+											"$ref": "#/components/schemas/ResError"
+										}
+									]
+								}
+							}
+						}
+					}
+				},
+				"description": "get all the roles",
+				"summary": "get all the roles",
+				"tags": [
+					"Role"
+				],
+				"security": [],
+				"parameters": []
+			},
+			"post": {
+				"operationId": "SaveRole",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"$ref": "#/components/schemas/ResRole"
+										},
+										{
+											"$ref": "#/components/schemas/ResError"
+										}
+									]
+								}
+							}
+						}
+					}
+				},
+				"description": "save role",
+				"summary": "save role",
 				"tags": [
 					"Role"
 				],
@@ -529,12 +1495,21 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/GetSetPermisisons"
+									"anyOf": [
+										{
+											"$ref": "#/components/schemas/GetSetPermisisons"
+										},
+										{
+											"$ref": "#/components/schemas/ResError"
+										}
+									]
 								}
 							}
 						}
 					}
 				},
+				"description": "allot permissions to a role",
+				"summary": "allot permissions to a role",
 				"tags": [
 					"Role"
 				],
@@ -552,113 +1527,47 @@
 				}
 			}
 		},
-		"/role/subRoleSet": {
-			"put": {
-				"operationId": "SetSubRole",
+		"/permission": {
+			"get": {
+				"operationId": "GetAllPermissions",
 				"responses": {
 					"200": {
 						"description": "Ok",
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/ResRoleSubRole"
+									"anyOf": [
+										{
+											"items": {
+												"$ref": "#/components/schemas/ResPermission"
+											},
+											"type": "array"
+										},
+										{
+											"properties": {
+												"error": {
+													"type": "string"
+												}
+											},
+											"required": [
+												"error"
+											],
+											"type": "object"
+										}
+									]
 								}
 							}
 						}
 					}
 				},
-				"description": "setting role subrole",
-				"summary": "setting role subRole",
+				"description": "get all permissions",
+				"summary": "get all permissions",
 				"tags": [
-					"Role"
+					"Permission"
 				],
 				"security": [],
-				"parameters": [],
-				"requestBody": {
-					"required": true,
-					"content": {
-						"application/json": {
-							"schema": {
-								"$ref": "#/components/schemas/ReqRoleSubRole"
-							}
-						}
-					}
-				}
-			}
-		},
-		"/role/getSubRole": {
-			"post": {
-				"operationId": "GetSubRole",
-				"responses": {
-					"200": {
-						"description": "Ok",
-						"content": {
-							"application/json": {
-								"schema": {
-									"items": {
-										"$ref": "#/components/schemas/ResRole"
-									},
-									"type": "array"
-								}
-							}
-						}
-					}
-				},
-				"tags": [
-					"Role"
-				],
-				"security": [],
-				"parameters": [],
-				"requestBody": {
-					"required": true,
-					"content": {
-						"application/json": {
-							"schema": {
-								"$ref": "#/components/schemas/ReqRoleBody"
-							}
-						}
-					}
-				}
-			}
-		},
-		"/role/getPermissionFromRole": {
-			"post": {
-				"operationId": "GetPermissionsFromRole",
-				"responses": {
-					"200": {
-						"description": "Ok",
-						"content": {
-							"application/json": {
-								"schema": {
-									"items": {
-										"$ref": "#/components/schemas/Permission"
-									},
-									"type": "array"
-								}
-							}
-						}
-					}
-				},
-				"description": "getting permissions from subrole",
-				"summary": "getting permissions from subrole",
-				"tags": [
-					"Role"
-				],
-				"security": [],
-				"parameters": [],
-				"requestBody": {
-					"required": true,
-					"content": {
-						"application/json": {
-							"schema": {
-								"$ref": "#/components/schemas/ReqRoleBody"
-							}
-						}
-					}
-				}
-			}
-		},
-		"/role/{roleId}/permission/{permissionId}": {
+				"parameters": []
+			},
 			"post": {
 				"operationId": "SavePermission",
 				"responses": {
@@ -667,7 +1576,14 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/ResPermission"
+									"anyOf": [
+										{
+											"$ref": "#/components/schemas/ResPermission"
+										},
+										{
+											"$ref": "#/components/schemas/ResError"
+										}
+									]
 								}
 							}
 						}
@@ -690,14 +1606,446 @@
 				}
 			}
 		},
-		"/device/update": {
-			"put": {
-				"operationId": "UpdateGeolocation",
+		"/permission/{permissionId}": {
+			"delete": {
+				"operationId": "DeletePermission",
 				"responses": {
-					"204": {
-						"description": "No content"
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"$ref": "#/components/schemas/ResSuccess"
+										},
+										{
+											"$ref": "#/components/schemas/ResError"
+										}
+									]
+								}
+							}
+						}
 					}
 				},
+				"description": "delete role",
+				"summary": "delete role",
+				"tags": [
+					"Permission"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "permissionId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			},
+			"put": {
+				"operationId": "UpdatePermission",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"$ref": "#/components/schemas/ResPermission"
+										},
+										{
+											"$ref": "#/components/schemas/ResError"
+										}
+									]
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Permission"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "permissionId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/ReqPermission"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/permission/getUserPerms/{userId}": {
+			"get": {
+				"operationId": "GetPermissionsOfUser",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"items": {
+												"$ref": "#/components/schemas/ResPermission"
+											},
+											"type": "array"
+										},
+										{
+											"properties": {
+												"error": {
+													"type": "string"
+												}
+											},
+											"required": [
+												"error"
+											],
+											"type": "object"
+										}
+									]
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Permission"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "userId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			}
+		},
+		"/loginpacket": {
+			"post": {
+				"operationId": "SaveLoginPacket",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/LoginPacket"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Login Packet"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/ReqLoginPacket"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/user/freeDongle/{userId}": {
+			"put": {
+				"operationId": "FreeTheDongle",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"type": "string"
+										},
+										{
+											"properties": {
+												"error": {
+													"type": "string"
+												}
+											},
+											"required": [
+												"error"
+											],
+											"type": "object"
+										}
+									]
+								}
+							}
+						}
+					}
+				},
+				"description": "FREE THE DONGLE-DEVICE-USER CONNECTION",
+				"summary": "FREE THE DONGLE-DEVICE-USER CONNECTION",
+				"tags": [
+					"FREE DONGLE"
+				],
+				"security": [
+					{
+						"Api-Token": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "userId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			}
+		},
+		"/dongle": {
+			"post": {
+				"operationId": "SaveDongle",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"$ref": "#/components/schemas/ResDongle"
+										},
+										{
+											"$ref": "#/components/schemas/ResError"
+										}
+									]
+								}
+							}
+						}
+					}
+				},
+				"description": "save dongle",
+				"summary": "save dongle",
+				"tags": [
+					"Dongle"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/ReqDongle"
+							}
+						}
+					}
+				}
+			},
+			"get": {
+				"operationId": "GetAllDongle",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"items": {
+												"$ref": "#/components/schemas/ResDongle"
+											},
+											"type": "array"
+										},
+										{
+											"$ref": "#/components/schemas/ResError"
+										}
+									]
+								}
+							}
+						}
+					}
+				},
+				"description": "get all dongle",
+				"summary": "get all dongle",
+				"tags": [
+					"Dongle"
+				],
+				"security": [],
+				"parameters": []
+			}
+		},
+		"/dongle/{dongleId}": {
+			"get": {
+				"operationId": "GetOneDongle",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"$ref": "#/components/schemas/ResDongle"
+										},
+										{
+											"$ref": "#/components/schemas/ResError"
+										}
+									]
+								}
+							}
+						}
+					}
+				},
+				"description": "get one dongle",
+				"summary": "get one dongle",
+				"tags": [
+					"Dongle"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "dongleId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			},
+			"delete": {
+				"operationId": "DeleteDongle",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"$ref": "#/components/schemas/ResSuccess"
+										},
+										{
+											"$ref": "#/components/schemas/ResError"
+										}
+									]
+								}
+							}
+						}
+					}
+				},
+				"description": "delete dongle",
+				"summary": "delete dongle",
+				"tags": [
+					"Dongle"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "dongleId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			}
+		},
+		"/device": {
+			"get": {
+				"operationId": "GetAllDevice",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"items": {
+												"$ref": "#/components/schemas/ResDevice"
+											},
+											"type": "array"
+										},
+										{
+											"properties": {
+												"error": {
+													"type": "string"
+												}
+											},
+											"required": [
+												"error"
+											],
+											"type": "object"
+										}
+									]
+								}
+							}
+						}
+					}
+				},
+				"description": "get all device (history enabled)",
+				"summary": "get all device (history enabled)",
+				"tags": [
+					"Device"
+				],
+				"security": [],
+				"parameters": []
+			},
+			"post": {
+				"operationId": "SaveDevice",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"$ref": "#/components/schemas/ResDevice"
+										},
+										{
+											"$ref": "#/components/schemas/ResError"
+										}
+									]
+								}
+							}
+						}
+					}
+				},
+				"description": "SAVES DEVICE",
+				"summary": "SAVES A DEVICE",
 				"tags": [
 					"Device"
 				],
@@ -708,7 +2056,107 @@
 					"content": {
 						"application/json": {
 							"schema": {
-								"$ref": "#/components/schemas/GeolocationUpdate"
+								"$ref": "#/components/schemas/ReqDevice"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/device/{deviceId}": {
+			"delete": {
+				"operationId": "DeleteDevice",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"$ref": "#/components/schemas/ResSuccess"
+										},
+										{
+											"$ref": "#/components/schemas/ResError"
+										}
+									]
+								}
+							}
+						}
+					}
+				},
+				"description": "delete device",
+				"summary": "delete device",
+				"tags": [
+					"Device"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "deviceId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			}
+		},
+		"/device/allotDongle/{deviceId}": {
+			"put": {
+				"operationId": "AllotDongleToDevice",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"$ref": "#/components/schemas/Device"
+										},
+										{
+											"properties": {
+												"error": {
+													"type": "string"
+												}
+											},
+											"required": [
+												"error"
+											],
+											"type": "object"
+										}
+									]
+								}
+							}
+						}
+					}
+				},
+				"description": "allot dongle to a device",
+				"summary": "allot dongle to a device",
+				"tags": [
+					"Device"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "deviceId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/ReqDongleAllot"
 							}
 						}
 					}
