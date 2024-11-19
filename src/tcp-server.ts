@@ -35,7 +35,7 @@ export function initSocketIOFeatures() {
   io.on('connect', (socket: Socket) => {
     console.log('A client connected to server using: ', socket.handshake.address);
     // socketArr.push(socket);
-    console.log('Total clients after addition: ', socketArr.length);
+    // console.log('Total clients after addition: ', socketArr.length);
   });
 
   io.on('close', (socket: Socket) => {
@@ -49,9 +49,9 @@ export function initSocketIOFeatures() {
   const server = net.createServer((socket: net.Socket) => {
     console.log('Client connected:', socket.remoteAddress, socket.remotePort);
     socketArr.push(socket);
-    for (const sock of socketArr) {
-      console.log('the cleint is, ', sock.remoteAddress);
-    }
+    // for (const sock of socketArr) {
+    //   console.log('the cleint is, ', sock.remoteAddress);
+    // }
     // console.log(socketArr);
     // Event listener for incoming data
     socket.on('data', (data) => {
@@ -91,7 +91,14 @@ export function initSocketIOFeatures() {
           console.log('this is the saved packet', packetSave);
           // socketArr.splice(socket);
           // console.log('the socket array is now 1', socketArr);
-          socketArr = socketArr.filter((socket) => socket !== socket);
+          for (const [index, sock] of socketArr.entries()) {
+            console.log(`the socket BEFORE ${index} address is`, sock.address());
+          }
+          const socketToRemove = socket;
+          // console.log('this is the socket', socket);
+          socketArr = socketArr.filter((s) => s !== socketToRemove);
+
+          // socketArr = socketArr.filter((socket) => socket !== socket);
           for (const [index, sock] of socketArr.entries()) {
             console.log(`the socket ${index} address is`, sock.address());
           }
