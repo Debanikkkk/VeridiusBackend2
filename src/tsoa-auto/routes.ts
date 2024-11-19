@@ -324,14 +324,6 @@ const models: TsoaRoute.Models = {
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "ReqRoleBody": {
-        "dataType": "refObject",
-        "properties": {
-            "id": {"dataType":"double"},
-        },
-        "additionalProperties": false,
-    },
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "ReqPermission": {
         "dataType": "refObject",
         "properties": {
@@ -961,7 +953,7 @@ export function RegisterRoutes(app: Router) {
 
             async function RoleController_getPermissionsFromRole(request: ExRequest, response: ExResponse, next: any) {
             const args: Record<string, TsoaRoute.ParameterSchema> = {
-                    request: {"in":"body","name":"request","required":true,"ref":"ReqRoleBody"},
+                    roleId: {"in":"path","name":"roleId","required":true,"dataType":"double"},
             };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa

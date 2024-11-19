@@ -600,16 +600,6 @@
 				"type": "object",
 				"additionalProperties": false
 			},
-			"ReqRoleBody": {
-				"properties": {
-					"id": {
-						"type": "number",
-						"format": "double"
-					}
-				},
-				"type": "object",
-				"additionalProperties": false
-			},
 			"ReqPermission": {
 				"properties": {
 					"description": {
@@ -1410,17 +1400,17 @@
 					"Role"
 				],
 				"security": [],
-				"parameters": [],
-				"requestBody": {
-					"required": true,
-					"content": {
-						"application/json": {
-							"schema": {
-								"$ref": "#/components/schemas/ReqRoleBody"
-							}
+				"parameters": [
+					{
+						"in": "path",
+						"name": "roleId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
 						}
 					}
-				}
+				]
 			}
 		},
 		"/role": {

@@ -7,7 +7,7 @@ import { SetPermisisons } from '../models/req/SetPermisisons';
 import { GetSetPermisisons } from '../models/res/GetSetPermissions';
 import { In } from 'typeorm';
 import { Permission, permType } from '../entity/Permission';
-import { ReqRoleBody } from '../models/req/ReqRoleBody';
+// import { ReqRoleBody } from '../models/req/ReqRoleBody';
 import { ResError, ResSuccess } from '../models/res/Responses';
 @Tags('Role')
 @Route('/role')
@@ -222,13 +222,13 @@ export class RoleController extends Controller {
    *  @summary getting permissions from subrole
    */
   @Post('/{roleId}')
-  public async getPermissionsFromRole(@Body() request: ReqRoleBody) {
+  public async getPermissionsFromRole(@Path() roleId: number) {
     try {
-      const { id } = request;
+      // const { id } = request;
       const ogperms = await this.permissionrepository.find({
         where: {
           role: {
-            id: id,
+            id: roleId,
           },
         },
       });

@@ -4,8 +4,8 @@ import { LoginPacketController } from './controller/LoginPacketController';
 import { Server, Socket } from 'socket.io'; // Import the Socket.IO client
 import net from 'net';
 // import { log } from 'console';
-const socketArr: Socket[] = [];
-// const map = new Map<Socket[], string>();
+// const socketArr: net.Socket[] = [];
+const sockMap = new Map<string, net.Socket>();
 function splitStringToArrayStar(inputString: string): string[] {
   return inputString.split('*').map((item) => item.trim());
 }
@@ -28,19 +28,19 @@ const io: Server = new Server(5001, {
   },
 });
 
-// let socketArr: Socket[] = [];
+let socketArr: net.Socket[] = [];
 
 export function initSocketIOFeatures() {
   // Event listener for connection to the Socket.IO server
   io.on('connect', (socket: Socket) => {
     console.log('A client connected to server using: ', socket.handshake.address);
-    socketArr.push(socket);
+    // socketArr.push(socket);
     console.log('Total clients after addition: ', socketArr.length);
   });
 
   io.on('close', (socket: Socket) => {
     console.log('A Client gone: ', socket.handshake.address);
-    // socketArr = socketArr.filter((item) => item !== socket);
+    socketArr = socketArr.filter((socket) => socket !== socket);
     console.log('Total clients after remove: ', socketArr.length);
   });
 
@@ -48,13 +48,16 @@ export function initSocketIOFeatures() {
   const PORT: number = 8083;
   const server = net.createServer((socket: net.Socket) => {
     console.log('Client connected:', socket.remoteAddress, socket.remotePort);
-
+    socketArr.push(socket);
+    for (const sock of socketArr) {
+      console.log('the cleint is, ', sock.remoteAddress);
+    }
+    // console.log(socketArr);
     // Event listener for incoming data
     socket.on('data', (data) => {
       console.log(`Data received: ${data.toString()}`);
       const strData = data.toString();
       const dataArr = splitStringToArrayStar(strData);
-      console.log('star array', dataArr);
       const dataCommaArr = splitStringToArrayComma(strData);
       console.log('the data comma array is ', dataCommaArr);
       console.log('the data array is ', dataArr);
@@ -82,10 +85,22 @@ export function initSocketIOFeatures() {
           };
           // if (commaSep[0] === '$TP') {}
           // ****************
+
           const loginPacketInstance = new LoginPacketController();
           const packetSave = loginPacketInstance.saveLoginPacket(loginPacketBody);
           console.log('this is the saved packet', packetSave);
+          // socketArr.splice(socket);
+          // console.log('the socket array is now 1', socketArr);
+          socketArr = socketArr.filter((socket) => socket !== socket);
+          for (const [index, sock] of socketArr.entries()) {
+            console.log(`the socket ${index} address is`, sock.address());
+          }
 
+          sockMap.set(loginPacketBody.imei, socket);
+          for (const [imei, sock] of sockMap.entries()) {
+            console.log(`the imei number is ${imei} addr is `, sock.remoteAddress, sock.remotePort);
+          }
+          // console.log('the socket map is now', sockMap);
           // Emit the loginPacketBody to the Socket.IO server
           io.emit('lpMessage', loginPacketBody);
         }
