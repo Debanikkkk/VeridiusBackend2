@@ -525,6 +525,25 @@
 				"type": "object",
 				"additionalProperties": false
 			},
+			"Error": {
+				"properties": {
+					"name": {
+						"type": "string"
+					},
+					"message": {
+						"type": "string"
+					},
+					"stack": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"name",
+					"message"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
 			"ReqSTstatus": {
 				"properties": {
 					"status": {
@@ -1041,6 +1060,75 @@
 						}
 					}
 				}
+			}
+		},
+		"/user/getAllUser": {
+			"post": {
+				"operationId": "GetAllUsers",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/ResUser"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"User"
+				],
+				"security": [],
+				"parameters": []
+			}
+		},
+		"/user/getUserFromRole/{roleId}": {
+			"post": {
+				"operationId": "GetUsersFromRole",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"$ref": "#/components/schemas/Error"
+										},
+										{
+											"items": {
+												"$ref": "#/components/schemas/ResUser"
+											},
+											"type": "array"
+										}
+									]
+								}
+							}
+						}
+					}
+				},
+				"description": "get users from role",
+				"summary": "get users from role",
+				"tags": [
+					"User"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "roleId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
 			}
 		},
 		"/serviceTicket": {

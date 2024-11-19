@@ -4,7 +4,8 @@ import { LoginPacketController } from './controller/LoginPacketController';
 import { Server, Socket } from 'socket.io'; // Import the Socket.IO client
 import net from 'net';
 // import { log } from 'console';
-
+const socketArr: Socket[] = [];
+// const map = new Map<Socket[], string>();
 function splitStringToArrayStar(inputString: string): string[] {
   return inputString.split('*').map((item) => item.trim());
 }
@@ -27,7 +28,7 @@ const io: Server = new Server(5001, {
   },
 });
 
-let socketArr: Socket[] = [];
+// let socketArr: Socket[] = [];
 
 export function initSocketIOFeatures() {
   // Event listener for connection to the Socket.IO server
@@ -39,7 +40,7 @@ export function initSocketIOFeatures() {
 
   io.on('close', (socket: Socket) => {
     console.log('A Client gone: ', socket.handshake.address);
-    socketArr = socketArr.filter((item) => item !== socket);
+    // socketArr = socketArr.filter((item) => item !== socket);
     console.log('Total clients after remove: ', socketArr.length);
   });
 
@@ -66,36 +67,28 @@ export function initSocketIOFeatures() {
 
         const commaSep = splitStringToArrayComma(strData);
         console.log('comma separated', commaSep);
-        // if(commaSep[0]==='$LIN'){
+        if (commaSep[0] === '$LIN') {
+          const loginPacketBody: ReqLoginPacket = {
+            checksum: commaSep[10],
+            firmwareVersion: commaSep[5],
+            imei: commaSep[4],
+            latitude: Number(commaSep[9]),
+            longitude: Number(commaSep[7]),
+            packetHeader: commaSep[0],
+            protocolVersion: commaSep[6],
+            vehicleRegNo: commaSep[3],
+            vendorId: commaSep[2],
+            deviceType: commaSep[1],
+          };
+          // if (commaSep[0] === '$TP') {}
+          // ****************
+          const loginPacketInstance = new LoginPacketController();
+          const packetSave = loginPacketInstance.saveLoginPacket(loginPacketBody);
+          console.log('this is the saved packet', packetSave);
 
-        // }
-        const loginPacketBody: ReqLoginPacket = {
-          checksum: commaSep[10],
-          firmwareVersion: commaSep[5],
-          imei: commaSep[4],
-          latitude: Number(commaSep[9]),
-          longitude: Number(commaSep[7]),
-          packetHeader: commaSep[0],
-          protocolVersion: commaSep[6],
-          vehicleRegNo: commaSep[3],
-          vendorId: commaSep[2],
-          deviceType: commaSep[1],
-        };
-
-        // ****************
-        const loginPacketInstance = new LoginPacketController();
-        const packetSave = loginPacketInstance.saveLoginPacket(loginPacketBody);
-        console.log('this is the saved packet', packetSave);
-
-        // Emit the loginPacketBody to the Socket.IO server
-        io.emit('lpMessage', loginPacketBody);
-        // let index: number = 101;
-        // socketArr.forEach((sock) => {
-        //   console.log('ADDRESS OF ONE: ', sock.handshake.address);
-        //   loginPacketBody.protocolVersion = index.toString();
-        //   sock.emit('lpMessage', loginPacketBody);
-        //   index++;
-        // });
+          // Emit the loginPacketBody to the Socket.IO server
+          io.emit('lpMessage', loginPacketBody);
+        }
 
         return { '###REACHED THE END HERE***': 'ubefgoue' };
       } else {

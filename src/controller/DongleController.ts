@@ -68,9 +68,9 @@ export class DongleController extends Controller {
           where: {
             id: dongle.id,
           },
-          relations: {
-            dongle: true,
-          },
+          // relations: {
+          //   dongle: true,
+          // },
         });
         const resDevice: ResDevice = {
           // dongle: device?.dongle!,

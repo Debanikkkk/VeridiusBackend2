@@ -361,6 +361,76 @@ export class UserController extends Controller {
 
     // existingUser.service_ticket=service_ticket
   }
+
+  @Post('/getAllUser')
+  public async getAllUsers(): Promise<ResUser[]> {
+    const users = await this.userrepository.find({
+      relations: {
+        role: true,
+      },
+    });
+
+    if (!users) {
+      return Promise.reject(new Error('USER NOT FOUND'));
+    }
+
+    const resUser: ResUser[] = [];
+
+    for (const user of users) {
+      resUser.push({
+        address: user.address,
+        // device: user.device,
+        email: user.email,
+        id: user.id,
+        name: user.name,
+        password: user.password,
+        phone_number: user.phone_number,
+        role: {
+          description: (await user.role)?.description,
+          id: (await user.role)?.id,
+          name: (await user.role)?.name,
+        },
+      });
+    }
+    return resUser;
+  }
+  /**
+   * get users from role
+   * @summary get users from role
+   */
+  @Post('getUserFromRole/{roleId}')
+  public async getUsersFromRole(@Path() roleId: number) {
+    const users = await this.userrepository.find({
+      where: {
+        role: {
+          id: roleId,
+        },
+      },
+    });
+
+    if (!users) {
+      return Promise.resolve(new Error('USER NOT FOUND'));
+    }
+    const resUser: ResUser[] = [];
+
+    for (const user of users) {
+      resUser.push({
+        address: user.address,
+        // device: user.device,
+        email: user.email,
+        id: user.id,
+        name: user.name,
+        password: user.password,
+        phone_number: user.phone_number,
+        role: {
+          description: (await user.role)?.description,
+          id: (await user.role)?.id,
+          name: (await user.role)?.name,
+        },
+      });
+    }
+    return resUser;
+  }
 }
 
 // export class ItemService {
