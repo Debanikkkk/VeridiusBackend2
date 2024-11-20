@@ -92,54 +92,60 @@ export function initSocketIOFeatures() {
 
       if (checksum === dataArr[1]) {
         console.log('checksum valid');
+        if (dataArr[1] == 'v1') {
+          const commaSep = splitStringToArrayComma(strData);
+          console.log('comma separated', commaSep);
+          if (commaSep[0] === '$LIN') {
+            const loginPacketBody: ReqLoginPacket = {
+              checksum: commaSep[11],
+              firmwareVersion: commaSep[6],
+              imei: commaSep[5],
+              latitude: Number(commaSep[10]),
+              longitude: Number(commaSep[8]),
+              packetHeader: commaSep[0],
+              protocolVersion: commaSep[7],
+              vehicleRegNo: commaSep[4],
+              vendorId: commaSep[3],
+              version: commaSep[1],
+              deviceType: commaSep[2],
+            };
+            // if (commaSep[0] === '$TP') {}
+            // ****************
 
-        const commaSep = splitStringToArrayComma(strData);
-        console.log('comma separated', commaSep);
-        if (commaSep[0] === '$LIN') {
-          const loginPacketBody: ReqLoginPacket = {
-            checksum: commaSep[10],
-            firmwareVersion: commaSep[5],
-            imei: commaSep[4],
-            latitude: Number(commaSep[9]),
-            longitude: Number(commaSep[7]),
-            packetHeader: commaSep[0],
-            protocolVersion: commaSep[6],
-            vehicleRegNo: commaSep[3],
-            vendorId: commaSep[2],
-            deviceType: commaSep[1],
-          };
-          // if (commaSep[0] === '$TP') {}
-          // ****************
+            const loginPacketInstance = new LoginPacketController();
+            const packetSave = loginPacketInstance.saveLoginPacket(loginPacketBody);
+            console.log('this is the saved packet', packetSave);
+            // socketArr.splice(socket);
+            // console.log('the socket array is now 1', socketArr);
+            for (const [index, sock] of socketArr.entries()) {
+              console.log(`the socket BEFORE ${index} address is`, sock.address());
+            }
+            const socketToRemove = socket;
+            // console.log('this is the socket', socket);
+            socketArr = socketArr.filter((s) => s !== socketToRemove);
 
-          const loginPacketInstance = new LoginPacketController();
-          const packetSave = loginPacketInstance.saveLoginPacket(loginPacketBody);
-          console.log('this is the saved packet', packetSave);
-          // socketArr.splice(socket);
-          // console.log('the socket array is now 1', socketArr);
-          for (const [index, sock] of socketArr.entries()) {
-            console.log(`the socket BEFORE ${index} address is`, sock.address());
+            // socketArr = socketArr.filter((socket) => socket !== socket);
+            for (const [index, sock] of socketArr.entries()) {
+              console.log(`the socket ${index} address is`, sock.address());
+            }
+
+            sockMap.set(loginPacketBody.imei, container);
+            for (const [imei, sockContainer] of sockMap.entries()) {
+              const sock = sockContainer.socket;
+              console.log(`the imei number is ${imei} addr is `, sock.remoteAddress, sock.remotePort);
+            }
+            // console.log('the socket map is now', sockMap);
+            // Emit the loginPacketBody to the Socket.IO server
+            io.emit('lpMessage', loginPacketBody);
+          } else if (commaSep[0] === '$CONFIG') {
+            container.dataEventHandler.send(data.toString());
+          } else if (commaSep[0] === '$HMP') {
+            // container.dataEventHandler.send(data.toString());
+            if (sockMap.has(commaSep[4])) {
+              //checkking for imei
+            }
           }
-          const socketToRemove = socket;
-          // console.log('this is the socket', socket);
-          socketArr = socketArr.filter((s) => s !== socketToRemove);
-
-          // socketArr = socketArr.filter((socket) => socket !== socket);
-          for (const [index, sock] of socketArr.entries()) {
-            console.log(`the socket ${index} address is`, sock.address());
-          }
-
-          sockMap.set(loginPacketBody.imei, container);
-          for (const [imei, sockContainer] of sockMap.entries()) {
-            const sock = sockContainer.socket;
-            console.log(`the imei number is ${imei} addr is `, sock.remoteAddress, sock.remotePort);
-          }
-          // console.log('the socket map is now', sockMap);
-          // Emit the loginPacketBody to the Socket.IO server
-          io.emit('lpMessage', loginPacketBody);
-        } else if (commaSep[0] === '$CONFIG') {
-          container.dataEventHandler.send(data.toString());
         }
-
         return { '###REACHED THE END HERE***': 'ubefgoue' };
       } else {
         console.log('checksum invalid');

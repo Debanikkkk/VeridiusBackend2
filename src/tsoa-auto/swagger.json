@@ -630,6 +630,9 @@
 					"vehicleRegNo": {
 						"type": "string"
 					},
+					"version": {
+						"type": "string"
+					},
 					"imei": {
 						"type": "string"
 					},
@@ -686,6 +689,9 @@
 						"type": "string"
 					},
 					"vendorId": {
+						"type": "string"
+					},
+					"version": {
 						"type": "string"
 					},
 					"deviceType": {

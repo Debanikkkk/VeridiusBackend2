@@ -9,7 +9,7 @@ export class LoginPacketController extends Controller {
 
   @Post()
   public async saveLoginPacket(@Body() req: ReqLoginPacket) {
-    const { checksum, deviceType, firmwareVersion, imei, latitude, longitude, packetHeader, protocolVersion, vehicleRegNo, vendorId } = req;
+    const { checksum, deviceType, version, firmwareVersion, imei, latitude, longitude, packetHeader, protocolVersion, vehicleRegNo, vendorId } = req;
 
     const loginpack: LoginPacket = {
       checksum: checksum,
@@ -19,6 +19,7 @@ export class LoginPacketController extends Controller {
       latitude: latitude,
       longitude: longitude,
       packetHeader: packetHeader,
+      version: version,
       protocolVersion: protocolVersion,
       vehicleRegNo: vehicleRegNo,
       vendorId: vendorId,

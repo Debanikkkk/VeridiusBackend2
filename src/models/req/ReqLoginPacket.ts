@@ -8,5 +8,6 @@ export interface ReqLoginPacket {
   protocolVersion: string;
   vehicleRegNo: string;
   vendorId: string;
+  version?: string;
   deviceType: string;
 }
