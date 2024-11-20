@@ -7,6 +7,7 @@ import net from 'net';
 import { DataEvent } from './utils/dataEvent';
 import { ReqHMP } from './models/req/ReqHMP';
 import { HMPController } from './controller/HMPController';
+import { envs } from 'utils/envVars';
 // import { log } from 'console';
 // const socketArr: net.Socket[] = [];
 
@@ -27,8 +28,7 @@ export class SocketContainer {
 export const sockMap = new Map<string, SocketContainer>();
 const app = express();
 const HOST: string = '0.0.0.0';
-// const PORT: string = '5000';
-const TCP_PORT: number = 8083;
+const TCP_PORT: number = envs.TCP_PORT;
 app.use(express.json());
 
 // function sendIMEIandCMD(imei: string, cmd: string) {}
@@ -50,7 +50,7 @@ export function stringToHexCRC32(data: string): string {
   return uchecksum.toString(16).toUpperCase();
 }
 
-const io: Server = new Server(5001, {
+const io: Server = new Server(envs.SOCKETIO_PORT, {
   cors: {
     origin: '*', // Allow all origins for simplicity
   },
