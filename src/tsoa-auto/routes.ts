@@ -13,6 +13,8 @@ import { PermissionController } from './../controller/PermissionController';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { LoginPacketController } from './../controller/LoginPacketController';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+import { IMEICMDController } from './../controller/IMEICMDController';
+// WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { FreeDongleUserDeviceController } from './../controller/FreeDongleUserDeviceController';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { DongleController } from './../controller/DongleController';
@@ -365,6 +367,15 @@ const models: TsoaRoute.Models = {
             "vehicleRegNo": {"dataType":"string","required":true},
             "vendorId": {"dataType":"string","required":true},
             "deviceType": {"dataType":"string","required":true},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "SendCommandRequest": {
+        "dataType": "refObject",
+        "properties": {
+            "imei": {"dataType":"string","required":true},
+            "cmd": {"dataType":"string","required":true},
         },
         "additionalProperties": false,
     },
@@ -1146,6 +1157,36 @@ export function RegisterRoutes(app: Router) {
 
               await templateService.apiHandler({
                 methodName: 'saveLoginPacket',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.post('/cmd/send',
+            ...(fetchMiddlewares<RequestHandler>(IMEICMDController)),
+            ...(fetchMiddlewares<RequestHandler>(IMEICMDController.prototype.sendCommand)),
+
+            async function IMEICMDController_sendCommand(request: ExRequest, response: ExResponse, next: any) {
+            const args: Record<string, TsoaRoute.ParameterSchema> = {
+                    body: {"in":"body","name":"body","required":true,"ref":"SendCommandRequest"},
+            };
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+
+                const controller = new IMEICMDController();
+
+              await templateService.apiHandler({
+                methodName: 'sendCommand',
                 controller,
                 response,
                 next,

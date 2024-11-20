@@ -2,24 +2,50 @@ import * as crc32 from 'crc-32';
 import { ReqLoginPacket } from './models/req/ReqLoginPacket';
 import { LoginPacketController } from './controller/LoginPacketController';
 import { Server, Socket } from 'socket.io'; // Import the Socket.IO client
+import express from 'express';
 import net from 'net';
+import { DataEvent } from './utils/dataEvent';
 // import { log } from 'console';
 // const socketArr: net.Socket[] = [];
-const sockMap = new Map<string, net.Socket>();
-function splitStringToArrayStar(inputString: string): string[] {
+
+export class SocketContainer {
+  socket: net.Socket;
+  dataEventHandler: DataEvent<string>;
+
+  constructor(socket: net.Socket) {
+    this.socket = socket;
+    this.dataEventHandler = new DataEvent<string>();
+  }
+
+  sendDataToDevice(data: string): boolean {
+    return this.socket.write(data);
+  }
+}
+
+export const sockMap = new Map<string, SocketContainer>();
+const app = express();
+const HOST: string = '0.0.0.0';
+// const PORT: string = '5000';
+const TCP_PORT: number = 8083;
+app.use(express.json());
+
+// function sendIMEIandCMD(imei: string, cmd: string) {}
+export function splitStringToArrayStar(inputString: string): string[] {
   return inputString.split('*').map((item) => item.trim());
 }
 
-function splitStringToArrayComma(inputString: string): string[] {
+export function splitStringToArrayComma(inputString: string): string[] {
   return inputString.split(',').map((item) => item.trim());
 }
 
-function stringToHexCRC32(data: string): string {
+export function stringToHexCRC32(data: string): string {
   const dataWithout = data.split('*')[0];
   const dataWithoutChecksum = dataWithout + '*';
   console.log('datawihoutcehcksum', dataWithoutChecksum);
   const checksum = crc32.str(dataWithoutChecksum);
-  return checksum.toString(16).toUpperCase();
+  // Ensure the checksum is always positive
+  const uchecksum = checksum >>> 0; // Convert to unsigned 32-bit integer
+  return uchecksum.toString(16).toUpperCase();
 }
 
 const io: Server = new Server(5001, {
@@ -44,11 +70,10 @@ export function initSocketIOFeatures() {
     console.log('Total clients after remove: ', socketArr.length);
   });
 
-  const HOST: string = '0.0.0.0';
-  const PORT: number = 8083;
   const server = net.createServer((socket: net.Socket) => {
     console.log('Client connected:', socket.remoteAddress, socket.remotePort);
     socketArr.push(socket);
+    const container = new SocketContainer(socket);
     // for (const sock of socketArr) {
     //   console.log('the cleint is, ', sock.remoteAddress);
     // }
@@ -103,13 +128,16 @@ export function initSocketIOFeatures() {
             console.log(`the socket ${index} address is`, sock.address());
           }
 
-          sockMap.set(loginPacketBody.imei, socket);
-          for (const [imei, sock] of sockMap.entries()) {
+          sockMap.set(loginPacketBody.imei, container);
+          for (const [imei, sockContainer] of sockMap.entries()) {
+            const sock = sockContainer.socket;
             console.log(`the imei number is ${imei} addr is `, sock.remoteAddress, sock.remotePort);
           }
           // console.log('the socket map is now', sockMap);
           // Emit the loginPacketBody to the Socket.IO server
           io.emit('lpMessage', loginPacketBody);
+        } else if (commaSep[0] === '$CONFIG') {
+          container.dataEventHandler.send(data.toString());
         }
 
         return { '###REACHED THE END HERE***': 'ubefgoue' };
@@ -131,8 +159,8 @@ export function initSocketIOFeatures() {
   });
 
   // Start the server
-  server.listen(PORT, HOST, () => {
-    console.log(`Server listening on ${HOST}:${PORT}`);
+  server.listen(TCP_PORT, HOST, () => {
+    console.log(`Server listening on ${HOST}:${TCP_PORT}`);
   });
 
   // Event listener for server errors
