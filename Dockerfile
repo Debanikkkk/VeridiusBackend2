@@ -1,23 +1,38 @@
-# Use a Node.js base image
-FROM node:16
+FROM node:21-alpine as builder
 
-# Set working directory inside the container
 WORKDIR /app
 
-# Copy the package.json and package-lock.json files to the container
-COPY package*.json ./
+COPY package.json package.json
+COPY package-lock.json package-lock.json
 
-# Install dependencies
-RUN npm install
+RUN npm ci
 
-# Copy the rest of your project files to the container
 COPY . .
 
-# Build the TSOA Swagger project (if applicable)
-RUN npm run build
+RUN npm run build 
 
-# Expose the port that your API server will run on
-EXPOSE 3010
 
-# Start the application
-CMD ["npm", "start"]
+FROM node:21-alpine
+
+ENV NODE_ENV production
+
+WORKDIR /app
+RUN chown node:node /app 
+
+COPY --chown=node:node package.json package.json
+COPY --chown=node:node package-lock.json package-lock.json
+
+RUN ls -al
+RUN whoami
+
+RUN npm ci --production
+
+COPY --chown=node:node --from=builder /app/dist ./dist
+
+RUN ls -al
+RUN ls -al /app/dist/
+
+USER node
+
+CMD ["node", "dist/index.js"]
+
