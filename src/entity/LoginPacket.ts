@@ -17,6 +17,9 @@ export class LoginPacket {
   @Column({ type: 'varchar', length: 50, nullable: true })
   vehicleRegNo?: string;
 
+  @Column({ type: 'varchar', length: 50 })
+  version?: string;
+
   @Column({ type: 'varchar', length: 15, nullable: true })
   imei?: string;
 

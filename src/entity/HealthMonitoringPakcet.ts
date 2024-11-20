@@ -15,6 +15,9 @@ export class HealthMonitoringPacket {
   vendorId?: string;
 
   @Column({ type: 'varchar', length: 50 })
+  version?: string;
+
+  @Column({ type: 'varchar', length: 50 })
   firmwareVersion?: string;
 
   @Column({ type: 'varchar', length: 15 })

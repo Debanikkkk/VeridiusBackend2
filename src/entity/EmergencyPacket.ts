@@ -12,6 +12,9 @@ export class EmergencyPacket {
   packetHeader?: string;
 
   @Column({ type: 'varchar', length: 50 })
+  version?: string;
+
+  @Column({ type: 'varchar', length: 50 })
   vendorId?: string;
 
   @Column({ type: 'varchar', length: 10 })

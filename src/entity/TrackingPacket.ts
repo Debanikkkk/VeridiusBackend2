@@ -9,6 +9,9 @@ export class TrackingPacket {
   startCharacter?: string;
 
   @Column({ type: 'varchar', length: 50 })
+  version?: string;
+
+  @Column({ type: 'varchar', length: 50 })
   packetHeader?: string;
 
   @Column({ type: 'varchar', length: 50 })

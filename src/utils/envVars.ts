@@ -16,7 +16,7 @@ const pathExt: string = process.env.NODE_ENV ? '.' + process.env.NODE_ENV : '';
 dotenv.config({ path: `.env${pathExt}` });
 
 export const envs: EnvVars = {
-  PORT: parseInt(process.env.PORT || '3010'),
+  PORT: parseInt(process.env.PORT || '3000'),
   DB_HOST: process.env.DB_HOST || 'localhost',
   DB_PORT: parseInt(process.env.DB_PORT || '5432'),
   DB_USERNAME: process.env.DB_USERNAME || 'postgres',

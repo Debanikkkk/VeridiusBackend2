@@ -5,7 +5,7 @@ services:
     depends_on:
       - db
     ports:
-      - '3010:3010'
+      - '3010:3000'
     environment:
       DB_HOST: db
       DB_PORT: 5432
@@ -19,5 +19,5 @@ services:
       POSTGRES_DB: telematics_backend
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: root
-    ports:
-      - '5432:5432'
+    volumes:
+      - ./postgres:/var/lib/postgresql/data
