@@ -1,0 +1,60 @@
+import { MigrationInterface, QueryRunner } from "typeorm";
+
+export class BasicMig1732096831314 implements MigrationInterface {
+    name = 'BasicMig1732096831314'
+
+    public async up(queryRunner: QueryRunner): Promise<void> {
+        await queryRunner.query(`CREATE TABLE "dongle" ("id" SERIAL NOT NULL, "name" character varying(64) NOT NULL, CONSTRAINT "PK_3a6bac875b9c23209433f8381e1" PRIMARY KEY ("id"))`);
+        await queryRunner.query(`CREATE TABLE "device" ("id" SERIAL NOT NULL, "name" character varying(64) NOT NULL, "mac_address" character varying(17), "imei" character varying(15), "dongle_id" integer, CONSTRAINT "REL_4e45895a2aec400786bb56ed0a" UNIQUE ("dongle_id"), CONSTRAINT "PK_2dc10972aa4e27c01378dad2c72" PRIMARY KEY ("id"))`);
+        await queryRunner.query(`CREATE TYPE "public"."permission_type_enum" AS ENUM('user', 'product')`);
+        await queryRunner.query(`CREATE TABLE "permission" ("id" SERIAL NOT NULL, "name" character varying(64) NOT NULL, "description" character varying(64), "type" "public"."permission_type_enum", CONSTRAINT "PK_3b8b97af9d9d8807e41e6f48362" PRIMARY KEY ("id"))`);
+        await queryRunner.query(`CREATE TABLE "role" ("id" SERIAL NOT NULL, "name" character varying(64) NOT NULL, "description" character varying(64), CONSTRAINT "PK_b36bcfe02fc8de3c57a8b2391c2" PRIMARY KEY ("id"))`);
+        await queryRunner.query(`CREATE TYPE "public"."service_ticket_status_enum" AS ENUM('open', 'closed', 'new')`);
+        await queryRunner.query(`CREATE TABLE "service_ticket" ("id" SERIAL NOT NULL, "date" TIMESTAMP NOT NULL DEFAULT now(), "createdAt" TIMESTAMP NOT NULL DEFAULT now(), "updatedAt" TIMESTAMP NOT NULL DEFAULT now(), "status" "public"."service_ticket_status_enum" NOT NULL DEFAULT 'new', "service_ticket_number" character varying(17) NOT NULL, "technician_id" integer NOT NULL, CONSTRAINT "REL_158977193099c0625411d5d208" UNIQUE ("technician_id"), CONSTRAINT "PK_ce829d561a217cafc769fcd8de6" PRIMARY KEY ("id"))`);
+        await queryRunner.query(`CREATE TABLE "user" ("id" SERIAL NOT NULL, "name" character varying(64) NOT NULL, "password" character varying(16) NOT NULL, "address" character varying(64) NOT NULL, "phone_number" character varying(64) NOT NULL, "email" character varying(64) NOT NULL, "device_id" integer, "role_id" integer, CONSTRAINT "REL_0232591a0b48e1eb92f3ec5d0d" UNIQUE ("device_id"), CONSTRAINT "PK_cace4a159ff9f2512dd42373760" PRIMARY KEY ("id"))`);
+        await queryRunner.query(`CREATE TABLE "tracking_packet" ("id" SERIAL NOT NULL, "startCharacter" character varying(1) NOT NULL, "version" character varying(50) NOT NULL, "packetHeader" character varying(50) NOT NULL, "vendorId" character varying(50) NOT NULL, "firmwareVersion" character varying(50) NOT NULL, "packetType" character varying(2) NOT NULL, "messageId" integer NOT NULL, "packetStatus" character varying(1) NOT NULL, "imei" character varying(15) NOT NULL, "vehicleRegNo" character varying(20) NOT NULL, "gpsFix" integer NOT NULL, "date" character varying(8) NOT NULL, "time" character varying(6) NOT NULL, "latitude" double precision NOT NULL, "latitudeDir" character varying(1) NOT NULL, "longitude" double precision NOT NULL, "longitudeDir" character varying(1) NOT NULL, "speed" double precision NOT NULL, "heading" double precision NOT NULL, "noOfSatellites" integer NOT NULL, "altitude" integer NOT NULL, "pdop" double precision NOT NULL, "hdop" double precision NOT NULL, "networkOperatorName" character varying(20) NOT NULL, "ignitionStatus" integer NOT NULL, "mainPowerStatus" integer NOT NULL, "mainInputVoltage" double precision NOT NULL, "internalBatteryVoltage" double precision NOT NULL, "emergencyStatus" integer NOT NULL, "tamperAlert" character varying(1) NOT NULL, "gsmSignalStrength" integer NOT NULL, "mccServing" integer NOT NULL, "mncServing" integer NOT NULL, "lacServing" character varying(4) NOT NULL, "cellIdServing" character varying(4) NOT NULL, "gsmSignalStrengthNmr1stNeighbour" integer NOT NULL, "lacNmr1stNeighbour" character varying(4) NOT NULL, "cellIdNmr1stNeighbour" character varying(4) NOT NULL, "gsmSignalStrengthNmr2ndNeighbour" integer NOT NULL, "lacNmr2ndNeighbour" character varying(4) NOT NULL, "cellIdNmr2ndNeighbour" character varying(4) NOT NULL, "gsmSignalStrengthNmr3rdNeighbour" integer NOT NULL, "lacNmr3rdNeighbour" character varying(4) NOT NULL, "cellIdNmr3rdNeighbour" character varying(4) NOT NULL, "gsmSignalStrengthNmr4thNeighbour" integer NOT NULL, "lacNmr4thNeighbour" character varying(4) NOT NULL, "cellIdNmr4thNeighbour" character varying(4) NOT NULL, "digitalInputStatus" character varying(4) NOT NULL, "digitalOutputStatus" character varying(2) NOT NULL, "frameNumber" integer NOT NULL, "analogInput1" double precision NOT NULL, "analogInput2" double precision NOT NULL, "deltaDistance" integer NOT NULL, "otaResponse" character varying(50) NOT NULL, "endCharacter" character varying(1) NOT NULL, "checksum" character varying(20) NOT NULL, CONSTRAINT "PK_c8b8858cc7b31ef080972a683c5" PRIMARY KEY ("id"))`);
+        await queryRunner.query(`CREATE TABLE "health_monitoring_packet" ("id" SERIAL NOT NULL, "startCharacter" character varying(1) NOT NULL, "header" character varying(50) NOT NULL, "vendorId" character varying(50) NOT NULL, "version" character varying(50) NOT NULL, "firmwareVersion" character varying(50) NOT NULL, "imei" character varying(15) NOT NULL, "batteryPercentage" integer NOT NULL, "lowBatteryThresholdPercentage" integer NOT NULL, "memoryPercentage1" double precision NOT NULL, "memoryPercentage2" double precision NOT NULL, "dataUpdateRateWhenIgnitionOn" integer NOT NULL, "dataUpdateRateWhenIgnitionOff" integer NOT NULL, "digitalInputStatus" character varying(4) NOT NULL, "analogInput1Status" double precision, "analogInput2Status" double precision, "endCharacter" character varying(1) NOT NULL, "checksum" character varying(10) NOT NULL, CONSTRAINT "PK_ef0dbfcad89122ab18a692b2ef4" PRIMARY KEY ("id"))`);
+        await queryRunner.query(`CREATE TABLE "login_packet" ("id" SERIAL NOT NULL, "packetHeader" character varying(50), "vendorId" character varying(50), "vehicleRegNo" character varying(50), "version" character varying(50) NOT NULL, "imei" character varying(15), "firmwareVersion" character varying(50), "protocolVersion" character varying(50), "device_type" character varying(50), "latitude" numeric(9,6), "longitude" numeric(9,6), "checksum" character varying(50), CONSTRAINT "PK_2d75db64eabbc70cfaba3fc5501" PRIMARY KEY ("id"))`);
+        await queryRunner.query(`CREATE TABLE "device_history" ("id" SERIAL NOT NULL, "device_id" integer NOT NULL, "name" character varying(64) NOT NULL, "mac_address" character varying(17) NOT NULL, "updatedOn" TIMESTAMP NOT NULL DEFAULT now(), "dongle_id" integer, "user_id" integer, CONSTRAINT "PK_e7b12f40c596560b264d9cd68f5" PRIMARY KEY ("id"))`);
+        await queryRunner.query(`CREATE TABLE "emergency_packet" ("id" SERIAL NOT NULL, "startCharacter" character varying(1) NOT NULL, "packetHeader" character varying(50) NOT NULL, "version" character varying(50) NOT NULL, "vendorId" character varying(50) NOT NULL, "messageType" character varying(10) NOT NULL, "deviceId" character varying(15) NOT NULL, "packetType" character varying(2) NOT NULL, "date" character varying(14) NOT NULL, "gps" character varying(1) NOT NULL, "latitude" double precision NOT NULL, "latitudeDirection" character varying(1) NOT NULL, "longitude" double precision NOT NULL, "longitudeDirection" character varying(1) NOT NULL, "altitude" integer NOT NULL, "speed" integer NOT NULL, "distance" integer NOT NULL, "provider" character varying(1) NOT NULL, "vehicleRegNo" character varying(15) NOT NULL, "replyNumber" character varying(15) NOT NULL, "checksum" character varying(1) NOT NULL, "crc" character varying(10) NOT NULL, CONSTRAINT "PK_995db2fff66d629f22f80dd7927" PRIMARY KEY ("id"))`);
+        await queryRunner.query(`CREATE TABLE "dtc" ("id" SERIAL NOT NULL, "code" character varying NOT NULL, "description" character varying NOT NULL, "severity" character varying, CONSTRAINT "UQ_b02ca9fc06592e35344cfa16009" UNIQUE ("code"), CONSTRAINT "PK_3dc68f9057c76aaedb27a9fbb64" PRIMARY KEY ("id"))`);
+        await queryRunner.query(`CREATE TABLE "dongle_history" ("id" SERIAL NOT NULL, "dongle_id" integer NOT NULL, "name" character varying(64) NOT NULL, "device_id" integer NOT NULL, "user_id" integer NOT NULL, CONSTRAINT "PK_9930b2ff4eafb6a084fed7609c9" PRIMARY KEY ("id"))`);
+        await queryRunner.query(`CREATE TABLE "role_permission" ("permission_id" integer NOT NULL, "role_id" integer NOT NULL, CONSTRAINT "PK_19a94c31d4960ded0dcd0397759" PRIMARY KEY ("permission_id", "role_id"))`);
+        await queryRunner.query(`CREATE INDEX "IDX_e3a3ba47b7ca00fd23be4ebd6c" ON "role_permission" ("permission_id") `);
+        await queryRunner.query(`CREATE INDEX "IDX_3d0a7155eafd75ddba5a701336" ON "role_permission" ("role_id") `);
+        await queryRunner.query(`ALTER TABLE "device" ADD CONSTRAINT "FK_4e45895a2aec400786bb56ed0a9" FOREIGN KEY ("dongle_id") REFERENCES "dongle"("id") ON DELETE CASCADE ON UPDATE CASCADE`);
+        await queryRunner.query(`ALTER TABLE "service_ticket" ADD CONSTRAINT "FK_158977193099c0625411d5d2082" FOREIGN KEY ("technician_id") REFERENCES "user"("id") ON DELETE CASCADE ON UPDATE CASCADE`);
+        await queryRunner.query(`ALTER TABLE "user" ADD CONSTRAINT "FK_0232591a0b48e1eb92f3ec5d0d1" FOREIGN KEY ("device_id") REFERENCES "device"("id") ON DELETE CASCADE ON UPDATE CASCADE`);
+        await queryRunner.query(`ALTER TABLE "user" ADD CONSTRAINT "FK_fb2e442d14add3cefbdf33c4561" FOREIGN KEY ("role_id") REFERENCES "role"("id") ON DELETE CASCADE ON UPDATE CASCADE`);
+        await queryRunner.query(`ALTER TABLE "role_permission" ADD CONSTRAINT "FK_e3a3ba47b7ca00fd23be4ebd6cf" FOREIGN KEY ("permission_id") REFERENCES "permission"("id") ON DELETE CASCADE ON UPDATE CASCADE`);
+        await queryRunner.query(`ALTER TABLE "role_permission" ADD CONSTRAINT "FK_3d0a7155eafd75ddba5a7013368" FOREIGN KEY ("role_id") REFERENCES "role"("id") ON DELETE CASCADE ON UPDATE CASCADE`);
+    }
+
+    public async down(queryRunner: QueryRunner): Promise<void> {
+        await queryRunner.query(`ALTER TABLE "role_permission" DROP CONSTRAINT "FK_3d0a7155eafd75ddba5a7013368"`);
+        await queryRunner.query(`ALTER TABLE "role_permission" DROP CONSTRAINT "FK_e3a3ba47b7ca00fd23be4ebd6cf"`);
+        await queryRunner.query(`ALTER TABLE "user" DROP CONSTRAINT "FK_fb2e442d14add3cefbdf33c4561"`);
+        await queryRunner.query(`ALTER TABLE "user" DROP CONSTRAINT "FK_0232591a0b48e1eb92f3ec5d0d1"`);
+        await queryRunner.query(`ALTER TABLE "service_ticket" DROP CONSTRAINT "FK_158977193099c0625411d5d2082"`);
+        await queryRunner.query(`ALTER TABLE "device" DROP CONSTRAINT "FK_4e45895a2aec400786bb56ed0a9"`);
+        await queryRunner.query(`DROP INDEX "public"."IDX_3d0a7155eafd75ddba5a701336"`);
+        await queryRunner.query(`DROP INDEX "public"."IDX_e3a3ba47b7ca00fd23be4ebd6c"`);
+        await queryRunner.query(`DROP TABLE "role_permission"`);
+        await queryRunner.query(`DROP TABLE "dongle_history"`);
+        await queryRunner.query(`DROP TABLE "dtc"`);
+        await queryRunner.query(`DROP TABLE "emergency_packet"`);
+        await queryRunner.query(`DROP TABLE "device_history"`);
+        await queryRunner.query(`DROP TABLE "login_packet"`);
+        await queryRunner.query(`DROP TABLE "health_monitoring_packet"`);
+        await queryRunner.query(`DROP TABLE "tracking_packet"`);
+        await queryRunner.query(`DROP TABLE "user"`);
+        await queryRunner.query(`DROP TABLE "service_ticket"`);
+        await queryRunner.query(`DROP TYPE "public"."service_ticket_status_enum"`);
+        await queryRunner.query(`DROP TABLE "role"`);
+        await queryRunner.query(`DROP TABLE "permission"`);
+        await queryRunner.query(`DROP TYPE "public"."permission_type_enum"`);
+        await queryRunner.query(`DROP TABLE "device"`);
+        await queryRunner.query(`DROP TABLE "dongle"`);
+    }
+
+}
