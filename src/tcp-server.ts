@@ -94,8 +94,7 @@ export function initSocketIOFeatures() {
 
       if (checksum === dataArr[1]) {
         console.log('checksum valid');
-        if (dataCommaArr[1] == 'v1') {
-          console.log('this is v1');
+        if (dataArr[1] == 'v1') {
           const commaSep = splitStringToArrayComma(strData);
           console.log('comma separated', commaSep);
           if (commaSep[0] === '$LIN') {
@@ -146,32 +145,6 @@ export function initSocketIOFeatures() {
             // container.dataEventHandler.send(data.toString());
             if (sockMap.has(commaSep[4])) {
               //checkking for imei
-              const hmpBody: ReqHMP = {
-                analogInput1Status: Number(commaSep[12]),
-                analogInput2Status: Number(commaSep[13]),
-                batteryPercentage: Number(commaSep[5]),
-                checksum: commaSep[15],
-                dataUpdateRateWhenIgnitionOff: Number(commaSep[9]),
-                dataUpdateRateWhenIgnitionOn: Number(commaSep[10]),
-                digitalInputStatus: commaSep[11],
-                endCharacter: commaSep[14],
-                firmwareVersion: commaSep[3],
-                header: commaSep[0],
-                imei: commaSep[4],
-                lowBatteryThresholdPercentage: Number(commaSep[6]),
-                memoryPercentage1: Number(commaSep[7]),
-                memoryPercentage2: Number(commaSep[8]),
-                // startCharacter: commaSep[],
-                vendorId: commaSep[2],
-                version: commaSep[1],
-              };
-
-              const healthControllerInstance = new HMPController();
-              healthControllerInstance.saveHmp(hmpBody);
-            } else {
-              console.log('this socket is not logged in ');
-              socket.write('YOU NEED TO LOGIN TO BE ABLE TO SEND A PACKET');
-              return { message: 'this socket is not logged in' };
             }
           }
         }
