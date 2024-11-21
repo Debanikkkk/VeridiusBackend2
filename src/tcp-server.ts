@@ -8,6 +8,7 @@ import { DataEvent } from './utils/dataEvent';
 import { ReqHMP } from './models/req/ReqHMP';
 import { HMPController } from './controller/HMPController';
 import { envs } from 'utils/envVars';
+import http from 'http';
 // import { log } from 'console';
 // const socketArr: net.Socket[] = [];
 
@@ -50,15 +51,15 @@ export function stringToHexCRC32(data: string): string {
   return uchecksum.toString(16).toUpperCase();
 }
 
-const io: Server = new Server(envs.SOCKETIO_PORT, {
-  cors: {
-    origin: '*', // Allow all origins for simplicity
-  },
-});
-
 let socketArr: net.Socket[] = [];
 
-export function initSocketIOFeatures() {
+export function initSocketIOFeatures(httpServer: http.Server) {
+  const io: Server = new Server(httpServer, {
+    cors: {
+      origin: '*', // Allow all origins for simplicity
+    },
+  });
+
   // Event listener for connection to the Socket.IO server
   io.on('connect', (socket: Socket) => {
     console.log('A client connected to server using: ', socket.handshake.address);
