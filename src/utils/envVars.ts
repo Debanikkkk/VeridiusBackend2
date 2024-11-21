@@ -3,7 +3,6 @@ import * as dotenv from 'dotenv';
 // import * as doten
 interface EnvVars {
   PORT: number;
-  SOCKETIO_PORT: number;
   TCP_PORT: number;
   DB_HOST: string;
   DB_PORT: number;
@@ -19,7 +18,6 @@ dotenv.config({ path: `.env${pathExt}` });
 
 export const envs: EnvVars = {
   PORT: parseInt(process.env.PORT || '3000'),
-  SOCKETIO_PORT: parseInt(process.env.SOCKETIO_PORT || '3001'),
   TCP_PORT: parseInt(process.env.TCP_PORT || '65432'),
   DB_HOST: process.env.DB_HOST || 'localhost',
   DB_PORT: parseInt(process.env.DB_PORT || '5432'),

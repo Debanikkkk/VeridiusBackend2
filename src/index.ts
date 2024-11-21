@@ -13,17 +13,20 @@ import * as fs from 'fs';
 import { updateStatusCron } from './cronjob';
 // import { tcpServer } from '../tcp-server';
 import { initSocketIOFeatures } from './tcp-server';
+import http from 'http';
+
 // Initialize database and start server
 AppDataSource.initialize()
   .then(async () => {
     AppDataSource.runMigrations({ transaction: 'each' });
 
     const app = express();
+    const server: http.Server = http.createServer(app);
 
     // CORS options
     const allowedOrigins = [...envs.CORS_ALLOWED_ORIGINS, 'http://localhost:3000', 'http://localhost:3001', 'https://chronicpestcontrolagencies.org'];
     const options: cors.CorsOptions = { origin: allowedOrigins };
-    initSocketIOFeatures();
+    initSocketIOFeatures(server);
     // Create uploads directory if it doesn’t exist
     const dir = './public/uploads/';
     if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
@@ -56,7 +59,7 @@ AppDataSource.initialize()
     // Start cron job
     updateStatusCron.start();
     // Start Express server
-    app.listen(envs.PORT, () => {
+    server.listen(envs.PORT, () => {
       console.log(`Express server has started on port ${envs.PORT}`);
       console.log(`Open http://localhost:${envs.PORT}/docs to see Swagger docs`);
     });
