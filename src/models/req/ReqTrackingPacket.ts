@@ -1,63 +1,58 @@
-// import { TrackingPacket } from '../../entity/TrackingPacket';
-
-// export interface ReqTrackingPacket {}
-
-// const p: TrackingPacket = {
-//   altitude,
-//   analogInput1,
-//   analogInput2,
-//   cellIdNmr1stNeighbour,
-//   cellIdNmr2ndNeighbour,
-//   cellIdNmr3rdNeighbour,
-//   cellIdNmr4thNeighbour,
-//   cellIdServing,
-//   checksum,
-//   date,
-//   deltaDistance,
-//   digitalInputStatus,
-//   digitalOutputStatus,
-//   emergencyStatus,
-//   endCharacter,
-//   firmwareVersion,
-//   frameNumber,
-//   gpsFix,
-//   gsmSignalStrength,
-//   gsmSignalStrengthNmr1stNeighbour,
-//   gsmSignalStrengthNmr2ndNeighbour,
-//   gsmSignalStrengthNmr3rdNeighbour,
-//   gsmSignalStrengthNmr4thNeighbour,
-//   hdop,
-//   heading,
-//   id,
-//   ignitionStatus,
-//   imei,
-//   internalBatteryVoltage,
-//   lacNmr1stNeighbour,
-//   lacNmr2ndNeighbour,
-//   lacNmr3rdNeighbour,
-//   lacNmr4thNeighbour,
-//   lacServing,
-//   latitude,
-//   latitudeDir,
-//   longitude,
-//   longitudeDir,
-//   mainInputVoltage,
-//   mainPowerStatus,
-//   mccServing,
-//   messageId,
-//   mncServing,
-//   networkOperatorName,
-//   noOfSatellites,
-//   otaResponse,
-//   packetHeader,
-//   packetStatus,
-//   packetType,
-//   pdop,
-//   speed,
-//   startCharacter,
-//   tamperAlert,
-//   time,
-//   vehicleRegNo,
-//   vendorId,
-//   version,
-// };
+export interface ReqTrackingPacket {
+  startCharacter?: string;
+  version?: string;
+  packetHeader?: string;
+  vendorId?: string;
+  firmwareVersion?: string;
+  packetType?: string;
+  messageId?: number;
+  packetStatus?: string;
+  imei?: string;
+  vehicleRegNo?: string;
+  gpsFix?: number;
+  date?: string;
+  time?: string;
+  latitude?: number;
+  latitudeDir?: string;
+  longitude?: number;
+  longitudeDir?: string;
+  speed?: number;
+  heading?: number;
+  noOfSatellites?: number;
+  altitude?: number;
+  pdop?: number;
+  hdop?: number;
+  networkOperatorName?: string;
+  ignitionStatus?: number;
+  mainPowerStatus?: number;
+  mainInputVoltage?: number;
+  internalBatteryVoltage?: number;
+  emergencyStatus?: number;
+  tamperAlert?: string;
+  gsmSignalStrength?: number;
+  mccServing?: number;
+  mncServing?: number;
+  lacServing?: string;
+  cellIdServing?: string;
+  gsmSignalStrengthNmr1stNeighbour?: number;
+  lacNmr1stNeighbour?: string;
+  cellIdNmr1stNeighbour?: string;
+  gsmSignalStrengthNmr2ndNeighbour?: number;
+  lacNmr2ndNeighbour?: string;
+  cellIdNmr2ndNeighbour?: string;
+  gsmSignalStrengthNmr3rdNeighbour?: number;
+  lacNmr3rdNeighbour?: string;
+  cellIdNmr3rdNeighbour?: string;
+  gsmSignalStrengthNmr4thNeighbour?: number;
+  lacNmr4thNeighbour?: string;
+  cellIdNmr4thNeighbour?: string;
+  digitalInputStatus?: string;
+  digitalOutputStatus?: string;
+  frameNumber?: number;
+  analogInput1?: number;
+  analogInput2?: number;
+  deltaDistance?: number;
+  otaResponse?: string;
+  endCharacter?: string;
+  checksum?: string;
+}
