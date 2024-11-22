@@ -95,6 +95,7 @@ export function initSocketIOFeatures(httpServer: http.Server) {
 
       if (checksum === dataArr[1]) {
         console.log('checksum valid');
+        console.log('the version is ', dataArr[1]);
         if (dataCommaArr[1] == 'v1') {
           console.log('this is v1');
           const commaSep = splitStringToArrayComma(strData);
