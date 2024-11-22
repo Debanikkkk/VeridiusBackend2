@@ -141,6 +141,7 @@ export function initSocketIOFeatures(httpServer: http.Server) {
             }
             // console.log('the socket map is now', sockMap);
             // Emit the loginPacketBody to the Socket.IO server
+            console.log('Emitting lpMessage: ', loginPacketBody);
             io.emit('lpMessage', loginPacketBody);
           } else if (commaSep[0] === '$CONFIG') {
             container.dataEventHandler.send(data.toString());
