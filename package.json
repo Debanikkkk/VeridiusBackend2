@@ -1,7 +1,7 @@
 {
-  "name": "PestControlAPIs",
+  "name": "NavigoOMNIAPIs",
   "version": "0.0.1",
-  "description": "PestControlAPI_Server",
+  "description": "NavigoOMNIAPIs",
   "type": "commonjs",
   "scripts": {
     "start": "ts-node src/index.ts",

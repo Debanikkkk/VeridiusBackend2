@@ -770,9 +770,9 @@
 		}
 	},
 	"info": {
-		"title": "PestControlAPIs",
+		"title": "NavigoOMNIAPIs",
 		"version": "0.0.1",
-		"description": "PestControlAPI_Server",
+		"description": "NavigoOMNIAPIs",
 		"contact": {}
 	},
 	"paths": {
