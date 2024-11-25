@@ -759,6 +759,47 @@
 				},
 				"type": "object",
 				"additionalProperties": false
+			},
+			"ResBanner": {
+				"properties": {
+					"createdAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"priority": {
+						"type": "number",
+						"format": "double"
+					},
+					"product_description": {
+						"type": "string"
+					},
+					"product_img": {
+						"type": "string"
+					},
+					"product_link": {
+						"type": "string"
+					},
+					"product_name": {
+						"type": "string"
+					},
+					"product_tag": {
+						"type": "string"
+					},
+					"rating": {
+						"type": "number",
+						"format": "double"
+					},
+					"updatedAt": {
+						"type": "string",
+						"format": "date-time"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
 			}
 		},
 		"securitySchemes": {
@@ -2255,6 +2296,31 @@
 						}
 					}
 				}
+			}
+		},
+		"/banners": {
+			"get": {
+				"operationId": "GetAllBanners",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/ResBanner"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Banners"
+				],
+				"security": [],
+				"parameters": []
 			}
 		}
 	},
