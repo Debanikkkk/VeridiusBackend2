@@ -13,6 +13,18 @@ import http from 'http';
 // import { ReqTrackingPacket } from './models/req/ReqTrackingPacket';
 // import { log } from 'console';
 // const socketArr: net.Socket[] = [];
+
+export interface ImeiPacketBody {
+  imei: string;
+  packet: string;
+  // deviceType: string;
+}
+
+export interface ImeiPacketBodyDT {
+  imei: string;
+  packet: string;
+  deviceType: string;
+}
 const headerArr: string[] = ['$LIN', '$HMP', '$TP', '$EPB', '$CONFIG', '$EMR', '$GF1', '$GF2', '$GF3', '#DOTA', '#FOTA'];
 console.log(headerArr);
 export class SocketContainer {
@@ -35,28 +47,52 @@ const HOST: string = '0.0.0.0';
 const TCP_PORT: number = envs.TCP_PORT;
 app.use(express.json());
 
-export function sendNegInvalidHeader(socket: net.Socket, header: string) {
+export function sendNegInvalidHeader(socket: net.Socket, header: string, io: Server) {
   const msg = header + ',N10*';
   const cs = stringToHexCRC32(msg);
   const invalidCommandMsg = msg + cs;
   console.log('the invalid comamand message is: ', invalidCommandMsg);
   socket.write(invalidCommandMsg);
+  // eslint-disable-next-line
+  const socketKey = [...sockMap.entries()].find(([_, value]) => value.socket === socket)?.[0]; //disable es-lint
+
+  const mess = {
+    imei: socketKey || socket.remoteAddress + ':' + socket.remotePort,
+    packet: invalidCommandMsg,
+  };
+  io.emit('sockMessage', mess);
 }
 
-export function sendNegInvalidChecksum(socket: net.Socket, header: string) {
+export function sendNegInvalidChecksum(socket: net.Socket, header: string, io: Server) {
   const msg = header + ',N15*';
   const cs = stringToHexCRC32(msg);
   const invalidCommandMsg = msg + cs;
   console.log('the invalid checksum message is: ', invalidCommandMsg);
   socket.write(invalidCommandMsg);
+  // eslint-disable-next-line
+  const socketKey = [...sockMap.entries()].find(([_, value]) => value.socket === socket)?.[0]; //disable es-lint
+  // console.log(key);
+  const mess = {
+    imei: socketKey || socket.remoteAddress + ':' + socket.remotePort,
+    packet: invalidCommandMsg,
+  };
+  io.emit('sockMessage', mess);
 }
 
-export function sendNegInvalidPacketFormat(socket: net.Socket, header: string) {
+export function sendNegInvalidPacketFormat(socket: net.Socket, header: string, io: Server) {
   const msg = header + ',N13*';
   const cs = stringToHexCRC32(msg);
   const invalidCommandMsg = msg + cs;
   console.log('the invalid packet format message is: ', invalidCommandMsg);
   socket.write(invalidCommandMsg);
+  // eslint-disable-next-line
+  const socketKey = [...sockMap.entries()].find(([_, value]) => value.socket === socket)?.[0]; //disable es-lint
+  // console.log(key);
+  const mess = {
+    imei: socketKey || socket.remoteAddress + ':' + socket.remotePort,
+    packet: invalidCommandMsg,
+  };
+  io.emit('sockMessage', mess);
 }
 
 // function sendIMEIandCMD(imei: string, cmd: string) {}
@@ -79,6 +115,254 @@ export function stringToHexCRC32(data: string): string {
 }
 
 let socketArr: net.Socket[] = [];
+
+function onSocketData(socket: net.Socket, container: SocketContainer, io: Server, data: Buffer) {
+  console.log(`Data received: ${data.toString()}`);
+  const strData = data.toString();
+  const dataStarArr = splitStringToArrayStar(strData);
+  const dataCommaArr = splitStringToArrayComma(strData);
+  console.log('the data comma array is ', dataCommaArr);
+  console.log('the data array is ', dataStarArr);
+  const checksum = stringToHexCRC32(strData);
+  console.log('checksum is', checksum);
+  console.log('the received checksum is ', dataStarArr[1]);
+  console.log('the socket map is ', sockMap);
+
+  console.log('checksum valid');
+  console.log('the version is ', dataCommaArr[1]);
+
+  if (dataCommaArr[1] == 'v1') {
+    console.log('this is v1');
+    const commaSep = splitStringToArrayComma(strData);
+    console.log('comma separated', commaSep);
+
+    if (commaSep[0] === '$LIN') {
+      if (commaSep.length == 12) {
+        // console.log(checksum)
+        // const checksumSeperateStar=
+        if (checksum === dataStarArr[1]) {
+          const loginPacketBody: ReqLoginPacket = {
+            checksum: commaSep[11],
+            firmwareVersion: commaSep[6],
+            imei: commaSep[5],
+            latitude: Number(commaSep[10]),
+            longitude: Number(commaSep[8]),
+            packetHeader: commaSep[0],
+            protocolVersion: commaSep[7],
+            vehicleRegNo: commaSep[4],
+            vendorId: commaSep[3],
+            version: commaSep[1],
+            deviceType: commaSep[2],
+          };
+          // if (commaSep[0] === '$TP') {}
+          // ****************
+
+          const loginPacketInstance = new LoginPacketController();
+          const packetSave = loginPacketInstance.saveLoginPacket(loginPacketBody);
+          console.log('this is the saved packet', packetSave);
+          // socketArr.splice(socket);
+          // console.log('the socket array is now 1', socketArr);
+          for (const [index, sock] of socketArr.entries()) {
+            console.log(`the socket BEFORE ${index} address is`, sock.address());
+          }
+          const socketToRemove = socket;
+          // console.log('this is the socket', socket);
+          socketArr = socketArr.filter((s) => s !== socketToRemove);
+
+          // socketArr = socketArr.filter((socket) => socket !== socket);
+          for (const [index, sock] of socketArr.entries()) {
+            console.log(`the socket ${index} address is`, sock.address());
+          }
+
+          sockMap.set(loginPacketBody.imei, container);
+          console.log('the socket map is IN THE $LIN BLOCK', sockMap);
+
+          for (const [imei, sockContainer] of sockMap.entries()) {
+            const sock = sockContainer.socket;
+            console.log(`the imei number is ${imei} addr is `, sock.remoteAddress, sock.remotePort);
+          }
+          // console.log('the socket map is now', sockMap);
+          // Emit the loginPacketBody to the Socket.IO server
+          console.log('Emitting lpMessage: ', loginPacketBody);
+          io.emit('lpMessage', loginPacketBody);
+          const imeiPacketBody: ImeiPacketBodyDT = {
+            imei: commaSep[5] || socket.remoteAddress + ':' + socket.remotePort,
+            packet: data.toString(),
+            deviceType: commaSep[2],
+          };
+          io.emit('sockMessage', imeiPacketBody);
+        } else {
+          console.log('checksum invalid in lin block');
+          sendNegInvalidChecksum(socket, commaSep[0], io);
+        }
+      } else {
+        sendNegInvalidPacketFormat(socket, commaSep[0], io);
+      }
+    } else if (commaSep[0] === '$CONFIG') {
+      container.dataEventHandler.send(data.toString());
+    } else if (commaSep[0] === '$HMP') {
+      if (commaSep.length != 15) {
+        if (checksum === dataStarArr[1]) {
+          console.log('the socket map is in $HMP BLOCK', sockMap);
+
+          for (const [imei, sockContainer] of sockMap) {
+            console.log('the socket imei is ', imei, 'and ', sockContainer.socket.address());
+          }
+          console.log('the list of sockets connected is ', sockMap);
+          console.log('this is the socket i am expecting ', sockMap.get(commaSep[4]));
+          console.log('this is the imei i am getting ', commaSep[4]);
+          // container.dataEventHandler.send(data.toString());
+          // const i = 0;
+          for (const [index, comma] of commaSep.entries()) {
+            console.log(`the index is ${index} and the value is ${comma}`);
+          }
+          if (sockMap.has(commaSep[4])) {
+            const commaStarSep = splitStringToArrayStar(commaSep[13]);
+
+            //checkking for imei
+            const hmpBody: ReqHMP = {
+              analogInput1Status: Number(commaSep[12]),
+              analogInput2Status: Number(commaStarSep[0]),
+              batteryPercentage: Number(commaSep[5]),
+              checksum: commaStarSep[1],
+              dataUpdateRateWhenIgnitionOff: Number(commaSep[9]),
+              dataUpdateRateWhenIgnitionOn: Number(commaSep[10]),
+              digitalInputStatus: commaSep[11],
+              firmwareVersion: commaSep[3],
+              header: commaSep[0],
+              imei: commaSep[4],
+              lowBatteryThresholdPercentage: Number(commaSep[6]),
+              memoryPercentage1: Number(commaSep[7]),
+              memoryPercentage2: Number(commaSep[8]),
+              vendorId: commaSep[2],
+              version: commaSep[1],
+            };
+            io.emit('hpMessage', hmpBody);
+            const healthControllerInstance = new HMPController();
+            healthControllerInstance.saveHmp(hmpBody);
+          } else {
+            console.log('this socket is not logged in ');
+
+            socket.write('YOU NEED TO LOGIN TO BE ABLE TO SEND A PACKET');
+            return { message: 'this socket is not logged in' };
+          }
+        } else {
+          console.log('invalid checksum');
+          sendNegInvalidChecksum(socket, commaSep[0], io);
+        }
+      } else {
+        sendNegInvalidPacketFormat(socket, commaSep[0], io);
+      }
+    } else if (commaSep[0] === '$TP') {
+      // Check if the packet starts with "$TRP"
+      // if(){
+      if (commaSep.length >= 35) {
+        // Assuming 35 is the minimum length based on the number of parameters
+        const checksum = dataStarArr[1];
+        if (checksum === dataStarArr[1]) {
+          // Validate checksum
+          console.log('The socket map is in $TRP BLOCK', sockMap);
+
+          // Log connected sockets
+          for (const [imei, sockContainer] of sockMap) {
+            console.log('Socket IMEI:', imei, 'Socket Address:', sockContainer.socket.address());
+          }
+          console.log('List of connected sockets:', sockMap);
+          console.log('Expected socket for IMEI:', sockMap.get(commaSep[8])); // IMEI assumed to be at index 8
+          console.log('Received IMEI:', commaSep[8]);
+
+          // Debugging: log each comma-separated value
+          for (const [index, comma] of commaSep.entries()) {
+            console.log(`Index: ${index}, Value: ${comma}`);
+          }
+
+          // if (sockMap.has(commaSep[7])) {
+          // Check if the IMEI is registered in sockMap
+          // Create ReqTrackingPacket object
+          // const trackingBody: ReqTrackingPacket = {
+          //   startCharacter: commaSep[0], // "*"
+          //   version: commaSep[1], // "1.0"
+          //   packetHeader: commaSep[2], // "123ABC"
+          //   vendorId: commaSep[3], // "XYZ"
+          //   firmwareVersion: commaSep[4], // "FW123"
+          //   packetType: commaSep[5], // "A"
+          //   messageId: Number(commaSep[6]), // 1
+          //   packetStatus: commaSep[7], // "S"
+          //   imei: commaSep[8], // "123456789012345"
+          //   vehicleRegNo: commaSep[9], // "ABC123"
+          //   gpsFix: Number(commaSep[10]), // 1
+          //   date: commaSep[11], // "20241122"
+          //   time: commaSep[12], // "123456"
+          //   latitude: Number(commaSep[13]), // 12.3456
+          //   latitudeDir: commaSep[14], // "N"
+          //   longitude: Number(commaSep[15]), // 78.9012
+          //   longitudeDir: commaSep[16], // "E"
+          //   speed: Number(commaSep[17]), // 60.5
+          //   heading: Number(commaSep[18]), // 90.0
+          //   noOfSatellites: Number(commaSep[19]), // 10
+          //   altitude: Number(commaSep[20]), // 150
+          //   pdop: Number(commaSep[21]), // 0.9
+          //   hdop: Number(commaSep[22]), // 0.8
+          //   networkOperatorName: commaSep[23], // "Network1"
+          //   ignitionStatus: Number(commaSep[24]), // 1
+          //   mainPowerStatus: Number(commaSep[25]), // 1
+          //   mainInputVoltage: Number(commaSep[26]), // 12.5
+          //   internalBatteryVoltage: Number(commaSep[27]), // 3.7
+          //   emergencyStatus: Number(commaSep[28]), // 0
+          //   tamperAlert: commaSep[29], // "N"
+          //   gsmSignalStrength: Number(commaSep[30]), // 23
+          //   mccServing: Number(commaSep[31]), // 123
+          //   mncServing: Number(commaSep[32]), // 45
+          //   lacServing: commaSep[33], // "1001"
+          //   cellIdServing: commaSep[34], // "2002"
+          //   gsmSignalStrengthNmr1stNeighbour: Number(commaSep[35]), // 18
+          //   lacNmr1stNeighbour: commaSep[36], // "1003"
+          //   cellIdNmr1stNeighbour: commaSep[37], // "2004"
+          //   gsmSignalStrengthNmr2ndNeighbour: Number(commaSep[38]), // 19
+          //   lacNmr2ndNeighbour: commaSep[39], // "1005"
+          //   cellIdNmr2ndNeighbour: commaSep[40], // "2006"
+          //   digitalInputStatus: commaSep[41], // "01"
+          //   digitalOutputStatus: commaSep[42], // "02"
+          //   frameNumber: Number(commaSep[43]), // 10
+          //   analogInput1: Number(commaSep[44]), // 4.5
+          //   analogInput2: Number(commaSep[45]), // 3.3
+          //   deltaDistance: Number(commaSep[46]), // 500
+          //   otaResponse: commaSep[47], // "Success"
+          //   endCharacter: commaSep[48], // "#"
+          //   checksum: checksum, // "1234ABCD"
+          // };
+
+          // Emit the tracking packet data
+          io.emit('tpMessage', data);
+
+          const imeiPacketBody: ImeiPacketBody = {
+            imei: commaSep[7] || socket.remoteAddress + ':' + socket.remotePort,
+            packet: data.toString(),
+            // deviceType: ,
+          };
+          io.emit('sockMessage', imeiPacketBody);
+          // Save the tracking packet using the controller
+          // const trackingControllerInstance = new TrackingPacketController();
+          // trackingControllerInstance
+          //   .saveTrackingPacket(trackingBody)
+          //   .then(() => console.log('Tracking packet saved successfully'))
+          //   .catch((err) => console.error('Error saving tracking packet:', err));
+        } else {
+          console.log('Invalid checksum');
+          sendNegInvalidChecksum(socket, commaSep[0], io); // Function to notify invalid checksum
+        }
+        // else{
+
+        // }
+      } else {
+        sendNegInvalidPacketFormat(socket, commaSep[0], io); // Function to notify invalid packet format
+      }
+    } else if (!headerArr.includes(commaSep[0])) {
+      sendNegInvalidHeader(socket, commaSep[0], io);
+    }
+  }
+  return { '###REACHED THE END HERE***': 'ubefgoue' };
+}
 
 export function initSocketIOFeatures(httpServer: http.Server) {
   const io: Server = new Server(httpServer, {
@@ -105,250 +389,29 @@ export function initSocketIOFeatures(httpServer: http.Server) {
   const server = net.createServer((socket: net.Socket) => {
     console.log('Client connected:', socket.remoteAddress, socket.remotePort);
     socketArr.push(socket);
+    // eslint-disable-next-line
+
     const container = new SocketContainer(socket);
     // for (const sock of socketArr) {
     //   console.log('the cleint is, ', sock.remoteAddress);
     // }
     // console.log(socketArr);
     // Event listener for incoming data
-    socket.on('data', (data) => {
-      console.log(`Data received: ${data.toString()}`);
-      const strData = data.toString();
-      const dataStarArr = splitStringToArrayStar(strData);
-      const dataCommaArr = splitStringToArrayComma(strData);
-      console.log('the data comma array is ', dataCommaArr);
-      console.log('the data array is ', dataStarArr);
-      const checksum = stringToHexCRC32(strData);
-      console.log('checksum is', checksum);
-      console.log('the received checksum is ', dataStarArr[1]);
-      console.log('the socket map is ', sockMap);
-
-      console.log('checksum valid');
-      console.log('the version is ', dataCommaArr[1]);
-
-      if (dataCommaArr[1] == 'v1') {
-        console.log('this is v1');
-        const commaSep = splitStringToArrayComma(strData);
-        console.log('comma separated', commaSep);
-
-        if (commaSep[0] === '$LIN') {
-          if (commaSep.length == 12) {
-            // console.log(checksum)
-            // const checksumSeperateStar=
-            if (checksum === dataStarArr[1]) {
-              const loginPacketBody: ReqLoginPacket = {
-                checksum: commaSep[11],
-                firmwareVersion: commaSep[6],
-                imei: commaSep[5],
-                latitude: Number(commaSep[10]),
-                longitude: Number(commaSep[8]),
-                packetHeader: commaSep[0],
-                protocolVersion: commaSep[7],
-                vehicleRegNo: commaSep[4],
-                vendorId: commaSep[3],
-                version: commaSep[1],
-                deviceType: commaSep[2],
-              };
-              // if (commaSep[0] === '$TP') {}
-              // ****************
-
-              const loginPacketInstance = new LoginPacketController();
-              const packetSave = loginPacketInstance.saveLoginPacket(loginPacketBody);
-              console.log('this is the saved packet', packetSave);
-              // socketArr.splice(socket);
-              // console.log('the socket array is now 1', socketArr);
-              for (const [index, sock] of socketArr.entries()) {
-                console.log(`the socket BEFORE ${index} address is`, sock.address());
-              }
-              const socketToRemove = socket;
-              // console.log('this is the socket', socket);
-              socketArr = socketArr.filter((s) => s !== socketToRemove);
-
-              // socketArr = socketArr.filter((socket) => socket !== socket);
-              for (const [index, sock] of socketArr.entries()) {
-                console.log(`the socket ${index} address is`, sock.address());
-              }
-
-              sockMap.set(loginPacketBody.imei, container);
-              console.log('the socket map is IN THE $LIN BLOCK', sockMap);
-
-              for (const [imei, sockContainer] of sockMap.entries()) {
-                const sock = sockContainer.socket;
-                console.log(`the imei number is ${imei} addr is `, sock.remoteAddress, sock.remotePort);
-              }
-              // console.log('the socket map is now', sockMap);
-              // Emit the loginPacketBody to the Socket.IO server
-              console.log('Emitting lpMessage: ', loginPacketBody);
-              io.emit('lpMessage', loginPacketBody);
-            } else {
-              console.log('checksum invalid in lin block');
-              sendNegInvalidChecksum(socket, commaSep[0]);
-            }
-          } else {
-            sendNegInvalidPacketFormat(socket, commaSep[0]);
-          }
-        } else if (commaSep[0] === '$CONFIG') {
-          container.dataEventHandler.send(data.toString());
-        } else if (commaSep[0] === '$HMP') {
-          if (commaSep.length != 15) {
-            if (checksum === dataStarArr[1]) {
-              console.log('the socket map is in $HMP BLOCK', sockMap);
-
-              for (const [imei, sockContainer] of sockMap) {
-                console.log('the socket imei is ', imei, 'and ', sockContainer.socket.address());
-              }
-              console.log('the list of sockets connected is ', sockMap);
-              console.log('this is the socket i am expecting ', sockMap.get(commaSep[4]));
-              console.log('this is the imei i am getting ', commaSep[4]);
-              // container.dataEventHandler.send(data.toString());
-              // const i = 0;
-              for (const [index, comma] of commaSep.entries()) {
-                console.log(`the index is ${index} and the value is ${comma}`);
-              }
-              if (sockMap.has(commaSep[4])) {
-                const commaStarSep = splitStringToArrayStar(commaSep[13]);
-
-                //checkking for imei
-                const hmpBody: ReqHMP = {
-                  analogInput1Status: Number(commaSep[12]),
-                  analogInput2Status: Number(commaStarSep[0]),
-                  batteryPercentage: Number(commaSep[5]),
-                  checksum: commaStarSep[1],
-                  dataUpdateRateWhenIgnitionOff: Number(commaSep[9]),
-                  dataUpdateRateWhenIgnitionOn: Number(commaSep[10]),
-                  digitalInputStatus: commaSep[11],
-                  firmwareVersion: commaSep[3],
-                  header: commaSep[0],
-                  imei: commaSep[4],
-                  lowBatteryThresholdPercentage: Number(commaSep[6]),
-                  memoryPercentage1: Number(commaSep[7]),
-                  memoryPercentage2: Number(commaSep[8]),
-                  vendorId: commaSep[2],
-                  version: commaSep[1],
-                };
-                io.emit('hpMessage', hmpBody);
-                const healthControllerInstance = new HMPController();
-                healthControllerInstance.saveHmp(hmpBody);
-              } else {
-                console.log('this socket is not logged in ');
-
-                socket.write('YOU NEED TO LOGIN TO BE ABLE TO SEND A PACKET');
-                return { message: 'this socket is not logged in' };
-              }
-            } else {
-              console.log('invalid checksum');
-              sendNegInvalidChecksum(socket, commaSep[0]);
-            }
-          } else {
-            sendNegInvalidPacketFormat(socket, commaSep[0]);
-          }
-        } else if (commaSep[0] === '$TP') {
-          // Check if the packet starts with "$TRP"
-          // if(){
-          if (commaSep.length >= 35) {
-            // Assuming 35 is the minimum length based on the number of parameters
-            const checksum = dataStarArr[1];
-            if (checksum === dataStarArr[1]) {
-              // Validate checksum
-              console.log('The socket map is in $TRP BLOCK', sockMap);
-
-              // Log connected sockets
-              for (const [imei, sockContainer] of sockMap) {
-                console.log('Socket IMEI:', imei, 'Socket Address:', sockContainer.socket.address());
-              }
-              console.log('List of connected sockets:', sockMap);
-              console.log('Expected socket for IMEI:', sockMap.get(commaSep[8])); // IMEI assumed to be at index 8
-              console.log('Received IMEI:', commaSep[8]);
-
-              // Debugging: log each comma-separated value
-              for (const [index, comma] of commaSep.entries()) {
-                console.log(`Index: ${index}, Value: ${comma}`);
-              }
-
-              // if (sockMap.has(commaSep[7])) {
-              // Check if the IMEI is registered in sockMap
-              // Create ReqTrackingPacket object
-              // const trackingBody: ReqTrackingPacket = {
-              //   startCharacter: commaSep[0], // "*"
-              //   version: commaSep[1], // "1.0"
-              //   packetHeader: commaSep[2], // "123ABC"
-              //   vendorId: commaSep[3], // "XYZ"
-              //   firmwareVersion: commaSep[4], // "FW123"
-              //   packetType: commaSep[5], // "A"
-              //   messageId: Number(commaSep[6]), // 1
-              //   packetStatus: commaSep[7], // "S"
-              //   imei: commaSep[8], // "123456789012345"
-              //   vehicleRegNo: commaSep[9], // "ABC123"
-              //   gpsFix: Number(commaSep[10]), // 1
-              //   date: commaSep[11], // "20241122"
-              //   time: commaSep[12], // "123456"
-              //   latitude: Number(commaSep[13]), // 12.3456
-              //   latitudeDir: commaSep[14], // "N"
-              //   longitude: Number(commaSep[15]), // 78.9012
-              //   longitudeDir: commaSep[16], // "E"
-              //   speed: Number(commaSep[17]), // 60.5
-              //   heading: Number(commaSep[18]), // 90.0
-              //   noOfSatellites: Number(commaSep[19]), // 10
-              //   altitude: Number(commaSep[20]), // 150
-              //   pdop: Number(commaSep[21]), // 0.9
-              //   hdop: Number(commaSep[22]), // 0.8
-              //   networkOperatorName: commaSep[23], // "Network1"
-              //   ignitionStatus: Number(commaSep[24]), // 1
-              //   mainPowerStatus: Number(commaSep[25]), // 1
-              //   mainInputVoltage: Number(commaSep[26]), // 12.5
-              //   internalBatteryVoltage: Number(commaSep[27]), // 3.7
-              //   emergencyStatus: Number(commaSep[28]), // 0
-              //   tamperAlert: commaSep[29], // "N"
-              //   gsmSignalStrength: Number(commaSep[30]), // 23
-              //   mccServing: Number(commaSep[31]), // 123
-              //   mncServing: Number(commaSep[32]), // 45
-              //   lacServing: commaSep[33], // "1001"
-              //   cellIdServing: commaSep[34], // "2002"
-              //   gsmSignalStrengthNmr1stNeighbour: Number(commaSep[35]), // 18
-              //   lacNmr1stNeighbour: commaSep[36], // "1003"
-              //   cellIdNmr1stNeighbour: commaSep[37], // "2004"
-              //   gsmSignalStrengthNmr2ndNeighbour: Number(commaSep[38]), // 19
-              //   lacNmr2ndNeighbour: commaSep[39], // "1005"
-              //   cellIdNmr2ndNeighbour: commaSep[40], // "2006"
-              //   digitalInputStatus: commaSep[41], // "01"
-              //   digitalOutputStatus: commaSep[42], // "02"
-              //   frameNumber: Number(commaSep[43]), // 10
-              //   analogInput1: Number(commaSep[44]), // 4.5
-              //   analogInput2: Number(commaSep[45]), // 3.3
-              //   deltaDistance: Number(commaSep[46]), // 500
-              //   otaResponse: commaSep[47], // "Success"
-              //   endCharacter: commaSep[48], // "#"
-              //   checksum: checksum, // "1234ABCD"
-              // };
-
-              // Emit the tracking packet data
-              io.emit('tpMessage', data);
-
-              // Save the tracking packet using the controller
-              // const trackingControllerInstance = new TrackingPacketController();
-              // trackingControllerInstance
-              //   .saveTrackingPacket(trackingBody)
-              //   .then(() => console.log('Tracking packet saved successfully'))
-              //   .catch((err) => console.error('Error saving tracking packet:', err));
-            } else {
-              console.log('Invalid checksum');
-              sendNegInvalidChecksum(socket, commaSep[0]); // Function to notify invalid checksum
-            }
-            // else{
-
-            // }
-          } else {
-            sendNegInvalidPacketFormat(socket, commaSep[0]); // Function to notify invalid packet format
-          }
-        } else if (!headerArr.includes(commaSep[0])) {
-          sendNegInvalidHeader(socket, commaSep[0]);
-        }
-      }
-      return { '###REACHED THE END HERE***': 'ubefgoue' };
+    socket.on('data', (data: Buffer) => {
+      onSocketData(socket, container, io, data);
     });
 
     // Event listener for client disconnection
     socket.on('end', () => {
+      // eslint-disable-next-line
+      const socketKey = [...sockMap.entries()].find(([_, value]) => value.socket === socket)?.[0]; //disable es-lint
+      // console.log(key);
+      console.log('the client i wanna see here is =====>', socketKey);
+      const mess = {
+        imei: socketKey || socket.remoteAddress + ':' + socket.remotePort,
+        packet: 'CLIENT DISCONNECTED: ' + socketKey,
+      };
+      io.emit('sockMessage', mess);
       console.log('Client disconnected');
     });
 
@@ -356,6 +419,24 @@ export function initSocketIOFeatures(httpServer: http.Server) {
     socket.on('error', (err) => {
       console.error(`Error: ${err.message}`);
     });
+  });
+
+  server.on('connection', (socket) => {
+    console.log('the on connect block has started');
+    // eslint-disable-next-line
+    const socketKey = [...sockMap.entries()].find(([_, value]) => value.socket === socket)?.[0]; //disable es-lint
+    // console.log(key);
+    console.log('the on connect block has reached here');
+
+    const mess = {
+      imei: socketKey || socket.remoteAddress + ':' + socket.remotePort,
+      packet: 'CLIENT CONNECTED: ' + socket.remoteAddress + ':' + socket.remotePort,
+      // socketKey,
+    };
+    console.log('the on connect block has reached here 2');
+
+    console.log('this is the message i wanna send******=====>', mess);
+    io.emit('sockMessage', mess);
   });
 
   // Start the server
