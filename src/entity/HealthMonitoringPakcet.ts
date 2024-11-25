@@ -5,8 +5,8 @@ export class HealthMonitoringPacket {
   @PrimaryGeneratedColumn()
   id?: number;
 
-  @Column({ type: 'varchar', length: 1 })
-  startCharacter?: string;
+  // @Column({ type: 'varchar', length: 1 })
+  // startCharacter?: string;
 
   @Column({ type: 'varchar', length: 50 })
   header?: string;
@@ -49,9 +49,6 @@ export class HealthMonitoringPacket {
 
   @Column({ type: 'float', nullable: true })
   analogInput2Status?: number;
-
-  @Column({ type: 'varchar', length: 1 })
-  endCharacter?: string;
 
   @Column({ type: 'varchar', length: 10 })
   checksum?: string;

@@ -6,7 +6,7 @@ export interface ReqHMP {
   dataUpdateRateWhenIgnitionOff: number;
   dataUpdateRateWhenIgnitionOn: number;
   digitalInputStatus: string;
-  endCharacter: string;
+  // endCharacter: string;
   firmwareVersion: string;
   header: string;
   // id,
