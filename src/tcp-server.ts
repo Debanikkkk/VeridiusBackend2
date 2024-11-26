@@ -47,7 +47,7 @@ const HOST: string = '0.0.0.0';
 const TCP_PORT: number = envs.TCP_PORT;
 app.use(express.json());
 
-export function sendNegInvalidHeader(socket: net.Socket, header: string, io: Server) {
+export function sendNegInvalidHeader(socket: net.Socket, header: string, io: Server, data: string) {
   const msg = header + ',N10*';
   const cs = stringToHexCRC32(msg);
   const invalidCommandMsg = msg + cs;
@@ -60,10 +60,15 @@ export function sendNegInvalidHeader(socket: net.Socket, header: string, io: Ser
     imei: socketKey || socket.remoteAddress + ':' + socket.remotePort,
     packet: invalidCommandMsg,
   };
+  const messFull = {
+    imei: socketKey || socket.remoteAddress + ':' + socket.remotePort,
+    packet: data.toString(),
+  };
+  io.emit('sockMessage', messFull);
   io.emit('sockMessage', mess);
 }
 
-export function sendNegInvalidChecksum(socket: net.Socket, header: string, io: Server) {
+export function sendNegInvalidChecksum(socket: net.Socket, header: string, io: Server, data: string) {
   const msg = header + ',N15*';
   const cs = stringToHexCRC32(msg);
   const invalidCommandMsg = msg + cs;
@@ -76,10 +81,15 @@ export function sendNegInvalidChecksum(socket: net.Socket, header: string, io: S
     imei: socketKey || socket.remoteAddress + ':' + socket.remotePort,
     packet: invalidCommandMsg,
   };
+  const messFull = {
+    imei: socketKey || socket.remoteAddress + ':' + socket.remotePort,
+    packet: data.toString(),
+  };
+  io.emit('sockMessage', messFull);
   io.emit('sockMessage', mess);
 }
 
-export function sendNegInvalidPacketFormat(socket: net.Socket, header: string, io: Server) {
+export function sendNegInvalidPacketFormat(socket: net.Socket, header: string, io: Server, data: string) {
   const msg = header + ',N13*';
   const cs = stringToHexCRC32(msg);
   const invalidCommandMsg = msg + cs;
@@ -92,6 +102,11 @@ export function sendNegInvalidPacketFormat(socket: net.Socket, header: string, i
     imei: socketKey || socket.remoteAddress + ':' + socket.remotePort,
     packet: invalidCommandMsg,
   };
+  const messFull = {
+    imei: socketKey || socket.remoteAddress + ':' + socket.remotePort,
+    packet: data.toString(),
+  };
+  io.emit('sockMessage', messFull);
   io.emit('sockMessage', mess);
 }
 
@@ -193,13 +208,21 @@ function onSocketData(socket: net.Socket, container: SocketContainer, io: Server
           io.emit('sockMessage', imeiPacketBody);
         } else {
           console.log('checksum invalid in lin block');
-          sendNegInvalidChecksum(socket, commaSep[0], io);
+          sendNegInvalidChecksum(socket, commaSep[0], io, data.toString());
         }
       } else {
-        sendNegInvalidPacketFormat(socket, commaSep[0], io);
+        sendNegInvalidPacketFormat(socket, commaSep[0], io, data.toString());
       }
-    } else if (commaSep[0] === '$CONFIG') {
+    } else if (commaSep[0] === '#CONFIG') {
       container.dataEventHandler.send(data.toString());
+      // eslint-disable-next-line
+      const socketKey = [...sockMap.entries()].find(([_, value]) => value.socket === socket)?.[0]; //disable es-lint
+      // console.log(key);
+      const mess = {
+        imei: socketKey || socket.remoteAddress + ':' + socket.remotePort,
+        packet: data.toString(),
+      };
+      io.emit('sockMessage', mess);
     } else if (commaSep[0] === '$HMP') {
       if (commaSep.length != 15) {
         if (checksum === dataStarArr[1]) {
@@ -238,6 +261,11 @@ function onSocketData(socket: net.Socket, container: SocketContainer, io: Server
               version: commaSep[1],
             };
             io.emit('hpMessage', hmpBody);
+            const mess = {
+              packet: data.toString(),
+              imei: commaSep[4],
+            };
+            io.emit('sockMessage', mess);
             const healthControllerInstance = new HMPController();
             healthControllerInstance.saveHmp(hmpBody);
           } else {
@@ -248,10 +276,10 @@ function onSocketData(socket: net.Socket, container: SocketContainer, io: Server
           }
         } else {
           console.log('invalid checksum');
-          sendNegInvalidChecksum(socket, commaSep[0], io);
+          sendNegInvalidChecksum(socket, commaSep[0], io, data.toString());
         }
       } else {
-        sendNegInvalidPacketFormat(socket, commaSep[0], io);
+        sendNegInvalidPacketFormat(socket, commaSep[0], io, data.toString());
       }
     } else if (commaSep[0] === '$TP') {
       // Check if the packet starts with "$TRP"
@@ -349,103 +377,124 @@ function onSocketData(socket: net.Socket, container: SocketContainer, io: Server
           //   .catch((err) => console.error('Error saving tracking packet:', err));
         } else {
           console.log('Invalid checksum');
-          sendNegInvalidChecksum(socket, commaSep[0], io); // Function to notify invalid checksum
+          sendNegInvalidChecksum(socket, commaSep[0], io, data.toString()); // Function to notify invalid checksum
         }
         // else{
 
         // }
       } else {
-        sendNegInvalidPacketFormat(socket, commaSep[0], io); // Function to notify invalid packet format
+        sendNegInvalidPacketFormat(socket, commaSep[0], io, data.toString()); // Function to notify invalid packet format
       }
-    } else if (!headerArr.includes(commaSep[0])) {
-      sendNegInvalidHeader(socket, commaSep[0], io);
+    }
+    // else if (commaSep[0] === '$EPB') {
+    // } else if (commaSep[0] == '$EMR') {
+    // }
+    else {
+      // sendNegInvalidHeader(socket, commaSep[0], io);
+      // eslint-disable-next-line
+      const socketKey = [...sockMap.entries()].find(([_, value]) => value.socket === socket)?.[0]; //disable es-lint
+
+      const mess = {
+        packet: data.toString(),
+        imei: socketKey,
+      };
+      io.emit('sockMessage', mess);
     }
   }
   return { '###REACHED THE END HERE***': 'ubefgoue' };
 }
-
+let io: Server;
 export function initSocketIOFeatures(httpServer: http.Server) {
-  const io: Server = new Server(httpServer, {
-    cors: {
-      origin: '*', // Allow all origins for simplicity
-    },
-  });
-
-  // Event listener for connection to the Socket.IO server
-  io.on('connect', (socket: Socket) => {
-    console.log('A client connected to server using: ', socket.handshake.address);
-    console.log('the list of sockets connected is ', sockMap);
-
-    // socketArr.push(socket);
-    // console.log('Total clients after addition: ', socketArr.length);
-  });
-
-  io.on('close', (socket: Socket) => {
-    console.log('A Client gone: ', socket.handshake.address);
-    socketArr = socketArr.filter((socket) => socket !== socket);
-    console.log('Total clients after remove: ', socketArr.length);
-  });
-
-  const server = net.createServer((socket: net.Socket) => {
-    console.log('Client connected:', socket.remoteAddress, socket.remotePort);
-    socketArr.push(socket);
-    // eslint-disable-next-line
-
-    const container = new SocketContainer(socket);
-    // for (const sock of socketArr) {
-    //   console.log('the cleint is, ', sock.remoteAddress);
-    // }
-    // console.log(socketArr);
-    // Event listener for incoming data
-    socket.on('data', (data: Buffer) => {
-      onSocketData(socket, container, io, data);
+  if (!io) {
+    io = new Server(httpServer, {
+      cors: {
+        origin: '*', // Allow all origins for simplicity
+      },
     });
 
-    // Event listener for client disconnection
-    socket.on('end', () => {
+    // Event listener for connection to the Socket.IO server
+    io.on('connect', (socket: Socket) => {
+      console.log('A client connected to server using: ', socket.handshake.address);
+      console.log('the list of sockets connected is ', sockMap);
+
+      // socketArr.push(socket);
+      // console.log('Total clients after addition: ', socketArr.length);
+    });
+
+    io.on('close', (socket: Socket) => {
+      console.log('A Client gone: ', socket.handshake.address);
+      socketArr = socketArr.filter((socket) => socket !== socket);
+      console.log('Total clients after remove: ', socketArr.length);
+    });
+
+    const server = net.createServer((socket: net.Socket) => {
+      console.log('Client connected:', socket.remoteAddress, socket.remotePort);
+      socketArr.push(socket);
+      // eslint-disable-next-line
+
+      const container = new SocketContainer(socket);
+      // for (const sock of socketArr) {
+      //   console.log('the cleint is, ', sock.remoteAddress);
+      // }
+      // console.log(socketArr);
+      // Event listener for incoming data
+      socket.on('data', (data: Buffer) => {
+        onSocketData(socket, container, io, data);
+      });
+
+      // Event listener for client disconnection
+      socket.on('end', () => {
+        // eslint-disable-next-line
+        const socketKey = [...sockMap.entries()].find(([_, value]) => value.socket === socket)?.[0]; //disable es-lint
+        // console.log(key);
+        console.log('the client i wanna see here is =====>', socketKey);
+        const mess = {
+          imei: socketKey || socket.remoteAddress + ':' + socket.remotePort,
+          packet: 'CLIENT DISCONNECTED: ' + socketKey,
+        };
+        io.emit('sockMessage', mess);
+        console.log('Client disconnected');
+      });
+
+      // Event listener for errors
+      socket.on('error', (err) => {
+        console.error(`Error: ${err.message}`);
+      });
+    });
+
+    server.on('connection', (socket) => {
+      console.log('the on connect block has started');
       // eslint-disable-next-line
       const socketKey = [...sockMap.entries()].find(([_, value]) => value.socket === socket)?.[0]; //disable es-lint
       // console.log(key);
-      console.log('the client i wanna see here is =====>', socketKey);
+      console.log('the on connect block has reached here');
+
       const mess = {
         imei: socketKey || socket.remoteAddress + ':' + socket.remotePort,
-        packet: 'CLIENT DISCONNECTED: ' + socketKey,
+        packet: 'CLIENT CONNECTED: ' + socket.remoteAddress + ':' + socket.remotePort,
+        // socketKey,
       };
+      console.log('the on connect block has reached here 2');
+
+      console.log('this is the message i wanna send******=====>', mess);
       io.emit('sockMessage', mess);
-      console.log('Client disconnected');
     });
 
-    // Event listener for errors
-    socket.on('error', (err) => {
-      console.error(`Error: ${err.message}`);
+    // Start the server
+    server.listen(TCP_PORT, HOST, () => {
+      console.log(`Server listening on ${HOST}:${TCP_PORT}`);
     });
-  });
 
-  server.on('connection', (socket) => {
-    console.log('the on connect block has started');
-    // eslint-disable-next-line
-    const socketKey = [...sockMap.entries()].find(([_, value]) => value.socket === socket)?.[0]; //disable es-lint
-    // console.log(key);
-    console.log('the on connect block has reached here');
+    // Event listener for server errors
+    server.on('error', (err) => {
+      console.error(`Server error: ${err.message}`);
+    });
+  }
+}
 
-    const mess = {
-      imei: socketKey || socket.remoteAddress + ':' + socket.remotePort,
-      packet: 'CLIENT CONNECTED: ' + socket.remoteAddress + ':' + socket.remotePort,
-      // socketKey,
-    };
-    console.log('the on connect block has reached here 2');
-
-    console.log('this is the message i wanna send******=====>', mess);
-    io.emit('sockMessage', mess);
-  });
-
-  // Start the server
-  server.listen(TCP_PORT, HOST, () => {
-    console.log(`Server listening on ${HOST}:${TCP_PORT}`);
-  });
-
-  // Event listener for server errors
-  server.on('error', (err) => {
-    console.error(`Server error: ${err.message}`);
-  });
+export function getGlobalSocketIOInstance(): Server {
+  if (!io) {
+    throw new Error('Socket.IO instance is not initialized!');
+  }
+  return io;
 }
