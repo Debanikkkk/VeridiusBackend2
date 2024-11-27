@@ -24,6 +24,8 @@ export class IMEICMDController extends Controller {
       const mess = {
         imei: imei,
         packet: cmd.toString(),
+        color: 'orange',
+        date: new Date(),
       };
       const io = getGlobalSocketIOInstance();
       io.emit('sockMessage', mess); // Use the server instance to emit

@@ -9,6 +9,7 @@ import { ReqHMP } from './models/req/ReqHMP';
 import { HMPController } from './controller/HMPController';
 import { envs } from 'utils/envVars';
 import http from 'http';
+// import { timeStamp } from 'console';
 // import { TrackingPacketController } from './controller/TrackingPacketController';
 // import { ReqTrackingPacket } from './models/req/ReqTrackingPacket';
 // import { log } from 'console';
@@ -59,10 +60,14 @@ export function sendNegInvalidHeader(socket: net.Socket, header: string, io: Ser
   const mess = {
     imei: socketKey || socket.remoteAddress + ':' + socket.remotePort,
     packet: invalidCommandMsg,
+    timestamp: new Date(),
+    color: 'lightblue',
   };
   const messFull = {
     imei: socketKey || socket.remoteAddress + ':' + socket.remotePort,
     packet: data.toString(),
+    timestamp: new Date(),
+    color: '#E04D38',
   };
   io.emit('sockMessage', messFull);
   io.emit('sockMessage', mess);
@@ -80,10 +85,14 @@ export function sendNegInvalidChecksum(socket: net.Socket, header: string, io: S
   const mess = {
     imei: socketKey || socket.remoteAddress + ':' + socket.remotePort,
     packet: invalidCommandMsg,
+    timestamp: new Date(),
+    color: '#E04D38',
   };
   const messFull = {
     imei: socketKey || socket.remoteAddress + ':' + socket.remotePort,
     packet: data.toString(),
+    color: 'lightblue',
+    date: new Date(),
   };
   io.emit('sockMessage', messFull);
   io.emit('sockMessage', mess);
@@ -101,10 +110,14 @@ export function sendNegInvalidPacketFormat(socket: net.Socket, header: string, i
   const mess = {
     imei: socketKey || socket.remoteAddress + ':' + socket.remotePort,
     packet: invalidCommandMsg,
+    timestamp: new Date(),
+    color: '#E04D38',
   };
   const messFull = {
     imei: socketKey || socket.remoteAddress + ':' + socket.remotePort,
     packet: data.toString(),
+    color: 'lightblue',
+    timestamp: new Date(),
   };
   io.emit('sockMessage', messFull);
   io.emit('sockMessage', mess);
@@ -200,18 +213,88 @@ function onSocketData(socket: net.Socket, container: SocketContainer, io: Server
           // Emit the loginPacketBody to the Socket.IO server
           console.log('Emitting lpMessage: ', loginPacketBody);
           io.emit('lpMessage', loginPacketBody);
-          const imeiPacketBody: ImeiPacketBodyDT = {
+          const imeiPacketBody = {
             imei: commaSep[5] || socket.remoteAddress + ':' + socket.remotePort,
             packet: data.toString(),
             deviceType: commaSep[2],
+            timestamp: new Date(),
+            color: 'lightblue',
+          };
+          const checksum = stringToHexCRC32('#LIN,OK*');
+          const okLin = {
+            imei: commaSep[5],
+            deviceType: commaSep[2],
+            timestamp: new Date(),
+            packet: '#LIN,OK*' + checksum,
+            color: 'lightgreen',
           };
           io.emit('sockMessage', imeiPacketBody);
+          io.emit('sockMessage', okLin);
         } else {
           console.log('checksum invalid in lin block');
-          sendNegInvalidChecksum(socket, commaSep[0], io, data.toString());
+          sendNegInvalidChecksum(socket, '#LIN', io, data.toString());
         }
       } else {
-        sendNegInvalidPacketFormat(socket, commaSep[0], io, data.toString());
+        sendNegInvalidPacketFormat(socket, '#LIN', io, data.toString());
+      }
+    }
+    // else if ((commaSep[0] = '$EMR')) {
+
+    // } else if ((commaSep[0] = '$EPB')) {
+    // }
+    else if (commaSep[0] === '$GF1') {
+      if (commaSep.length == 17) {
+        if (checksum === dataStarArr[1]) {
+          const imeiPacketBody = {
+            imei: commaSep[5] || socket.remoteAddress + ':' + socket.remotePort,
+            packet: data.toString(),
+            // deviceType: commaSep[2],
+            timestamp: new Date(),
+            color: 'lightblue',
+          };
+          const checksum = stringToHexCRC32('#GF1,OK*');
+          const okGf1 = {
+            imei: commaSep[5],
+            // deviceType: commaSep[2],
+            timestamp: new Date(),
+            packet: '#GF1,OK*' + checksum,
+            color: 'lightgreen',
+          };
+          io.emit('sockMessage', imeiPacketBody);
+          socket.write(okGf1.toString());
+          io.emit('sockMessage', okGf1);
+        } else {
+          console.log('invalid checksum');
+          sendNegInvalidChecksum(socket, '#GF1', io, data.toString());
+        }
+      }
+    } else if (commaSep[0] === '$GF2') {
+      if (commaSep.length == 17) {
+        if (checksum === dataStarArr[1]) {
+          const imeiPacketBody = {
+            imei: commaSep[5] || socket.remoteAddress + ':' + socket.remotePort,
+            packet: data.toString(),
+            // deviceType: commaSep[2],
+            timestamp: new Date(),
+            color: 'lightblue',
+          };
+          const checksum = stringToHexCRC32('#GF2,OK*');
+          const okGf2 = {
+            imei: commaSep[5],
+            // deviceType: commaSep[2],
+            timestamp: new Date(),
+            packet: '#GF2,OK*' + checksum,
+            color: 'lightgreen',
+          };
+          io.emit('sockMessage', imeiPacketBody);
+          socket.write(okGf2.toString());
+          io.emit('sockMessage', okGf2);
+        } else {
+          console.log('invalid checksum');
+          sendNegInvalidChecksum(socket, '#GF2', io, data.toString());
+        }
+      } else {
+        sendNegInvalidPacketFormat(socket, '#GF2', io, data.toString());
       }
     } else if (commaSep[0] === '#CONFIG') {
       container.dataEventHandler.send(data.toString());
@@ -221,6 +304,8 @@ function onSocketData(socket: net.Socket, container: SocketContainer, io: Server
       const mess = {
         imei: socketKey || socket.remoteAddress + ':' + socket.remotePort,
         packet: data.toString(),
+        color: '#CBC3E3',
+        date: new Date(),
       };
       io.emit('sockMessage', mess);
     } else if (commaSep[0] === '$HMP') {
@@ -264,8 +349,19 @@ function onSocketData(socket: net.Socket, container: SocketContainer, io: Server
             const mess = {
               packet: data.toString(),
               imei: commaSep[4],
+              color: 'lightblue',
+              timestamp: new Date(),
+            };
+            const checksum = stringToHexCRC32('#HMP,OK*');
+            const okHmp = {
+              imei: commaSep[5],
+              deviceType: commaSep[2],
+              timestamp: new Date(),
+              packet: '#HMP,OK*' + checksum,
+              color: 'lightgreen',
             };
             io.emit('sockMessage', mess);
+            io.emit('sockMessage', okHmp);
             const healthControllerInstance = new HMPController();
             healthControllerInstance.saveHmp(hmpBody);
           } else {
@@ -276,10 +372,10 @@ function onSocketData(socket: net.Socket, container: SocketContainer, io: Server
           }
         } else {
           console.log('invalid checksum');
-          sendNegInvalidChecksum(socket, commaSep[0], io, data.toString());
+          sendNegInvalidChecksum(socket, '#HMP', io, data.toString());
         }
       } else {
-        sendNegInvalidPacketFormat(socket, commaSep[0], io, data.toString());
+        sendNegInvalidPacketFormat(socket, '#HMP', io, data.toString());
       }
     } else if (commaSep[0] === '$TP') {
       // Check if the packet starts with "$TRP"
@@ -305,7 +401,7 @@ function onSocketData(socket: net.Socket, container: SocketContainer, io: Server
           }
 
           // if (sockMap.has(commaSep[7])) {
-          // Check if the IMEI is registered in sockMap
+          // Check if the IMEI is registe#E04D38 in sockMap
           // Create ReqTrackingPacket object
           // const trackingBody: ReqTrackingPacket = {
           //   startCharacter: commaSep[0], // "*"
@@ -363,11 +459,22 @@ function onSocketData(socket: net.Socket, container: SocketContainer, io: Server
           // Emit the tracking packet data
           io.emit('tpMessage', data);
 
-          const imeiPacketBody: ImeiPacketBody = {
+          const imeiPacketBody = {
             imei: commaSep[7] || socket.remoteAddress + ':' + socket.remotePort,
             packet: data.toString(),
             // deviceType: ,
+            color: 'lightblue',
+            timestamp: new Date(),
           };
+          const checksum = stringToHexCRC32('#TP,OK*');
+          const okTp = {
+            imei: commaSep[7],
+            deviceType: commaSep[2],
+            timestamp: new Date(),
+            packet: '#TP,OK*' + checksum,
+            color: 'lightgreen',
+          };
+          io.emit('sockMessage', okTp);
           io.emit('sockMessage', imeiPacketBody);
           // Save the tracking packet using the controller
           // const trackingControllerInstance = new TrackingPacketController();
@@ -397,6 +504,8 @@ function onSocketData(socket: net.Socket, container: SocketContainer, io: Server
       const mess = {
         packet: data.toString(),
         imei: socketKey,
+        color: 'lightblue',
+        timestamp: new Date(),
       };
       io.emit('sockMessage', mess);
     }
@@ -451,6 +560,8 @@ export function initSocketIOFeatures(httpServer: http.Server) {
         const mess = {
           imei: socketKey || socket.remoteAddress + ':' + socket.remotePort,
           packet: 'CLIENT DISCONNECTED: ' + socketKey,
+          color: 'yellow',
+          timestamp: new Date(),
         };
         io.emit('sockMessage', mess);
         console.log('Client disconnected');
@@ -473,6 +584,8 @@ export function initSocketIOFeatures(httpServer: http.Server) {
         imei: socketKey || socket.remoteAddress + ':' + socket.remotePort,
         packet: 'CLIENT CONNECTED: ' + socket.remoteAddress + ':' + socket.remotePort,
         // socketKey,
+        color: 'yellow',
+        timestamp: new Date(),
       };
       console.log('the on connect block has reached here 2');
 
