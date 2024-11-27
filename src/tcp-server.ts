@@ -15,6 +15,13 @@ import http from 'http';
 // import { log } from 'console';
 // const socketArr: net.Socket[] = [];
 
+export interface Coordinates {
+  longitude: number;
+  latitude: number;
+  longDir: 'W' | 'E';
+  latDir: 'N' | 'S';
+}
+
 export interface ImeiPacketBody {
   imei: string;
   packet: string;
@@ -92,7 +99,8 @@ export function sendNegInvalidChecksum(socket: net.Socket, header: string, io: S
     imei: socketKey || socket.remoteAddress + ':' + socket.remotePort,
     packet: data.toString(),
     color: 'lightblue',
-    date: new Date(),
+    timestamp: new Date(),
+    // timestamp: new
   };
   io.emit('sockMessage', messFull);
   io.emit('sockMessage', mess);
@@ -380,7 +388,7 @@ function onSocketData(socket: net.Socket, container: SocketContainer, io: Server
     } else if (commaSep[0] === '$TP') {
       // Check if the packet starts with "$TRP"
       // if(){
-      if (commaSep.length >= 35) {
+      if (commaSep.length >= 0) {
         // Assuming 35 is the minimum length based on the number of parameters
         const checksum = dataStarArr[1];
         if (checksum === dataStarArr[1]) {
@@ -457,7 +465,21 @@ function onSocketData(socket: net.Socket, container: SocketContainer, io: Server
           // };
 
           // Emit the tracking packet data
-          io.emit('tpMessage', data);
+          // io.emit('tpMessage', data);
+          let lad: 'N' | 'S';
+          let lod: 'E' | 'W';
+          let dummy: Coordinates;
+          if ((commaSep[13] == 'N' || commaSep[13] == 'S') && (commaSep[15] == 'W' || commaSep[15] == 'E')) {
+            lad = commaSep[13];
+            lod = commaSep[15];
+            dummy = {
+              latitude: Number(commaSep[12]),
+              longitude: Number(commaSep[14]),
+              latDir: lad,
+              longDir: lod,
+            };
+            io.emit('tpMessage', dummy);
+          }
 
           const imeiPacketBody = {
             imei: commaSep[7] || socket.remoteAddress + ':' + socket.remotePort,
