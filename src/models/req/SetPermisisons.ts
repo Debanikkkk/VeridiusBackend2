@@ -1,4 +1,4 @@
 export interface SetPermisisons {
-  role?: number;
+  // role?: number;
   permissions?: number[];
 }

@@ -110,6 +110,9 @@
 							}
 						],
 						"nullable": true
+					},
+					"imei": {
+						"type": "string"
 					}
 				},
 				"type": "object",
@@ -311,6 +314,12 @@
 					},
 					"service_ticket": {
 						"$ref": "#/components/schemas/ServiceTicket"
+					},
+					"trips": {
+						"items": {
+							"$ref": "#/components/schemas/Trip"
+						},
+						"type": "array"
 					}
 				},
 				"type": "object",
@@ -456,6 +465,46 @@
 				"type": "object",
 				"additionalProperties": false
 			},
+			"Trip": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"user": {
+						"$ref": "#/components/schemas/User"
+					},
+					"startLatitude": {
+						"type": "number",
+						"format": "double"
+					},
+					"startLongitude": {
+						"type": "number",
+						"format": "double"
+					},
+					"endLatitude": {
+						"type": "number",
+						"format": "double"
+					},
+					"endLongitude": {
+						"type": "number",
+						"format": "double"
+					},
+					"tariff": {
+						"type": "number",
+						"format": "double"
+					},
+					"paymentStatus": {
+						"type": "string"
+					},
+					"timestamp": {
+						"type": "string",
+						"format": "date-time"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
 			"ReqDeviceAssign": {
 				"properties": {
 					"id": {
@@ -585,10 +634,6 @@
 			},
 			"SetPermisisons": {
 				"properties": {
-					"role": {
-						"type": "number",
-						"format": "double"
-					},
 					"permissions": {
 						"items": {
 							"type": "number",
@@ -744,6 +789,9 @@
 						"type": "string"
 					},
 					"name": {
+						"type": "string"
+					},
+					"imei": {
 						"type": "string"
 					}
 				},
@@ -1549,7 +1597,7 @@
 				}
 			}
 		},
-		"/role/setPermissions": {
+		"/role/{roleId}/setPermissions": {
 			"put": {
 				"operationId": "GivePermissionToRole",
 				"responses": {
@@ -1577,7 +1625,17 @@
 					"Role"
 				],
 				"security": [],
-				"parameters": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "roleId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				],
 				"requestBody": {
 					"required": true,
 					"content": {

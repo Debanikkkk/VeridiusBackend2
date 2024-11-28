@@ -196,6 +196,8 @@ function onSocketData(socket: net.Socket, container: SocketContainer, io: Server
           const loginPacketInstance = new LoginPacketController();
           const packetSave = loginPacketInstance.saveLoginPacket(loginPacketBody);
           console.log('this is the saved packet', packetSave);
+
+          console.log('this is the imei i wanna see', commaSep[5]);
           // socketArr.splice(socket);
           // console.log('the socket array is now 1', socketArr);
           for (const [index, sock] of socketArr.entries()) {

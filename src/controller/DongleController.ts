@@ -52,15 +52,19 @@ export class DongleController extends Controller {
   public async getAllDongle(): Promise<ResDongle[] | ResError> {
     try {
       const dongles = await this.donglerepository.find({
-        relations: {
-          device: true,
-        },
+        // relations: {
+        //   // device: true,
+        // },
       });
 
       if (!dongles) {
         return Promise.reject(new Error('DONGLES WERE NOT FOUND'));
       }
-
+      // const device=await this.devicerepository.findOne({
+      //   where:{
+      //     id: dongl
+      //   }
+      // })
       const dongleArr: ResDongle[] = [];
 
       for (const dongle of dongles) {

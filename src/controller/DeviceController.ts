@@ -81,11 +81,12 @@ export class DeviceController extends Controller {
   @Post()
   public async saveDevice(@Body() request: ReqDevice): Promise<ResDevice | ResError> {
     try {
-      const { mac_address, name } = request;
+      const { mac_address, name, imei } = request;
 
       const deviceToSave: Device = {
         mac_address: mac_address,
         name: name,
+        imei: imei,
       };
 
       const deviceSaver = Object.assign(new Device(), deviceToSave);
@@ -99,6 +100,7 @@ export class DeviceController extends Controller {
         id: savedDevice.id,
         mac_address: savedDevice.mac_address,
         name: savedDevice.name,
+        imei: savedDevice.imei,
         user: {
           // address: (await savedDevice.user)?.address,
           // email: (await savedDevice.user)?.email,

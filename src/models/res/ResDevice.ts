@@ -7,4 +7,5 @@ export interface ResDevice {
   name?: string;
   user?: ResUser;
   dongle?: ResDongle | null;
+  imei?: string;
 }

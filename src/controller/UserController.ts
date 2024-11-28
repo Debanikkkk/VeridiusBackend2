@@ -132,6 +132,7 @@ export class UserController extends Controller {
         id: user.id!,
         //   pincode: user.pincode,
         role: {
+          id: (await user.role).id!,
           permissions: (await perm_result)!.map<string>((p) => {
             return p.name!;
           }),

@@ -1,7 +1,8 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Device } from './Device';
 import { Role } from './Role';
 import { ServiceTicket } from './ServiceTickets';
+import { Trip } from './Trip';
 
 @Entity()
 export class User {
@@ -64,4 +65,13 @@ export class User {
   )
   // @JoinColumn({name: 'service_ticket_id'})
   service_ticket?: Promise<ServiceTicket>;
+
+  @OneToMany(
+    () => Trip,
+    (trip) => {
+      trip.user;
+    },
+    { nullable: true, onDelete: 'CASCADE', onUpdate: 'CASCADE' },
+  )
+  trips?: Promise<Trip[]>;
 }

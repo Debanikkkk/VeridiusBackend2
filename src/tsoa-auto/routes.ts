@@ -83,6 +83,7 @@ const models: TsoaRoute.Models = {
             "name": {"dataType":"string"},
             "user": {"ref":"ResUser"},
             "dongle": {"dataType":"union","subSchemas":[{"ref":"ResDongle"},{"dataType":"enum","enums":[null]}]},
+            "imei": {"dataType":"string"},
         },
         "additionalProperties": false,
     },
@@ -185,6 +186,7 @@ const models: TsoaRoute.Models = {
             "device": {"dataType":"union","subSchemas":[{"ref":"Device"},{"dataType":"enum","enums":[null]}]},
             "role": {"ref":"Role"},
             "service_ticket": {"ref":"ServiceTicket"},
+            "trips": {"dataType":"array","array":{"dataType":"refObject","ref":"Trip"}},
         },
         "additionalProperties": false,
     },
@@ -246,6 +248,22 @@ const models: TsoaRoute.Models = {
             "status": {"ref":"serviceTicketStatus"},
             "service_ticket_number": {"dataType":"string"},
             "technician": {"ref":"User"},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "Trip": {
+        "dataType": "refObject",
+        "properties": {
+            "id": {"dataType":"double"},
+            "user": {"ref":"User"},
+            "startLatitude": {"dataType":"double"},
+            "startLongitude": {"dataType":"double"},
+            "endLatitude": {"dataType":"double"},
+            "endLongitude": {"dataType":"double"},
+            "tariff": {"dataType":"double"},
+            "paymentStatus": {"dataType":"string"},
+            "timestamp": {"dataType":"datetime"},
         },
         "additionalProperties": false,
     },
@@ -322,7 +340,6 @@ const models: TsoaRoute.Models = {
     "SetPermisisons": {
         "dataType": "refObject",
         "properties": {
-            "role": {"dataType":"double"},
             "permissions": {"dataType":"array","array":{"dataType":"double"}},
         },
         "additionalProperties": false,
@@ -397,6 +414,7 @@ const models: TsoaRoute.Models = {
         "properties": {
             "mac_address": {"dataType":"string"},
             "name": {"dataType":"string"},
+            "imei": {"dataType":"string"},
         },
         "additionalProperties": false,
     },
@@ -918,13 +936,14 @@ export function RegisterRoutes(app: Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        app.put('/role/setPermissions',
+        app.put('/role/:roleId/setPermissions',
             ...(fetchMiddlewares<RequestHandler>(RoleController)),
             ...(fetchMiddlewares<RequestHandler>(RoleController.prototype.givePermissionToRole)),
 
             async function RoleController_givePermissionToRole(request: ExRequest, response: ExResponse, next: any) {
             const args: Record<string, TsoaRoute.ParameterSchema> = {
                     request: {"in":"body","name":"request","required":true,"ref":"SetPermisisons"},
+                    roleId: {"in":"path","name":"roleId","required":true,"dataType":"double"},
             };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa

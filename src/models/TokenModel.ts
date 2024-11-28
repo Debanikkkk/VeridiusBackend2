@@ -6,5 +6,6 @@ export interface JWTTokenData {
   // region?: number;
   // subOem?: number;
   // pincode?: number;
-  role: { permissions: string[] };
+  // role_id?: number;
+  role: { id: number; permissions: string[] };
 }
