@@ -137,14 +137,14 @@ export class RoleController extends Controller {
    * allot permissions to a role
    * @summary allot permissions to a role
    */
-  @Put('/setPermissions')
-  public async givePermissionToRole(@Body() request: SetPermisisons): Promise<GetSetPermisisons | ResError> {
+  @Put('{roleId}/setPermissions')
+  public async givePermissionToRole(@Body() request: SetPermisisons, roleId: number): Promise<GetSetPermisisons | ResError> {
     try {
-      const { role, permissions } = request;
+      const { permissions } = request;
 
       const db_role = await this.rolerepository.findOne({
         where: {
-          id: role,
+          id: roleId,
         },
       });
       if (!db_role) {

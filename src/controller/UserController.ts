@@ -28,12 +28,15 @@ export class UserController extends Controller {
   public async saveUser(@Body() req: ReqUser): Promise<ResUser | ResError> {
     try {
       const { address, email, password, name, phone_number, role } = req;
-
+      if (!role) {
+        return { error: 'user cannot be created witout role' };
+      }
       const db_role = await this.rolerepository.findOne({
         where: {
           id: role,
         },
       });
+      console.log('the saved role is ', db_role);
       if (!db_role) {
         return Promise.reject(new Error('PLEASE INSERT ROLE'));
       }
@@ -45,6 +48,7 @@ export class UserController extends Controller {
         phone_number: phone_number,
         role: Promise.resolve(db_role),
       };
+      console.log('the user to save is', userToSave);
 
       const userSaver = Object.assign(new User(), userToSave);
       const savedUser = await this.userrepository.save(userSaver);
@@ -56,6 +60,11 @@ export class UserController extends Controller {
         name: savedUser.name,
         phone_number: savedUser.phone_number,
         password: savedUser.password,
+        role: {
+          description: (await savedUser.role)?.description,
+          id: (await savedUser.role)?.id,
+          name: (await savedUser.role)?.name,
+        },
       };
       return resUser;
     } catch (error) {
@@ -123,6 +132,7 @@ export class UserController extends Controller {
         id: user.id!,
         //   pincode: user.pincode,
         role: {
+          id: (await user.role).id!,
           permissions: (await perm_result)!.map<string>((p) => {
             return p.name!;
           }),
@@ -135,8 +145,8 @@ export class UserController extends Controller {
       loginUser.token = jsonWebtoken;
       return loginUser;
     } catch (error) {
-      console.log('there was an errror in logging in ', error);
-      return { error: 'failed to login' };
+      console.log('INVALID CREDENTIALS', error);
+      return { error: 'INVALID CREDENTIALS' };
     }
   }
 

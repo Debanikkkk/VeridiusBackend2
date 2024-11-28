@@ -5,43 +5,43 @@ export class HealthMonitoringPacket {
   @PrimaryGeneratedColumn()
   id?: number;
 
-  // @Column({ type: 'varchar', length: 1 })
+  // @Column({ type: 'varchar', length: 1 , nullable: true})
   // startCharacter?: string;
 
-  @Column({ type: 'varchar', length: 50 })
+  @Column({ type: 'varchar', length: 50, nullable: true })
   header?: string;
 
-  @Column({ type: 'varchar', length: 50 })
+  @Column({ type: 'varchar', length: 50, nullable: true })
   vendorId?: string;
 
-  @Column({ type: 'varchar', length: 50 })
+  @Column({ type: 'varchar', length: 50, nullable: true })
   version?: string;
 
-  @Column({ type: 'varchar', length: 50 })
+  @Column({ type: 'varchar', length: 50, nullable: true })
   firmwareVersion?: string;
 
-  @Column({ type: 'varchar', length: 15 })
+  @Column({ type: 'varchar', length: 50, nullable: true })
   imei?: string;
 
-  @Column({ type: 'int' })
+  @Column({ type: 'int', nullable: true })
   batteryPercentage?: number;
 
-  @Column({ type: 'int' })
+  @Column({ type: 'int', nullable: true })
   lowBatteryThresholdPercentage?: number;
 
-  @Column({ type: 'float' })
+  @Column({ type: 'float', nullable: true })
   memoryPercentage1?: number;
 
-  @Column({ type: 'float' })
+  @Column({ type: 'float', nullable: true })
   memoryPercentage2?: number;
 
-  @Column({ type: 'int' })
+  @Column({ type: 'int', nullable: true })
   dataUpdateRateWhenIgnitionOn?: number;
 
-  @Column({ type: 'int' })
+  @Column({ type: 'int', nullable: true })
   dataUpdateRateWhenIgnitionOff?: number;
 
-  @Column({ type: 'varchar', length: 4 })
+  @Column({ type: 'varchar', length: 50, nullable: true })
   digitalInputStatus?: string;
 
   @Column({ type: 'float', nullable: true })
@@ -50,6 +50,6 @@ export class HealthMonitoringPacket {
   @Column({ type: 'float', nullable: true })
   analogInput2Status?: number;
 
-  @Column({ type: 'varchar', length: 10 })
+  @Column({ type: 'varchar', length: 50, nullable: true })
   checksum?: string;
 }
