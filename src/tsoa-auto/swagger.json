@@ -7,6 +7,13 @@
 		"requestBodies": {},
 		"responses": {},
 		"schemas": {
+			"permType": {
+				"enum": [
+					"user",
+					"product"
+				],
+				"type": "string"
+			},
 			"ResRole": {
 				"properties": {
 					"id": {
@@ -18,8 +25,42 @@
 					},
 					"description": {
 						"type": "string"
+					},
+					"permissions": {
+						"items": {
+							"$ref": "#/components/schemas/ResPermission"
+						},
+						"type": "array"
 					}
 				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ResPermission": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"description": {
+						"type": "string"
+					},
+					"type": {
+						"$ref": "#/components/schemas/permType"
+					},
+					"name": {
+						"type": "string"
+					},
+					"roles": {
+						"items": {
+							"$ref": "#/components/schemas/ResRole"
+						},
+						"type": "array"
+					}
+				},
+				"required": [
+					"type"
+				],
 				"type": "object",
 				"additionalProperties": false
 			},
@@ -168,41 +209,6 @@
 						"format": "double"
 					}
 				},
-				"type": "object",
-				"additionalProperties": false
-			},
-			"permType": {
-				"enum": [
-					"user",
-					"product"
-				],
-				"type": "string"
-			},
-			"ResPermission": {
-				"properties": {
-					"id": {
-						"type": "number",
-						"format": "double"
-					},
-					"description": {
-						"type": "string"
-					},
-					"type": {
-						"$ref": "#/components/schemas/permType"
-					},
-					"name": {
-						"type": "string"
-					},
-					"roles": {
-						"items": {
-							"$ref": "#/components/schemas/ResRole"
-						},
-						"type": "array"
-					}
-				},
-				"required": [
-					"type"
-				],
 				"type": "object",
 				"additionalProperties": false
 			},

@@ -9,6 +9,7 @@ import { In } from 'typeorm';
 import { Permission, permType } from '../entity/Permission';
 // import { ReqRoleBody } from '../models/req/ReqRoleBody';
 import { ResError, ResSuccess } from '../models/res/Responses';
+import { ResPermission } from '../models/res/ResPermission';
 @Tags('Role')
 @Route('/role')
 export class RoleController extends Controller {
@@ -48,15 +49,36 @@ export class RoleController extends Controller {
   @Get()
   public async getAllRole(): Promise<ResRole[] | ResError> {
     try {
-      const roles = await this.rolerepository.find();
+      const roles = await this.rolerepository.find({
+        relations: {
+          permissions: true,
+        },
+      });
 
+      if (!roles) {
+        return Promise.reject(new Error('ROLES NOT FOUND'));
+      }
       const roleArr: ResRole[] = [];
-
+      const resPermArr: ResPermission[] = [];
       for (const role of roles) {
+        const permissions = await role.permissions;
+        let resPermission: ResPermission;
+        if (permissions) {
+          permissions.forEach((r) => {
+            resPermission = {
+              type: r.type!,
+              description: r.description,
+              id: r.id,
+              name: r.name,
+            };
+            resPermArr.push(resPermission);
+          });
+        }
         roleArr.push({
           description: role.description,
           id: role.id,
           name: role.name,
+          permissions: resPermArr,
         });
       }
 
