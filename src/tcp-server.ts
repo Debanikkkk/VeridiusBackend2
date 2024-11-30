@@ -238,6 +238,7 @@ function onSocketData(socket: net.Socket, container: SocketContainer, io: Server
             packet: '#LIN,OK*' + checksum,
             color: 'lightgreen',
           };
+          socket.write(okLin.packet.toString())
           io.emit('sockMessage', imeiPacketBody);
           io.emit('sockMessage', okLin);
         } else {
@@ -370,6 +371,7 @@ function onSocketData(socket: net.Socket, container: SocketContainer, io: Server
               packet: '#HMP,OK*' + checksum,
               color: 'lightgreen',
             };
+            socket.write(okHmp.packet.toString())
             io.emit('sockMessage', mess);
             io.emit('sockMessage', okHmp);
             const healthControllerInstance = new HMPController();
@@ -500,6 +502,7 @@ function onSocketData(socket: net.Socket, container: SocketContainer, io: Server
           };
           io.emit('sockMessage', okTp);
           io.emit('sockMessage', imeiPacketBody);
+          socket.write(okTp.packet.toString())
           // Save the tracking packet using the controller
           // const trackingControllerInstance = new TrackingPacketController();
           // trackingControllerInstance

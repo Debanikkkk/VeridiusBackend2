@@ -32,12 +32,30 @@ const expressAuthenticationRecasted = expressAuthentication as (req: ExRequest, 
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
 const models: TsoaRoute.Models = {
+    "permType": {
+        "dataType": "refEnum",
+        "enums": ["user","product"],
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "ResRole": {
         "dataType": "refObject",
         "properties": {
             "id": {"dataType":"double"},
             "name": {"dataType":"string"},
             "description": {"dataType":"string"},
+            "permissions": {"dataType":"array","array":{"dataType":"refObject","ref":"ResPermission"}},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "ResPermission": {
+        "dataType": "refObject",
+        "properties": {
+            "id": {"dataType":"double"},
+            "description": {"dataType":"string"},
+            "type": {"ref":"permType","required":true},
+            "name": {"dataType":"string"},
+            "roles": {"dataType":"array","array":{"dataType":"refObject","ref":"ResRole"}},
         },
         "additionalProperties": false,
     },
@@ -115,23 +133,6 @@ const models: TsoaRoute.Models = {
             "email": {"dataType":"string"},
             "phone_number": {"dataType":"string"},
             "role": {"dataType":"double"},
-        },
-        "additionalProperties": false,
-    },
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "permType": {
-        "dataType": "refEnum",
-        "enums": ["user","product"],
-    },
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "ResPermission": {
-        "dataType": "refObject",
-        "properties": {
-            "id": {"dataType":"double"},
-            "description": {"dataType":"string"},
-            "type": {"ref":"permType","required":true},
-            "name": {"dataType":"string"},
-            "roles": {"dataType":"array","array":{"dataType":"refObject","ref":"ResRole"}},
         },
         "additionalProperties": false,
     },

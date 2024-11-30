@@ -33,6 +33,5 @@ RUN ls -al
 RUN ls -al /app/dist/
 
 USER node
-
 CMD ["node", "dist/index.js"]
 
