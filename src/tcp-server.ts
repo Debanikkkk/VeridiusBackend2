@@ -14,7 +14,7 @@ import http from 'http';
 // import { ReqTrackingPacket } from './models/req/ReqTrackingPacket';
 // import { log } from 'console';
 // const socketArr: net.Socket[] = [];
-
+import WebSocket from 'ws';
 export interface Coordinates {
   longitude: number;
   latitude: number;
@@ -48,6 +48,10 @@ export class SocketContainer {
     return this.socket.write(data);
   }
 }
+const host = 'ws://192.168.29.239';
+const port = 5000;
+const url = `${host}:${port}`;
+const ws = new WebSocket(url);
 
 export const sockMap = new Map<string, SocketContainer>();
 const app = express();
@@ -147,7 +151,7 @@ export function stringToHexCRC32(data: string): string {
   const checksum = crc32.str(dataWithoutChecksum);
   // Ensure the checksum is always positive
   const uchecksum = checksum >>> 0; // Convert to unsigned 32-bit integer
-  return uchecksum.toString(16).toUpperCase();
+  return uchecksum.toString(16).toUpperCase().padStart(8, '0');
 }
 
 let socketArr: net.Socket[] = [];
@@ -192,7 +196,7 @@ function onSocketData(socket: net.Socket, container: SocketContainer, io: Server
           };
           // if (commaSep[0] === '$TP') {}
           // ****************
-
+          ws.send(loginPacketBody.toString())
           const loginPacketInstance = new LoginPacketController();
           const packetSave = loginPacketInstance.saveLoginPacket(loginPacketBody);
           console.log('this is the saved packet', packetSave);
@@ -483,6 +487,7 @@ function onSocketData(socket: net.Socket, container: SocketContainer, io: Server
               longDir: lod,
             };
             io.emit('tpMessage', dummy);
+            ws.send(dummy.toString())
           }
 
           const imeiPacketBody = {
@@ -502,6 +507,7 @@ function onSocketData(socket: net.Socket, container: SocketContainer, io: Server
           };
           io.emit('sockMessage', okTp);
           io.emit('sockMessage', imeiPacketBody);
+
           socket.write(okTp.packet.toString())
           // Save the tracking packet using the controller
           // const trackingControllerInstance = new TrackingPacketController();
