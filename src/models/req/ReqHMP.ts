@@ -8,7 +8,7 @@ export interface ReqHMP {
   digitalInputStatus: string;
   // endCharacter: string;
   firmwareVersion: string;
-  header: string;
+  packetHeader: string;
   // id,
   imei: string;
   lowBatteryThresholdPercentage: number;
