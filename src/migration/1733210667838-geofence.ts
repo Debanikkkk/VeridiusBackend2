@@ -4,7 +4,6 @@ export class Geofence1733210667838 implements MigrationInterface {
     name = 'Geofence1733210667838'
 
     public async up(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.query(`CREATE EXTENSION postgis`);
         await queryRunner.query(`ALTER TABLE "geofence" DROP COLUMN "latitude"`);
         await queryRunner.query(`ALTER TABLE "geofence" DROP COLUMN "longitude"`);
         await queryRunner.query(`ALTER TABLE "geofence" DROP COLUMN "radius"`);
@@ -20,7 +19,6 @@ export class Geofence1733210667838 implements MigrationInterface {
         await queryRunner.query(`ALTER TABLE "geofence" ADD "radius" double precision NOT NULL`);
         await queryRunner.query(`ALTER TABLE "geofence" ADD "longitude" double precision NOT NULL`);
         await queryRunner.query(`ALTER TABLE "geofence" ADD "latitude" double precision NOT NULL`);
-        await queryRunner.query(`DROP EXTENSION postgis`);
     }
 
 }
