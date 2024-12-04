@@ -173,7 +173,7 @@ function onSocketData(socket: net.Socket, container: SocketContainer, io: Server
   console.log('checksum valid');
   console.log('the version is ', dataCommaArr[1]);
 
-  if (dataCommaArr[1] == 'v1') {
+  if (dataCommaArr[1].toUpperCase() == 'V1') {
     console.log('this is v1');
     const commaSep = splitStringToArrayComma(strData);
     console.log('comma separated', commaSep);
