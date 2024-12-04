@@ -15,6 +15,8 @@ import { LoginPacketController } from './../controller/LoginPacketController';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { IMEICMDController } from './../controller/IMEICMDController';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+import { GeofenceController } from './../controller/GeofenceController';
+// WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { FreeDongleUserDeviceController } from './../controller/FreeDongleUserDeviceController';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { DongleController } from './../controller/DongleController';
@@ -398,6 +400,25 @@ const models: TsoaRoute.Models = {
         "properties": {
             "imei": {"dataType":"string","required":true},
             "cmd": {"dataType":"string","required":true},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "ResGeofence": {
+        "dataType": "refObject",
+        "properties": {
+            "id": {"dataType":"double"},
+            "name": {"dataType":"string"},
+            "polygon": {"dataType":"nestedObjectLiteral","nestedProperties":{"coordinates":{"dataType":"array","array":{"dataType":"array","array":{"dataType":"array","array":{"dataType":"double"}}},"required":true},"type":{"dataType":"enum","enums":["Polygon"],"required":true}}},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "ReqGeofence": {
+        "dataType": "refObject",
+        "properties": {
+            "name": {"dataType":"string"},
+            "polygon": {"dataType":"nestedObjectLiteral","nestedProperties":{"coordinates":{"dataType":"array","array":{"dataType":"array","array":{"dataType":"array","array":{"dataType":"double"}}},"required":true},"type":{"dataType":"enum","enums":["Polygon"],"required":true}}},
         },
         "additionalProperties": false,
     },
@@ -1228,6 +1249,65 @@ export function RegisterRoutes(app: Router) {
 
               await templateService.apiHandler({
                 methodName: 'sendCommand',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.post('/geofence',
+            ...(fetchMiddlewares<RequestHandler>(GeofenceController)),
+            ...(fetchMiddlewares<RequestHandler>(GeofenceController.prototype.saveGeofence)),
+
+            async function GeofenceController_saveGeofence(request: ExRequest, response: ExResponse, next: any) {
+            const args: Record<string, TsoaRoute.ParameterSchema> = {
+                    req: {"in":"body","name":"req","required":true,"ref":"ReqGeofence"},
+            };
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+
+                const controller = new GeofenceController();
+
+              await templateService.apiHandler({
+                methodName: 'saveGeofence',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.get('/geofence',
+            ...(fetchMiddlewares<RequestHandler>(GeofenceController)),
+            ...(fetchMiddlewares<RequestHandler>(GeofenceController.prototype.getAllGeofence)),
+
+            async function GeofenceController_getAllGeofence(request: ExRequest, response: ExResponse, next: any) {
+            const args: Record<string, TsoaRoute.ParameterSchema> = {
+            };
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+
+                const controller = new GeofenceController();
+
+              await templateService.apiHandler({
+                methodName: 'getAllGeofence',
                 controller,
                 response,
                 next,

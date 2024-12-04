@@ -24,7 +24,13 @@ AppDataSource.initialize()
     const server: http.Server = http.createServer(app);
 
     // CORS options
-    const allowedOrigins = [...envs.CORS_ALLOWED_ORIGINS, 'http://localhost:3000', 'http://localhost:3001', 'https://chronicpestcontrolagencies.org'];
+    const allowedOrigins = [
+      ...envs.CORS_ALLOWED_ORIGINS,
+      'http://localhost:3000',
+      'http://localhost:8081',
+      'http://localhost:3001',
+      'https://chronicpestcontrolagencies.org',
+    ];
     const options: cors.CorsOptions = { origin: allowedOrigins };
     initSocketIOFeatures(server);
     // Create uploads directory if it doesn’t exist

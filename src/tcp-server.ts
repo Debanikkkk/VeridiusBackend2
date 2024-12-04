@@ -9,12 +9,8 @@ import { ReqHMP } from './models/req/ReqHMP';
 import { HMPController } from './controller/HMPController';
 import { envs } from 'utils/envVars';
 import http from 'http';
-// import { timeStamp } from 'console';
-// import { TrackingPacketController } from './controller/TrackingPacketController';
-// import { ReqTrackingPacket } from './models/req/ReqTrackingPacket';
-// import { log } from 'console';
-// const socketArr: net.Socket[] = [];
-import WebSocket from 'ws';
+import { ReqTrackingPacket } from './models/req/ReqTrackingPacket';
+
 export interface Coordinates {
   longitude: number;
   latitude: number;
@@ -48,10 +44,10 @@ export class SocketContainer {
     return this.socket.write(data);
   }
 }
-const host = 'ws://192.168.29.239';
-const port = 5000;
-const url = `${host}:${port}`;
-const ws = new WebSocket(url);
+// const host = 'ws://192.168.29.229';
+// const port = 5005;
+// const url = `${host}:${port}`;
+// const ws = new WebSocket(url);
 
 export const sockMap = new Map<string, SocketContainer>();
 const app = express();
@@ -72,12 +68,14 @@ export function sendNegInvalidHeader(socket: net.Socket, header: string, io: Ser
     imei: socketKey || socket.remoteAddress + ':' + socket.remotePort,
     packet: invalidCommandMsg,
     timestamp: new Date(),
+    packetHeader: header,
     color: 'lightblue',
   };
   const messFull = {
     imei: socketKey || socket.remoteAddress + ':' + socket.remotePort,
     packet: data.toString(),
     timestamp: new Date(),
+    packetHeader: header,
     color: '#E04D38',
   };
   io.emit('sockMessage', messFull);
@@ -97,11 +95,13 @@ export function sendNegInvalidChecksum(socket: net.Socket, header: string, io: S
     imei: socketKey || socket.remoteAddress + ':' + socket.remotePort,
     packet: invalidCommandMsg,
     timestamp: new Date(),
+    packetHeader: header,
     color: '#E04D38',
   };
   const messFull = {
     imei: socketKey || socket.remoteAddress + ':' + socket.remotePort,
     packet: data.toString(),
+    packetHeader: header,
     color: 'lightblue',
     timestamp: new Date(),
     // timestamp: new
@@ -122,12 +122,14 @@ export function sendNegInvalidPacketFormat(socket: net.Socket, header: string, i
   const mess = {
     imei: socketKey || socket.remoteAddress + ':' + socket.remotePort,
     packet: invalidCommandMsg,
+    packetHeader: header,
     timestamp: new Date(),
     color: '#E04D38',
   };
   const messFull = {
     imei: socketKey || socket.remoteAddress + ':' + socket.remotePort,
     packet: data.toString(),
+    packetHeader: header,
     color: 'lightblue',
     timestamp: new Date(),
   };
@@ -196,7 +198,9 @@ function onSocketData(socket: net.Socket, container: SocketContainer, io: Server
           };
           // if (commaSep[0] === '$TP') {}
           // ****************
-          ws.send(loginPacketBody.toString())
+          // ws.send(loginPacketBody.toString());
+          // *****
+          // ws.send(JSON.stringify(loginPacketBody));
           const loginPacketInstance = new LoginPacketController();
           const packetSave = loginPacketInstance.saveLoginPacket(loginPacketBody);
           console.log('this is the saved packet', packetSave);
@@ -233,6 +237,7 @@ function onSocketData(socket: net.Socket, container: SocketContainer, io: Server
             deviceType: commaSep[2],
             timestamp: new Date(),
             color: 'lightblue',
+            packetHeader: commaSep[0],
           };
           const checksum = stringToHexCRC32('#LIN,OK*');
           const okLin = {
@@ -241,8 +246,9 @@ function onSocketData(socket: net.Socket, container: SocketContainer, io: Server
             timestamp: new Date(),
             packet: '#LIN,OK*' + checksum,
             color: 'lightgreen',
+            packetHeader: commaSep[0],
           };
-          socket.write(okLin.packet.toString())
+          socket.write(okLin.packet.toString());
           io.emit('sockMessage', imeiPacketBody);
           io.emit('sockMessage', okLin);
         } else {
@@ -266,6 +272,7 @@ function onSocketData(socket: net.Socket, container: SocketContainer, io: Server
             // deviceType: commaSep[2],
             timestamp: new Date(),
             color: 'lightblue',
+            packetHeader: commaSep[0],
           };
           const checksum = stringToHexCRC32('#GF1,OK*');
           const okGf1 = {
@@ -274,6 +281,7 @@ function onSocketData(socket: net.Socket, container: SocketContainer, io: Server
             timestamp: new Date(),
             packet: '#GF1,OK*' + checksum,
             color: 'lightgreen',
+            packetHeader: commaSep[0],
           };
           io.emit('sockMessage', imeiPacketBody);
           socket.write(okGf1.toString());
@@ -289,6 +297,7 @@ function onSocketData(socket: net.Socket, container: SocketContainer, io: Server
           const imeiPacketBody = {
             imei: commaSep[5] || socket.remoteAddress + ':' + socket.remotePort,
             packet: data.toString(),
+            packetHeader: commaSep[0],
             // deviceType: commaSep[2],
             timestamp: new Date(),
             color: 'lightblue',
@@ -296,6 +305,7 @@ function onSocketData(socket: net.Socket, container: SocketContainer, io: Server
           const checksum = stringToHexCRC32('#GF2,OK*');
           const okGf2 = {
             imei: commaSep[5],
+            packetHeader: commaSep[0],
             // deviceType: commaSep[2],
             timestamp: new Date(),
             packet: '#GF2,OK*' + checksum,
@@ -319,6 +329,7 @@ function onSocketData(socket: net.Socket, container: SocketContainer, io: Server
       const mess = {
         imei: socketKey || socket.remoteAddress + ':' + socket.remotePort,
         packet: data.toString(),
+        packetHeader: commaSep[0],
         color: '#CBC3E3',
         date: new Date(),
       };
@@ -352,7 +363,7 @@ function onSocketData(socket: net.Socket, container: SocketContainer, io: Server
               dataUpdateRateWhenIgnitionOn: Number(commaSep[10]),
               digitalInputStatus: commaSep[11],
               firmwareVersion: commaSep[3],
-              header: commaSep[0],
+              packetHeader: commaSep[0],
               imei: commaSep[4],
               lowBatteryThresholdPercentage: Number(commaSep[6]),
               memoryPercentage1: Number(commaSep[7]),
@@ -365,6 +376,7 @@ function onSocketData(socket: net.Socket, container: SocketContainer, io: Server
               packet: data.toString(),
               imei: commaSep[4],
               color: 'lightblue',
+              packetHeader: commaSep[0],
               timestamp: new Date(),
             };
             const checksum = stringToHexCRC32('#HMP,OK*');
@@ -372,12 +384,16 @@ function onSocketData(socket: net.Socket, container: SocketContainer, io: Server
               imei: commaSep[5],
               deviceType: commaSep[2],
               timestamp: new Date(),
+              packetHeader: commaSep[0],
               packet: '#HMP,OK*' + checksum,
               color: 'lightgreen',
             };
-            socket.write(okHmp.packet.toString())
+            socket.write(okHmp.packet.toString());
             io.emit('sockMessage', mess);
             io.emit('sockMessage', okHmp);
+            //****** */
+            // ws.send(JSON.stringify(hmpBody));
+
             const healthControllerInstance = new HMPController();
             healthControllerInstance.saveHmp(hmpBody);
           } else {
@@ -416,105 +432,114 @@ function onSocketData(socket: net.Socket, container: SocketContainer, io: Server
             console.log(`Index: ${index}, Value: ${comma}`);
           }
 
-          // if (sockMap.has(commaSep[7])) {
-          // Check if the IMEI is registe#E04D38 in sockMap
-          // Create ReqTrackingPacket object
-          // const trackingBody: ReqTrackingPacket = {
-          //   startCharacter: commaSep[0], // "*"
-          //   version: commaSep[1], // "1.0"
-          //   packetHeader: commaSep[2], // "123ABC"
-          //   vendorId: commaSep[3], // "XYZ"
-          //   firmwareVersion: commaSep[4], // "FW123"
-          //   packetType: commaSep[5], // "A"
-          //   messageId: Number(commaSep[6]), // 1
-          //   packetStatus: commaSep[7], // "S"
-          //   imei: commaSep[8], // "123456789012345"
-          //   vehicleRegNo: commaSep[9], // "ABC123"
-          //   gpsFix: Number(commaSep[10]), // 1
-          //   date: commaSep[11], // "20241122"
-          //   time: commaSep[12], // "123456"
-          //   latitude: Number(commaSep[13]), // 12.3456
-          //   latitudeDir: commaSep[14], // "N"
-          //   longitude: Number(commaSep[15]), // 78.9012
-          //   longitudeDir: commaSep[16], // "E"
-          //   speed: Number(commaSep[17]), // 60.5
-          //   heading: Number(commaSep[18]), // 90.0
-          //   noOfSatellites: Number(commaSep[19]), // 10
-          //   altitude: Number(commaSep[20]), // 150
-          //   pdop: Number(commaSep[21]), // 0.9
-          //   hdop: Number(commaSep[22]), // 0.8
-          //   networkOperatorName: commaSep[23], // "Network1"
-          //   ignitionStatus: Number(commaSep[24]), // 1
-          //   mainPowerStatus: Number(commaSep[25]), // 1
-          //   mainInputVoltage: Number(commaSep[26]), // 12.5
-          //   internalBatteryVoltage: Number(commaSep[27]), // 3.7
-          //   emergencyStatus: Number(commaSep[28]), // 0
-          //   tamperAlert: commaSep[29], // "N"
-          //   gsmSignalStrength: Number(commaSep[30]), // 23
-          //   mccServing: Number(commaSep[31]), // 123
-          //   mncServing: Number(commaSep[32]), // 45
-          //   lacServing: commaSep[33], // "1001"
-          //   cellIdServing: commaSep[34], // "2002"
-          //   gsmSignalStrengthNmr1stNeighbour: Number(commaSep[35]), // 18
-          //   lacNmr1stNeighbour: commaSep[36], // "1003"
-          //   cellIdNmr1stNeighbour: commaSep[37], // "2004"
-          //   gsmSignalStrengthNmr2ndNeighbour: Number(commaSep[38]), // 19
-          //   lacNmr2ndNeighbour: commaSep[39], // "1005"
-          //   cellIdNmr2ndNeighbour: commaSep[40], // "2006"
-          //   digitalInputStatus: commaSep[41], // "01"
-          //   digitalOutputStatus: commaSep[42], // "02"
-          //   frameNumber: Number(commaSep[43]), // 10
-          //   analogInput1: Number(commaSep[44]), // 4.5
-          //   analogInput2: Number(commaSep[45]), // 3.3
-          //   deltaDistance: Number(commaSep[46]), // 500
-          //   otaResponse: commaSep[47], // "Success"
-          //   endCharacter: commaSep[48], // "#"
-          //   checksum: checksum, // "1234ABCD"
-          // };
+          if (sockMap.has(commaSep[7])) {
+            // Check if the IMEI is registe#E04D38 in sockMap
+            // Create ReqTrackingPacket object
+            const trackingBody: ReqTrackingPacket = {
+              // startCharacter: commaSep[0], // "*"
+              version: commaSep[1], // "1.0"
+              packetHeader: commaSep[0], // "123ABC"
+              vendorId: commaSep[2], // "XYZ"
+              firmwareVersion: commaSep[3], // "FW123"
+              packetType: commaSep[4], // "A"
+              messageId: Number(commaSep[5]), // 1
+              packetStatus: commaSep[6], // "S"
+              imei: commaSep[7], // "123456789012345"
+              vehicleRegNo: commaSep[8], // "ABC123"
+              gpsFix: Number(commaSep[9]), // 1
+              date: commaSep[10], // "20241122"
+              time: commaSep[11], // "123456"
 
-          // Emit the tracking packet data
-          // io.emit('tpMessage', data);
-          let lad: 'N' | 'S';
-          let lod: 'E' | 'W';
-          let dummy: Coordinates;
-          if ((commaSep[13] == 'N' || commaSep[13] == 'S') && (commaSep[15] == 'W' || commaSep[15] == 'E')) {
-            lad = commaSep[13];
-            lod = commaSep[15];
-            dummy = {
-              latitude: Number(commaSep[12]),
-              longitude: Number(commaSep[14]),
-              latDir: lad,
-              longDir: lod,
+              latitude: Number(commaSep[12]), // 12.3456
+              latitudeDir: commaSep[13], // "N"
+              longitude: Number(commaSep[14]), // 78.9012
+              longitudeDir: commaSep[15], // "E"
+
+              speed: Number(commaSep[17]), // 60.5
+              heading: Number(commaSep[18]), // 90.0
+              noOfSatellites: Number(commaSep[19]), // 10
+              altitude: Number(commaSep[20]), // 150
+              pdop: Number(commaSep[21]), // 0.9
+              hdop: Number(commaSep[22]), // 0.8
+              networkOperatorName: commaSep[23], // "Network1"
+              ignitionStatus: Number(commaSep[24]), // 1
+              mainPowerStatus: Number(commaSep[25]), // 1
+              mainInputVoltage: Number(commaSep[26]), // 12.5
+              internalBatteryVoltage: Number(commaSep[27]), // 3.7
+              emergencyStatus: Number(commaSep[28]), // 0
+              tamperAlert: commaSep[29], // "N"
+              gsmSignalStrength: Number(commaSep[30]), // 23
+              mccServing: Number(commaSep[31]), // 123
+              mncServing: Number(commaSep[32]), // 45
+              lacServing: commaSep[33], // "1001"
+              cellIdServing: commaSep[34], // "2002"
+              gsmSignalStrengthNmr1stNeighbour: Number(commaSep[35]), // 18
+              lacNmr1stNeighbour: commaSep[36], // "1003"
+              cellIdNmr1stNeighbour: commaSep[37], // "2004"
+              gsmSignalStrengthNmr2ndNeighbour: Number(commaSep[38]), // 19
+              lacNmr2ndNeighbour: commaSep[39], // "1005"
+              cellIdNmr2ndNeighbour: commaSep[40], // "2006"
+              digitalInputStatus: commaSep[41], // "01"
+              digitalOutputStatus: commaSep[42], // "02"
+              frameNumber: Number(commaSep[43]), // 10
+              analogInput1: Number(commaSep[44]), // 4.5
+              analogInput2: Number(commaSep[45]), // 3.3
+              deltaDistance: Number(commaSep[46]), // 500
+              otaResponse: commaSep[47], // "Success"
+              endCharacter: commaSep[48], // "#"
+              checksum: dataCommaArr[1], // "1234ABCD"
             };
-            io.emit('tpMessage', dummy);
-            ws.send(dummy.toString())
+
+            // Emit the tracking packet data
+            // io.emit('tpMessage', data);
+            let lad: 'N' | 'S';
+            let lod: 'E' | 'W';
+            let dummy: Coordinates;
+            if ((commaSep[13] == 'N' || commaSep[13] == 'S') && (commaSep[15] == 'W' || commaSep[15] == 'E')) {
+              lad = commaSep[13];
+              lod = commaSep[15];
+              dummy = {
+                latitude: Number(commaSep[12]),
+                longitude: Number(commaSep[14]),
+                latDir: lad,
+                longDir: lod,
+              };
+              io.emit('tpMessage', dummy);
+              console.log(trackingBody);
+              // ws.send(dummy.toString());
+              //***** */
+              // ws.send(JSON.stringify(dummy));
+              // ws.send(JSON.stringify(trackingBody));
+            }
+
+            const imeiPacketBody = {
+              imei: commaSep[7] || socket.remoteAddress + ':' + socket.remotePort,
+              packet: data.toString(),
+              packetHeader: commaSep[0],
+              // deviceType: ,
+              color: 'lightblue',
+              timestamp: new Date(),
+            };
+            const checksum = stringToHexCRC32('#TP,OK*');
+            const okTp = {
+              imei: commaSep[7],
+              deviceType: commaSep[2],
+              packetHeader: commaSep[0],
+              timestamp: new Date(),
+              packet: '#TP,OK*' + checksum,
+              color: 'lightgreen',
+            };
+            io.emit('sockMessage', okTp);
+            io.emit('sockMessage', imeiPacketBody);
+
+            socket.write(okTp.packet.toString());
+            // Save the tracking packet using the controller
+            // const trackingControllerInstance = new TrackingPacketController();
+            // trackingControllerInstance
+            //   .saveTrackingPacket(trackingBody)
+            //   .then(() => console.log('Tracking packet saved successfully'))
+            //   .catch((err) => console.error('Error saving tracking packet:', err));
           }
-
-          const imeiPacketBody = {
-            imei: commaSep[7] || socket.remoteAddress + ':' + socket.remotePort,
-            packet: data.toString(),
-            // deviceType: ,
-            color: 'lightblue',
-            timestamp: new Date(),
-          };
-          const checksum = stringToHexCRC32('#TP,OK*');
-          const okTp = {
-            imei: commaSep[7],
-            deviceType: commaSep[2],
-            timestamp: new Date(),
-            packet: '#TP,OK*' + checksum,
-            color: 'lightgreen',
-          };
-          io.emit('sockMessage', okTp);
-          io.emit('sockMessage', imeiPacketBody);
-
-          socket.write(okTp.packet.toString())
-          // Save the tracking packet using the controller
-          // const trackingControllerInstance = new TrackingPacketController();
-          // trackingControllerInstance
-          //   .saveTrackingPacket(trackingBody)
-          //   .then(() => console.log('Tracking packet saved successfully'))
-          //   .catch((err) => console.error('Error saving tracking packet:', err));
         } else {
           console.log('Invalid checksum');
           sendNegInvalidChecksum(socket, commaSep[0], io, data.toString()); // Function to notify invalid checksum
@@ -537,6 +562,7 @@ function onSocketData(socket: net.Socket, container: SocketContainer, io: Server
       const mess = {
         packet: data.toString(),
         imei: socketKey,
+        packetHeader: commaSep[0],
         color: 'lightblue',
         timestamp: new Date(),
       };

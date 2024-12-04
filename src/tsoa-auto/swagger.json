@@ -780,6 +780,86 @@
 				"type": "object",
 				"additionalProperties": false
 			},
+			"ResGeofence": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"name": {
+						"type": "string"
+					},
+					"polygon": {
+						"properties": {
+							"coordinates": {
+								"items": {
+									"items": {
+										"items": {
+											"type": "number",
+											"format": "double"
+										},
+										"type": "array"
+									},
+									"type": "array"
+								},
+								"type": "array"
+							},
+							"type": {
+								"type": "string",
+								"enum": [
+									"Polygon"
+								],
+								"nullable": false
+							}
+						},
+						"required": [
+							"coordinates",
+							"type"
+						],
+						"type": "object"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ReqGeofence": {
+				"properties": {
+					"name": {
+						"type": "string"
+					},
+					"polygon": {
+						"properties": {
+							"coordinates": {
+								"items": {
+									"items": {
+										"items": {
+											"type": "number",
+											"format": "double"
+										},
+										"type": "array"
+									},
+									"type": "array"
+								},
+								"type": "array"
+							},
+							"type": {
+								"type": "string",
+								"enum": [
+									"Polygon"
+								],
+								"nullable": false
+							}
+						},
+						"required": [
+							"coordinates",
+							"type"
+						],
+						"type": "object"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
 			"ReqDongle": {
 				"properties": {
 					"name": {
@@ -1973,6 +2053,61 @@
 						}
 					}
 				}
+			}
+		},
+		"/geofence": {
+			"post": {
+				"operationId": "SaveGeofence",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ResGeofence"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Geofence"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/ReqGeofence"
+							}
+						}
+					}
+				}
+			},
+			"get": {
+				"operationId": "GetAllGeofence",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/ResGeofence"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Geofence"
+				],
+				"security": [],
+				"parameters": []
 			}
 		},
 		"/user/freeDongle/{userId}": {

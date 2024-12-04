@@ -22,6 +22,7 @@
     "@eslint/js": "^9.14.0",
     "@types/cors": "^2.8.17",
     "@types/express": "^4.17.21",
+    "@types/geojson": "^7946.0.14",
     "@types/joi": "^17.2.3",
     "@types/jsonwebtoken": "^9.0.6",
     "@types/node": "^16.11.10",
@@ -45,6 +46,7 @@
     "typescript-eslint": "^7.18.0"
   },
   "dependencies": {
+    "@types/pg": "^8.11.10",
     "axios": "^1.7.2",
     "bcrypt": "^5.1.1",
     "body-parser": "^1.19.1",
@@ -52,19 +54,22 @@
     "crc-32": "^1.2.2",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
+    "geojson": "^0.5.0",
     "joi": "^17.13.1",
     "jsonwebtoken": "^9.0.2",
     "multer": "^1.4.5-lts.1",
     "net": "^1.0.2",
     "node-cron": "^3.0.3",
-    "pg": "^8.11.3",
+    "pg": "^8.13.1",
+    "pg-hstore": "^2.3.4",
     "reflect-metadata": "^0.1.13",
     "socket.io": "^4.8.1",
     "socket.io-client": "^4.8.1",
     "swagger-ui-express": "^5.0.0",
     "tsoa": "^6.3.1",
-    "typeorm": "0.3.19",
+    "typeorm": "^0.3.20",
     "websocket": "^1.0.35",
+    "wkx": "^0.5.0",
     "ws": "^8.18.0"
   }
 }
