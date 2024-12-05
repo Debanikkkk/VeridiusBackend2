@@ -11,6 +11,17 @@ import { envs } from 'utils/envVars';
 import http from 'http';
 import { ReqTrackingPacket } from './models/req/ReqTrackingPacket';
 
+const timeOptions: Intl.DateTimeFormatOptions = {
+  timeZone: 'Asia/Kolkata',
+  year: 'numeric',
+  month: '2-digit',
+  day: '2-digit',
+  hour: '2-digit',
+  minute: '2-digit',
+  second: '2-digit',
+  hour12: true,
+};
+
 export interface Coordinates {
   longitude: number;
   latitude: number;
@@ -64,17 +75,20 @@ export function sendNegInvalidHeader(socket: net.Socket, header: string, io: Ser
   // eslint-disable-next-line
   const socketKey = [...sockMap.entries()].find(([_, value]) => value.socket === socket)?.[0]; //disable es-lint
 
+  const timestamp = new Date();
+  const formattedTimestamp = timestamp.toLocaleString('en-IN', timeOptions);
+
   const mess = {
     imei: socketKey || socket.remoteAddress + ':' + socket.remotePort,
     packet: invalidCommandMsg,
-    timestamp: new Date(),
+    timestamp: formattedTimestamp,
     packetHeader: header,
     color: 'lightblue',
   };
   const messFull = {
     imei: socketKey || socket.remoteAddress + ':' + socket.remotePort,
     packet: data.toString(),
-    timestamp: new Date(),
+    timestamp: formattedTimestamp,
     packetHeader: header,
     color: '#E04D38',
   };
@@ -91,10 +105,13 @@ export function sendNegInvalidChecksum(socket: net.Socket, header: string, io: S
   // eslint-disable-next-line
   const socketKey = [...sockMap.entries()].find(([_, value]) => value.socket === socket)?.[0]; //disable es-lint
   // console.log(key);
+  const timestamp = new Date();
+  const formattedTimestamp = timestamp.toLocaleString('en-IN', timeOptions);
+
   const mess = {
     imei: socketKey || socket.remoteAddress + ':' + socket.remotePort,
     packet: invalidCommandMsg,
-    timestamp: new Date(),
+    timestamp: formattedTimestamp,
     packetHeader: header,
     color: '#E04D38',
   };
@@ -103,7 +120,7 @@ export function sendNegInvalidChecksum(socket: net.Socket, header: string, io: S
     packet: data.toString(),
     packetHeader: header,
     color: 'lightblue',
-    timestamp: new Date(),
+    timestamp: formattedTimestamp,
     // timestamp: new
   };
   io.emit('sockMessage', messFull);
@@ -119,11 +136,14 @@ export function sendNegInvalidPacketFormat(socket: net.Socket, header: string, i
   // eslint-disable-next-line
   const socketKey = [...sockMap.entries()].find(([_, value]) => value.socket === socket)?.[0]; //disable es-lint
   // console.log(key);
+  const timestamp = new Date();
+  const formattedTimestamp = timestamp.toLocaleString('en-IN', timeOptions);
+
   const mess = {
     imei: socketKey || socket.remoteAddress + ':' + socket.remotePort,
     packet: invalidCommandMsg,
     packetHeader: header,
-    timestamp: new Date(),
+    timestamp: formattedTimestamp,
     color: '#E04D38',
   };
   const messFull = {
@@ -131,7 +151,7 @@ export function sendNegInvalidPacketFormat(socket: net.Socket, header: string, i
     packet: data.toString(),
     packetHeader: header,
     color: 'lightblue',
-    timestamp: new Date(),
+    timestamp: formattedTimestamp,
   };
   io.emit('sockMessage', messFull);
   io.emit('sockMessage', mess);
@@ -231,11 +251,15 @@ function onSocketData(socket: net.Socket, container: SocketContainer, io: Server
           // Emit the loginPacketBody to the Socket.IO server
           console.log('Emitting lpMessage: ', loginPacketBody);
           io.emit('lpMessage', loginPacketBody);
+
+          const timestamp = new Date();
+          const formattedTimestamp = timestamp.toLocaleString('en-IN', timeOptions);
+
           const imeiPacketBody = {
             imei: commaSep[5] || socket.remoteAddress + ':' + socket.remotePort,
             packet: data.toString(),
             deviceType: commaSep[2],
-            timestamp: new Date(),
+            timestamp: formattedTimestamp,
             color: 'lightblue',
             packetHeader: commaSep[0],
           };
@@ -243,7 +267,7 @@ function onSocketData(socket: net.Socket, container: SocketContainer, io: Server
           const okLin = {
             imei: commaSep[5],
             deviceType: commaSep[2],
-            timestamp: new Date(),
+            timestamp: formattedTimestamp,
             packet: '#LIN,OK*' + checksum,
             color: 'lightgreen',
             packetHeader: commaSep[0],
@@ -266,11 +290,13 @@ function onSocketData(socket: net.Socket, container: SocketContainer, io: Server
     else if (commaSep[0] === '$GF1') {
       if (commaSep.length == 17) {
         if (checksum === dataStarArr[1]) {
+          const timestamp = new Date();
+          const formattedTimestamp = timestamp.toLocaleString('en-IN', timeOptions);
           const imeiPacketBody = {
             imei: commaSep[5] || socket.remoteAddress + ':' + socket.remotePort,
             packet: data.toString(),
             // deviceType: commaSep[2],
-            timestamp: new Date(),
+            timestamp: formattedTimestamp,
             color: 'lightblue',
             packetHeader: commaSep[0],
           };
@@ -278,7 +304,7 @@ function onSocketData(socket: net.Socket, container: SocketContainer, io: Server
           const okGf1 = {
             imei: commaSep[5],
             // deviceType: commaSep[2],
-            timestamp: new Date(),
+            timestamp: formattedTimestamp,
             packet: '#GF1,OK*' + checksum,
             color: 'lightgreen',
             packetHeader: commaSep[0],
@@ -294,20 +320,23 @@ function onSocketData(socket: net.Socket, container: SocketContainer, io: Server
     } else if (commaSep[0] === '$GF2') {
       if (commaSep.length == 17) {
         if (checksum === dataStarArr[1]) {
+          const timestamp = new Date();
+          const formattedTimestamp = timestamp.toLocaleString('en-IN', timeOptions);
           const imeiPacketBody = {
             imei: commaSep[5] || socket.remoteAddress + ':' + socket.remotePort,
             packet: data.toString(),
             packetHeader: commaSep[0],
             // deviceType: commaSep[2],
-            timestamp: new Date(),
+            timestamp: formattedTimestamp,
             color: 'lightblue',
           };
           const checksum = stringToHexCRC32('#GF2,OK*');
+
           const okGf2 = {
             imei: commaSep[5],
             packetHeader: commaSep[0],
             // deviceType: commaSep[2],
-            timestamp: new Date(),
+            timestamp: formattedTimestamp,
             packet: '#GF2,OK*' + checksum,
             color: 'lightgreen',
           };
@@ -326,12 +355,14 @@ function onSocketData(socket: net.Socket, container: SocketContainer, io: Server
       // eslint-disable-next-line
       const socketKey = [...sockMap.entries()].find(([_, value]) => value.socket === socket)?.[0]; //disable es-lint
       // console.log(key);
+      const timestamp = new Date();
+      const formattedTimestamp = timestamp.toLocaleString('en-IN', timeOptions);
       const mess = {
         imei: socketKey || socket.remoteAddress + ':' + socket.remotePort,
         packet: data.toString(),
         packetHeader: commaSep[0],
         color: '#CBC3E3',
-        date: new Date(),
+        date: formattedTimestamp,
       };
       io.emit('sockMessage', mess);
     } else if (commaSep[0] === '$HMP') {
@@ -372,18 +403,21 @@ function onSocketData(socket: net.Socket, container: SocketContainer, io: Server
               version: commaSep[1],
             };
             io.emit('hpMessage', hmpBody);
+
+            const timestamp = new Date();
+            const formattedTimestamp = timestamp.toLocaleString('en-IN', timeOptions);
             const mess = {
               packet: data.toString(),
               imei: commaSep[4],
               color: 'lightblue',
               packetHeader: commaSep[0],
-              timestamp: new Date(),
+              timestamp: formattedTimestamp,
             };
             const checksum = stringToHexCRC32('#HMP,OK*');
             const okHmp = {
               imei: commaSep[5],
               deviceType: commaSep[2],
-              timestamp: new Date(),
+              timestamp: formattedTimestamp,
               packetHeader: commaSep[0],
               packet: '#HMP,OK*' + checksum,
               color: 'lightgreen',
@@ -511,21 +545,22 @@ function onSocketData(socket: net.Socket, container: SocketContainer, io: Server
               // ws.send(JSON.stringify(dummy));
               // ws.send(JSON.stringify(trackingBody));
             }
-
+            const timestamp = new Date();
+            const formattedTimestamp = timestamp.toLocaleString('en-IN', timeOptions);
             const imeiPacketBody = {
               imei: commaSep[7] || socket.remoteAddress + ':' + socket.remotePort,
               packet: data.toString(),
               packetHeader: commaSep[0],
               // deviceType: ,
               color: 'lightblue',
-              timestamp: new Date(),
+              timestamp: formattedTimestamp,
             };
             const checksum = stringToHexCRC32('#TP,OK*');
             const okTp = {
               imei: commaSep[7],
               deviceType: commaSep[2],
               packetHeader: commaSep[0],
-              timestamp: new Date(),
+              timestamp: formattedTimestamp,
               packet: '#TP,OK*' + checksum,
               color: 'lightgreen',
             };
@@ -558,13 +593,14 @@ function onSocketData(socket: net.Socket, container: SocketContainer, io: Server
       // sendNegInvalidHeader(socket, commaSep[0], io);
       // eslint-disable-next-line
       const socketKey = [...sockMap.entries()].find(([_, value]) => value.socket === socket)?.[0]; //disable es-lint
-
+      const timestamp = new Date();
+      const formattedTimestamp = timestamp.toLocaleString('en-IN', timeOptions);
       const mess = {
         packet: data.toString(),
         imei: socketKey,
         packetHeader: commaSep[0],
         color: 'lightblue',
-        timestamp: new Date(),
+        timestamp: formattedTimestamp,
       };
       io.emit('sockMessage', mess);
     }
@@ -616,11 +652,13 @@ export function initSocketIOFeatures(httpServer: http.Server) {
         const socketKey = [...sockMap.entries()].find(([_, value]) => value.socket === socket)?.[0]; //disable es-lint
         // console.log(key);
         console.log('the client i wanna see here is =====>', socketKey);
+        const timestamp = new Date();
+        const formattedTimestamp = timestamp.toLocaleString('en-IN', timeOptions);
         const mess = {
           imei: socketKey || socket.remoteAddress + ':' + socket.remotePort,
           packet: 'CLIENT DISCONNECTED: ' + socketKey,
           color: 'yellow',
-          timestamp: new Date(),
+          timestamp: formattedTimestamp,
         };
         io.emit('sockMessage', mess);
         console.log('Client disconnected');
@@ -638,13 +676,14 @@ export function initSocketIOFeatures(httpServer: http.Server) {
       const socketKey = [...sockMap.entries()].find(([_, value]) => value.socket === socket)?.[0]; //disable es-lint
       // console.log(key);
       console.log('the on connect block has reached here');
-
+      const timestamp = new Date();
+      const formattedTimestamp = timestamp.toLocaleString('en-IN', timeOptions);
       const mess = {
         imei: socketKey || socket.remoteAddress + ':' + socket.remotePort,
         packet: 'CLIENT CONNECTED: ' + socket.remoteAddress + ':' + socket.remotePort,
         // socketKey,
         color: 'yellow',
-        timestamp: new Date(),
+        timestamp: formattedTimestamp,
       };
       console.log('the on connect block has reached here 2');
 
