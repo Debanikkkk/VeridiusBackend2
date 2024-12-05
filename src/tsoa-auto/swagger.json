@@ -7,12 +7,400 @@
 		"requestBodies": {},
 		"responses": {},
 		"schemas": {
+			"Vehicle": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"name": {
+						"type": "string"
+					},
+					"vehicle_model": {
+						"$ref": "#/components/schemas/VehicleModel"
+					},
+					"vehicle_sub_model": {
+						"$ref": "#/components/schemas/VehicleSubModel"
+					},
+					"vehicle_variant": {
+						"$ref": "#/components/schemas/VehicleVariant"
+					},
+					"oem": {
+						"$ref": "#/components/schemas/OEM"
+					},
+					"ecu": {
+						"items": {
+							"$ref": "#/components/schemas/ECU"
+						},
+						"type": "array"
+					},
+					"service_ticket": {
+						"$ref": "#/components/schemas/ServiceTicket"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"VehicleModel": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"name": {
+						"type": "string"
+					},
+					"vehicle": {
+						"items": {
+							"$ref": "#/components/schemas/Vehicle"
+						},
+						"type": "array"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"VehicleSubModel": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"name": {
+						"type": "string"
+					},
+					"vehicle": {
+						"items": {
+							"$ref": "#/components/schemas/Vehicle"
+						},
+						"type": "array"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"VehicleVariant": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"name": {
+						"type": "string"
+					},
+					"vehicle": {
+						"items": {
+							"$ref": "#/components/schemas/Vehicle"
+						},
+						"type": "array"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"OEM": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"name": {
+						"type": "string"
+					},
+					"vehicle": {
+						"items": {
+							"$ref": "#/components/schemas/Vehicle"
+						},
+						"type": "array"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ECU": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"name": {
+						"type": "string"
+					},
+					"mac_address": {
+						"type": "string"
+					},
+					"vehicle": {
+						"items": {
+							"$ref": "#/components/schemas/Vehicle"
+						},
+						"type": "array"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"serviceTicketStatus": {
+				"enum": [
+					"open",
+					"closed",
+					"new"
+				],
+				"type": "string"
+			},
+			"User": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"name": {
+						"type": "string"
+					},
+					"password": {
+						"type": "string"
+					},
+					"address": {
+						"type": "string"
+					},
+					"phone_number": {
+						"type": "string"
+					},
+					"email": {
+						"type": "string"
+					},
+					"device": {
+						"allOf": [
+							{
+								"$ref": "#/components/schemas/Device"
+							}
+						],
+						"nullable": true
+					},
+					"role": {
+						"$ref": "#/components/schemas/Role"
+					},
+					"service_ticket": {
+						"$ref": "#/components/schemas/ServiceTicket"
+					},
+					"trips": {
+						"items": {
+							"$ref": "#/components/schemas/Trip"
+						},
+						"type": "array"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"Device": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"name": {
+						"type": "string"
+					},
+					"mac_address": {
+						"type": "string"
+					},
+					"imei": {
+						"type": "string"
+					},
+					"user": {
+						"allOf": [
+							{
+								"$ref": "#/components/schemas/User"
+							}
+						],
+						"nullable": true
+					},
+					"dongle": {
+						"allOf": [
+							{
+								"$ref": "#/components/schemas/Dongle"
+							}
+						],
+						"nullable": true
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"Dongle": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"name": {
+						"type": "string"
+					},
+					"device": {
+						"allOf": [
+							{
+								"$ref": "#/components/schemas/Device"
+							}
+						],
+						"nullable": true
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
 			"permType": {
 				"enum": [
 					"user",
 					"product"
 				],
 				"type": "string"
+			},
+			"Role": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"name": {
+						"type": "string"
+					},
+					"description": {
+						"type": "string"
+					},
+					"permissions": {
+						"items": {
+							"$ref": "#/components/schemas/Permission"
+						},
+						"type": "array"
+					},
+					"users": {
+						"items": {
+							"$ref": "#/components/schemas/User"
+						},
+						"type": "array"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"Permission": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"name": {
+						"type": "string"
+					},
+					"description": {
+						"type": "string"
+					},
+					"type": {
+						"$ref": "#/components/schemas/permType"
+					},
+					"role": {
+						"items": {
+							"$ref": "#/components/schemas/Role"
+						},
+						"type": "array"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ServiceTicket": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"date": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"created_on": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"updated_on": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"status": {
+						"$ref": "#/components/schemas/serviceTicketStatus"
+					},
+					"service_ticket_number": {
+						"type": "string"
+					},
+					"technician": {
+						"$ref": "#/components/schemas/User"
+					},
+					"vehicle": {
+						"$ref": "#/components/schemas/Vehicle"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"Trip": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"user": {
+						"$ref": "#/components/schemas/User"
+					},
+					"startLatitude": {
+						"type": "number",
+						"format": "double"
+					},
+					"startLongitude": {
+						"type": "number",
+						"format": "double"
+					},
+					"endLatitude": {
+						"type": "number",
+						"format": "double"
+					},
+					"endLongitude": {
+						"type": "number",
+						"format": "double"
+					},
+					"tariff": {
+						"type": "number",
+						"format": "double"
+					},
+					"paymentStatus": {
+						"type": "string"
+					},
+					"timestamp": {
+						"type": "string",
+						"format": "date-time"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ReqVehicle": {
+				"properties": {
+					"ecu": {
+						"items": {
+							"type": "number",
+							"format": "double"
+						},
+						"type": "array"
+					},
+					"name": {
+						"type": "string"
+					},
+					"service_ticket": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
 			},
 			"ResRole": {
 				"properties": {
@@ -63,14 +451,6 @@
 				],
 				"type": "object",
 				"additionalProperties": false
-			},
-			"serviceTicketStatus": {
-				"enum": [
-					"open",
-					"closed",
-					"new"
-				],
-				"type": "string"
 			},
 			"ResUser": {
 				"properties": {
@@ -283,231 +663,6 @@
 				"required": [
 					"result"
 				],
-				"type": "object",
-				"additionalProperties": false
-			},
-			"User": {
-				"properties": {
-					"id": {
-						"type": "number",
-						"format": "double"
-					},
-					"name": {
-						"type": "string"
-					},
-					"password": {
-						"type": "string"
-					},
-					"address": {
-						"type": "string"
-					},
-					"phone_number": {
-						"type": "string"
-					},
-					"email": {
-						"type": "string"
-					},
-					"device": {
-						"allOf": [
-							{
-								"$ref": "#/components/schemas/Device"
-							}
-						],
-						"nullable": true
-					},
-					"role": {
-						"$ref": "#/components/schemas/Role"
-					},
-					"service_ticket": {
-						"$ref": "#/components/schemas/ServiceTicket"
-					},
-					"trips": {
-						"items": {
-							"$ref": "#/components/schemas/Trip"
-						},
-						"type": "array"
-					}
-				},
-				"type": "object",
-				"additionalProperties": false
-			},
-			"Device": {
-				"properties": {
-					"id": {
-						"type": "number",
-						"format": "double"
-					},
-					"name": {
-						"type": "string"
-					},
-					"mac_address": {
-						"type": "string"
-					},
-					"imei": {
-						"type": "string"
-					},
-					"user": {
-						"allOf": [
-							{
-								"$ref": "#/components/schemas/User"
-							}
-						],
-						"nullable": true
-					},
-					"dongle": {
-						"allOf": [
-							{
-								"$ref": "#/components/schemas/Dongle"
-							}
-						],
-						"nullable": true
-					}
-				},
-				"type": "object",
-				"additionalProperties": false
-			},
-			"Dongle": {
-				"properties": {
-					"id": {
-						"type": "number",
-						"format": "double"
-					},
-					"name": {
-						"type": "string"
-					},
-					"device": {
-						"allOf": [
-							{
-								"$ref": "#/components/schemas/Device"
-							}
-						],
-						"nullable": true
-					}
-				},
-				"type": "object",
-				"additionalProperties": false
-			},
-			"Role": {
-				"properties": {
-					"id": {
-						"type": "number",
-						"format": "double"
-					},
-					"name": {
-						"type": "string"
-					},
-					"description": {
-						"type": "string"
-					},
-					"permissions": {
-						"items": {
-							"$ref": "#/components/schemas/Permission"
-						},
-						"type": "array"
-					},
-					"users": {
-						"items": {
-							"$ref": "#/components/schemas/User"
-						},
-						"type": "array"
-					}
-				},
-				"type": "object",
-				"additionalProperties": false
-			},
-			"Permission": {
-				"properties": {
-					"id": {
-						"type": "number",
-						"format": "double"
-					},
-					"name": {
-						"type": "string"
-					},
-					"description": {
-						"type": "string"
-					},
-					"type": {
-						"$ref": "#/components/schemas/permType"
-					},
-					"role": {
-						"items": {
-							"$ref": "#/components/schemas/Role"
-						},
-						"type": "array"
-					}
-				},
-				"type": "object",
-				"additionalProperties": false
-			},
-			"ServiceTicket": {
-				"properties": {
-					"id": {
-						"type": "number",
-						"format": "double"
-					},
-					"date": {
-						"type": "string",
-						"format": "date-time"
-					},
-					"created_on": {
-						"type": "string",
-						"format": "date-time"
-					},
-					"updated_on": {
-						"type": "string",
-						"format": "date-time"
-					},
-					"status": {
-						"$ref": "#/components/schemas/serviceTicketStatus"
-					},
-					"service_ticket_number": {
-						"type": "string"
-					},
-					"technician": {
-						"$ref": "#/components/schemas/User"
-					}
-				},
-				"type": "object",
-				"additionalProperties": false
-			},
-			"Trip": {
-				"properties": {
-					"id": {
-						"type": "number",
-						"format": "double"
-					},
-					"user": {
-						"$ref": "#/components/schemas/User"
-					},
-					"startLatitude": {
-						"type": "number",
-						"format": "double"
-					},
-					"startLongitude": {
-						"type": "number",
-						"format": "double"
-					},
-					"endLatitude": {
-						"type": "number",
-						"format": "double"
-					},
-					"endLongitude": {
-						"type": "number",
-						"format": "double"
-					},
-					"tariff": {
-						"type": "number",
-						"format": "double"
-					},
-					"paymentStatus": {
-						"type": "string"
-					},
-					"timestamp": {
-						"type": "string",
-						"format": "date-time"
-					}
-				},
 				"type": "object",
 				"additionalProperties": false
 			},
@@ -860,6 +1015,25 @@
 				"type": "object",
 				"additionalProperties": false
 			},
+			"ReqECU": {
+				"properties": {
+					"mac_address": {
+						"type": "string"
+					},
+					"name": {
+						"type": "string"
+					},
+					"vehicle": {
+						"items": {
+							"type": "number",
+							"format": "double"
+						},
+						"type": "array"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
 			"ReqDongle": {
 				"properties": {
 					"name": {
@@ -951,6 +1125,38 @@
 		"contact": {}
 	},
 	"paths": {
+		"/vehicle": {
+			"post": {
+				"operationId": "SaveVehicle",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Vehicle"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Vehicle"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/ReqVehicle"
+							}
+						}
+					}
+				}
+			}
+		},
 		"/user": {
 			"post": {
 				"operationId": "SaveUser",
@@ -2161,6 +2367,71 @@
 						}
 					}
 				]
+			}
+		},
+		"/ecu/macaddressFromIMEI/{macAdd}": {
+			"get": {
+				"operationId": "GetDeviceIMEIusingECU",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Device"
+								}
+							}
+						}
+					}
+				},
+				"description": "get device imei using ecu",
+				"summary": "get device imei using ecu",
+				"tags": [
+					"ECU"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "macAdd",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/ecu": {
+			"post": {
+				"operationId": "SaveEcu",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ECU"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"ECU"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/ReqECU"
+							}
+						}
+					}
+				}
 			}
 		},
 		"/dongle": {

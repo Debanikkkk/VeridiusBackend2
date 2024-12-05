@@ -58,5 +58,6 @@ export class ServiceTicket {
     },
     { onUpdate: 'CASCADE', onDelete: 'CASCADE', nullable: true },
   )
+  @JoinColumn({ name: 'vehicle_id' })
   vehicle?: Promise<Vehicle>;
 }
