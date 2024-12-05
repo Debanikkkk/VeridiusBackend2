@@ -1,5 +1,6 @@
 import { Column, CreateDateColumn, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import { User } from './User';
+import { Vehicle } from './Vehicle';
 
 export enum serviceTicketStatus {
   open = 'open',
@@ -49,4 +50,14 @@ export class ServiceTicket {
   )
   @JoinColumn({ name: 'technician_id' })
   technician?: Promise<User>;
+
+  @OneToOne(
+    () => Vehicle,
+    (vehicle) => {
+      vehicle.service_ticket;
+    },
+    { onUpdate: 'CASCADE', onDelete: 'CASCADE', nullable: true },
+  )
+  @JoinColumn({ name: 'vehicle_id' })
+  vehicle?: Promise<Vehicle>;
 }
