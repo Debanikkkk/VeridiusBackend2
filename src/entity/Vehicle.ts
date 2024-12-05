@@ -1,9 +1,11 @@
-import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { VehicleModel } from './VehicleModel';
 import { VehicleSubModel } from './VehicleSubModel';
 import { VehicleVariant } from './VehicleVariant';
 import { OEM } from './OEM';
 import { ECU } from './ECU';
+import { ServiceTicket } from './ServiceTickets';
+// import { Serializable } from 'child_process';
 @Entity()
 export class Vehicle {
   @PrimaryGeneratedColumn()
@@ -67,4 +69,14 @@ export class Vehicle {
     inverseJoinColumn: { name: 'ecu_id' },
   })
   ecu?: Promise<ECU[]>;
+
+  @OneToOne(
+    () => ServiceTicket,
+    (service_ticket) => {
+      service_ticket.vehicle;
+    },
+    { onUpdate: 'CASCADE', onDelete: 'CASCADE', nullable: true },
+  )
+  @JoinColumn({ name: 'service_ticket_id' })
+  service_ticket?: Promise<ServiceTicket>;
 }

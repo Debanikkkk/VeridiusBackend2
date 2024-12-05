@@ -37,6 +37,9 @@ AppDataSource.initialize()
     const dir = './public/uploads/';
     if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
 
+    const ecudir = './public/ecuUploads/';
+    if (!fs.existsSync(ecudir)) fs.mkdirSync(ecudir, { recursive: true });
+
     app.use(cors(options));
     app.use(bodyParser.json());
     app.use('/public/uploads', express.static('./public/uploads'));
