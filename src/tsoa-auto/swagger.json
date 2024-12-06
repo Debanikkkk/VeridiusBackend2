@@ -329,6 +329,9 @@
 					"status": {
 						"$ref": "#/components/schemas/serviceTicketStatus"
 					},
+					"active": {
+						"type": "boolean"
+					},
 					"service_ticket_number": {
 						"type": "string"
 					},

@@ -186,6 +186,7 @@ const models: TsoaRoute.Models = {
             "created_on": {"dataType":"datetime"},
             "updated_on": {"dataType":"datetime"},
             "status": {"ref":"serviceTicketStatus"},
+            "active": {"dataType":"boolean"},
             "service_ticket_number": {"dataType":"string"},
             "technician": {"ref":"User"},
             "vehicle": {"ref":"Vehicle"},

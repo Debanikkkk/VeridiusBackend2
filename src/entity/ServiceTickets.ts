@@ -37,6 +37,12 @@ export class ServiceTicket {
   status?: serviceTicketStatus;
 
   @Column({
+    nullable: true,
+    default: false,
+  })
+  active?: boolean;
+
+  @Column({
     length: 17,
   })
   service_ticket_number?: string;
