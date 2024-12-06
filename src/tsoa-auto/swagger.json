@@ -201,6 +201,9 @@
 					"name": {
 						"type": "string"
 					},
+					"dongle_conn_status": {
+						"type": "boolean"
+					},
 					"mac_address": {
 						"type": "string"
 					},
@@ -328,6 +331,9 @@
 					},
 					"status": {
 						"$ref": "#/components/schemas/serviceTicketStatus"
+					},
+					"active": {
+						"type": "boolean"
 					},
 					"service_ticket_number": {
 						"type": "string"
@@ -2367,6 +2373,73 @@
 						}
 					}
 				]
+			}
+		},
+		"/ecuFlashFile": {
+			"post": {
+				"operationId": "SaveFlash",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"properties": {
+												"filePath": {},
+												"message": {
+													"type": "string"
+												}
+											},
+											"required": [
+												"message"
+											],
+											"type": "object"
+										},
+										{
+											"properties": {
+												"filePath": {},
+												"message": {
+													"type": "string"
+												}
+											},
+											"required": [
+												"filePath",
+												"message"
+											],
+											"type": "object"
+										}
+									]
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"ECU Flash  File"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"multipart/form-data": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"file": {
+										"type": "string",
+										"format": "binary"
+									}
+								},
+								"required": [
+									"file"
+								]
+							}
+						}
+					}
+				}
 			}
 		},
 		"/ecu/macaddressFromIMEI/{macAdd}": {
