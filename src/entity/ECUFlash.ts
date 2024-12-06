@@ -10,6 +10,15 @@ export class ECUFlash {
   })
   flash_file_name?: string;
 
+  @Column({
+    length: 128,
+  })
+  flash_file_path?: string;
+
+  @Column({
+    default: true,
+  })
+  status?: boolean;
   //   @Column({
   //     length: 'MAX',
   //   })
