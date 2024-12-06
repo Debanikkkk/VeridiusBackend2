@@ -13,6 +13,12 @@ export class Device {
   name?: string;
 
   @Column({
+    nullable: true,
+    default: false,
+  })
+  dongle_conn_status?: boolean;
+
+  @Column({
     length: 17,
     nullable: true,
   })

@@ -8,10 +8,10 @@ export class ECUFlash {
   @Column({
     length: 128,
   })
-  flashFileName?: string;
+  flash_file_name?: string;
 
-  @Column({
-    length: 'MAX',
-  })
-  flashFileContent?: string;
+  //   @Column({
+  //     length: 'MAX',
+  //   })
+  //   flashFileContent?: string;
 }

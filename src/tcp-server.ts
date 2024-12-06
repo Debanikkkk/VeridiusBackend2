@@ -415,7 +415,7 @@ function onSocketData(socket: net.Socket, container: SocketContainer, io: Server
             };
             const checksum = stringToHexCRC32('#HMP,OK*');
             const okHmp = {
-              imei: commaSep[5],
+              imei: commaSep[4],
               deviceType: commaSep[2],
               timestamp: formattedTimestamp,
               packetHeader: commaSep[0],

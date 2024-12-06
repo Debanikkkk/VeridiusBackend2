@@ -199,4 +199,6 @@ export class DeviceController extends Controller {
       return { error: 'failed to allot the donlge to the device' };
     }
   }
+
+  public async updateDeviceConnStatus() {}
 }
