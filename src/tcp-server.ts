@@ -353,6 +353,8 @@ function onSocketData(socket: net.Socket, container: SocketContainer, io: Server
     } else if (commaSep[0] === '#CONFIG') {
       container.dataEventHandler.send(data.toString());
       // eslint-disable-next-line
+      console.log('-----THE CONFIC COMMAND RESPONSE WAS ACTIVATED------');
+      // eslint-disable-next-line
       const socketKey = [...sockMap.entries()].find(([_, value]) => value.socket === socket)?.[0]; //disable es-lint
       // console.log(key);
       const timestamp = new Date();

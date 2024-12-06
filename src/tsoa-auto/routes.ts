@@ -284,6 +284,7 @@ const models: TsoaRoute.Models = {
             "name": {"dataType":"string"},
             "user": {"ref":"ResUser"},
             "dongle": {"dataType":"union","subSchemas":[{"ref":"ResDongle"},{"dataType":"enum","enums":[null]}]},
+            "dongleConnStatus": {"dataType":"boolean"},
             "imei": {"dataType":"string"},
         },
         "additionalProperties": false,
@@ -542,6 +543,14 @@ const models: TsoaRoute.Models = {
         "dataType": "refObject",
         "properties": {
             "id": {"dataType":"double"},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "ReqDevConStatus": {
+        "dataType": "refObject",
+        "properties": {
+            "devConnStatus": {"dataType":"boolean"},
         },
         "additionalProperties": false,
     },
@@ -1797,6 +1806,37 @@ export function RegisterRoutes(app: Router) {
 
               await templateService.apiHandler({
                 methodName: 'allotDongleToDevice',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.put('/device/:deviceId',
+            ...(fetchMiddlewares<RequestHandler>(DeviceController)),
+            ...(fetchMiddlewares<RequestHandler>(DeviceController.prototype.updateDeviceConnStatus)),
+
+            async function DeviceController_updateDeviceConnStatus(request: ExRequest, response: ExResponse, next: any) {
+            const args: Record<string, TsoaRoute.ParameterSchema> = {
+                    deviceId: {"in":"path","name":"deviceId","required":true,"dataType":"double"},
+                    req: {"in":"body","name":"req","required":true,"ref":"ReqDevConStatus"},
+            };
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+
+                const controller = new DeviceController();
+
+              await templateService.apiHandler({
+                methodName: 'updateDeviceConnStatus',
                 controller,
                 response,
                 next,

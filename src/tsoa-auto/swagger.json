@@ -538,6 +538,9 @@
 						],
 						"nullable": true
 					},
+					"dongleConnStatus": {
+						"type": "boolean"
+					},
 					"imei": {
 						"type": "string"
 					}
@@ -1069,6 +1072,15 @@
 					"id": {
 						"type": "number",
 						"format": "double"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ReqDevConStatus": {
+				"properties": {
+					"devConnStatus": {
+						"type": "boolean"
 					}
 				},
 				"type": "object",
@@ -2780,6 +2792,48 @@
 						}
 					}
 				]
+			},
+			"put": {
+				"operationId": "UpdateDeviceConnStatus",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ResDevice"
+								}
+							}
+						}
+					}
+				},
+				"description": "updates device to dongle connection status",
+				"summary": "updates device to dongle connection status",
+				"tags": [
+					"Device"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "deviceId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/ReqDevConStatus"
+							}
+						}
+					}
+				}
 			}
 		},
 		"/device/allotDongle/{deviceId}": {

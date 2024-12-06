@@ -9,6 +9,8 @@ import { ResDevice } from '../models/res/ResDevice';
 import { ResError, ResSuccess } from '../models/res/Responses';
 import { DeviceHistory } from '../entity/DeviceHistory';
 import { User } from '../entity/User';
+import { ReqDevConStatus } from '../models/req/ReqDevConStatus';
+// import { ReqDevConStatus } from '../models/req/ReqDevConStatus';
 
 // interface GeolocationUpdate {
 //     deviceId: number;
@@ -200,5 +202,42 @@ export class DeviceController extends Controller {
     }
   }
 
-  public async updateDeviceConnStatus() {}
+  /**
+   * updates device to dongle connection status
+   * @summary  updates device to dongle connection status
+   */
+  @Put('/{deviceId}')
+  public async updateDeviceConnStatus(@Path() deviceId: number, @Body() req: ReqDevConStatus) {
+    const device = await this.devicerepository.findOne({
+      where: {
+        id: deviceId,
+      },
+      relations: {
+        dongle: true,
+      },
+    });
+    if (!device) {
+      return Promise.reject(new Error('THIS DEVICE WAS NOT FOUND'));
+    }
+
+    const { devConnStatus } = req;
+
+    device.dongle_conn_status = devConnStatus;
+
+    const newDevice = await this.devicerepository.save(device);
+    const resDevice: ResDevice = {
+      dongle: {
+        // device,
+        id: newDevice.dongle?.id,
+        name: newDevice.dongle?.name,
+      },
+      id: newDevice.id,
+      imei: newDevice.imei,
+      mac_address: newDevice.mac_address,
+      name: newDevice.name,
+      // user: newDevice.
+      dongleConnStatus: newDevice.dongle_conn_status,
+    };
+    return resDevice;
+  }
 }
