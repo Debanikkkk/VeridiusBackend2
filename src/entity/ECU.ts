@@ -1,6 +1,8 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToMany, JoinTable, ManyToOne, JoinColumn } from 'typeorm';
 import { NegativeResponseCode } from './NegativeCode';
 import { Vehicle } from './Vehicle';
+import { PIDDataset } from './PIDDataset';
+import { DtcDataset } from './DTCDataset';
 // import { NegativeResponseCode } from 'src/entity/NegativeResponseCode'; // Import the NegativeResponseCode entity
 
 @Entity('ecu_management')
@@ -69,4 +71,20 @@ export class ECU {
     name: 'vehicle_id',
   })
   vehicle?: Vehicle;
+
+  @ManyToMany(() => PIDDataset, (piddataset) => piddataset.ecus, { nullable: true })
+  @JoinTable({
+    name: 'ecu_pid_dataset',
+    joinColumn: { name: 'ecu_id' },
+    inverseJoinColumn: { name: 'pid_dataset_id' },
+  })
+  pid_datasets?: PIDDataset[];
+
+  @ManyToMany(() => DtcDataset, (dtc_dataset) => dtc_dataset.ecus, { nullable: true })
+  @JoinTable({
+    name: 'ecu_dtc_dataset',
+    joinColumn: { name: 'ecu_id' },
+    inverseJoinColumn: { name: 'dtc_dataset_id' },
+  })
+  dtc_datasets?: DtcDataset[];
 }

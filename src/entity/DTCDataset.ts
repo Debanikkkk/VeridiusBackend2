@@ -1,5 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToMany, JoinTable } from 'typeorm';
 import { DTC } from './DTC';
+import { ECU } from './ECU';
 // import { Dtc } from './Dtc'; // Make sure to import the DTC entity correctly
 
 @Entity('dtc_dataset')
@@ -29,4 +30,12 @@ export class DtcDataset {
     inverseJoinColumn: { name: 'dtc_id' },
   })
   dtcs?: DTC[];
+
+  @ManyToMany(() => ECU, (ecu) => ecu.dtc_dataset)
+  @JoinTable({
+    name: 'ecu_dtc_dataset',
+    joinColumn: { name: 'dtc_dataset_id' },
+    inverseJoinColumn: { name: 'ecu_id' },
+  })
+  ecus?: ECU[];
 }

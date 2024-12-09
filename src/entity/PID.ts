@@ -69,7 +69,7 @@ export class PID {
     joinColumn: { name: 'pid_id' },
     inverseJoinColumn: { name: 'pid_dataset_id' },
   })
-  pidDatasets?: PIDDataset[];
+  pid_datasets?: PIDDataset[];
 
   @ManyToMany(() => Parameters, (parameters) => parameters.pids)
   @JoinTable({

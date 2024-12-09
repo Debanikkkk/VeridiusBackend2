@@ -1,5 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToMany, JoinTable } from 'typeorm';
 import { PID } from './PID'; // Import the PID entity
+import { ECU } from './ECU';
+import { MessageType } from './MessageType';
 
 @Entity('pid_dataset')
 export class PIDDataset {
@@ -22,11 +24,33 @@ export class PIDDataset {
   updated_at?: Date;
 
   // Many-to-many relationship with PID
-  @ManyToMany(() => PID, (pid) => pid.pidDatasets)
+  @ManyToMany(() => PID, (pid) => pid.pid_datasets)
   @JoinTable({
     name: 'pid_dataset_pid',
     joinColumn: { name: 'pid_dataset_id' },
     inverseJoinColumn: { name: 'pid_id' },
   })
   pids?: PID[];
+
+  @ManyToMany(() => ECU, (ecu) => ecu.pid_datasets)
+  @JoinTable({
+    name: 'ecu_pid_dataset',
+    joinColumn: { name: 'pid_dataset_id' },
+    inverseJoinColumn: { name: 'ecu_id' },
+  })
+  ecus?: ECU[];
+
+  @ManyToMany(
+    () => MessageType,
+    (messageType) => {
+      messageType.pid_datasets;
+    },
+    { nullable: true },
+  )
+  @JoinTable({
+    name: 'message_type_pid_dataset',
+    joinColumn: { name: 'pid_dataset_id' },
+    inverseJoinColumn: { name: 'message_type_id' },
+  })
+  message_types?: MessageType[];
 }

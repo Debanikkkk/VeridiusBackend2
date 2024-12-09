@@ -193,6 +193,18 @@
 					},
 					"vehicle": {
 						"$ref": "#/components/schemas/Vehicle"
+					},
+					"pid_datasets": {
+						"items": {
+							"$ref": "#/components/schemas/PIDDataset"
+						},
+						"type": "array"
+					},
+					"dtc_datasets": {
+						"items": {
+							"$ref": "#/components/schemas/DtcDataset"
+						},
+						"type": "array"
 					}
 				},
 				"type": "object",
@@ -221,6 +233,268 @@
 					"ecus": {
 						"items": {
 							"$ref": "#/components/schemas/ECU"
+						},
+						"type": "array"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"PIDDataset": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"name": {
+						"type": "string"
+					},
+					"description": {
+						"type": "string"
+					},
+					"active": {
+						"type": "boolean"
+					},
+					"created_at": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"updated_at": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"pids": {
+						"items": {
+							"$ref": "#/components/schemas/PID"
+						},
+						"type": "array"
+					},
+					"ecus": {
+						"items": {
+							"$ref": "#/components/schemas/ECU"
+						},
+						"type": "array"
+					},
+					"message_types": {
+						"items": {
+							"$ref": "#/components/schemas/MessageType"
+						},
+						"type": "array"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"PID": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"pid_code": {
+						"type": "string"
+					},
+					"long_name": {
+						"type": "string"
+					},
+					"description": {
+						"type": "string"
+					},
+					"short_name": {
+						"type": "string"
+					},
+					"active": {
+						"type": "boolean"
+					},
+					"created_at": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"updated_at": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"total_length": {
+						"type": "number",
+						"format": "double"
+					},
+					"byte_position": {
+						"type": "number",
+						"format": "double"
+					},
+					"length_bytes": {
+						"type": "number",
+						"format": "double"
+					},
+					"bit_coded": {
+						"type": "boolean"
+					},
+					"resolution": {
+						"type": "number",
+						"format": "double"
+					},
+					"offset": {
+						"type": "number",
+						"format": "double"
+					},
+					"min": {
+						"type": "number",
+						"format": "double"
+					},
+					"max": {
+						"type": "number",
+						"format": "double"
+					},
+					"read": {
+						"type": "boolean"
+					},
+					"write": {
+						"type": "boolean"
+					},
+					"unit": {
+						"type": "string"
+					},
+					"pid_datasets": {
+						"items": {
+							"$ref": "#/components/schemas/PIDDataset"
+						},
+						"type": "array"
+					},
+					"parameters": {
+						"items": {
+							"$ref": "#/components/schemas/Parameters"
+						},
+						"type": "array"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"Parameters": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"name": {
+						"type": "string"
+					},
+					"description": {
+						"type": "string"
+					},
+					"active": {
+						"type": "boolean"
+					},
+					"created_at": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"updated_at": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"pids": {
+						"items": {
+							"$ref": "#/components/schemas/PID"
+						},
+						"type": "array"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"MessageType": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"name": {
+						"type": "string"
+					},
+					"created_at": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"updated_at": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"pid_datasets": {
+						"items": {
+							"$ref": "#/components/schemas/PIDDataset"
+						},
+						"type": "array"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"DtcDataset": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"name": {
+						"type": "string"
+					},
+					"description": {
+						"type": "string"
+					},
+					"is_active": {
+						"type": "boolean"
+					},
+					"created_at": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"updated_at": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"dtcs": {
+						"items": {
+							"$ref": "#/components/schemas/DTC"
+						},
+						"type": "array"
+					},
+					"ecus": {
+						"items": {
+							"$ref": "#/components/schemas/ECU"
+						},
+						"type": "array"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"DTC": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"name": {
+						"type": "string"
+					},
+					"description": {
+						"type": "string"
+					},
+					"is_active": {
+						"type": "boolean"
+					},
+					"created_at": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"updated_at": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"dtc_dataset": {
+						"items": {
+							"$ref": "#/components/schemas/DtcDataset"
 						},
 						"type": "array"
 					}
