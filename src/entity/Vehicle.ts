@@ -1,10 +1,11 @@
-import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { VehicleModel } from './VehicleModel';
 import { VehicleSubModel } from './VehicleSubModel';
 import { VehicleVariant } from './VehicleVariant';
 import { OEM } from './OEM';
 import { ECU } from './ECU';
 import { ServiceTicket } from './ServiceTickets';
+import { Firmware } from './Firmware';
 // import { Serializable } from 'child_process';
 @Entity()
 export class Vehicle {
@@ -79,4 +80,16 @@ export class Vehicle {
   )
   @JoinColumn({ name: 'service_ticket_id' })
   service_ticket?: Promise<ServiceTicket>;
+
+  @OneToMany(
+    () => ECU,
+    (ecu) => {
+      ecu.vehicle;
+    },
+    { nullable: true },
+  )
+  ecus?: ECU[];
+
+  @OneToMany(() => Firmware, (firmware) => firmware.vehicle, { nullable: true })
+  firmwares?: Firmware[];
 }

@@ -1,10 +1,10 @@
-import { Body, Controller, Get, Path, Post, Route, Tags } from 'tsoa';
+import { Controller, Get, Path, Route, Tags } from 'tsoa';
 import { AppDataSource } from '../data-source';
 import { ECU } from '../entity/ECU';
 import { Device } from '../entity/Device';
 
-import { ReqECU } from '../models/req/ReqECU';
-import { In } from 'typeorm';
+// import { ReqECU } from '../models/req/ReqECU';
+// import { In } from 'typeorm';
 import { Vehicle } from '../entity/Vehicle';
 import { ServiceTicket } from '../entity/ServiceTickets';
 import { User } from '../entity/User';
@@ -27,7 +27,8 @@ export class EcuController extends Controller {
   public async getDeviceIMEIusingECU(@Path() macAdd: string) {
     const ecu = await this.ecurepository.findOne({
       where: {
-        mac_address: macAdd,
+        mac_id: macAdd,
+        // mac_address: macAdd,
       },
     });
 
@@ -89,33 +90,34 @@ export class EcuController extends Controller {
     return device;
   }
 
-  @Post()
-  public async saveEcu(@Body() req: ReqECU) {
-    const { mac_address, name, vehicle } = req;
-    const vehicleArr: Vehicle[] = [];
-    if (vehicle) {
-      const db_vehicle = await this.vehiclerepository.find({
-        where: {
-          id: In(vehicle),
-        },
-      });
+  // @Post()
+  // public async saveEcu(@Body() req: ReqECU) {
+  //   const { mac_address, name, vehicle } = req;
+  //   const vehicleArr: Vehicle[] = [];
+  //   if (vehicle) {
+  //     const db_vehicle = await this.vehiclerepository.find({
+  //       where: {
+  //         id: In(vehicle),
+  //       },
+  //     });
 
-      if (!vehicle) {
-        return Promise.reject(new Error('THE VEHILCE FROM THE DB WAS NOT FOUND'));
-      }
+  //     if (!vehicle) {
+  //       return Promise.reject(new Error('THE VEHILCE FROM THE DB WAS NOT FOUND'));
+  //     }
 
-      vehicleArr.push(...db_vehicle);
-    }
+  //     vehicleArr.push(...db_vehicle);
+  //   }
 
-    const ecuToSave: ECU = {
-      mac_address: mac_address,
-      name: name,
-      vehicle: Promise.resolve(vehicleArr),
-    };
+  //   const ecuToSave: ECU = {
+  //     // mac_address: mac_address,
+  //     // name: name,
+  //     // vehicle: Promise.resolve(vehicleArr),
 
-    const ecuSaver = Object.assign(new ECU(), ecuToSave);
-    const savedEcu = await this.ecurepository.save(ecuSaver);
+  //   };
 
-    return savedEcu;
-  }
+  //   const ecuSaver = Object.assign(new ECU(), ecuToSave);
+  //   const savedEcu = await this.ecurepository.save(ecuSaver);
+
+  //   return savedEcu;
+  // }
 }

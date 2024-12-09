@@ -36,6 +36,18 @@
 					},
 					"service_ticket": {
 						"$ref": "#/components/schemas/ServiceTicket"
+					},
+					"ecus": {
+						"items": {
+							"$ref": "#/components/schemas/ECU"
+						},
+						"type": "array"
+					},
+					"firmwares": {
+						"items": {
+							"$ref": "#/components/schemas/Firmware"
+						},
+						"type": "array"
 					}
 				},
 				"type": "object",
@@ -123,15 +135,92 @@
 						"type": "number",
 						"format": "double"
 					},
-					"name": {
+					"is_active": {
+						"type": "boolean"
+					},
+					"mac_id": {
 						"type": "string"
 					},
-					"mac_address": {
+					"ecu_name": {
 						"type": "string"
+					},
+					"created_at": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"updated_at": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"protocol": {
+						"type": "string"
+					},
+					"dtc_dataset": {
+						"type": "string"
+					},
+					"pid_dataset": {
+						"type": "string"
+					},
+					"rx_header": {
+						"type": "string"
+					},
+					"tx_header": {
+						"type": "string"
+					},
+					"read_dtc_fc_index": {
+						"type": "string"
+					},
+					"clear_dtc_fn_index": {
+						"type": "string"
+					},
+					"read_data_fn_index": {
+						"type": "string"
+					},
+					"write_data_fn_index": {
+						"type": "string"
+					},
+					"seedkey_algo_fn_index": {
+						"type": "string"
+					},
+					"ior_test_index": {
+						"type": "string"
+					},
+					"negative_responses": {
+						"items": {
+							"$ref": "#/components/schemas/NegativeResponseCode"
+						},
+						"type": "array"
 					},
 					"vehicle": {
+						"$ref": "#/components/schemas/Vehicle"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"NegativeResponseCode": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"response_code": {
+						"type": "string"
+					},
+					"description": {
+						"type": "string"
+					},
+					"created_at": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"updated_at": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"ecus": {
 						"items": {
-							"$ref": "#/components/schemas/Vehicle"
+							"$ref": "#/components/schemas/ECU"
 						},
 						"type": "array"
 					}
@@ -383,6 +472,39 @@
 					"timestamp": {
 						"type": "string",
 						"format": "date-time"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"Firmware": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"firmware_version": {
+						"type": "string"
+					},
+					"file": {
+						"type": "string"
+					},
+					"created_at": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"updated_at": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"uploaded_by": {
+						"type": "string"
+					},
+					"is_active": {
+						"type": "boolean"
+					},
+					"vehicle": {
+						"$ref": "#/components/schemas/Vehicle"
 					}
 				},
 				"type": "object",
@@ -1047,25 +1169,6 @@
 				"properties": {
 					"devConnStatus": {
 						"type": "boolean"
-					}
-				},
-				"type": "object",
-				"additionalProperties": false
-			},
-			"ReqECU": {
-				"properties": {
-					"mac_address": {
-						"type": "string"
-					},
-					"name": {
-						"type": "string"
-					},
-					"vehicle": {
-						"items": {
-							"type": "number",
-							"format": "double"
-						},
-						"type": "array"
 					}
 				},
 				"type": "object",
@@ -2544,38 +2647,6 @@
 						}
 					}
 				]
-			}
-		},
-		"/ecu": {
-			"post": {
-				"operationId": "SaveEcu",
-				"responses": {
-					"200": {
-						"description": "Ok",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/ECU"
-								}
-							}
-						}
-					}
-				},
-				"tags": [
-					"ECU"
-				],
-				"security": [],
-				"parameters": [],
-				"requestBody": {
-					"required": true,
-					"content": {
-						"application/json": {
-							"schema": {
-								"$ref": "#/components/schemas/ReqECU"
-							}
-						}
-					}
-				}
 			}
 		},
 		"/dongle": {

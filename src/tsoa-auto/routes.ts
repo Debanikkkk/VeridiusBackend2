@@ -53,6 +53,8 @@ const models: TsoaRoute.Models = {
             "oem": {"ref":"OEM"},
             "ecu": {"dataType":"array","array":{"dataType":"refObject","ref":"ECU"}},
             "service_ticket": {"ref":"ServiceTicket"},
+            "ecus": {"dataType":"array","array":{"dataType":"refObject","ref":"ECU"}},
+            "firmwares": {"dataType":"array","array":{"dataType":"refObject","ref":"Firmware"}},
         },
         "additionalProperties": false,
     },
@@ -101,9 +103,37 @@ const models: TsoaRoute.Models = {
         "dataType": "refObject",
         "properties": {
             "id": {"dataType":"double"},
-            "name": {"dataType":"string"},
-            "mac_address": {"dataType":"string"},
-            "vehicle": {"dataType":"array","array":{"dataType":"refObject","ref":"Vehicle"}},
+            "is_active": {"dataType":"boolean"},
+            "mac_id": {"dataType":"string"},
+            "ecu_name": {"dataType":"string"},
+            "created_at": {"dataType":"datetime"},
+            "updated_at": {"dataType":"datetime"},
+            "protocol": {"dataType":"string"},
+            "dtc_dataset": {"dataType":"string"},
+            "pid_dataset": {"dataType":"string"},
+            "rx_header": {"dataType":"string"},
+            "tx_header": {"dataType":"string"},
+            "read_dtc_fc_index": {"dataType":"string"},
+            "clear_dtc_fn_index": {"dataType":"string"},
+            "read_data_fn_index": {"dataType":"string"},
+            "write_data_fn_index": {"dataType":"string"},
+            "seedkey_algo_fn_index": {"dataType":"string"},
+            "ior_test_index": {"dataType":"string"},
+            "negative_responses": {"dataType":"array","array":{"dataType":"refObject","ref":"NegativeResponseCode"}},
+            "vehicle": {"ref":"Vehicle"},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "NegativeResponseCode": {
+        "dataType": "refObject",
+        "properties": {
+            "id": {"dataType":"double"},
+            "response_code": {"dataType":"string"},
+            "description": {"dataType":"string"},
+            "created_at": {"dataType":"datetime"},
+            "updated_at": {"dataType":"datetime"},
+            "ecus": {"dataType":"array","array":{"dataType":"refObject","ref":"ECU"}},
         },
         "additionalProperties": false,
     },
@@ -211,6 +241,21 @@ const models: TsoaRoute.Models = {
             "tariff": {"dataType":"double"},
             "paymentStatus": {"dataType":"string"},
             "timestamp": {"dataType":"datetime"},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "Firmware": {
+        "dataType": "refObject",
+        "properties": {
+            "id": {"dataType":"double"},
+            "firmware_version": {"dataType":"string"},
+            "file": {"dataType":"string"},
+            "created_at": {"dataType":"datetime"},
+            "updated_at": {"dataType":"datetime"},
+            "uploaded_by": {"dataType":"string"},
+            "is_active": {"dataType":"boolean"},
+            "vehicle": {"ref":"Vehicle"},
         },
         "additionalProperties": false,
     },
@@ -526,16 +571,6 @@ const models: TsoaRoute.Models = {
         "dataType": "refObject",
         "properties": {
             "devConnStatus": {"dataType":"boolean"},
-        },
-        "additionalProperties": false,
-    },
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "ReqECU": {
-        "dataType": "refObject",
-        "properties": {
-            "mac_address": {"dataType":"string"},
-            "name": {"dataType":"string"},
-            "vehicle": {"dataType":"array","array":{"dataType":"double"}},
         },
         "additionalProperties": false,
     },
@@ -1580,36 +1615,6 @@ export function RegisterRoutes(app: Router) {
 
               await templateService.apiHandler({
                 methodName: 'getDeviceIMEIusingECU',
-                controller,
-                response,
-                next,
-                validatedArgs,
-                successStatus: undefined,
-              });
-            } catch (err) {
-                return next(err);
-            }
-        });
-        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        app.post('/ecu',
-            ...(fetchMiddlewares<RequestHandler>(EcuController)),
-            ...(fetchMiddlewares<RequestHandler>(EcuController.prototype.saveEcu)),
-
-            async function EcuController_saveEcu(request: ExRequest, response: ExResponse, next: any) {
-            const args: Record<string, TsoaRoute.ParameterSchema> = {
-                    req: {"in":"body","name":"req","required":true,"ref":"ReqECU"},
-            };
-
-            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-
-            let validatedArgs: any[] = [];
-            try {
-                validatedArgs = templateService.getValidatedArgs({ args, request, response });
-
-                const controller = new EcuController();
-
-              await templateService.apiHandler({
-                methodName: 'saveEcu',
                 controller,
                 response,
                 next,
