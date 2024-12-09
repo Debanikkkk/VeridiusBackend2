@@ -1448,6 +1448,59 @@
 				"type": "object",
 				"additionalProperties": false
 			},
+			"ResFirmware": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"firmwareVersion": {
+						"type": "string"
+					},
+					"file": {
+						"type": "string"
+					},
+					"createdAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"updatedAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"uploadedBy": {
+						"type": "string"
+					},
+					"isActive": {
+						"type": "boolean"
+					},
+					"vehicleId": {
+						"type": "number",
+						"format": "double",
+						"nullable": true
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ReqFirmware": {
+				"properties": {
+					"firmwareVersion": {
+						"type": "string"
+					},
+					"file": {
+						"type": "string"
+					},
+					"uploadedBy": {
+						"type": "string"
+					},
+					"isActive": {
+						"type": "boolean"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
 			"ReqDongle": {
 				"properties": {
 					"name": {
@@ -2884,6 +2937,177 @@
 						"application/json": {
 							"schema": {
 								"$ref": "#/components/schemas/ReqDevConStatus"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/firmware/{firmwareId}": {
+			"get": {
+				"operationId": "GetOneFirmware",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"$ref": "#/components/schemas/ResFirmware"
+										},
+										{
+											"$ref": "#/components/schemas/ResError"
+										}
+									]
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Firmware"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "firmwareId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			},
+			"put": {
+				"operationId": "UpdateFirmware",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ResFirmware"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Firmware"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "firmwareId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/ReqFirmware"
+							}
+						}
+					}
+				}
+			},
+			"delete": {
+				"operationId": "DeleteFirmware",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ResSuccess"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Firmware"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "firmwareId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			}
+		},
+		"/firmware": {
+			"get": {
+				"operationId": "GetAllFirmwares",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"items": {
+												"$ref": "#/components/schemas/ResFirmware"
+											},
+											"type": "array"
+										},
+										{
+											"$ref": "#/components/schemas/ResError"
+										}
+									]
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Firmware"
+				],
+				"security": [],
+				"parameters": []
+			},
+			"post": {
+				"operationId": "SaveFirmware",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ResFirmware"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Firmware"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/ReqFirmware"
 							}
 						}
 					}

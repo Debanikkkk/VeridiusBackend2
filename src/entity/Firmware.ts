@@ -26,5 +26,5 @@ export class Firmware {
 
   @ManyToOne(() => Vehicle, (vehicle) => vehicle.firmwares, { nullable: true })
   @JoinColumn({ name: 'vehicle_id' })
-  vehicle?: Vehicle; // One vehicle to many firmware managements
+  vehicle?: Vehicle;
 }
