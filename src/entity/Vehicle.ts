@@ -1,95 +1,67 @@
-import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany, JoinColumn } from 'typeorm';
+
 import { VehicleModel } from './VehicleModel';
 import { VehicleSubModel } from './VehicleSubModel';
-import { VehicleVariant } from './VehicleVariant';
-import { OEM } from './OEM';
-import { ECU } from './ECU';
-import { ServiceTicket } from './ServiceTickets';
-import { Firmware } from './Firmware';
-// import { Serializable } from 'child_process';
+import { VehicleSegment } from './VehicleSegment';
+import { VehicleVersion } from './VehicleVersion';
+import { VehicleOwner } from './VehicleOwner';
+import { VehiclePartsReplacement } from './VehiclePartsReplacement';
+import { VehicleInsurance } from './VehicleInsurance';
+import { Dealer } from './Dealer';
+
 @Entity()
 export class Vehicle {
   @PrimaryGeneratedColumn()
   id?: number;
 
-  @Column({
-    length: 64,
-  })
-  name?: string;
+  @Column({ unique: true })
+  vin?: string;
 
-  @ManyToOne(
-    () => VehicleModel,
-    (vehicle_model) => {
-      vehicle_model.vehicle;
-    },
-    { onDelete: 'CASCADE', onUpdate: 'CASCADE', nullable: true },
-  )
+  @Column({ unique: true })
+  engine_number?: string;
+
+  @Column()
+  vehicle_number?: string;
+
+  @Column()
+  color?: string;
+
+  @Column()
+  manufacture_year?: number;
+
+  @Column()
+  transmission_type?: string;
+
+  @ManyToOne(() => VehicleModel, (model) => model.vehicles)
   @JoinColumn({ name: 'vehicle_model_id' })
-  vehicle_model?: Promise<VehicleModel>;
+  vehicle_model?: VehicleModel;
 
-  @ManyToOne(
-    () => VehicleSubModel,
-    (vehicle_sub_model) => {
-      vehicle_sub_model.vehicle;
-    },
-    { onDelete: 'CASCADE', onUpdate: 'CASCADE', nullable: true },
-  )
-  @JoinColumn({ name: 'vehicle_sub_model_id' })
-  vehicle_sub_model?: Promise<VehicleSubModel>;
+  @ManyToOne(() => VehicleSubModel, (subModel) => subModel.vehicles)
+  @JoinColumn({ name: 'vehicle_sub_id' })
+  vehicle_sub_model?: VehicleSubModel;
 
-  @ManyToOne(
-    () => VehicleVariant,
-    (vehicle_variant) => {
-      vehicle_variant.vehicle;
-    },
-    { onDelete: 'CASCADE', onUpdate: 'CASCADE', nullable: true },
-  )
-  @JoinColumn({ name: 'vehicle_variant_id' })
-  vehicle_variant?: Promise<VehicleVariant>;
+  @ManyToOne(() => VehicleSegment, (segment) => segment.vehicles)
+  @JoinColumn({ name: 'vehicle_segment_id' })
+  vehicle_segment?: VehicleSegment;
 
-  @ManyToOne(
-    () => OEM,
-    (oem) => {
-      oem.vehicle;
-    },
-    { onDelete: 'CASCADE', onUpdate: 'CASCADE', nullable: true },
-  )
-  @JoinColumn({ name: 'oem_id' })
-  oem?: Promise<OEM>;
+  @ManyToOne(() => VehicleVersion, (version) => version.vehicles)
+  @JoinColumn({ name: 'vehicle_version_id' })
+  vehicle_version?: VehicleVersion;
 
-  @ManyToMany(
-    () => ECU,
-    (ecu) => {
-      ecu.vehicle;
-    },
-    { onDelete: 'CASCADE', onUpdate: 'CASCADE', nullable: true },
-  )
-  @JoinTable({
-    name: 'vehicle_ecu',
-    joinColumn: { name: 'vehicle_id' },
-    inverseJoinColumn: { name: 'ecu_id' },
-  })
-  ecu?: Promise<ECU[]>;
+  @Column()
+  mileage?: number;
 
-  @OneToOne(
-    () => ServiceTicket,
-    (service_ticket) => {
-      service_ticket.vehicle;
-    },
-    { onUpdate: 'CASCADE', onDelete: 'CASCADE', nullable: true },
-  )
-  @JoinColumn({ name: 'service_ticket_id' })
-  service_ticket?: Promise<ServiceTicket>;
+  @ManyToOne(() => VehicleOwner, (owner) => owner.vehicles)
+  @JoinColumn({ name: 'vehicle_owner_id' })
+  vehicle_owner?: VehicleOwner;
 
-  @OneToMany(
-    () => ECU,
-    (ecu) => {
-      ecu.vehicle;
-    },
-    { nullable: true },
-  )
-  ecus?: ECU[];
+  @OneToMany(() => VehiclePartsReplacement, (replacement) => replacement.vehicle)
+  vehicle_parts_replacements?: VehiclePartsReplacement[];
 
-  @OneToMany(() => Firmware, (firmware) => firmware.vehicle, { nullable: true })
-  firmwares?: Firmware[];
+  @OneToMany(() => VehicleInsurance, (insurance) => insurance.vehicle)
+  vehicle_insurances?: VehicleInsurance[];
+
+  @ManyToOne(() => Dealer, (dealer) => dealer.vehicles)
+  @JoinColumn({ name: 'dealer_id' })
+  dealer?: Dealer;
 }

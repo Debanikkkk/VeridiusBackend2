@@ -58,8 +58,8 @@ export class FreeDongleUserDeviceController extends Controller {
       const deviceHistory: DeviceHistory = {
         device_id: device.id,
         dongle_id: device.dongle?.id,
-        mac_address: device.mac_address,
-        name: device.name,
+        // mac_address: device.mac_address!,
+        // name: device.name,
         user_id: req.user.id,
       };
 
@@ -67,7 +67,7 @@ export class FreeDongleUserDeviceController extends Controller {
 
       const savedDeviceHistory = await this.devicehistoryrepository.save(devicehistorySaver);
       console.log(savedDeviceHistory);
-      console.log('this is the user found in the device', device.user);
+      // console.log('this is the user found in the device', device.user);
       device.dongle = null;
       await this.devicerepository.save(device);
       user.device = null;

@@ -31,7 +31,7 @@ export class FirmwareController extends Controller {
       updatedAt: firmware.updated_at,
       uploadedBy: firmware.uploaded_by,
       isActive: firmware.is_active,
-      vehicleId: firmware.vehicle?.id,
+      // vehicleId: firmware.vehicle?.id,
     };
   }
 
@@ -51,7 +51,7 @@ export class FirmwareController extends Controller {
       updatedAt: firmware.updated_at,
       uploadedBy: firmware.uploaded_by,
       isActive: firmware.is_active,
-      vehicleId: firmware.vehicle?.id,
+      // vehicleId: firmware.vehicle?.id,
     }));
   }
 
@@ -74,7 +74,7 @@ export class FirmwareController extends Controller {
       updatedAt: savedFirmware.updated_at,
       uploadedBy: savedFirmware.uploaded_by,
       isActive: savedFirmware.is_active,
-      vehicleId: savedFirmware.vehicle?.id,
+      // vehicleId: savedFirmware.vehicle?.id,
     };
   }
 
@@ -101,7 +101,7 @@ export class FirmwareController extends Controller {
       updatedAt: updatedFirmware.updated_at,
       uploadedBy: updatedFirmware.uploaded_by,
       isActive: updatedFirmware.is_active,
-      vehicleId: updatedFirmware.vehicle?.id,
+      // vehicleId: updatedFirmware.vehicle?.id,
     };
   }
 

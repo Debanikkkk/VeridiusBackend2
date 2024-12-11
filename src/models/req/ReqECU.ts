@@ -1,12 +1,13 @@
 export interface ReqECU {
   id?: number;
-  vehicleManagementId?: number; // Assuming vehicleManagementId is the related vehicle ID in many-to-one relation
-  active?: boolean;
+  vehicle?: number; // Assuming vehicleManagementId is the related vehicle ID in many-to-one relation
+  isActive?: boolean;
   macId?: string;
   ecuName?: string;
   protocol?: string;
-  dtcDataset?: string;
-  pidDataset?: string;
+  dtcDataset?: number[];
+  pidDataset?: number[];
+  firmware?: number;
   rxHeader?: string;
   txHeader?: string;
   readDtcFcIndex?: string;

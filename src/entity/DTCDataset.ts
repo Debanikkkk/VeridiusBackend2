@@ -31,7 +31,7 @@ export class DtcDataset {
   })
   dtcs?: DTC[];
 
-  @ManyToMany(() => ECU, (ecu) => ecu.dtc_dataset)
+  @ManyToMany(() => ECU, (ecu) => ecu.dtc_datasets)
   @JoinTable({
     name: 'ecu_dtc_dataset',
     joinColumn: { name: 'dtc_dataset_id' },

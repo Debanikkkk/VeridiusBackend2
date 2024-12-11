@@ -1,22 +1,26 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { Vehicle } from './Vehicle';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import { VehicleModel } from './VehicleModel';
 
 @Entity()
 export class OEM {
   @PrimaryGeneratedColumn()
   id?: number;
 
-  @Column({
-    length: 16,
-  })
+  @Column()
   name?: string;
 
-  @OneToMany(
-    () => Vehicle,
-    (vehicle) => {
-      vehicle.oem;
-    },
-    { onDelete: 'CASCADE', onUpdate: 'CASCADE', nullable: true },
-  )
-  vehicle?: Promise<Vehicle[]>;
+  @Column()
+  country?: string;
+
+  @Column()
+  founded_year?: number;
+
+  @Column()
+  contact_information?: string;
+
+  @Column()
+  website?: string;
+
+  @OneToMany(() => VehicleModel, (model) => model.oem)
+  vehicle_models?: VehicleModel[];
 }

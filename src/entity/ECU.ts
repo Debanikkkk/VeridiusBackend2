@@ -1,8 +1,9 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToMany, JoinTable, ManyToOne, JoinColumn } from 'typeorm';
-import { NegativeResponseCode } from './NegativeCode';
-import { Vehicle } from './Vehicle';
+
 import { PIDDataset } from './PIDDataset';
 import { DtcDataset } from './DTCDataset';
+import { Firmware } from './Firmware';
+import { NegativeResponseCode } from './NegativeCode';
 // import { NegativeResponseCode } from 'src/entity/NegativeResponseCode'; // Import the NegativeResponseCode entity
 
 @Entity('ecu_management')
@@ -27,12 +28,6 @@ export class ECU {
 
   @Column({ type: 'varchar', length: 255, nullable: true })
   protocol?: string;
-
-  @Column({ type: 'varchar', length: 255, nullable: true })
-  dtc_dataset?: string;
-
-  @Column({ type: 'varchar', length: 255, nullable: true })
-  pid_dataset?: string;
 
   @Column({ type: 'varchar', length: 255, nullable: true })
   rx_header?: string;
@@ -66,11 +61,11 @@ export class ECU {
   })
   negative_responses?: NegativeResponseCode[];
 
-  @ManyToOne(() => Vehicle, (vehicle) => vehicle.ecu, { nullable: true })
-  @JoinColumn({
-    name: 'vehicle_id',
-  })
-  vehicle?: Vehicle;
+  // @ManyToOne(() => Vehicle, (vehicle) => vehicle.ecu, { nullable: true })
+  // @JoinColumn({
+  //   name: 'vehicle_id',
+  // })
+  // vehicle?: Vehicle;
 
   @ManyToMany(() => PIDDataset, (piddataset) => piddataset.ecus, { nullable: true })
   @JoinTable({
@@ -87,4 +82,14 @@ export class ECU {
     inverseJoinColumn: { name: 'dtc_dataset_id' },
   })
   dtc_datasets?: DtcDataset[];
+
+  @ManyToOne(
+    () => Firmware,
+    (firmware) => {
+      firmware.ecus;
+    },
+    { nullable: true },
+  )
+  @JoinColumn({ name: 'firmware_id' })
+  firmware?: Firmware;
 }

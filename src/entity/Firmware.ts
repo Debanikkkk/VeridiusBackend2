@@ -1,6 +1,11 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn } from 'typeorm';
-import { Vehicle } from './Vehicle'; // Import the Vehicle entity
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany } from 'typeorm';
+// import { Vehicle } from './Vehicle'; // Import the Vehicle entity
+import { ECU } from './ECU';
 
+export enum firmware_management {
+  DEVOTA = 'DEVOTA',
+  DOTA = 'DOTA',
+}
 @Entity('firmware_management')
 export class Firmware {
   @PrimaryGeneratedColumn()
@@ -24,7 +29,22 @@ export class Firmware {
   @Column({ type: 'boolean', default: true })
   is_active?: boolean;
 
-  @ManyToOne(() => Vehicle, (vehicle) => vehicle.firmwares, { nullable: true })
-  @JoinColumn({ name: 'vehicle_id' })
-  vehicle?: Vehicle;
+  @Column({
+    type: 'enum',
+    enum: firmware_management,
+    // default: firmware_management.,
+  })
+  firmware_type?: firmware_management;
+  // @ManyToOne(() => Vehicle, (vehicle) => vehicle.firmwares, { nullable: true })
+  // @JoinColumn({ name: 'vehicle_id' })
+  // vehicle?: Vehicle;
+
+  @OneToMany(
+    () => ECU,
+    (ecu) => {
+      ecu.firmware;
+    },
+    { nullable: true },
+  )
+  ecus?: ECU[];
 }
