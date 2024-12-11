@@ -538,6 +538,9 @@
 						],
 						"nullable": true
 					},
+					"dongleConnStatus": {
+						"type": "boolean"
+					},
 					"imei": {
 						"type": "string"
 					}
@@ -1016,6 +1019,34 @@
 							"type"
 						],
 						"type": "object"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ECUFlash": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"flash_file_name": {
+						"type": "string"
+					},
+					"flash_file_path": {
+						"type": "string"
+					},
+					"status": {
+						"type": "boolean"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ReqDevConStatus": {
+				"properties": {
+					"devConnStatus": {
+						"type": "boolean"
 					}
 				},
 				"type": "object",
@@ -2386,26 +2417,15 @@
 								"schema": {
 									"anyOf": [
 										{
-											"properties": {
-												"filePath": {},
-												"message": {
-													"type": "string"
-												}
-											},
-											"required": [
-												"message"
-											],
-											"type": "object"
+											"$ref": "#/components/schemas/ECUFlash"
 										},
 										{
 											"properties": {
-												"filePath": {},
 												"message": {
 													"type": "string"
 												}
 											},
 											"required": [
-												"filePath",
 												"message"
 											],
 											"type": "object"
@@ -2420,7 +2440,16 @@
 					"ECU Flash  File"
 				],
 				"security": [],
-				"parameters": [],
+				"parameters": [
+					{
+						"in": "query",
+						"name": "fileName",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
 				"requestBody": {
 					"required": true,
 					"content": {
@@ -2436,6 +2465,48 @@
 								"required": [
 									"file"
 								]
+							}
+						}
+					}
+				}
+			}
+		},
+		"/ecuFlashFile/{flashFileId}": {
+			"put": {
+				"operationId": "FlashFileStatusChange",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ECUFlash"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"ECU Flash  File"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "flashFileId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/ReqDevConStatus"
 							}
 						}
 					}
@@ -2780,6 +2851,48 @@
 						}
 					}
 				]
+			},
+			"put": {
+				"operationId": "UpdateDeviceConnStatus",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ResDevice"
+								}
+							}
+						}
+					}
+				},
+				"description": "updates device to dongle connection status",
+				"summary": "updates device to dongle connection status",
+				"tags": [
+					"Device"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "deviceId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/ReqDevConStatus"
+							}
+						}
+					}
+				}
 			}
 		},
 		"/device/allotDongle/{deviceId}": {

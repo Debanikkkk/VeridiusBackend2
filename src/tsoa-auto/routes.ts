@@ -284,6 +284,7 @@ const models: TsoaRoute.Models = {
             "name": {"dataType":"string"},
             "user": {"ref":"ResUser"},
             "dongle": {"dataType":"union","subSchemas":[{"ref":"ResDongle"},{"dataType":"enum","enums":[null]}]},
+            "dongleConnStatus": {"dataType":"boolean"},
             "imei": {"dataType":"string"},
         },
         "additionalProperties": false,
@@ -506,6 +507,25 @@ const models: TsoaRoute.Models = {
         "properties": {
             "name": {"dataType":"string"},
             "polygon": {"dataType":"nestedObjectLiteral","nestedProperties":{"coordinates":{"dataType":"array","array":{"dataType":"array","array":{"dataType":"array","array":{"dataType":"double"}}},"required":true},"type":{"dataType":"enum","enums":["Polygon"],"required":true}}},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "ECUFlash": {
+        "dataType": "refObject",
+        "properties": {
+            "id": {"dataType":"double"},
+            "flash_file_name": {"dataType":"string"},
+            "flash_file_path": {"dataType":"string"},
+            "status": {"dataType":"boolean"},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "ReqDevConStatus": {
+        "dataType": "refObject",
+        "properties": {
+            "devConnStatus": {"dataType":"boolean"},
         },
         "additionalProperties": false,
     },
@@ -1486,6 +1506,7 @@ export function RegisterRoutes(app: Router) {
             async function FlashFileController_saveFlash(request: ExRequest, response: ExResponse, next: any) {
             const args: Record<string, TsoaRoute.ParameterSchema> = {
                     file: {"in":"formData","name":"file","required":true,"dataType":"file"},
+                    fileName: {"in":"query","name":"fileName","required":true,"dataType":"string"},
             };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -1498,6 +1519,37 @@ export function RegisterRoutes(app: Router) {
 
               await templateService.apiHandler({
                 methodName: 'saveFlash',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.put('/ecuFlashFile/:flashFileId',
+            ...(fetchMiddlewares<RequestHandler>(FlashFileController)),
+            ...(fetchMiddlewares<RequestHandler>(FlashFileController.prototype.flashFileStatusChange)),
+
+            async function FlashFileController_flashFileStatusChange(request: ExRequest, response: ExResponse, next: any) {
+            const args: Record<string, TsoaRoute.ParameterSchema> = {
+                    flashFileId: {"in":"path","name":"flashFileId","required":true,"dataType":"double"},
+                    req: {"in":"body","name":"req","required":true,"ref":"ReqDevConStatus"},
+            };
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+
+                const controller = new FlashFileController();
+
+              await templateService.apiHandler({
+                methodName: 'flashFileStatusChange',
                 controller,
                 response,
                 next,
@@ -1797,6 +1849,37 @@ export function RegisterRoutes(app: Router) {
 
               await templateService.apiHandler({
                 methodName: 'allotDongleToDevice',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.put('/device/:deviceId',
+            ...(fetchMiddlewares<RequestHandler>(DeviceController)),
+            ...(fetchMiddlewares<RequestHandler>(DeviceController.prototype.updateDeviceConnStatus)),
+
+            async function DeviceController_updateDeviceConnStatus(request: ExRequest, response: ExResponse, next: any) {
+            const args: Record<string, TsoaRoute.ParameterSchema> = {
+                    deviceId: {"in":"path","name":"deviceId","required":true,"dataType":"double"},
+                    req: {"in":"body","name":"req","required":true,"ref":"ReqDevConStatus"},
+            };
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+
+                const controller = new DeviceController();
+
+              await templateService.apiHandler({
+                methodName: 'updateDeviceConnStatus',
                 controller,
                 response,
                 next,
