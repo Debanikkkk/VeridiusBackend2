@@ -3,6 +3,7 @@ import { Device } from './Device';
 import { Role } from './Role';
 import { ServiceTicket } from './ServiceTickets';
 import { Trip } from './Trip';
+import { Firmware } from './Firmware';
 
 @Entity()
 export class User {
@@ -82,4 +83,13 @@ export class User {
     inverseJoinColumn: { name: 'under_user_id', referencedColumnName: 'id' },
   })
   is_under?: Promise<User[]>;
+
+  @OneToMany(
+    () => Firmware,
+    (firmware) => {
+      firmware.created_by;
+    },
+    { nullable: true },
+  )
+  firmwares?: Firmware[];
 }

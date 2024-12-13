@@ -40,6 +40,7 @@ export class Device {
     type: 'enum',
     enum: DeviceStatus,
     default: DeviceStatus.ACTIVE,
+    nullable: true,
   })
   status?: DeviceStatus;
 

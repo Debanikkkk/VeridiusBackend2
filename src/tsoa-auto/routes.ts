@@ -19,8 +19,6 @@ import { GeofenceController } from './../controller/GeofenceController';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { FreeDongleUserDeviceController } from './../controller/FreeDongleUserDeviceController';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-import { FlashFileController } from './../controller/FlashFileController';
-// WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { FirmwareController } from './../controller/FirmwareController';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { DeviceController } from './../controller/DeviceController';
@@ -255,6 +253,7 @@ const models: TsoaRoute.Models = {
             "service_ticket": {"ref":"ServiceTicket"},
             "trips": {"dataType":"array","array":{"dataType":"refObject","ref":"Trip"}},
             "is_under": {"dataType":"array","array":{"dataType":"refObject","ref":"User"}},
+            "firmwares": {"dataType":"array","array":{"dataType":"refObject","ref":"Firmware"}},
         },
         "additionalProperties": false,
     },
@@ -310,6 +309,167 @@ const models: TsoaRoute.Models = {
             "tariff": {"dataType":"double"},
             "paymentStatus": {"dataType":"string"},
             "timestamp": {"dataType":"datetime"},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "firmware_management": {
+        "dataType": "refEnum",
+        "enums": ["DEVOTA","DOTA"],
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "ECU": {
+        "dataType": "refObject",
+        "properties": {
+            "id": {"dataType":"double"},
+            "is_active": {"dataType":"boolean"},
+            "mac_id": {"dataType":"string"},
+            "ecu_name": {"dataType":"string"},
+            "created_at": {"dataType":"datetime"},
+            "updated_at": {"dataType":"datetime"},
+            "protocol": {"dataType":"string"},
+            "rx_header": {"dataType":"string"},
+            "tx_header": {"dataType":"string"},
+            "read_dtc_fc_index": {"dataType":"string"},
+            "clear_dtc_fn_index": {"dataType":"string"},
+            "read_data_fn_index": {"dataType":"string"},
+            "write_data_fn_index": {"dataType":"string"},
+            "seedkey_algo_fn_index": {"dataType":"string"},
+            "ior_test_index": {"dataType":"string"},
+            "negative_responses": {"dataType":"array","array":{"dataType":"refObject","ref":"NegativeResponseCode"}},
+            "pid_datasets": {"dataType":"array","array":{"dataType":"refObject","ref":"PIDDataset"}},
+            "dtc_datasets": {"dataType":"array","array":{"dataType":"refObject","ref":"DtcDataset"}},
+            "firmware": {"ref":"Firmware"},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "NegativeResponseCode": {
+        "dataType": "refObject",
+        "properties": {
+            "id": {"dataType":"double"},
+            "response_code": {"dataType":"string"},
+            "description": {"dataType":"string"},
+            "created_at": {"dataType":"datetime"},
+            "updated_at": {"dataType":"datetime"},
+            "ecus": {"dataType":"array","array":{"dataType":"refObject","ref":"ECU"}},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "PIDDataset": {
+        "dataType": "refObject",
+        "properties": {
+            "id": {"dataType":"double"},
+            "name": {"dataType":"string"},
+            "description": {"dataType":"string"},
+            "active": {"dataType":"boolean"},
+            "created_at": {"dataType":"datetime"},
+            "updated_at": {"dataType":"datetime"},
+            "pids": {"dataType":"array","array":{"dataType":"refObject","ref":"PID"}},
+            "ecus": {"dataType":"array","array":{"dataType":"refObject","ref":"ECU"}},
+            "message_types": {"dataType":"array","array":{"dataType":"refObject","ref":"MessageType"}},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "PID": {
+        "dataType": "refObject",
+        "properties": {
+            "id": {"dataType":"double"},
+            "pid_code": {"dataType":"string"},
+            "long_name": {"dataType":"string"},
+            "description": {"dataType":"string"},
+            "short_name": {"dataType":"string"},
+            "active": {"dataType":"boolean"},
+            "created_at": {"dataType":"datetime"},
+            "updated_at": {"dataType":"datetime"},
+            "total_length": {"dataType":"double"},
+            "byte_position": {"dataType":"double"},
+            "length_bytes": {"dataType":"double"},
+            "bit_coded": {"dataType":"boolean"},
+            "resolution": {"dataType":"double"},
+            "offset": {"dataType":"double"},
+            "min": {"dataType":"double"},
+            "max": {"dataType":"double"},
+            "read": {"dataType":"boolean"},
+            "write": {"dataType":"boolean"},
+            "unit": {"dataType":"string"},
+            "pid_datasets": {"dataType":"array","array":{"dataType":"refObject","ref":"PIDDataset"}},
+            "parameters": {"dataType":"array","array":{"dataType":"refObject","ref":"Parameters"}},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "Parameters": {
+        "dataType": "refObject",
+        "properties": {
+            "id": {"dataType":"double"},
+            "name": {"dataType":"string"},
+            "description": {"dataType":"string"},
+            "active": {"dataType":"boolean"},
+            "created_at": {"dataType":"datetime"},
+            "updated_at": {"dataType":"datetime"},
+            "pids": {"dataType":"array","array":{"dataType":"refObject","ref":"PID"}},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "MessageType": {
+        "dataType": "refObject",
+        "properties": {
+            "id": {"dataType":"double"},
+            "name": {"dataType":"string"},
+            "created_at": {"dataType":"datetime"},
+            "updated_at": {"dataType":"datetime"},
+            "pid_datasets": {"dataType":"array","array":{"dataType":"refObject","ref":"PIDDataset"}},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "DtcDataset": {
+        "dataType": "refObject",
+        "properties": {
+            "id": {"dataType":"double"},
+            "name": {"dataType":"string"},
+            "description": {"dataType":"string"},
+            "is_active": {"dataType":"boolean"},
+            "created_at": {"dataType":"datetime"},
+            "updated_at": {"dataType":"datetime"},
+            "dtcs": {"dataType":"array","array":{"dataType":"refObject","ref":"DTC"}},
+            "ecus": {"dataType":"array","array":{"dataType":"refObject","ref":"ECU"}},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "DTC": {
+        "dataType": "refObject",
+        "properties": {
+            "id": {"dataType":"double"},
+            "name": {"dataType":"string"},
+            "description": {"dataType":"string"},
+            "is_active": {"dataType":"boolean"},
+            "created_at": {"dataType":"datetime"},
+            "updated_at": {"dataType":"datetime"},
+            "dtc_dataset": {"dataType":"array","array":{"dataType":"refObject","ref":"DtcDataset"}},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "Firmware": {
+        "dataType": "refObject",
+        "properties": {
+            "id": {"dataType":"double"},
+            "firmware_version": {"dataType":"string"},
+            "file": {"dataType":"string"},
+            "file_name": {"dataType":"string"},
+            "file_description": {"dataType":"string"},
+            "created_at": {"dataType":"datetime"},
+            "updated_at": {"dataType":"datetime"},
+            "is_active": {"dataType":"boolean"},
+            "firmware_type": {"ref":"firmware_management"},
+            "created_by": {"ref":"User"},
+            "ecus": {"dataType":"array","array":{"dataType":"refObject","ref":"ECU"}},
         },
         "additionalProperties": false,
     },
@@ -464,25 +624,6 @@ const models: TsoaRoute.Models = {
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "ECUFlash": {
-        "dataType": "refObject",
-        "properties": {
-            "id": {"dataType":"double"},
-            "flash_file_name": {"dataType":"string"},
-            "flash_file_path": {"dataType":"string"},
-            "status": {"dataType":"boolean"},
-        },
-        "additionalProperties": false,
-    },
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "ReqDevConStatus": {
-        "dataType": "refObject",
-        "properties": {
-            "devConnStatus": {"dataType":"boolean"},
-        },
-        "additionalProperties": false,
-    },
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "ResFirmware": {
         "dataType": "refObject",
         "properties": {
@@ -491,20 +632,9 @@ const models: TsoaRoute.Models = {
             "file": {"dataType":"string"},
             "createdAt": {"dataType":"datetime"},
             "updatedAt": {"dataType":"datetime"},
-            "uploadedBy": {"dataType":"string"},
+            "uploadedBy": {"ref":"ResUser"},
             "isActive": {"dataType":"boolean"},
             "vehicleId": {"dataType":"union","subSchemas":[{"dataType":"double"},{"dataType":"enum","enums":[null]}]},
-        },
-        "additionalProperties": false,
-    },
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "ReqFirmware": {
-        "dataType": "refObject",
-        "properties": {
-            "firmwareVersion": {"dataType":"string"},
-            "file": {"dataType":"string"},
-            "uploadedBy": {"dataType":"string"},
-            "isActive": {"dataType":"boolean"},
         },
         "additionalProperties": false,
     },
@@ -1475,69 +1605,6 @@ export function RegisterRoutes(app: Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        app.post('/ecuFlashFile',
-            upload.fields([{"name":"file","maxCount":1,"multiple":false}]),
-            ...(fetchMiddlewares<RequestHandler>(FlashFileController)),
-            ...(fetchMiddlewares<RequestHandler>(FlashFileController.prototype.saveFlash)),
-
-            async function FlashFileController_saveFlash(request: ExRequest, response: ExResponse, next: any) {
-            const args: Record<string, TsoaRoute.ParameterSchema> = {
-                    file: {"in":"formData","name":"file","required":true,"dataType":"file"},
-                    fileName: {"in":"query","name":"fileName","required":true,"dataType":"string"},
-            };
-
-            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-
-            let validatedArgs: any[] = [];
-            try {
-                validatedArgs = templateService.getValidatedArgs({ args, request, response });
-
-                const controller = new FlashFileController();
-
-              await templateService.apiHandler({
-                methodName: 'saveFlash',
-                controller,
-                response,
-                next,
-                validatedArgs,
-                successStatus: undefined,
-              });
-            } catch (err) {
-                return next(err);
-            }
-        });
-        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        app.put('/ecuFlashFile/:flashFileId',
-            ...(fetchMiddlewares<RequestHandler>(FlashFileController)),
-            ...(fetchMiddlewares<RequestHandler>(FlashFileController.prototype.flashFileStatusChange)),
-
-            async function FlashFileController_flashFileStatusChange(request: ExRequest, response: ExResponse, next: any) {
-            const args: Record<string, TsoaRoute.ParameterSchema> = {
-                    flashFileId: {"in":"path","name":"flashFileId","required":true,"dataType":"double"},
-                    req: {"in":"body","name":"req","required":true,"ref":"ReqDevConStatus"},
-            };
-
-            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-
-            let validatedArgs: any[] = [];
-            try {
-                validatedArgs = templateService.getValidatedArgs({ args, request, response });
-
-                const controller = new FlashFileController();
-
-              await templateService.apiHandler({
-                methodName: 'flashFileStatusChange',
-                controller,
-                response,
-                next,
-                validatedArgs,
-                successStatus: undefined,
-              });
-            } catch (err) {
-                return next(err);
-            }
-        });
-        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         app.get('/firmware/:firmwareId',
             ...(fetchMiddlewares<RequestHandler>(FirmwareController)),
             ...(fetchMiddlewares<RequestHandler>(FirmwareController.prototype.getOneFirmware)),
@@ -1598,12 +1665,19 @@ export function RegisterRoutes(app: Router) {
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         app.post('/firmware',
+            authenticateMiddleware([{"Api-Token":[]}]),
+            upload.fields([{"name":"file","maxCount":1,"multiple":false}]),
             ...(fetchMiddlewares<RequestHandler>(FirmwareController)),
             ...(fetchMiddlewares<RequestHandler>(FirmwareController.prototype.saveFirmware)),
 
             async function FirmwareController_saveFirmware(request: ExRequest, response: ExResponse, next: any) {
             const args: Record<string, TsoaRoute.ParameterSchema> = {
-                    request: {"in":"body","name":"request","required":true,"ref":"ReqFirmware"},
+                    file: {"in":"formData","name":"file","required":true,"dataType":"file"},
+                    firmwareVersion: {"in":"query","name":"firmwareVersion","required":true,"dataType":"string"},
+                    firmwareType: {"in":"query","name":"firmwareType","required":true,"ref":"firmware_management"},
+                    isActive: {"in":"query","name":"isActive","required":true,"dataType":"boolean"},
+                    fileName: {"in":"query","name":"fileName","required":true,"dataType":"string"},
+                    req: {"in":"request","name":"req","required":true,"dataType":"object"},
             };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -1616,37 +1690,6 @@ export function RegisterRoutes(app: Router) {
 
               await templateService.apiHandler({
                 methodName: 'saveFirmware',
-                controller,
-                response,
-                next,
-                validatedArgs,
-                successStatus: undefined,
-              });
-            } catch (err) {
-                return next(err);
-            }
-        });
-        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        app.put('/firmware/:firmwareId',
-            ...(fetchMiddlewares<RequestHandler>(FirmwareController)),
-            ...(fetchMiddlewares<RequestHandler>(FirmwareController.prototype.updateFirmware)),
-
-            async function FirmwareController_updateFirmware(request: ExRequest, response: ExResponse, next: any) {
-            const args: Record<string, TsoaRoute.ParameterSchema> = {
-                    firmwareId: {"in":"path","name":"firmwareId","required":true,"dataType":"double"},
-                    request: {"in":"body","name":"request","required":true,"ref":"ReqFirmware"},
-            };
-
-            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-
-            let validatedArgs: any[] = [];
-            try {
-                validatedArgs = templateService.getValidatedArgs({ args, request, response });
-
-                const controller = new FirmwareController();
-
-              await templateService.apiHandler({
-                methodName: 'updateFirmware',
                 controller,
                 response,
                 next,

@@ -1,6 +1,7 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany, ManyToOne, JoinColumn } from 'typeorm';
 // import { Vehicle } from './Vehicle'; // Import the Vehicle entity
 import { ECU } from './ECU';
+import { User } from './User';
 
 export enum firmware_management {
   DEVOTA = 'DEVOTA',
@@ -17,14 +18,20 @@ export class Firmware {
   @Column({ type: 'varchar', length: 255, nullable: true })
   file?: string;
 
+  @Column({ type: 'varchar', length: 255, nullable: true })
+  file_name?: string;
+
+  @Column({ type: 'varchar', length: 255, nullable: true })
+  file_description?: string;
+
   @CreateDateColumn()
   created_at?: Date;
 
   @UpdateDateColumn()
   updated_at?: Date;
 
-  @Column({ type: 'varchar', length: 255, nullable: true })
-  uploaded_by?: string;
+  // @Column({ type: 'varchar', length: 255, nullable: true })
+  // uploaded_by?: string;
 
   @Column({ type: 'boolean', default: true })
   is_active?: boolean;
@@ -39,6 +46,15 @@ export class Firmware {
   // @JoinColumn({ name: 'vehicle_id' })
   // vehicle?: Vehicle;
 
+  @ManyToOne(
+    () => User,
+    (user) => {
+      user.firmwares;
+    },
+    { nullable: true },
+  )
+  @JoinColumn({ name: 'created_by' })
+  created_by?: User;
   @OneToMany(
     () => ECU,
     (ecu) => {

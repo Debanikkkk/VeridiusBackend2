@@ -12,19 +12,20 @@ export class Dongle {
   @PrimaryGeneratedColumn()
   id?: number;
 
-  @Column({ unique: true })
+  @Column({ unique: true, nullable: true })
   dongle_serial_number?: string;
 
-  @Column()
+  @Column({ nullable: true })
   model?: string;
 
-  @Column()
+  @Column({ nullable: true })
   manufacture_date?: Date;
 
-  @Column()
+  @Column({ nullable: true })
   firmware_version?: string;
 
   @Column({
+    nullable: true,
     type: 'enum',
     enum: DongleStatus,
     default: DongleStatus.AVAILABLE,
@@ -35,12 +36,12 @@ export class Dongle {
   @JoinColumn({ name: 'assigned_device_id' })
   assigned_device?: Device | null;
 
-  @Column()
+  @Column({ nullable: true })
   firmware_updated_at?: Date;
 
-  @CreateDateColumn()
+  @CreateDateColumn({ nullable: true })
   created_at?: Date;
 
-  @UpdateDateColumn()
+  @UpdateDateColumn({ nullable: true })
   updated_at?: Date;
 }
