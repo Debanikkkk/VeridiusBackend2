@@ -1,15 +1,14 @@
-import { Body, Controller, Delete, Get, Path, Post, Put, Route, Tags } from 'tsoa';
+import { Controller, Get, Route, Tags } from 'tsoa';
 
 import { Device } from '../entity/Device';
 import { AppDataSource } from '../data-source';
 import { Dongle } from '../entity/Dongle';
-import { ReqDongleAllot } from '../models/req/ReqDongleAllot';
-import { ReqDevice } from '../models/req/ReqDevice';
+
 import { ResDevice } from '../models/res/ResDevice';
-import { ResError, ResSuccess } from '../models/res/Responses';
+
 import { DeviceHistory } from '../entity/DeviceHistory';
 import { User } from '../entity/User';
-import { ReqDevConStatus } from '../models/req/ReqDevConStatus';
+
 // import { ReqDevConStatus } from '../models/req/ReqDevConStatus';
 
 // interface GeolocationUpdate {
@@ -43,6 +42,7 @@ export class DeviceController extends Controller {
 
       const resDevice: ResDevice[] = [];
       for (const device of devices) {
+        const assigned_to = await device.assigned_to;
         const dongle = await device.dongle;
         // if(!dongle){
         //     return Promise.reject(new Error('THIS DONGLE WAS NOT FOUND'))
@@ -50,12 +50,24 @@ export class DeviceController extends Controller {
         resDevice.push({
           dongle: {
             id: dongle?.id,
-            name: dongle?.name,
           },
-          id: device.id,
-          mac_address: device.mac_address,
-          name: device.name,
-          // user: device.user
+          assigned_to: {
+            address: assigned_to?.address,
+            email: assigned_to?.email,
+            id: assigned_to?.id,
+            name: assigned_to?.name,
+            password: assigned_to?.password,
+            phone_number: assigned_to?.phone_number,
+          },
+          created_at: device?.created_at,
+          device_name: device?.device_name,
+          device_type: device?.device_type,
+          id: device?.id,
+          os_version: device?.os_version,
+          registration_date: device?.registration_date,
+          serial_number: device?.serial_number,
+          status: device?.status,
+          updated_at: device?.updated_at,
         });
       }
       return resDevice;
@@ -76,168 +88,164 @@ export class DeviceController extends Controller {
   //         .where('id = :deviceId', { deviceId: body.deviceId })
   //         .execute();
   // }
-  /**
-   * SAVES DEVICE
-   * @summary SAVES A DEVICE
-   */
-  @Post()
-  public async saveDevice(@Body() request: ReqDevice): Promise<ResDevice | ResError> {
-    try {
-      const { mac_address, name, imei } = request;
+  // /**
+  //  * SAVES DEVICE
+  //  * @summary SAVES A DEVICE
+  //  */
+  // @Post()
+  // public async saveDevice(@Body() request: ReqDevice): Promise<ResDevice | ResError> {
+  //   try {
+  //     const {} = request;
 
-      const deviceToSave: Device = {
-        mac_address: mac_address,
-        name: name,
-        imei: imei,
-      };
+  //     const deviceToSave: Device = {};
 
-      const deviceSaver = Object.assign(new Device(), deviceToSave);
-      const savedDevice = await this.devicerepository.save(deviceSaver);
+  //     const deviceSaver = Object.assign(new Device(), deviceToSave);
+  //     const savedDevice = await this.devicerepository.save(deviceSaver);
 
-      const resDevice: ResDevice = {
-        dongle: {
-          id: (await savedDevice.dongle)?.id,
-          name: (await savedDevice.dongle)?.name,
-        },
-        id: savedDevice.id,
-        mac_address: savedDevice.mac_address,
-        name: savedDevice.name,
-        imei: savedDevice.imei,
-        user: {
-          // address: (await savedDevice.user)?.address,
-          // email: (await savedDevice.user)?.email,
-          // id: (await savedDevice.user)?.id,
-          // name: (await savedDevice.user)?.name,
-          // password: (await savedDevice.user)?.password,
-          // phone_number: (await savedDevice.user)?.phone_number
-        },
-      };
-      return resDevice;
-    } catch (error) {
-      console.log('there was an errror in saving the device', error);
-      return { error: 'failed to save the device' };
-    }
-  }
-  /**
-   * delete device
-   * @summary delete device
-   */
-  @Delete('/{deviceId}')
-  public async deleteDevice(@Path() deviceId: number): Promise<ResSuccess | ResError> {
-    try {
-      const devicetodelete = await this.devicerepository.findOne({
-        where: {
-          id: deviceId,
-        },
-        relations: {
-          dongle: true,
-        },
-      });
-      const user = await this.userrepository.findOne({
-        where: {
-          device: {
-            id: deviceId,
-          },
-        },
-      });
-      if (!devicetodelete) {
-        return Promise.reject(new Error('DEVICE NOT FOUND'));
-      }
+  //     const resDevice: ResDevice = {
+  //       dongle: {
+  //         id: (await savedDevice.dongle)?.id,
+  //         name: (await savedDevice.dongle)?.name,
+  //       },
+  //       id: savedDevice.id,
+  //       // mac_address: savedDevice.mac_address,
+  //       name: savedDevice.name,
+  //       imei: savedDevice.imei,
+  //       user: {
+  //         // address: (await savedDevice.user)?.address,
+  //         // email: (await savedDevice.user)?.email,
+  //         // id: (await savedDevice.user)?.id,
+  //         // name: (await savedDevice.user)?.name,
+  //         // password: (await savedDevice.user)?.password,
+  //         // phone_number: (await savedDevice.user)?.phone_number
+  //       },
+  //     };
+  //     return resDevice;
+  //   } catch (error) {
+  //     console.log('there was an errror in saving the device', error);
+  //     return { error: 'failed to save the device' };
+  //   }
+  // }
+  // /**
+  //  * delete device
+  //  * @summary delete device
+  //  */
+  // @Delete('/{deviceId}')
+  // public async deleteDevice(@Path() deviceId: number): Promise<ResSuccess | ResError> {
+  //   try {
+  //     const devicetodelete = await this.devicerepository.findOne({
+  //       where: {
+  //         id: deviceId,
+  //       },
+  //       relations: {
+  //         dongle: true,
+  //       },
+  //     });
+  //     const user = await this.userrepository.findOne({
+  //       where: {
+  //         device: {
+  //           id: deviceId,
+  //         },
+  //       },
+  //     });
+  //     if (!devicetodelete) {
+  //       return Promise.reject(new Error('DEVICE NOT FOUND'));
+  //     }
 
-      const device: DeviceHistory = {
-        device_id: devicetodelete.id,
-        dongle_id: devicetodelete.dongle?.id,
-        id: devicetodelete.id,
-        mac_address: devicetodelete.mac_address,
-        name: devicetodelete.name,
-        user_id: user?.id,
-      };
+  //     const device: DeviceHistory = {
+  //       device_id: devicetodelete.id,
+  //       dongle_id: devicetodelete.dongle?.id,
+  //       id: devicetodelete.id,
+  //       // mac_address: devicetodelete.mac_address,
+  //       name: devicetodelete.name,
+  //       user_id: user?.id,
+  //     };
 
-      await this.devicehistoryrepository.save(device);
-      await this.devicerepository.remove(devicetodelete);
+  //     await this.devicehistoryrepository.save(device);
+  //     await this.devicerepository.remove(devicetodelete);
 
-      return { result: 'DEVICE WAS DELETED SUCCESSFULLY' };
-    } catch (error) {
-      console.log('there was an errror in deleting the device', error);
-      return { error: 'failed to delete the device' };
-    }
-  }
+  //     return { result: 'DEVICE WAS DELETED SUCCESSFULLY' };
+  //   } catch (error) {
+  //     console.log('there was an errror in deleting the device', error);
+  //     return { error: 'failed to delete the device' };
+  //   }
+  // }
 
-  /**
-   * allot dongle to a device
-   * @summary allot dongle to a device
-   */
-  @Put('allotDongle/{deviceId}')
-  public async allotDongleToDevice(@Path() deviceId: number, @Body() request: ReqDongleAllot) {
-    try {
-      const { id } = request;
-      const device = await this.devicerepository.findOne({
-        where: {
-          id: deviceId,
-        },
-      });
-      if (!device) {
-        return Promise.reject(new Error('DEVICE NOT FOUND'));
-      }
+  // /**
+  //  * allot dongle to a device
+  //  * @summary allot dongle to a device
+  //  */
+  // @Put('allotDongle/{deviceId}')
+  // public async allotDongleToDevice(@Path() deviceId: number, @Body() request: ReqDongleAllot) {
+  //   try {
+  //     const { id } = request;
+  //     const device = await this.devicerepository.findOne({
+  //       where: {
+  //         id: deviceId,
+  //       },
+  //     });
+  //     if (!device) {
+  //       return Promise.reject(new Error('DEVICE NOT FOUND'));
+  //     }
 
-      const dongle = await this.donglerepository.findOne({
-        where: {
-          id: id,
-        },
-      });
+  //     const dongle = await this.donglerepository.findOne({
+  //       where: {
+  //         id: id,
+  //       },
+  //     });
 
-      if (!dongle) {
-        return Promise.reject(new Error('DONGLE NOT FOUND'));
-      }
-      console.log('IT REACHED HERE');
-      device.dongle = dongle;
-      console.log('IT REACHED HERE');
+  //     if (!dongle) {
+  //       return Promise.reject(new Error('DONGLE NOT FOUND'));
+  //     }
+  //     console.log('IT REACHED HERE');
+  //     device.dongle = dongle;
+  //     console.log('IT REACHED HERE');
 
-      const newDevice = await this.devicerepository.save(device);
-      console.log('this is the newdevice', newDevice);
-      return newDevice;
-    } catch (error) {
-      console.log('there was an errror in alloting the dongle to the device', error);
-      return { error: 'failed to allot the donlge to the device' };
-    }
-  }
+  //     const newDevice = await this.devicerepository.save(device);
+  //     console.log('this is the newdevice', newDevice);
+  //     return newDevice;
+  //   } catch (error) {
+  //     console.log('there was an errror in alloting the dongle to the device', error);
+  //     return { error: 'failed to allot the donlge to the device' };
+  //   }
+  // }
 
-  /**
-   * updates device to dongle connection status
-   * @summary  updates device to dongle connection status
-   */
-  @Put('/{deviceId}')
-  public async updateDeviceConnStatus(@Path() deviceId: number, @Body() req: ReqDevConStatus) {
-    const device = await this.devicerepository.findOne({
-      where: {
-        id: deviceId,
-      },
-      relations: {
-        dongle: true,
-      },
-    });
-    if (!device) {
-      return Promise.reject(new Error('THIS DEVICE WAS NOT FOUND'));
-    }
+  // /**
+  //  * updates device to dongle connection status
+  //  * @summary  updates device to dongle connection status
+  //  */
+  // @Put('/{deviceId}')
+  // public async updateDeviceConnStatus(@Path() deviceId: number, @Body() req: ReqDevConStatus) {
+  //   const device = await this.devicerepository.findOne({
+  //     where: {
+  //       id: deviceId,
+  //     },
+  //     relations: {
+  //       dongle: true,
+  //     },
+  //   });
+  //   if (!device) {
+  //     return Promise.reject(new Error('THIS DEVICE WAS NOT FOUND'));
+  //   }
 
-    const { devConnStatus } = req;
+  //   const { devConnStatus } = req;
 
-    device.dongle_conn_status = devConnStatus;
+  //   device.dongle_conn_status = devConnStatus;
 
-    const newDevice = await this.devicerepository.save(device);
-    const resDevice: ResDevice = {
-      dongle: {
-        // device,
-        id: newDevice.dongle?.id,
-        name: newDevice.dongle?.name,
-      },
-      id: newDevice.id,
-      imei: newDevice.imei,
-      mac_address: newDevice.mac_address,
-      name: newDevice.name,
-      // user: newDevice.
-      dongleConnStatus: newDevice.dongle_conn_status,
-    };
-    return resDevice;
-  }
+  //   const newDevice = await this.devicerepository.save(device);
+  //   const resDevice: ResDevice = {
+  //     dongle: {
+  //       // device,
+  //       id: newDevice.dongle?.id,
+  //       name: newDevice.dongle?.name,
+  //     },
+  //     id: newDevice.id,
+  //     imei: newDevice.imei,
+  //     // mac_address: newDevice.mac_address,
+  //     name: newDevice.name,
+  //     // user: newDevice.
+  //     dongleConnStatus: newDevice.dongle_conn_status,
+  //   };
+  //   return resDevice;
+  // }
 }

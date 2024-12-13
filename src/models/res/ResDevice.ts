@@ -1,12 +1,17 @@
+import { DeviceStatus } from '../../entity/Device';
 import { ResDongle } from './ResDongle';
 import { ResUser } from './ResUser';
 
 export interface ResDevice {
+  assigned_to?: ResUser;
+  created_at?: Date;
+  device_name?: string;
+  device_type?: string;
+  dongle?: ResDongle;
   id?: number;
-  mac_address?: string;
-  name?: string;
-  user?: ResUser;
-  dongle?: ResDongle | null;
-  dongleConnStatus?: boolean;
-  imei?: string;
+  os_version?: string;
+  registration_date?: Date;
+  serial_number?: string;
+  status?: DeviceStatus;
+  updated_at?: Date;
 }

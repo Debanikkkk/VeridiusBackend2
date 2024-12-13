@@ -1,121 +1,303 @@
-import { Body, Controller, Get, Path, Post, Route, Tags } from 'tsoa';
-import { AppDataSource } from '../data-source';
-import { ECU } from '../entity/ECU';
-import { Device } from '../entity/Device';
+// // import { Controller, Get, Path, Route, Tags } from 'tsoa';
+// // import { AppDataSource } from '../data-source';
+// // import { ECU } from '../entity/ECU';
+// // import { Device } from '../entity/Device';
 
-import { ReqECU } from '../models/req/ReqECU';
-import { In } from 'typeorm';
-import { Vehicle } from '../entity/Vehicle';
-import { ServiceTicket } from '../entity/ServiceTickets';
-import { User } from '../entity/User';
+// import { Body, Controller, Get, Post, Route, Tags } from 'tsoa';
+// import { AppDataSource } from '../data-source';
+// import { ECU } from '../entity/ECU';
+// import { ReqECU } from '../models/req/ReqECU';
+// import { ResECU } from '../models/res/ResECU';
+// // import { write } from 'fs';
+// import { In } from 'typeorm';
+// import { DtcDataset } from '../entity/DTCDataset';
+// import { PIDDataset } from '../entity/PIDDataset';
+// import { NegativeResponseCode } from '../entity/NegativeCode';
+// import { Vehicle } from '../entity/Vehicle';
 
-@Route('/ecu')
-@Tags('ECU')
-export class EcuController extends Controller {
-  private ecurepository = AppDataSource.getRepository(ECU);
-  private devicerepositroy = AppDataSource.getRepository(Device);
-  private vehiclerepository = AppDataSource.getRepository(Vehicle);
-  private serviceticketrepository = AppDataSource.getRepository(ServiceTicket);
-  private userrepository = AppDataSource.getRepository(User);
-  // private repoi
+// // // import { ReqECU } from '../models/req/ReqECU';
+// // // import { In } from 'typeorm';
+// // import { Vehicle } from '../entity/Vehicle';
+// // import { ServiceTicket } from '../entity/ServiceTickets';
+// // import { User } from '../entity/User';
 
-  /**
-   * get device imei using ecu
-   * @summary  get device imei using ecu
-   */
-  @Get('macaddressFromIMEI/{macAdd}')
-  public async getDeviceIMEIusingECU(@Path() macAdd: string) {
-    const ecu = await this.ecurepository.findOne({
-      where: {
-        mac_address: macAdd,
-      },
-    });
+// // @Route('/ecu')
+// // @Tags('ECU')
+// // export class EcuController extends Controller {
+// //   private ecurepository = AppDataSource.getRepository(ECU);
+// //   private devicerepositroy = AppDataSource.getRepository(Device);
+// //   private vehiclerepository = AppDataSource.getRepository(Vehicle);
+// //   private serviceticketrepository = AppDataSource.getRepository(ServiceTicket);
+// //   private userrepository = AppDataSource.getRepository(User);
+// //   // private repoi
 
-    if (!ecu) {
-      return Promise.reject(new Error('THE DEVICE WASN NOT FOUND'));
-    }
-    console.log('ecu found', ecu);
+// //   /**
+// //    * get device imei using ecu
+// //    * @summary  get device imei using ecu
+// //    */
+// //   @Get('macaddressFromIMEI/{macAdd}')
+// //   public async getDeviceIMEIusingECU(@Path() macAdd: string) {
+// //     const ecu = await this.ecurepository.findOne({
+// //       where: {
+// //         mac_id: macAdd,
+// //         // mac_address: macAdd,
+// //       },
+// //     });
 
-    const vehicle = await this.vehiclerepository.findOne({
-      where: {
-        ecu: {
-          id: ecu.id,
-        },
-      },
-      relations: {
-        service_ticket: true,
-      },
-    });
+// //     if (!ecu) {
+// //       return Promise.reject(new Error('THE DEVICE WASN NOT FOUND'));
+// //     }
+// //     console.log('ecu found', ecu);
 
-    if (!vehicle) {
-      return Promise.reject(new Error('THE VEHICLE WASN NOT FOUND'));
-    }
-    console.log('vehicle found', vehicle);
-    const service_ticket = await this.serviceticketrepository.findOne({
-      where: {
-        id: (await vehicle.service_ticket)?.id,
-      },
-      relations: {
-        technician: true,
-      },
-    });
+// //     const vehicle = await this.vehiclerepository.findOne({
+// //       where: {
+// //         ecu: {
+// //           id: ecu.id,
+// //         },
+// //       },
+// //       relations: {
+// //         service_ticket: true,
+// //       },
+// //     });
 
-    if (!service_ticket) {
-      return Promise.reject(new Error('THE SERVICE TICKET WASN NOT FOUND'));
-    }
+// //     if (!vehicle) {
+// //       return Promise.reject(new Error('THE VEHICLE WASN NOT FOUND'));
+// //     }
+// //     console.log('vehicle found', vehicle);
+// //     const service_ticket = await this.serviceticketrepository.findOne({
+// //       where: {
+// //         id: (await vehicle.service_ticket)?.id,
+// //       },
+// //       relations: {
+// //         technician: true,
+// //       },
+// //     });
 
-    const user = await this.userrepository.findOne({
-      where: {
-        id: (await service_ticket.technician)?.id,
-      },
-      relations: {
-        device: true,
-      },
-    });
+// //     if (!service_ticket) {
+// //       return Promise.reject(new Error('THE SERVICE TICKET WASN NOT FOUND'));
+// //     }
 
-    if (!user) {
-      return Promise.reject(new Error('THE USER WASN NOT FOUND'));
-    }
+// //     const user = await this.userrepository.findOne({
+// //       where: {
+// //         id: (await service_ticket.technician)?.id,
+// //       },
+// //       relations: {
+// //         device: true,
+// //       },
+// //     });
 
-    const device = await this.devicerepositroy.findOne({
-      where: {
-        id: user.device?.id,
-      },
-    });
+// //     if (!user) {
+// //       return Promise.reject(new Error('THE USER WASN NOT FOUND'));
+// //     }
 
-    if (!device) {
-      return Promise.reject(new Error('THE DEVCICE WASN NOT FOUND'));
-    }
-    return device;
-  }
+// //     const device = await this.devicerepositroy.findOne({
+// //       where: {
+// //         id: user.device?.id,
+// //       },
+// //     });
 
-  @Post()
-  public async saveEcu(@Body() req: ReqECU) {
-    const { mac_address, name, vehicle } = req;
-    const vehicleArr: Vehicle[] = [];
-    if (vehicle) {
-      const db_vehicle = await this.vehiclerepository.find({
-        where: {
-          id: In(vehicle),
-        },
-      });
+// //     if (!device) {
+// //       return Promise.reject(new Error('THE DEVCICE WASN NOT FOUND'));
+// //     }
+// //     return device;
+// //   }
 
-      if (!vehicle) {
-        return Promise.reject(new Error('THE VEHILCE FROM THE DB WAS NOT FOUND'));
-      }
+// //   // @Post()
+// //   // public async saveEcu(@Body() req: ReqECU) {
+// //   //   const { mac_address, name, vehicle } = req;
+// //   //   const vehicleArr: Vehicle[] = [];
+// //   //   if (vehicle) {
+// //   //     const db_vehicle = await this.vehiclerepository.find({
+// //   //       where: {
+// //   //         id: In(vehicle),
+// //   //       },
+// //   //     });
 
-      vehicleArr.push(...db_vehicle);
-    }
+// //   //     if (!vehicle) {
+// //   //       return Promise.reject(new Error('THE VEHILCE FROM THE DB WAS NOT FOUND'));
+// //   //     }
 
-    const ecuToSave: ECU = {
-      mac_address: mac_address,
-      name: name,
-      vehicle: Promise.resolve(vehicleArr),
-    };
+// //   //     vehicleArr.push(...db_vehicle);
+// //   //   }
 
-    const ecuSaver = Object.assign(new ECU(), ecuToSave);
-    const savedEcu = await this.ecurepository.save(ecuSaver);
+// //   //   const ecuToSave: ECU = {
+// //   //     // mac_address: mac_address,
+// //   //     // name: name,
+// //   //     // vehicle: Promise.resolve(vehicleArr),
 
-    return savedEcu;
-  }
-}
+// //   //   };
+
+// //   //   const ecuSaver = Object.assign(new ECU(), ecuToSave);
+// //   //   const savedEcu = await this.ecurepository.save(ecuSaver);
+
+// //   //   return savedEcu;
+// //   // }
+// // }
+// @Route('/ecu')
+// @Tags('ECU')
+// export class EcuController extends Controller {
+//   private vehiclerepository = AppDataSource.getRepository(Vehicle);
+//   private ecurepository = AppDataSource.getRepository(ECU);
+//   private dtcdatasetrepository = AppDataSource.getRepository(DtcDataset);
+//   private piddatasetrepository = AppDataSource.getRepository(PIDDataset);
+//   private negativeresponserepository = AppDataSource.getRepository(NegativeResponseCode);
+//   @Post()
+//   public async saveECU(@Body() req: ReqECU): Promise<ResECU> {
+//     const {
+//       isActive,
+//       clearDtcFnIndex,
+//       createdAt,
+//       dtcDataset,
+//       ecuName,
+//       id,
+//       iorTestIndex,
+//       macId,
+//       negativeResponses,
+//       pidDataset,
+//       protocol,
+//       readDataFnIndex,
+//       readDtcFcIndex,
+//       rxHeader,
+//       seedkeyalgoFnIndex,
+//       txHeader,
+//       updatedAt,
+//       vehicle,
+//       writeDataFnIndex,
+//     } = req;
+
+//     // const dtcDatasetArr: DtcDataset[]=[]
+//     const piddatasetArr: PIDDataset[] = [];
+//     const negativeResArr: NegativeResponseCode[] = [];
+
+//     const dtcDatasetArr: DtcDataset[] = [];
+
+//     if (dtcDataset) {
+//       const db_dtc_dataset = await this.dtcdatasetrepository.find({
+//         where: {
+//           id: In(dtcDataset),
+//         },
+//       });
+//       if (!db_dtc_dataset) {
+//         return Promise.reject(new Error('THERE WAS A PROBLEM IN FETCHING THE DTC'));
+//       }
+
+//       dtcDatasetArr.push(...db_dtc_dataset);
+//     }
+
+//     if (pidDataset) {
+//       const db_pid_dataset = await this.piddatasetrepository.find({
+//         where: {
+//           id: In(pidDataset),
+//         },
+//       });
+
+//       if (!db_pid_dataset) {
+//         return Promise.reject(new Error('THIS PID DATASET WAS NOT FOUND'));
+//       }
+
+//       piddatasetArr.push(...db_pid_dataset);
+//     }
+
+//     if (negativeResponses) {
+//       const db_negres = await this.negativeresponserepository.find({
+//         where: {
+//           id: In(negativeResponses),
+//         },
+//       });
+//       if (!db_negres) {
+//         return Promise.reject(new Error('THERE WAS A PRONBELM IN RETREIVINV THE NEGATIVE RESPONSES'));
+//       }
+
+//       negativeResArr.push(...negativeResArr);
+//     }
+
+//     const db_vehicle = await this.vehiclerepository.findOne({
+//       where: {
+//         id: vehicle,
+//       },
+//     });
+//     if (!db_vehicle) {
+//       return Promise.reject(new Error('THIS VEHICLE WAS NOT FOUND'));
+//     }
+//     const saveECU: ECU = {
+//       clear_dtc_fn_index: clearDtcFnIndex,
+//       created_at: createdAt,
+//       // dtc_dataset,
+//       dtc_datasets: dtcDatasetArr,
+//       ecu_name: ecuName,
+//       id: id,
+//       ior_test_index: iorTestIndex,
+//       is_active: isActive,
+//       mac_id: macId,
+//       negative_responses: negativeResArr,
+//       // pid_dataset,
+//       pid_datasets: piddatasetArr,
+//       protocol: protocol,
+//       read_data_fn_index: readDataFnIndex,
+//       read_dtc_fc_index: readDtcFcIndex,
+//       rx_header: rxHeader,
+//       seedkey_algo_fn_index: seedkeyalgoFnIndex,
+//       tx_header: txHeader,
+//       updated_at: updatedAt,
+//       vehicle: db_vehicle,
+//       write_data_fn_index: writeDataFnIndex,
+//     };
+
+//     const ecuSaver = Object.assign(new ECU(), saveECU);
+//     const savedECU = await this.ecurepository.save(ecuSaver);
+
+//     const resEcu: ResECU = {
+//       createdAt: savedECU.created_at,
+//       dtcDataset: savedECU.dtc_datasets,
+//       ecuName: savedECU.ecu_name,
+//       id: savedECU.id,
+//       isActive: savedECU.is_active,
+//       macId: savedECU.mac_id,
+//       negativeResponses: savedECU.negative_responses,
+//       pidDataset: savedECU.pid_datasets,
+//       protocol: savedECU.protocol,
+//       rxHeader: savedECU.rx_header,
+//       txHeader: savedECU.tx_header,
+//       updatedAt: savedECU.updated_at,
+//       vehicle: savedECU.vehicle,
+//     };
+//     return resEcu;
+//   }
+//   @Get()
+//   public async getAllECU() {
+//     const ecus = await this.ecurepository.find({
+//       relations: {
+//         dtc_datasets: true,
+//         negative_responses: true,
+//         pid_datasets: true,
+//       },
+//     });
+
+//     if (!ecus) {
+//       return Promise.reject(new Error('THE ECUS  WERE NOT FOUND'));
+//     }
+
+//     const ecuArr: ResECU[] = [];
+
+//     for (const ecu of ecus) {
+//       ecuArr.push({
+//         createdAt: ecu.created_at,
+//         dtcDataset: ecu.dtc_datasets,
+//         ecuName: ecu.ecu_name,
+//         id: ecu.id,
+//         isActive: ecu.is_active,
+//         macId: ecu.mac_id,
+//         negativeResponses: ecu.negative_responses,
+//         pidDataset: ecu.pid_datasets,
+//         protocol: ecu.protocol,
+//         rxHeader: ecu.rx_header,
+//         txHeader: ecu.tx_header,
+//         updatedAt: ecu.updated_at,
+//         // vehicle: ecu.vehicle,
+//       });
+//     }
+
+//     return ecuArr;
+//   }
+
+// }

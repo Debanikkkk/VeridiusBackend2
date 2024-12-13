@@ -1,6 +1,12 @@
-import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { User } from './User';
+import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 import { Dongle } from './Dongle';
+import { User } from './User'; // Assuming there's a User or Technician entity.
+
+export enum DeviceStatus {
+  ACTIVE = 'Active',
+  INACTIVE = 'Inactive',
+  SUSPENDED = 'Suspended',
+}
 
 @Entity()
 export class Device {
@@ -8,51 +14,50 @@ export class Device {
   id?: number;
 
   @Column({
-    length: 64,
+    nullable: true,
   })
-  name?: string;
+  device_name?: string;
 
   @Column({
     nullable: true,
-    default: false,
   })
-  dongle_conn_status?: boolean;
-
-  @Column({
-    length: 17,
-    nullable: true,
-  })
-  mac_address?: string;
+  device_type?: string;
 
   @Column({
     nullable: true,
-    length: 15,
   })
-  imei?: string;
-  // @Column({
-  //     type: 'geography',
-  //     spatialFeatureType: 'point',
-  //     srid: 4326
-  // })
-  // location?: string
+  os_version?: string;
 
-  @OneToOne(
-    () => User,
-    (user) => {
-      user.device;
-    },
-    { onDelete: 'CASCADE', onUpdate: 'CASCADE', nullable: true },
-  )
-  // @JoinColumn({name: 'user_id'})
-  user?: Promise<User> | null;
+  @Column({ unique: true, nullable: true })
+  serial_number?: string;
 
-  @OneToOne(
-    () => Dongle,
-    (dongle) => {
-      dongle.device;
-    },
-    { onDelete: 'CASCADE', onUpdate: 'CASCADE', nullable: true },
-  )
+  @CreateDateColumn({
+    nullable: true,
+  })
+  registration_date?: Date;
+
+  @Column({
+    type: 'enum',
+    enum: DeviceStatus,
+    default: DeviceStatus.ACTIVE,
+  })
+  status?: DeviceStatus;
+
+  @OneToOne(() => Dongle, (dongle) => dongle.assigned_device, { nullable: true })
   @JoinColumn({ name: 'dongle_id' })
   dongle?: Dongle | null;
+
+  @OneToOne(() => User, (user) => user.device, { nullable: true })
+  @JoinColumn({ name: 'assigned_to' })
+  assigned_to?: User | null;
+
+  @CreateDateColumn({
+    nullable: true,
+  })
+  created_at?: Date;
+
+  @UpdateDateColumn({
+    nullable: true,
+  })
+  updated_at?: Date;
 }

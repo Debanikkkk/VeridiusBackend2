@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Device } from './Device';
 import { Role } from './Role';
 import { ServiceTicket } from './ServiceTickets';
@@ -37,7 +37,7 @@ export class User {
   @OneToOne(
     () => Device,
     (device) => {
-      device.user;
+      device.assigned_to;
     },
     { onDelete: 'CASCADE', onUpdate: 'CASCADE', nullable: true },
   )
@@ -74,4 +74,12 @@ export class User {
     { nullable: true, onDelete: 'CASCADE', onUpdate: 'CASCADE' },
   )
   trips?: Promise<Trip[]>;
+
+  @ManyToMany(() => User)
+  @JoinTable({
+    name: 'user_hierarchy',
+    joinColumn: { name: 'user_id', referencedColumnName: 'id' },
+    inverseJoinColumn: { name: 'under_user_id', referencedColumnName: 'id' },
+  })
+  is_under?: Promise<User[]>;
 }

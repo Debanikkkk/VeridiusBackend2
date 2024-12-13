@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Path, Post, Put, Query, Route, Tags } from 'tsoa';
+import { Body, Controller, Delete, Get, Path, Post, Put, Query, Request, Route, Security, Tags } from 'tsoa';
 import { AppDataSource } from '../data-source';
 import { User } from '../entity/User';
 import { ResUser } from '../models/res/ResUser';
@@ -16,6 +16,11 @@ import { Device } from '../entity/Device';
 import { PaginatedResponse } from '../models/res/PaginatedResponse';
 import { ResUserUpdate } from '../models/req/ReqUserUpdate';
 import { ResError, ResSuccess } from '../models/res/Responses';
+import { JWTRequest } from '../models/req/JWTRequest';
+import { ReqUsersUnder } from '../models/req/ReqUsersUnder';
+import { In } from 'typeorm';
+import { ReqUserRoleFind } from '../models/req/ReqUserRoleFind';
+// import { And } from 'typeorm';
 // import { serviceTicketStatus } from "../entity/ServiceTickets";
 @Tags('User')
 @Route('/user')
@@ -25,7 +30,8 @@ export class UserController extends Controller {
   private rolerepository = AppDataSource.getRepository(Role);
 
   @Post()
-  public async saveUser(@Body() req: ReqUser): Promise<ResUser | ResError> {
+  @Security('Api-Token', [])
+  public async saveUser(@Request() request: JWTRequest, @Body() req: ReqUser): Promise<ResUser | ResError> {
     try {
       const { address, email, password, name, phone_number, role } = req;
       if (!role) {
@@ -40,6 +46,15 @@ export class UserController extends Controller {
       if (!db_role) {
         return Promise.reject(new Error('PLEASE INSERT ROLE'));
       }
+      const user = await this.userrepository.find({
+        where: {
+          id: request.user.id,
+        },
+      });
+      if (!user) {
+        return Promise.reject(new Error('USER IS NOT FOUND'));
+      }
+      console.log('this is the user i wanna make the manager', user);
       const userToSave: User = {
         password: password,
         address: address,
@@ -47,12 +62,12 @@ export class UserController extends Controller {
         name: name,
         phone_number: phone_number,
         role: Promise.resolve(db_role),
+        is_under: Promise.resolve(user),
       };
       console.log('the user to save is', userToSave);
 
       const userSaver = Object.assign(new User(), userToSave);
       const savedUser = await this.userrepository.save(userSaver);
-
       const resUser: ResUser = {
         id: savedUser.id,
         address: savedUser.address,
@@ -65,7 +80,20 @@ export class UserController extends Controller {
           id: (await savedUser.role)?.id,
           name: (await savedUser.role)?.name,
         },
+        is_under: {
+          address: user[0].address,
+          // device: user[0].device,
+          email: user[0].email,
+          id: user[0].id,
+          // is_under: user[0].is_under,
+          name: user[0].name,
+          password: user[0].password,
+          phone_number: user[0].phone_number,
+          // role: user[0].role,
+          // service_ticket: user[0].,
+        },
       };
+
       return resUser;
     } catch (error) {
       console.log('there was an errror in saving the user', error);
@@ -149,7 +177,118 @@ export class UserController extends Controller {
       return { error: 'INVALID CREDENTIALS' };
     }
   }
+  // eslint-disable-next-line
+  private async getUsersRecursively(user: any): Promise<any[]> {
+    // Find users directly under the given user
+    const usersUnder = await this.userrepository.find({
+      where: { is_under: user },
+    });
 
+    // If no users are found, terminate recursion for this branch
+    if (usersUnder.length === 0) {
+      return [];
+    }
+
+    // Recursively find users under each of the found users
+    const nestedUsers = await Promise.all(usersUnder.map(async (u) => this.getUsersRecursively(u)));
+
+    // Combine the direct users with all nested users
+    return [...usersUnder, ...nestedUsers.flat()];
+  }
+  // eslint-disable-next-line
+  private async getUsersRecursivelyUsingRole(user: any, role: any): Promise<any[]> {
+    // Find users directly under the given user
+    const db_role = await this.rolerepository.findOne({
+      where: {
+        id: role,
+      },
+    });
+    if (!db_role) {
+      return Promise.reject(new Error('THIS ROLE WAS NOT FOUND'));
+    }
+    const usersUnder = await this.userrepository.find({
+      where: { is_under: user, role: db_role },
+    });
+
+    // If no users are found, terminate recursion for this branch
+    if (usersUnder.length === 0) {
+      return [];
+    }
+
+    // Recursively find users under each of the found users
+    const nestedUsers = await Promise.all(usersUnder.map(async (u) => this.getUsersRecursively(u)));
+
+    // Combine the direct users with all nested users
+    return [...usersUnder, ...nestedUsers.flat()];
+  }
+  @Post('getUsersUnder/{userId}')
+  public async getUsersUnder(@Path() userId: number | undefined) {
+    if (userId === undefined) {
+      return Promise.reject(new Error('userId is required'));
+    }
+
+    const goal_user = await this.userrepository.findOne({
+      where: { id: userId },
+    });
+
+    if (!goal_user) {
+      return Promise.reject(new Error('User not found'));
+    }
+    // eslint-disable-next-line
+    const getUsersRecursively = async (user: any): Promise<any[]> => {
+      const usersUnder = await this.userrepository.find({
+        where: { is_under: user },
+      });
+
+      if (usersUnder.length === 0) {
+        return [];
+      }
+
+      const nestedUsers = await Promise.all(usersUnder.map(async (u) => getUsersRecursively(u)));
+
+      return [...usersUnder, ...nestedUsers.flat()];
+    };
+
+    const users_under = await getUsersRecursively(goal_user);
+    return users_under;
+  }
+
+  // /**
+  //  * REAL gets users under a user
+  //  *  @summary REAL gets users under a user
+  //  */
+  // @Post('/{userId}')
+  // public async theRealGetUsersUnder(@Path() userId: number | undefined): Promise<User[]> {
+
+  // }
+
+  @Put('putUsersUnder/{userId}')
+  public async putUsersUnder(@Path() userId: number, @Body() req: ReqUsersUnder) {
+    const { users_under } = req;
+    const user = await this.userrepository.findOne({
+      where: {
+        id: userId,
+      },
+    });
+
+    if (!user) {
+      return Promise.reject(new Error('THIS USER WAS NOT FOUND'));
+    }
+    if (!users_under) {
+      return Promise.reject(new Error('YOU NEED TO GIVE THE USERS FOR THIS TO WORK'));
+    }
+    const db_users_under = await this.userrepository.find({
+      where: {
+        id: In(users_under),
+      },
+    });
+
+    for (const userr of db_users_under) {
+      (await userr.is_under)?.push(user);
+      await this.userrepository.save(userr);
+    }
+    return { message: 'THE INSERTION WAS SUCCESFULL' };
+  }
   @Delete('/{userId}')
   public async deleteUser(@Path() userId: number): Promise<ResSuccess> {
     const usertodelete = await this.userrepository.findOne({
@@ -275,8 +414,8 @@ export class UserController extends Controller {
             phone_number: user.phone_number,
             device: {
               id: device?.id,
-              mac_address: device?.mac_address,
-              name: device?.name,
+              // mac_address: device?.mac_address,
+              // name: device?.name,
             },
             role: {
               description: role?.description,
@@ -309,7 +448,7 @@ export class UserController extends Controller {
       relations: {
         device: true,
         role: true,
-        service_ticket: true,
+        // service_ticket: true,
       },
     });
 
@@ -318,14 +457,13 @@ export class UserController extends Controller {
     }
 
     const { address, device, email, name, password, phone_number, role } = request;
-
-    const db_device = await this.devicerepository.findOne({
-      where: {
-        id: device,
-      },
-    });
-    if (!db_device) {
-      return Promise.reject(new Error('DB DEVICE NOT FOUND'));
+    let db_device;
+    if (device) {
+      db_device = await this.devicerepository.findOne({
+        where: {
+          id: device,
+        },
+      });
     }
 
     const db_role = await this.rolerepository.findOne({
@@ -333,16 +471,14 @@ export class UserController extends Controller {
         id: role,
       },
     });
-    if (!db_role) {
-      return Promise.reject(new Error('DB ROLE NOT FOUND'));
-    }
+
     existingUser.address = address;
     existingUser.device = db_device;
     existingUser.email = email;
     existingUser.name = name;
     existingUser.password = password;
     existingUser.phone_number = phone_number;
-    existingUser.role = Promise.resolve(db_role);
+    existingUser.role = Promise.resolve(db_role!);
 
     const savedUser = await this.userrepository.save(existingUser);
 
@@ -350,9 +486,9 @@ export class UserController extends Controller {
       address: savedUser.address,
       device: {
         // dongle: db_device.,
-        id: db_device.id,
-        mac_address: db_device.mac_address,
-        name: db_device.name,
+        id: db_device?.id,
+        // mac_address: db_device?.mac_address,
+        // name: db_device?.name,
         // user: db_device.user
       },
       email: savedUser.email,
@@ -361,9 +497,9 @@ export class UserController extends Controller {
       password: savedUser.password,
       phone_number: savedUser.phone_number,
       role: {
-        description: db_role.description,
-        id: db_role.id,
-        name: db_role.name,
+        description: db_role?.description,
+        id: db_role?.id,
+        name: db_role?.name,
       },
       // service_ticket: savedUser.service_ticket,
     };
@@ -405,61 +541,39 @@ export class UserController extends Controller {
     return resUser;
   }
   /**
-   * get users from role
-   * @summary get users from role
+   * get users under from role
+   * @summary get users under from role
    */
-  @Post('getUserFromRole/{roleId}')
-  public async getUsersFromRole(@Path() roleId: number) {
-    const users = await this.userrepository.find({
-      where: {
-        role: {
-          id: roleId,
-        },
-      },
+  @Post('{userId}/getUserFromRole')
+  public async getUsersFromRole(@Path() userId: number, @Body() request: ReqUserRoleFind) {
+    const { role } = request;
+    if (userId === undefined) {
+      return Promise.reject(new Error('userId is required'));
+    }
+
+    const goal_user = await this.userrepository.findOne({
+      where: { id: userId },
     });
 
-    if (!users) {
-      return Promise.resolve(new Error('USER NOT FOUND'));
+    if (!goal_user) {
+      return Promise.reject(new Error('User not found'));
     }
-    const resUser: ResUser[] = [];
-
-    for (const user of users) {
-      resUser.push({
-        address: user.address,
-        // device: user.device,
-        email: user.email,
-        id: user.id,
-        name: user.name,
-        password: user.password,
-        phone_number: user.phone_number,
-        role: {
-          description: (await user.role)?.description,
-          id: (await user.role)?.id,
-          name: (await user.role)?.name,
-        },
+    // eslint-disable-next-line
+    const getUsersRecursively = async (user: any): Promise<any[]> => {
+      const usersUnder = await this.userrepository.find({
+        where: { is_under: user },
       });
-    }
-    return resUser;
+
+      if (usersUnder.length === 0) {
+        return [];
+      }
+
+      const nestedUsers = await Promise.all(usersUnder.map(async (u) => getUsersRecursively(u)));
+
+      return [...usersUnder, ...nestedUsers.flat()];
+    };
+
+    const users_under = await this.getUsersRecursivelyUsingRole(goal_user, role);
+    return users_under;
   }
 }
-
-// export class ItemService {
-//   public async getItems(page: number = 1, limit: number = 10): Promise<{ data: Item[], page: number, limit: number, total: number, totalPages: number }> {
-//     const itemRepository = getRepository(Item);
-
-//     const [items, total] = await itemRepository.findAndCount({
-//       take: limit,
-//       skip: (page - 1) * limit,
-//     });
-
-//     const totalPages = Math.ceil(total / limit);
-
-//     return {
-//       data: items,
-//       page,
-//       limit,
-//       total,
-//       totalPages
-//     };
-//   }
-// }

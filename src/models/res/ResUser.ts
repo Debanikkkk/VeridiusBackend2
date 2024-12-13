@@ -12,4 +12,5 @@ export interface ResUser {
   role?: ResRole;
   service_ticket?: ResServiceTicket;
   device?: ResDevice;
+  is_under?: ResUser;
 }

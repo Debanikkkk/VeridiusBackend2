@@ -76,7 +76,12 @@ export function sendNegInvalidHeader(socket: net.Socket, header: string, io: Ser
   const socketKey = [...sockMap.entries()].find(([_, value]) => value.socket === socket)?.[0]; //disable es-lint
 
   const timestamp = new Date();
-  const formattedTimestamp = timestamp.toLocaleString('en-IN', timeOptions);
+  let formattedTimestamp = `${timestamp.toLocaleDateString('en-IN', timeOptions)}, ${timestamp.getHours()}:${timestamp.getMinutes()}:${timestamp.getSeconds()}.${timestamp.getMilliseconds().toString().padStart(3, '0')} ${timestamp.getHours() >= 12 ? 'PM' : 'AM'}`;
+
+  const [date, time] = formattedTimestamp.split(' '); // Separate date and time for line break
+
+  // Return formattedTimestamp directly
+  formattedTimestamp = `${date}\n${time}`;
 
   const mess = {
     imei: socketKey || socket.remoteAddress + ':' + socket.remotePort,
@@ -106,7 +111,12 @@ export function sendNegInvalidChecksum(socket: net.Socket, header: string, io: S
   const socketKey = [...sockMap.entries()].find(([_, value]) => value.socket === socket)?.[0]; //disable es-lint
   // console.log(key);
   const timestamp = new Date();
-  const formattedTimestamp = timestamp.toLocaleString('en-IN', timeOptions);
+  let formattedTimestamp = `${timestamp.toLocaleDateString('en-IN', timeOptions)}, ${timestamp.getHours()}:${timestamp.getMinutes()}:${timestamp.getSeconds()}.${timestamp.getMilliseconds().toString().padStart(3, '0')} ${timestamp.getHours() >= 12 ? 'PM' : 'AM'}`;
+
+  const [date, time] = formattedTimestamp.split(' '); // Separate date and time for line break
+
+  // Return formattedTimestamp directly
+  formattedTimestamp = `${date}\n${time}`;
 
   const mess = {
     imei: socketKey || socket.remoteAddress + ':' + socket.remotePort,
@@ -137,7 +147,12 @@ export function sendNegInvalidPacketFormat(socket: net.Socket, header: string, i
   const socketKey = [...sockMap.entries()].find(([_, value]) => value.socket === socket)?.[0]; //disable es-lint
   // console.log(key);
   const timestamp = new Date();
-  const formattedTimestamp = timestamp.toLocaleString('en-IN', timeOptions);
+  let formattedTimestamp = `${timestamp.toLocaleDateString('en-IN', timeOptions)}, ${timestamp.getHours()}:${timestamp.getMinutes()}:${timestamp.getSeconds()}.${timestamp.getMilliseconds().toString().padStart(3, '0')} ${timestamp.getHours() >= 12 ? 'PM' : 'AM'}`;
+
+  const [date, time] = formattedTimestamp.split(' '); // Separate date and time for line break
+
+  // Return formattedTimestamp directly
+  formattedTimestamp = `${date}\n${time}`;
 
   const mess = {
     imei: socketKey || socket.remoteAddress + ':' + socket.remotePort,
@@ -253,7 +268,12 @@ function onSocketData(socket: net.Socket, container: SocketContainer, io: Server
           io.emit('lpMessage', loginPacketBody);
 
           const timestamp = new Date();
-          const formattedTimestamp = timestamp.toLocaleString('en-IN', timeOptions);
+          let formattedTimestamp = `${timestamp.toLocaleDateString('en-IN', timeOptions)}, ${timestamp.getHours()}:${timestamp.getMinutes()}:${timestamp.getSeconds()}.${timestamp.getMilliseconds().toString().padStart(3, '0')} ${timestamp.getHours() >= 12 ? 'PM' : 'AM'}`;
+
+          const [date, time] = formattedTimestamp.split(' '); // Separate date and time for line break
+
+          // Return formattedTimestamp directly
+          formattedTimestamp = `${date}\n${time}`;
 
           const imeiPacketBody = {
             imei: commaSep[5] || socket.remoteAddress + ':' + socket.remotePort,
@@ -291,7 +311,13 @@ function onSocketData(socket: net.Socket, container: SocketContainer, io: Server
       if (commaSep.length == 17) {
         if (checksum === dataStarArr[1]) {
           const timestamp = new Date();
-          const formattedTimestamp = timestamp.toLocaleString('en-IN', timeOptions);
+          let formattedTimestamp = `${timestamp.toLocaleDateString('en-IN', timeOptions)}, ${timestamp.getHours()}:${timestamp.getMinutes()}:${timestamp.getSeconds()}.${timestamp.getMilliseconds().toString().padStart(3, '0')} ${timestamp.getHours() >= 12 ? 'PM' : 'AM'}`;
+
+          const [date, time] = formattedTimestamp.split(' '); // Separate date and time for line break
+
+          // Return formattedTimestamp directly
+          formattedTimestamp = `${date}\n${time}`;
+
           const imeiPacketBody = {
             imei: commaSep[5] || socket.remoteAddress + ':' + socket.remotePort,
             packet: data.toString(),
@@ -321,7 +347,13 @@ function onSocketData(socket: net.Socket, container: SocketContainer, io: Server
       if (commaSep.length == 17) {
         if (checksum === dataStarArr[1]) {
           const timestamp = new Date();
-          const formattedTimestamp = timestamp.toLocaleString('en-IN', timeOptions);
+          let formattedTimestamp = `${timestamp.toLocaleDateString('en-IN', timeOptions)}, ${timestamp.getHours()}:${timestamp.getMinutes()}:${timestamp.getSeconds()}.${timestamp.getMilliseconds().toString().padStart(3, '0')} ${timestamp.getHours() >= 12 ? 'PM' : 'AM'}`;
+
+          const [date, time] = formattedTimestamp.split(' '); // Separate date and time for line break
+
+          // Return formattedTimestamp directly
+          formattedTimestamp = `${date}\n${time}`;
+
           const imeiPacketBody = {
             imei: commaSep[5] || socket.remoteAddress + ':' + socket.remotePort,
             packet: data.toString(),
@@ -358,7 +390,13 @@ function onSocketData(socket: net.Socket, container: SocketContainer, io: Server
       const socketKey = [...sockMap.entries()].find(([_, value]) => value.socket === socket)?.[0]; //disable es-lint
       // console.log(key);
       const timestamp = new Date();
-      const formattedTimestamp = timestamp.toLocaleString('en-IN', timeOptions);
+      let formattedTimestamp = `${timestamp.toLocaleDateString('en-IN', timeOptions)}, ${timestamp.getHours()}:${timestamp.getMinutes()}:${timestamp.getSeconds()}.${timestamp.getMilliseconds().toString().padStart(3, '0')} ${timestamp.getHours() >= 12 ? 'PM' : 'AM'}`;
+
+      const [date, time] = formattedTimestamp.split(' '); // Separate date and time for line break
+
+      // Return formattedTimestamp directly
+      formattedTimestamp = `${date}\n${time}`;
+
       const mess = {
         imei: socketKey || socket.remoteAddress + ':' + socket.remotePort,
         packet: data.toString(),
@@ -407,7 +445,13 @@ function onSocketData(socket: net.Socket, container: SocketContainer, io: Server
             io.emit('hpMessage', hmpBody);
 
             const timestamp = new Date();
-            const formattedTimestamp = timestamp.toLocaleString('en-IN', timeOptions);
+            let formattedTimestamp = `${timestamp.toLocaleDateString('en-IN', timeOptions)}, ${timestamp.getHours()}:${timestamp.getMinutes()}:${timestamp.getSeconds()}.${timestamp.getMilliseconds().toString().padStart(3, '0')} ${timestamp.getHours() >= 12 ? 'PM' : 'AM'}`;
+
+            const [date, time] = formattedTimestamp.split(' '); // Separate date and time for line break
+
+            // Return formattedTimestamp directly
+            formattedTimestamp = `${date}\n${time}`;
+
             const mess = {
               packet: data.toString(),
               imei: commaSep[4],
@@ -548,7 +592,13 @@ function onSocketData(socket: net.Socket, container: SocketContainer, io: Server
               // ws.send(JSON.stringify(trackingBody));
             }
             const timestamp = new Date();
-            const formattedTimestamp = timestamp.toLocaleString('en-IN', timeOptions);
+            let formattedTimestamp = `${timestamp.toLocaleDateString('en-IN', timeOptions)}, ${timestamp.getHours()}:${timestamp.getMinutes()}:${timestamp.getSeconds()}.${timestamp.getMilliseconds().toString().padStart(3, '0')} ${timestamp.getHours() >= 12 ? 'PM' : 'AM'}`;
+
+            const [date, time] = formattedTimestamp.split(' '); // Separate date and time for line break
+
+            // Return formattedTimestamp directly
+            formattedTimestamp = `${date}\n${time}`;
+
             const imeiPacketBody = {
               imei: commaSep[7] || socket.remoteAddress + ':' + socket.remotePort,
               packet: data.toString(),
@@ -596,7 +646,13 @@ function onSocketData(socket: net.Socket, container: SocketContainer, io: Server
       // eslint-disable-next-line
       const socketKey = [...sockMap.entries()].find(([_, value]) => value.socket === socket)?.[0]; //disable es-lint
       const timestamp = new Date();
-      const formattedTimestamp = timestamp.toLocaleString('en-IN', timeOptions);
+      let formattedTimestamp = `${timestamp.toLocaleDateString('en-IN', timeOptions)}, ${timestamp.getHours()}:${timestamp.getMinutes()}:${timestamp.getSeconds()}.${timestamp.getMilliseconds().toString().padStart(3, '0')} ${timestamp.getHours() >= 12 ? 'PM' : 'AM'}`;
+
+      const [date, time] = formattedTimestamp.split(' '); // Separate date and time for line break
+
+      // Return formattedTimestamp directly
+      formattedTimestamp = `${date}\n${time}`;
+
       const mess = {
         packet: data.toString(),
         imei: socketKey,
@@ -655,7 +711,13 @@ export function initSocketIOFeatures(httpServer: http.Server) {
         // console.log(key);
         console.log('the client i wanna see here is =====>', socketKey);
         const timestamp = new Date();
-        const formattedTimestamp = timestamp.toLocaleString('en-IN', timeOptions);
+        let formattedTimestamp = `${timestamp.toLocaleDateString('en-IN', timeOptions)}, ${timestamp.getHours()}:${timestamp.getMinutes()}:${timestamp.getSeconds()}.${timestamp.getMilliseconds().toString().padStart(3, '0')} ${timestamp.getHours() >= 12 ? 'PM' : 'AM'}`;
+
+        const [date, time] = formattedTimestamp.split(' '); // Separate date and time for line break
+
+        // Return formattedTimestamp directly
+        formattedTimestamp = `${date}\n${time}`;
+
         const mess = {
           imei: socketKey || socket.remoteAddress + ':' + socket.remotePort,
           packet: 'CLIENT DISCONNECTED: ' + socketKey,
@@ -679,7 +741,13 @@ export function initSocketIOFeatures(httpServer: http.Server) {
       // console.log(key);
       console.log('the on connect block has reached here');
       const timestamp = new Date();
-      const formattedTimestamp = timestamp.toLocaleString('en-IN', timeOptions);
+      let formattedTimestamp = `${timestamp.toLocaleDateString('en-IN', timeOptions)}, ${timestamp.getHours()}:${timestamp.getMinutes()}:${timestamp.getSeconds()}.${timestamp.getMilliseconds().toString().padStart(3, '0')} ${timestamp.getHours() >= 12 ? 'PM' : 'AM'}`;
+
+      const [date, time] = formattedTimestamp.split(' '); // Separate date and time for line break
+
+      // Return formattedTimestamp directly
+      formattedTimestamp = `${date}\n${time}`;
+
       const mess = {
         imei: socketKey || socket.remoteAddress + ':' + socket.remotePort,
         packet: 'CLIENT CONNECTED: ' + socket.remoteAddress + ':' + socket.remotePort,
