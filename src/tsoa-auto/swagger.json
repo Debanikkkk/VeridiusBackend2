@@ -480,6 +480,12 @@
 							"$ref": "#/components/schemas/User"
 						},
 						"type": "array"
+					},
+					"firmwares": {
+						"items": {
+							"$ref": "#/components/schemas/Firmware"
+						},
+						"type": "array"
 					}
 				},
 				"type": "object",
@@ -607,6 +613,425 @@
 					"timestamp": {
 						"type": "string",
 						"format": "date-time"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"firmware_management": {
+				"enum": [
+					"DEVOTA",
+					"DOTA"
+				],
+				"type": "string"
+			},
+			"ECU": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"is_active": {
+						"type": "boolean"
+					},
+					"mac_id": {
+						"type": "string"
+					},
+					"ecu_name": {
+						"type": "string"
+					},
+					"created_at": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"updated_at": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"protocol": {
+						"type": "string"
+					},
+					"rx_header": {
+						"type": "string"
+					},
+					"tx_header": {
+						"type": "string"
+					},
+					"read_dtc_fc_index": {
+						"type": "string"
+					},
+					"clear_dtc_fn_index": {
+						"type": "string"
+					},
+					"read_data_fn_index": {
+						"type": "string"
+					},
+					"write_data_fn_index": {
+						"type": "string"
+					},
+					"seedkey_algo_fn_index": {
+						"type": "string"
+					},
+					"ior_test_index": {
+						"type": "string"
+					},
+					"negative_responses": {
+						"items": {
+							"$ref": "#/components/schemas/NegativeResponseCode"
+						},
+						"type": "array"
+					},
+					"pid_datasets": {
+						"items": {
+							"$ref": "#/components/schemas/PIDDataset"
+						},
+						"type": "array"
+					},
+					"dtc_datasets": {
+						"items": {
+							"$ref": "#/components/schemas/DtcDataset"
+						},
+						"type": "array"
+					},
+					"firmware": {
+						"$ref": "#/components/schemas/Firmware"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"NegativeResponseCode": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"response_code": {
+						"type": "string"
+					},
+					"description": {
+						"type": "string"
+					},
+					"created_at": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"updated_at": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"ecus": {
+						"items": {
+							"$ref": "#/components/schemas/ECU"
+						},
+						"type": "array"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"PIDDataset": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"name": {
+						"type": "string"
+					},
+					"description": {
+						"type": "string"
+					},
+					"active": {
+						"type": "boolean"
+					},
+					"created_at": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"updated_at": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"pids": {
+						"items": {
+							"$ref": "#/components/schemas/PID"
+						},
+						"type": "array"
+					},
+					"ecus": {
+						"items": {
+							"$ref": "#/components/schemas/ECU"
+						},
+						"type": "array"
+					},
+					"message_types": {
+						"items": {
+							"$ref": "#/components/schemas/MessageType"
+						},
+						"type": "array"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"PID": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"pid_code": {
+						"type": "string"
+					},
+					"long_name": {
+						"type": "string"
+					},
+					"description": {
+						"type": "string"
+					},
+					"short_name": {
+						"type": "string"
+					},
+					"active": {
+						"type": "boolean"
+					},
+					"created_at": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"updated_at": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"total_length": {
+						"type": "number",
+						"format": "double"
+					},
+					"byte_position": {
+						"type": "number",
+						"format": "double"
+					},
+					"length_bytes": {
+						"type": "number",
+						"format": "double"
+					},
+					"bit_coded": {
+						"type": "boolean"
+					},
+					"resolution": {
+						"type": "number",
+						"format": "double"
+					},
+					"offset": {
+						"type": "number",
+						"format": "double"
+					},
+					"min": {
+						"type": "number",
+						"format": "double"
+					},
+					"max": {
+						"type": "number",
+						"format": "double"
+					},
+					"read": {
+						"type": "boolean"
+					},
+					"write": {
+						"type": "boolean"
+					},
+					"unit": {
+						"type": "string"
+					},
+					"pid_datasets": {
+						"items": {
+							"$ref": "#/components/schemas/PIDDataset"
+						},
+						"type": "array"
+					},
+					"parameters": {
+						"items": {
+							"$ref": "#/components/schemas/Parameters"
+						},
+						"type": "array"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"Parameters": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"name": {
+						"type": "string"
+					},
+					"description": {
+						"type": "string"
+					},
+					"active": {
+						"type": "boolean"
+					},
+					"created_at": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"updated_at": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"pids": {
+						"items": {
+							"$ref": "#/components/schemas/PID"
+						},
+						"type": "array"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"MessageType": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"name": {
+						"type": "string"
+					},
+					"created_at": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"updated_at": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"pid_datasets": {
+						"items": {
+							"$ref": "#/components/schemas/PIDDataset"
+						},
+						"type": "array"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"DtcDataset": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"name": {
+						"type": "string"
+					},
+					"description": {
+						"type": "string"
+					},
+					"is_active": {
+						"type": "boolean"
+					},
+					"created_at": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"updated_at": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"dtcs": {
+						"items": {
+							"$ref": "#/components/schemas/DTC"
+						},
+						"type": "array"
+					},
+					"ecus": {
+						"items": {
+							"$ref": "#/components/schemas/ECU"
+						},
+						"type": "array"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"DTC": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"name": {
+						"type": "string"
+					},
+					"description": {
+						"type": "string"
+					},
+					"is_active": {
+						"type": "boolean"
+					},
+					"created_at": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"updated_at": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"dtc_dataset": {
+						"items": {
+							"$ref": "#/components/schemas/DtcDataset"
+						},
+						"type": "array"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"Firmware": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"firmware_version": {
+						"type": "string"
+					},
+					"file": {
+						"type": "string"
+					},
+					"file_name": {
+						"type": "string"
+					},
+					"file_description": {
+						"type": "string"
+					},
+					"created_at": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"updated_at": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"is_active": {
+						"type": "boolean"
+					},
+					"firmware_type": {
+						"$ref": "#/components/schemas/firmware_management"
+					},
+					"created_by": {
+						"$ref": "#/components/schemas/User"
+					},
+					"ecus": {
+						"items": {
+							"$ref": "#/components/schemas/ECU"
+						},
+						"type": "array"
 					}
 				},
 				"type": "object",
@@ -952,34 +1377,6 @@
 				"type": "object",
 				"additionalProperties": false
 			},
-			"ECUFlash": {
-				"properties": {
-					"id": {
-						"type": "number",
-						"format": "double"
-					},
-					"flash_file_name": {
-						"type": "string"
-					},
-					"flash_file_path": {
-						"type": "string"
-					},
-					"status": {
-						"type": "boolean"
-					}
-				},
-				"type": "object",
-				"additionalProperties": false
-			},
-			"ReqDevConStatus": {
-				"properties": {
-					"devConnStatus": {
-						"type": "boolean"
-					}
-				},
-				"type": "object",
-				"additionalProperties": false
-			},
 			"ResFirmware": {
 				"properties": {
 					"id": {
@@ -1001,7 +1398,7 @@
 						"format": "date-time"
 					},
 					"uploadedBy": {
-						"type": "string"
+						"$ref": "#/components/schemas/ResUser"
 					},
 					"isActive": {
 						"type": "boolean"
@@ -1010,24 +1407,6 @@
 						"type": "number",
 						"format": "double",
 						"nullable": true
-					}
-				},
-				"type": "object",
-				"additionalProperties": false
-			},
-			"ReqFirmware": {
-				"properties": {
-					"firmwareVersion": {
-						"type": "string"
-					},
-					"file": {
-						"type": "string"
-					},
-					"uploadedBy": {
-						"type": "string"
-					},
-					"isActive": {
-						"type": "boolean"
 					}
 				},
 				"type": "object",
@@ -2390,113 +2769,6 @@
 				]
 			}
 		},
-		"/ecuFlashFile": {
-			"post": {
-				"operationId": "SaveFlash",
-				"responses": {
-					"200": {
-						"description": "Ok",
-						"content": {
-							"application/json": {
-								"schema": {
-									"anyOf": [
-										{
-											"$ref": "#/components/schemas/ECUFlash"
-										},
-										{
-											"properties": {
-												"message": {
-													"type": "string"
-												}
-											},
-											"required": [
-												"message"
-											],
-											"type": "object"
-										}
-									]
-								}
-							}
-						}
-					}
-				},
-				"tags": [
-					"ECU Flash  File"
-				],
-				"security": [],
-				"parameters": [
-					{
-						"in": "query",
-						"name": "fileName",
-						"required": true,
-						"schema": {
-							"type": "string"
-						}
-					}
-				],
-				"requestBody": {
-					"required": true,
-					"content": {
-						"multipart/form-data": {
-							"schema": {
-								"type": "object",
-								"properties": {
-									"file": {
-										"type": "string",
-										"format": "binary"
-									}
-								},
-								"required": [
-									"file"
-								]
-							}
-						}
-					}
-				}
-			}
-		},
-		"/ecuFlashFile/{flashFileId}": {
-			"put": {
-				"operationId": "FlashFileStatusChange",
-				"responses": {
-					"200": {
-						"description": "Ok",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/ECUFlash"
-								}
-							}
-						}
-					}
-				},
-				"tags": [
-					"ECU Flash  File"
-				],
-				"security": [],
-				"parameters": [
-					{
-						"in": "path",
-						"name": "flashFileId",
-						"required": true,
-						"schema": {
-							"format": "double",
-							"type": "number"
-						}
-					}
-				],
-				"requestBody": {
-					"required": true,
-					"content": {
-						"application/json": {
-							"schema": {
-								"$ref": "#/components/schemas/ReqDevConStatus"
-							}
-						}
-					}
-				}
-			}
-		},
 		"/firmware/{firmwareId}": {
 			"get": {
 				"operationId": "GetOneFirmware",
@@ -2535,46 +2807,6 @@
 					}
 				]
 			},
-			"put": {
-				"operationId": "UpdateFirmware",
-				"responses": {
-					"200": {
-						"description": "Ok",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/ResFirmware"
-								}
-							}
-						}
-					}
-				},
-				"tags": [
-					"Firmware"
-				],
-				"security": [],
-				"parameters": [
-					{
-						"in": "path",
-						"name": "firmwareId",
-						"required": true,
-						"schema": {
-							"format": "double",
-							"type": "number"
-						}
-					}
-				],
-				"requestBody": {
-					"required": true,
-					"content": {
-						"application/json": {
-							"schema": {
-								"$ref": "#/components/schemas/ReqFirmware"
-							}
-						}
-					}
-				}
-			},
 			"delete": {
 				"operationId": "DeleteFirmware",
 				"responses": {
@@ -2583,7 +2815,15 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/ResSuccess"
+									"properties": {
+										"result": {
+											"type": "string"
+										}
+									},
+									"required": [
+										"result"
+									],
+									"type": "object"
 								}
 							}
 						}
@@ -2654,14 +2894,60 @@
 				"tags": [
 					"Firmware"
 				],
-				"security": [],
-				"parameters": [],
+				"security": [
+					{
+						"Api-Token": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "query",
+						"name": "firmwareVersion",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "firmwareType",
+						"required": true,
+						"schema": {
+							"$ref": "#/components/schemas/firmware_management"
+						}
+					},
+					{
+						"in": "query",
+						"name": "isActive",
+						"required": true,
+						"schema": {
+							"type": "boolean"
+						}
+					},
+					{
+						"in": "query",
+						"name": "fileName",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
 				"requestBody": {
 					"required": true,
 					"content": {
-						"application/json": {
+						"multipart/form-data": {
 							"schema": {
-								"$ref": "#/components/schemas/ReqFirmware"
+								"type": "object",
+								"properties": {
+									"file": {
+										"type": "string",
+										"format": "binary"
+									}
+								},
+								"required": [
+									"file"
+								]
 							}
 						}
 					}
