@@ -302,6 +302,31 @@
 				"type": "object",
 				"additionalProperties": false
 			},
+			"ReqUsersUnder": {
+				"properties": {
+					"users_under": {
+						"items": {
+							"type": "number",
+							"format": "double"
+						},
+						"type": "array"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ResSuccess": {
+				"properties": {
+					"result": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"result"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
 			"DongleStatus": {
 				"enum": [
 					"Available",
@@ -587,31 +612,6 @@
 				"type": "object",
 				"additionalProperties": false
 			},
-			"ReqUsersUnder": {
-				"properties": {
-					"users_under": {
-						"items": {
-							"type": "number",
-							"format": "double"
-						},
-						"type": "array"
-					}
-				},
-				"type": "object",
-				"additionalProperties": false
-			},
-			"ResSuccess": {
-				"properties": {
-					"result": {
-						"type": "string"
-					}
-				},
-				"required": [
-					"result"
-				],
-				"type": "object",
-				"additionalProperties": false
-			},
 			"ReqDeviceAssign": {
 				"properties": {
 					"id": {
@@ -681,22 +681,13 @@
 				"type": "object",
 				"additionalProperties": false
 			},
-			"Error": {
+			"ReqUserRoleFind": {
 				"properties": {
-					"name": {
-						"type": "string"
-					},
-					"message": {
-						"type": "string"
-					},
-					"stack": {
-						"type": "string"
+					"role": {
+						"type": "number",
+						"format": "double"
 					}
 				},
-				"required": [
-					"name",
-					"message"
-				],
 				"type": "object",
 				"additionalProperties": false
 			},
@@ -1227,7 +1218,7 @@
 				}
 			}
 		},
-		"/user/{userId}": {
+		"/user/getUsersUnder/{userId}": {
 			"post": {
 				"operationId": "GetUsersUnder",
 				"responses": {
@@ -1236,17 +1227,13 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"items": {
-										"$ref": "#/components/schemas/User"
-									},
+									"items": {},
 									"type": "array"
 								}
 							}
 						}
 					}
 				},
-				"description": "gets users under a user",
-				"summary": "gets users under a user",
 				"tags": [
 					"User"
 				],
@@ -1262,7 +1249,59 @@
 						}
 					}
 				]
-			},
+			}
+		},
+		"/user/putUsersUnder/{userId}": {
+			"put": {
+				"operationId": "PutUsersUnder",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"properties": {
+										"message": {
+											"type": "string"
+										}
+									},
+									"required": [
+										"message"
+									],
+									"type": "object"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"User"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "userId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/ReqUsersUnder"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/user/{userId}": {
 			"delete": {
 				"operationId": "DeleteUser",
 				"responses": {
@@ -1379,56 +1418,6 @@
 				}
 			}
 		},
-		"/user/putUsersUnder/{userId}": {
-			"put": {
-				"operationId": "PutUsersUnder",
-				"responses": {
-					"200": {
-						"description": "Ok",
-						"content": {
-							"application/json": {
-								"schema": {
-									"properties": {
-										"message": {
-											"type": "string"
-										}
-									},
-									"required": [
-										"message"
-									],
-									"type": "object"
-								}
-							}
-						}
-					}
-				},
-				"tags": [
-					"User"
-				],
-				"security": [],
-				"parameters": [
-					{
-						"in": "path",
-						"name": "userId",
-						"required": true,
-						"schema": {
-							"format": "double",
-							"type": "number"
-						}
-					}
-				],
-				"requestBody": {
-					"required": true,
-					"content": {
-						"application/json": {
-							"schema": {
-								"$ref": "#/components/schemas/ReqUsersUnder"
-							}
-						}
-					}
-				}
-			}
-		},
 		"/user/userDeviceAllot/{userId}": {
 			"put": {
 				"operationId": "AssignUserDevice",
@@ -1511,7 +1500,7 @@
 				"parameters": []
 			}
 		},
-		"/user/getUserFromRole/{roleId}": {
+		"/user/{userId}/getUserFromRole": {
 			"post": {
 				"operationId": "GetUsersFromRole",
 				"responses": {
@@ -1520,24 +1509,15 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"anyOf": [
-										{
-											"$ref": "#/components/schemas/Error"
-										},
-										{
-											"items": {
-												"$ref": "#/components/schemas/ResUser"
-											},
-											"type": "array"
-										}
-									]
+									"items": {},
+									"type": "array"
 								}
 							}
 						}
 					}
 				},
-				"description": "get users from role",
-				"summary": "get users from role",
+				"description": "get users under from role",
+				"summary": "get users under from role",
 				"tags": [
 					"User"
 				],
@@ -1545,14 +1525,24 @@
 				"parameters": [
 					{
 						"in": "path",
-						"name": "roleId",
+						"name": "userId",
 						"required": true,
 						"schema": {
 							"format": "double",
 							"type": "number"
 						}
 					}
-				]
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/ReqUserRoleFind"
+							}
+						}
+					}
+				}
 			}
 		},
 		"/serviceTicket": {

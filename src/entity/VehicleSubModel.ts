@@ -14,6 +14,7 @@ export class VehicleSubModel {
   name?: string;
 
   @ManyToOne(() => VehicleModel, (model) => model.vehicle_sub_models)
+  @JoinColumn({ name: 'vehicle_model_id' })
   vehicle_model?: VehicleModel;
 
   @Column()

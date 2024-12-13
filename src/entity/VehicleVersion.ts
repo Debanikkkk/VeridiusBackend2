@@ -24,8 +24,11 @@ export class VehicleVersion {
   @Column()
   price?: number;
 
-  @Column({ type: 'jsonb', nullable: true })
-  features?: object;
+  @Column({
+    // type: 'jsonb',
+    nullable: true,
+  })
+  features?: string;
 
   @OneToMany(() => Vehicle, (vehicle) => vehicle.vehicle_version)
   vehicles?: Vehicle[];
