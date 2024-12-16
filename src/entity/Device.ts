@@ -23,6 +23,9 @@ export class Device {
   })
   device_type?: string;
 
+  @Column({ unique: true, nullable: true })
+  imei?: string;
+
   @Column({
     nullable: true,
   })
@@ -30,6 +33,9 @@ export class Device {
 
   @Column({ unique: true, nullable: true })
   serial_number?: string;
+
+  @Column({ nullable: true, default: true })
+  dongle_conn_status?: boolean;
 
   @CreateDateColumn({
     nullable: true,

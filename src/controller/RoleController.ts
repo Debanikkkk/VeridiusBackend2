@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Path, Post, Put, Route, Tags } from 'tsoa';
+import { Body, Controller, Delete, Get, Path, Post, Put, Request, Route, Security, Tags } from 'tsoa';
 import { Role } from '../entity/Role';
 import { AppDataSource } from '../data-source';
 import { ReqRole } from '../models/req/ReqRole';
@@ -10,11 +10,14 @@ import { Permission, permType } from '../entity/Permission';
 // import { ReqRoleBody } from '../models/req/ReqRoleBody';
 import { ResError, ResSuccess } from '../models/res/Responses';
 import { ResPermission } from '../models/res/ResPermission';
+import { JWTRequest } from '../models/req/JWTRequest';
+import { User } from '../entity/User';
 @Tags('Role')
 @Route('/role')
 export class RoleController extends Controller {
   private rolerepository = AppDataSource.getRepository(Role);
   private permissionrepository = AppDataSource.getRepository(Permission);
+  private userrepository = AppDataSource.getRepository(User);
 
   @Get('/{roleId}')
   public async getOneRole(@Path() roleId: number): Promise<ResRole | ResError> {
@@ -114,13 +117,23 @@ export class RoleController extends Controller {
    * @summary save role
    */
   @Post()
-  public async saveRole(@Body() request: ReqRole): Promise<ResRole | ResError> {
+  @Security('Api-Token', [])
+  public async saveRole(@Body() request: ReqRole, @Request() req: JWTRequest): Promise<ResRole | ResError> {
     try {
+      const user = await this.userrepository.findOne({
+        where: {
+          id: req.user.id,
+        },
+      });
+      if (!user) {
+        return Promise.reject(new Error('USER NOT FOUND'));
+      }
       const { name, description } = request;
 
       const roleToSave: Role = {
-        description: description,
-        name: name,
+        description,
+        name,
+        created_by: Promise.resolve(user),
       };
 
       const roleSaver = Object.assign(new Role(), roleToSave);
@@ -143,10 +156,26 @@ export class RoleController extends Controller {
       };
       await this.permissionrepository.save(permissionToSaveManage);
       await this.permissionrepository.save(permissionToSaveView);
+      const created_by = savedRole.created_by;
+      if (!created_by) {
+        return Promise.reject(new Error('CREATED BY USER NOT FOUND'));
+      }
       const resRole: ResRole = {
         description,
         id: savedRole.id,
         name: savedRole.name,
+        created_by: {
+          address: (await created_by).address,
+          // device: (await created_by).device,
+          email: (await created_by).email,
+          id: (await created_by).id,
+          // is_under: (await created_by).,
+          name: (await created_by).name,
+          password: (await created_by).password,
+          phone_number: (await created_by).phone_number,
+          // role: (await created_by).,
+          // service_ticket: (await created_by).,
+        },
       };
       return resRole;
     } catch (error) {
@@ -235,6 +264,18 @@ export class RoleController extends Controller {
       description: updatedRole.description,
       id: updatedRole.id,
       name: updatedRole.name,
+      created_by: {
+        address: (await updatedRole.created_by)?.address,
+        // device: :(await updatedRole.created_by)?.,
+        email: (await updatedRole.created_by)?.email,
+        id: (await updatedRole.created_by)?.id,
+        // is_under:(await updatedRole.created_by)?.,
+        name: (await updatedRole.created_by)?.name,
+        password: (await updatedRole.created_by)?.password,
+        phone_number: (await updatedRole.created_by)?.phone_number,
+        // role:(await updatedRole.created_by)?.,
+        // service_ticket:(await updatedRole.created_by)?.
+      },
     };
     return resUpdatedRole;
   }

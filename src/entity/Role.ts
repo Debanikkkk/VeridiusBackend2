@@ -1,8 +1,9 @@
-import { Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn, Unique } from 'typeorm';
 import { Permission } from './Permission';
 import { User } from './User';
 
 @Entity()
+@Unique(['name', 'created_by'])
 export class Role {
   @PrimaryGeneratedColumn()
   id?: number;
@@ -11,6 +12,9 @@ export class Role {
     length: 64,
   })
   name?: string;
+
+  // @Column({ unique: true, nullable: true })
+  // created_by?: string;
 
   @Column({
     length: 64,
@@ -34,6 +38,10 @@ export class Role {
 
   @OneToMany(() => User, (user) => user.role, { onDelete: 'CASCADE', onUpdate: 'CASCADE', nullable: false })
   users?: Promise<User[]>;
+
+  @ManyToOne(() => User, (user) => user.role, { onDelete: 'CASCADE', onUpdate: 'CASCADE', nullable: true })
+  @JoinColumn({ name: 'created_by' })
+  created_by?: Promise<User>;
 
   // @ManyToMany(()=>(Role), (role)=>(role.role), {onDelete: 'CASCADE', onUpdate: 'CASCADE', nullable: false})
   // @JoinTable({
