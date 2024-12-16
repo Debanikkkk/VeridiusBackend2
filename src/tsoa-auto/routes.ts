@@ -19,8 +19,6 @@ import { GeofenceController } from './../controller/GeofenceController';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { FreeDongleUserDeviceController } from './../controller/FreeDongleUserDeviceController';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-import { FirmwareController } from './../controller/FirmwareController';
-// WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { DongleController } from './../controller/DongleController';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { DeviceController } from './../controller/DeviceController';
@@ -29,8 +27,6 @@ import { BannerController } from './../controller/BannerController';
 import { expressAuthentication } from './../authentication';
 // @ts-ignore - no great way to install types from subpackage
 import type { Request as ExRequest, Response as ExResponse, RequestHandler, Router } from 'express';
-const multer = require('multer');
-const upload = multer({"limits":{"fileSize":8388608}});
 
 const expressAuthenticationRecasted = expressAuthentication as (req: ExRequest, securityName: string, scopes?: string[], res?: ExResponse) => Promise<any>;
 
@@ -329,7 +325,7 @@ const models: TsoaRoute.Models = {
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "firmware_management": {
         "dataType": "refEnum",
-        "enums": ["DEVOTA","DOTA"],
+        "enums": ["DEVOTA","FOTA"],
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "ECU": {
@@ -475,15 +471,25 @@ const models: TsoaRoute.Models = {
         "properties": {
             "id": {"dataType":"double"},
             "firmware_version": {"dataType":"string"},
+            "firmware_type": {"ref":"firmware_management"},
+            "created_by": {"ref":"User"},
+            "ecus": {"dataType":"array","array":{"dataType":"refObject","ref":"ECU"}},
+            "files": {"dataType":"array","array":{"dataType":"refObject","ref":"File"}},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "File": {
+        "dataType": "refObject",
+        "properties": {
+            "id": {"dataType":"double"},
             "file": {"dataType":"string"},
             "file_name": {"dataType":"string"},
             "file_description": {"dataType":"string"},
             "created_at": {"dataType":"datetime"},
             "updated_at": {"dataType":"datetime"},
             "is_active": {"dataType":"boolean"},
-            "firmware_type": {"ref":"firmware_management"},
-            "created_by": {"ref":"User"},
-            "ecus": {"dataType":"array","array":{"dataType":"refObject","ref":"ECU"}},
+            "firmware": {"ref":"Firmware"},
         },
         "additionalProperties": false,
     },
@@ -636,21 +642,6 @@ const models: TsoaRoute.Models = {
         "properties": {
             "name": {"dataType":"string"},
             "polygon": {"dataType":"nestedObjectLiteral","nestedProperties":{"coordinates":{"dataType":"array","array":{"dataType":"array","array":{"dataType":"array","array":{"dataType":"double"}}},"required":true},"type":{"dataType":"enum","enums":["Polygon"],"required":true}}},
-        },
-        "additionalProperties": false,
-    },
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "ResFirmware": {
-        "dataType": "refObject",
-        "properties": {
-            "id": {"dataType":"double"},
-            "firmwareVersion": {"dataType":"string"},
-            "file": {"dataType":"string"},
-            "createdAt": {"dataType":"datetime"},
-            "updatedAt": {"dataType":"datetime"},
-            "uploadedBy": {"ref":"ResUser"},
-            "isActive": {"dataType":"boolean"},
-            "vehicleId": {"dataType":"union","subSchemas":[{"dataType":"double"},{"dataType":"enum","enums":[null]}]},
         },
         "additionalProperties": false,
     },
@@ -1662,132 +1653,6 @@ export function RegisterRoutes(app: Router) {
 
               await templateService.apiHandler({
                 methodName: 'freeTheDongle',
-                controller,
-                response,
-                next,
-                validatedArgs,
-                successStatus: undefined,
-              });
-            } catch (err) {
-                return next(err);
-            }
-        });
-        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        app.get('/firmware/:firmwareId',
-            ...(fetchMiddlewares<RequestHandler>(FirmwareController)),
-            ...(fetchMiddlewares<RequestHandler>(FirmwareController.prototype.getOneFirmware)),
-
-            async function FirmwareController_getOneFirmware(request: ExRequest, response: ExResponse, next: any) {
-            const args: Record<string, TsoaRoute.ParameterSchema> = {
-                    firmwareId: {"in":"path","name":"firmwareId","required":true,"dataType":"double"},
-            };
-
-            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-
-            let validatedArgs: any[] = [];
-            try {
-                validatedArgs = templateService.getValidatedArgs({ args, request, response });
-
-                const controller = new FirmwareController();
-
-              await templateService.apiHandler({
-                methodName: 'getOneFirmware',
-                controller,
-                response,
-                next,
-                validatedArgs,
-                successStatus: undefined,
-              });
-            } catch (err) {
-                return next(err);
-            }
-        });
-        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        app.get('/firmware',
-            ...(fetchMiddlewares<RequestHandler>(FirmwareController)),
-            ...(fetchMiddlewares<RequestHandler>(FirmwareController.prototype.getAllFirmwares)),
-
-            async function FirmwareController_getAllFirmwares(request: ExRequest, response: ExResponse, next: any) {
-            const args: Record<string, TsoaRoute.ParameterSchema> = {
-            };
-
-            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-
-            let validatedArgs: any[] = [];
-            try {
-                validatedArgs = templateService.getValidatedArgs({ args, request, response });
-
-                const controller = new FirmwareController();
-
-              await templateService.apiHandler({
-                methodName: 'getAllFirmwares',
-                controller,
-                response,
-                next,
-                validatedArgs,
-                successStatus: undefined,
-              });
-            } catch (err) {
-                return next(err);
-            }
-        });
-        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        app.post('/firmware',
-            authenticateMiddleware([{"Api-Token":[]}]),
-            upload.fields([{"name":"file","maxCount":1,"multiple":false}]),
-            ...(fetchMiddlewares<RequestHandler>(FirmwareController)),
-            ...(fetchMiddlewares<RequestHandler>(FirmwareController.prototype.saveFirmware)),
-
-            async function FirmwareController_saveFirmware(request: ExRequest, response: ExResponse, next: any) {
-            const args: Record<string, TsoaRoute.ParameterSchema> = {
-                    file: {"in":"formData","name":"file","required":true,"dataType":"file"},
-                    firmwareVersion: {"in":"query","name":"firmwareVersion","required":true,"dataType":"string"},
-                    firmwareType: {"in":"query","name":"firmwareType","required":true,"ref":"firmware_management"},
-                    isActive: {"in":"query","name":"isActive","required":true,"dataType":"boolean"},
-                    fileName: {"in":"query","name":"fileName","required":true,"dataType":"string"},
-                    req: {"in":"request","name":"req","required":true,"dataType":"object"},
-            };
-
-            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-
-            let validatedArgs: any[] = [];
-            try {
-                validatedArgs = templateService.getValidatedArgs({ args, request, response });
-
-                const controller = new FirmwareController();
-
-              await templateService.apiHandler({
-                methodName: 'saveFirmware',
-                controller,
-                response,
-                next,
-                validatedArgs,
-                successStatus: undefined,
-              });
-            } catch (err) {
-                return next(err);
-            }
-        });
-        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        app.delete('/firmware/:firmwareId',
-            ...(fetchMiddlewares<RequestHandler>(FirmwareController)),
-            ...(fetchMiddlewares<RequestHandler>(FirmwareController.prototype.deleteFirmware)),
-
-            async function FirmwareController_deleteFirmware(request: ExRequest, response: ExResponse, next: any) {
-            const args: Record<string, TsoaRoute.ParameterSchema> = {
-                    firmwareId: {"in":"path","name":"firmwareId","required":true,"dataType":"double"},
-            };
-
-            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-
-            let validatedArgs: any[] = [];
-            try {
-                validatedArgs = templateService.getValidatedArgs({ args, request, response });
-
-                const controller = new FirmwareController();
-
-              await templateService.apiHandler({
-                methodName: 'deleteFirmware',
                 controller,
                 response,
                 next,

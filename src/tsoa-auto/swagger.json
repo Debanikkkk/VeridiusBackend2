@@ -661,7 +661,7 @@
 			"firmware_management": {
 				"enum": [
 					"DEVOTA",
-					"DOTA"
+					"FOTA"
 				],
 				"type": "string"
 			},
@@ -1041,6 +1041,34 @@
 					"firmware_version": {
 						"type": "string"
 					},
+					"firmware_type": {
+						"$ref": "#/components/schemas/firmware_management"
+					},
+					"created_by": {
+						"$ref": "#/components/schemas/User"
+					},
+					"ecus": {
+						"items": {
+							"$ref": "#/components/schemas/ECU"
+						},
+						"type": "array"
+					},
+					"files": {
+						"items": {
+							"$ref": "#/components/schemas/File"
+						},
+						"type": "array"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"File": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
 					"file": {
 						"type": "string"
 					},
@@ -1061,17 +1089,8 @@
 					"is_active": {
 						"type": "boolean"
 					},
-					"firmware_type": {
-						"$ref": "#/components/schemas/firmware_management"
-					},
-					"created_by": {
-						"$ref": "#/components/schemas/User"
-					},
-					"ecus": {
-						"items": {
-							"$ref": "#/components/schemas/ECU"
-						},
-						"type": "array"
+					"firmware": {
+						"$ref": "#/components/schemas/Firmware"
 					}
 				},
 				"type": "object",
@@ -1419,41 +1438,6 @@
 							"type"
 						],
 						"type": "object"
-					}
-				},
-				"type": "object",
-				"additionalProperties": false
-			},
-			"ResFirmware": {
-				"properties": {
-					"id": {
-						"type": "number",
-						"format": "double"
-					},
-					"firmwareVersion": {
-						"type": "string"
-					},
-					"file": {
-						"type": "string"
-					},
-					"createdAt": {
-						"type": "string",
-						"format": "date-time"
-					},
-					"updatedAt": {
-						"type": "string",
-						"format": "date-time"
-					},
-					"uploadedBy": {
-						"$ref": "#/components/schemas/ResUser"
-					},
-					"isActive": {
-						"type": "boolean"
-					},
-					"vehicleId": {
-						"type": "number",
-						"format": "double",
-						"nullable": true
 					}
 				},
 				"type": "object",
@@ -2930,191 +2914,6 @@
 						}
 					}
 				]
-			}
-		},
-		"/firmware/{firmwareId}": {
-			"get": {
-				"operationId": "GetOneFirmware",
-				"responses": {
-					"200": {
-						"description": "Ok",
-						"content": {
-							"application/json": {
-								"schema": {
-									"anyOf": [
-										{
-											"$ref": "#/components/schemas/ResFirmware"
-										},
-										{
-											"$ref": "#/components/schemas/ResError"
-										}
-									]
-								}
-							}
-						}
-					}
-				},
-				"tags": [
-					"Firmware"
-				],
-				"security": [],
-				"parameters": [
-					{
-						"in": "path",
-						"name": "firmwareId",
-						"required": true,
-						"schema": {
-							"format": "double",
-							"type": "number"
-						}
-					}
-				]
-			},
-			"delete": {
-				"operationId": "DeleteFirmware",
-				"responses": {
-					"200": {
-						"description": "Ok",
-						"content": {
-							"application/json": {
-								"schema": {
-									"properties": {
-										"result": {
-											"type": "string"
-										}
-									},
-									"required": [
-										"result"
-									],
-									"type": "object"
-								}
-							}
-						}
-					}
-				},
-				"tags": [
-					"Firmware"
-				],
-				"security": [],
-				"parameters": [
-					{
-						"in": "path",
-						"name": "firmwareId",
-						"required": true,
-						"schema": {
-							"format": "double",
-							"type": "number"
-						}
-					}
-				]
-			}
-		},
-		"/firmware": {
-			"get": {
-				"operationId": "GetAllFirmwares",
-				"responses": {
-					"200": {
-						"description": "Ok",
-						"content": {
-							"application/json": {
-								"schema": {
-									"anyOf": [
-										{
-											"items": {
-												"$ref": "#/components/schemas/ResFirmware"
-											},
-											"type": "array"
-										},
-										{
-											"$ref": "#/components/schemas/ResError"
-										}
-									]
-								}
-							}
-						}
-					}
-				},
-				"tags": [
-					"Firmware"
-				],
-				"security": [],
-				"parameters": []
-			},
-			"post": {
-				"operationId": "SaveFirmware",
-				"responses": {
-					"200": {
-						"description": "Ok",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/ResFirmware"
-								}
-							}
-						}
-					}
-				},
-				"tags": [
-					"Firmware"
-				],
-				"security": [
-					{
-						"Api-Token": []
-					}
-				],
-				"parameters": [
-					{
-						"in": "query",
-						"name": "firmwareVersion",
-						"required": true,
-						"schema": {
-							"type": "string"
-						}
-					},
-					{
-						"in": "query",
-						"name": "firmwareType",
-						"required": true,
-						"schema": {
-							"$ref": "#/components/schemas/firmware_management"
-						}
-					},
-					{
-						"in": "query",
-						"name": "isActive",
-						"required": true,
-						"schema": {
-							"type": "boolean"
-						}
-					},
-					{
-						"in": "query",
-						"name": "fileName",
-						"required": true,
-						"schema": {
-							"type": "string"
-						}
-					}
-				],
-				"requestBody": {
-					"required": true,
-					"content": {
-						"multipart/form-data": {
-							"schema": {
-								"type": "object",
-								"properties": {
-									"file": {
-										"type": "string",
-										"format": "binary"
-									}
-								},
-								"required": [
-									"file"
-								]
-							}
-						}
-					}
-				}
 			}
 		},
 		"/dongle": {

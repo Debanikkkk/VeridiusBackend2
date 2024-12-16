@@ -1,5 +1,5 @@
 import { DeviceStatus } from '../../entity/Device';
-import { ResDongle } from '../res/ResDongle';
+// import { ResDongle } from '../res/ResDongle';
 // import { ResUser } from '../res/ResUser';
 
 export interface ReqDevice {
