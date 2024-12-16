@@ -1,4 +1,4 @@
-import { Controller, Get, Route, Tags } from 'tsoa';
+import { Body, Controller, Delete, Get, Path, Post, Put, Route, Tags } from 'tsoa';
 
 import { Device } from '../entity/Device';
 import { AppDataSource } from '../data-source';
@@ -8,14 +8,11 @@ import { ResDevice } from '../models/res/ResDevice';
 
 import { DeviceHistory } from '../entity/DeviceHistory';
 import { User } from '../entity/User';
+import { ReqDevice } from '../models/req/ReqDevice';
+import { ResError, ResSuccess } from '../models/res/Responses';
+import { ReqDongleAllot } from '../models/req/ReqDongleAllot';
+import { ReqDevConStatus } from '../models/req/ReqDevConStatus';
 
-// import { ReqDevConStatus } from '../models/req/ReqDevConStatus';
-
-// interface GeolocationUpdate {
-//     deviceId: number;
-//     latitude: number;
-//     longitude: number;
-// }
 @Route('/device')
 @Tags('Device')
 export class DeviceController extends Controller {
@@ -23,6 +20,44 @@ export class DeviceController extends Controller {
   private donglerepository = AppDataSource.getRepository(Dongle);
   private devicehistoryrepository = AppDataSource.getRepository(DeviceHistory);
   private userrepository = AppDataSource.getRepository(User);
+
+  @Get('/{deviceId}')
+  public async getOneDevice(@Path() deviceId: number) {
+    const device = await this.devicerepository
+      .findOne({
+        where: {
+          id: deviceId,
+        },
+        relations: {
+          assigned_to: true,
+        },
+      })
+      .then((dv) => {
+        if (!dv) {
+          return Promise.reject(new Error('THIS DEVICE WAS NOT FOUND '));
+        }
+
+        const assignedTo = dv.assigned_to;
+        const resDevice: ResDevice = {
+          assignedTo: {
+            id: assignedTo?.id,
+            name: assignedTo?.name,
+          },
+          createdAt: dv.created_at,
+          deviceName: dv.device_name,
+          deviceType: dv.device_type,
+          // dongle: dv.,
+          id: dv.id,
+          osVersion: dv.os_version,
+          registrationDate: dv.registration_date,
+          serialNumber: dv.serial_number,
+          status: dv.status,
+          updatedAt: dv.updated_at,
+        };
+        return resDevice;
+      });
+    return device;
+  }
   /**
    *  get all device (history enabled)
    * @summary get all device (history enabled)
@@ -33,6 +68,7 @@ export class DeviceController extends Controller {
       const devices = await this.devicerepository.find({
         relations: {
           dongle: true,
+          assigned_to: true,
         },
       });
 
@@ -43,6 +79,7 @@ export class DeviceController extends Controller {
       const resDevice: ResDevice[] = [];
       for (const device of devices) {
         const assigned_to = await device.assigned_to;
+        console.log('the assigned to is', assigned_to);
         const dongle = await device.dongle;
         // if(!dongle){
         //     return Promise.reject(new Error('THIS DONGLE WAS NOT FOUND'))
@@ -51,7 +88,7 @@ export class DeviceController extends Controller {
           dongle: {
             id: dongle?.id,
           },
-          assigned_to: {
+          assignedTo: {
             address: assigned_to?.address,
             email: assigned_to?.email,
             id: assigned_to?.id,
@@ -59,15 +96,15 @@ export class DeviceController extends Controller {
             password: assigned_to?.password,
             phone_number: assigned_to?.phone_number,
           },
-          created_at: device?.created_at,
-          device_name: device?.device_name,
-          device_type: device?.device_type,
+          createdAt: device?.created_at,
+          deviceName: device?.device_name,
+          deviceType: device?.device_type,
           id: device?.id,
-          os_version: device?.os_version,
-          registration_date: device?.registration_date,
-          serial_number: device?.serial_number,
+          osVersion: device?.os_version,
+          registrationDate: device?.registration_date,
+          serialNumber: device?.serial_number,
           status: device?.status,
-          updated_at: device?.updated_at,
+          updatedAt: device?.updated_at,
         });
       }
       return resDevice;
@@ -76,176 +113,190 @@ export class DeviceController extends Controller {
       return { error: 'failed to get all the devices' };
     }
   }
-  // @Put('/update')
-  // public async updateGeolocation(@Body() body: GeolocationUpdate): Promise<void> {
-  //     const deviceRepository = getRepository(Device);
-  //     const point = `POINT(${body.longitude} ${body.latitude})`;
 
-  //     await deviceRepository
-  //         .createQueryBuilder()
-  //         .update(Device)
-  //         .set({ location: () => `ST_SetSRID(ST_MakePoint(${body.longitude}, ${body.latitude}), 4326)` })
-  //         .where('id = :deviceId', { deviceId: body.deviceId })
-  //         .execute();
-  // }
-  // /**
-  //  * SAVES DEVICE
-  //  * @summary SAVES A DEVICE
-  //  */
-  // @Post()
-  // public async saveDevice(@Body() request: ReqDevice): Promise<ResDevice | ResError> {
-  //   try {
-  //     const {} = request;
+  /**
+   * SAVES DEVICE
+   * @summary SAVES A DEVICE
+   */
+  @Post()
+  public async saveDevice(@Body() request: ReqDevice): Promise<ResDevice | ResError> {
+    try {
+      const { assignedTo, createdAt, deviceName, deviceType, dongle, imei, osVersion, registrationDate, serialNumber, status, updatedAt } = request;
 
-  //     const deviceToSave: Device = {};
+      console.log('ignore logs', dongle);
+      // console.log('ignore logs', id);
+      const user_assign = await this.userrepository.findOne({
+        where: {
+          id: assignedTo,
+        },
+      });
+      const deviceToSave: Device = {
+        assigned_to: user_assign,
+        created_at: createdAt,
+        device_name: deviceName,
+        device_type: deviceType,
+        // dongle: ,
+        // id: ,
+        imei: imei,
+        os_version: osVersion,
+        registration_date: registrationDate,
+        serial_number: serialNumber,
+        status: status,
+        updated_at: updatedAt,
+      };
 
-  //     const deviceSaver = Object.assign(new Device(), deviceToSave);
-  //     const savedDevice = await this.devicerepository.save(deviceSaver);
+      const deviceSaver = Object.assign(new Device(), deviceToSave);
+      const savedDevice = await this.devicerepository.save(deviceSaver);
 
-  //     const resDevice: ResDevice = {
-  //       dongle: {
-  //         id: (await savedDevice.dongle)?.id,
-  //         name: (await savedDevice.dongle)?.name,
-  //       },
-  //       id: savedDevice.id,
-  //       // mac_address: savedDevice.mac_address,
-  //       name: savedDevice.name,
-  //       imei: savedDevice.imei,
-  //       user: {
-  //         // address: (await savedDevice.user)?.address,
-  //         // email: (await savedDevice.user)?.email,
-  //         // id: (await savedDevice.user)?.id,
-  //         // name: (await savedDevice.user)?.name,
-  //         // password: (await savedDevice.user)?.password,
-  //         // phone_number: (await savedDevice.user)?.phone_number
-  //       },
-  //     };
-  //     return resDevice;
-  //   } catch (error) {
-  //     console.log('there was an errror in saving the device', error);
-  //     return { error: 'failed to save the device' };
-  //   }
-  // }
-  // /**
-  //  * delete device
-  //  * @summary delete device
-  //  */
-  // @Delete('/{deviceId}')
-  // public async deleteDevice(@Path() deviceId: number): Promise<ResSuccess | ResError> {
-  //   try {
-  //     const devicetodelete = await this.devicerepository.findOne({
-  //       where: {
-  //         id: deviceId,
-  //       },
-  //       relations: {
-  //         dongle: true,
-  //       },
-  //     });
-  //     const user = await this.userrepository.findOne({
-  //       where: {
-  //         device: {
-  //           id: deviceId,
-  //         },
-  //       },
-  //     });
-  //     if (!devicetodelete) {
-  //       return Promise.reject(new Error('DEVICE NOT FOUND'));
-  //     }
+      const resDevice: ResDevice = {
+        assignedTo: {
+          address: savedDevice.assigned_to?.address,
+          // device,
+          email: savedDevice.assigned_to?.email,
+          id: savedDevice.assigned_to?.id,
+          // is_under,
+          name: savedDevice.assigned_to?.name,
+          password: savedDevice.assigned_to?.password,
+          phone_number: savedDevice.assigned_to?.phone_number,
+        },
+        createdAt: savedDevice.created_at,
+        deviceName: savedDevice.device_name,
+        deviceType: savedDevice.device_name,
+        // dongle: savedDevice.dongle,
+        id: savedDevice.id,
+        osVersion: savedDevice.os_version,
+        registrationDate: savedDevice.registration_date,
+        serialNumber: savedDevice.serial_number,
+        status: savedDevice.status,
+        updatedAt: savedDevice.updated_at,
+      };
+      return resDevice;
+    } catch (error) {
+      console.log('there was an errror in saving the device', error);
+      return { error: 'failed to save the device' };
+    }
+  }
+  /**
+   * delete device
+   * @summary delete device
+   */
+  @Delete('/{deviceId}')
+  public async deleteDevice(@Path() deviceId: number): Promise<ResSuccess | ResError> {
+    const devicetodelete = await this.devicerepository.findOne({
+      where: {
+        id: deviceId,
+      },
+      relations: {
+        dongle: true,
+      },
+    });
 
-  //     const device: DeviceHistory = {
-  //       device_id: devicetodelete.id,
-  //       dongle_id: devicetodelete.dongle?.id,
-  //       id: devicetodelete.id,
-  //       // mac_address: devicetodelete.mac_address,
-  //       name: devicetodelete.name,
-  //       user_id: user?.id,
-  //     };
+    if (!devicetodelete) {
+      return Promise.reject(new Error('DEVICE NOT FOUND'));
+    }
 
-  //     await this.devicehistoryrepository.save(device);
-  //     await this.devicerepository.remove(devicetodelete);
+    // await this.devicehistoryrepository.save(device);
+    await this.devicerepository.remove(devicetodelete);
 
-  //     return { result: 'DEVICE WAS DELETED SUCCESSFULLY' };
-  //   } catch (error) {
-  //     console.log('there was an errror in deleting the device', error);
-  //     return { error: 'failed to delete the device' };
-  //   }
-  // }
+    return { result: 'DEVICE WAS DELETED SUCCESSFULLY' };
+  }
 
-  // /**
-  //  * allot dongle to a device
-  //  * @summary allot dongle to a device
-  //  */
-  // @Put('allotDongle/{deviceId}')
-  // public async allotDongleToDevice(@Path() deviceId: number, @Body() request: ReqDongleAllot) {
-  //   try {
-  //     const { id } = request;
-  //     const device = await this.devicerepository.findOne({
-  //       where: {
-  //         id: deviceId,
-  //       },
-  //     });
-  //     if (!device) {
-  //       return Promise.reject(new Error('DEVICE NOT FOUND'));
-  //     }
+  /**
+   * allot dongle to a device
+   * @summary allot dongle to a device
+   */
+  @Put('allotDongle/{deviceId}')
+  public async allotDongleToDevice(@Path() deviceId: number, @Body() request: ReqDongleAllot) {
+    try {
+      const { id } = request;
+      const device = await this.devicerepository.findOne({
+        where: {
+          id: deviceId,
+        },
+      });
+      if (!device) {
+        return Promise.reject(new Error('DEVICE NOT FOUND'));
+      }
 
-  //     const dongle = await this.donglerepository.findOne({
-  //       where: {
-  //         id: id,
-  //       },
-  //     });
+      const dongle = await this.donglerepository.findOne({
+        where: {
+          id: id,
+        },
+      });
 
-  //     if (!dongle) {
-  //       return Promise.reject(new Error('DONGLE NOT FOUND'));
-  //     }
-  //     console.log('IT REACHED HERE');
-  //     device.dongle = dongle;
-  //     console.log('IT REACHED HERE');
+      if (!dongle) {
+        return Promise.reject(new Error('DONGLE NOT FOUND'));
+      }
+      console.log('IT REACHED HERE');
+      device.dongle = dongle;
+      console.log('IT REACHED HERE');
 
-  //     const newDevice = await this.devicerepository.save(device);
-  //     console.log('this is the newdevice', newDevice);
-  //     return newDevice;
-  //   } catch (error) {
-  //     console.log('there was an errror in alloting the dongle to the device', error);
-  //     return { error: 'failed to allot the donlge to the device' };
-  //   }
-  // }
+      const newDevice = await this.devicerepository.save(device);
+      console.log('this is the newdevice', newDevice);
+      return newDevice;
+    } catch (error) {
+      console.log('there was an errror in alloting the dongle to the device', error);
+      return { error: 'failed to allot the donlge to the device' };
+    }
+  }
 
-  // /**
-  //  * updates device to dongle connection status
-  //  * @summary  updates device to dongle connection status
-  //  */
-  // @Put('/{deviceId}')
-  // public async updateDeviceConnStatus(@Path() deviceId: number, @Body() req: ReqDevConStatus) {
-  //   const device = await this.devicerepository.findOne({
-  //     where: {
-  //       id: deviceId,
-  //     },
-  //     relations: {
-  //       dongle: true,
-  //     },
-  //   });
-  //   if (!device) {
-  //     return Promise.reject(new Error('THIS DEVICE WAS NOT FOUND'));
-  //   }
+  /**
+   * updates device to dongle connection status
+   * @summary  updates device to dongle connection status
+   */
+  @Put('/{deviceId}')
+  public async updateDeviceConnStatus(@Path() deviceId: number, @Body() req: ReqDevConStatus) {
+    const device = await this.devicerepository.findOne({
+      where: {
+        id: deviceId,
+      },
+      relations: {
+        dongle: true,
+      },
+    });
+    if (!device) {
+      return Promise.reject(new Error('THIS DEVICE WAS NOT FOUND'));
+    }
 
-  //   const { devConnStatus } = req;
+    const { devConnStatus } = req;
 
-  //   device.dongle_conn_status = devConnStatus;
+    device.dongle_conn_status = devConnStatus;
 
-  //   const newDevice = await this.devicerepository.save(device);
-  //   const resDevice: ResDevice = {
-  //     dongle: {
-  //       // device,
-  //       id: newDevice.dongle?.id,
-  //       name: newDevice.dongle?.name,
-  //     },
-  //     id: newDevice.id,
-  //     imei: newDevice.imei,
-  //     // mac_address: newDevice.mac_address,
-  //     name: newDevice.name,
-  //     // user: newDevice.
-  //     dongleConnStatus: newDevice.dongle_conn_status,
-  //   };
-  //   return resDevice;
-  // }
+    const newDevice = await this.devicerepository.save(device);
+    const resDevice: ResDevice = {
+      assignedTo: {
+        address: newDevice.assigned_to?.address,
+        // device: newDevice.assigned_to?.,
+        email: newDevice.assigned_to?.email,
+        id: newDevice.assigned_to?.id,
+        // is_under: newDevice.assigned_to?.,
+        name: newDevice.assigned_to?.name,
+        password: newDevice.assigned_to?.password,
+        phone_number: newDevice.assigned_to?.phone_number,
+        // role: newDevice.assigned_to?.,
+        // service_ticket: newDevice.assigned_to?.
+      },
+      createdAt: newDevice.created_at,
+      deviceName: newDevice.device_name,
+      deviceType: newDevice.device_type,
+      dongle: {
+        // assignedDevice: newDevice.dongle?.assigned_device,
+        createdAt: newDevice.dongle?.created_at,
+        dongleSerialNumber: newDevice.dongle?.dongle_serial_number,
+        firmwareUpdatedAt: newDevice.dongle?.firmware_updated_at,
+        firmwareVersion: newDevice.dongle?.firmware_version,
+        id: newDevice.dongle?.id,
+        macAddress: newDevice.dongle?.mac_address,
+        manufactureDate: newDevice.dongle?.manufacture_date,
+        status: newDevice.dongle?.status,
+      },
+      id: newDevice.id,
+      osVersion: newDevice.os_version,
+      registrationDate: newDevice.registration_date,
+      serialNumber: newDevice.serial_number,
+      status: newDevice.status,
+      updatedAt: newDevice.updated_at,
+    };
+    return resDevice;
+  }
 }

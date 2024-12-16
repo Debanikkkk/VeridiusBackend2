@@ -7,6 +7,43 @@
 		"requestBodies": {},
 		"responses": {},
 		"schemas": {
+			"ResUser": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"name": {
+						"type": "string"
+					},
+					"address": {
+						"type": "string"
+					},
+					"password": {
+						"type": "string"
+					},
+					"email": {
+						"type": "string"
+					},
+					"phone_number": {
+						"type": "string"
+					},
+					"role": {
+						"$ref": "#/components/schemas/ResRole"
+					},
+					"service_ticket": {
+						"$ref": "#/components/schemas/ResServiceTicket"
+					},
+					"device": {
+						"$ref": "#/components/schemas/ResDevice"
+					},
+					"is_under": {
+						"$ref": "#/components/schemas/ResUser"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
 			"permType": {
 				"enum": [
 					"user",
@@ -25,6 +62,9 @@
 					},
 					"description": {
 						"type": "string"
+					},
+					"created_by": {
+						"$ref": "#/components/schemas/ResUser"
 					},
 					"permissions": {
 						"items": {
@@ -72,43 +112,6 @@
 				],
 				"type": "string"
 			},
-			"ResUser": {
-				"properties": {
-					"id": {
-						"type": "number",
-						"format": "double"
-					},
-					"name": {
-						"type": "string"
-					},
-					"address": {
-						"type": "string"
-					},
-					"password": {
-						"type": "string"
-					},
-					"email": {
-						"type": "string"
-					},
-					"phone_number": {
-						"type": "string"
-					},
-					"role": {
-						"$ref": "#/components/schemas/ResRole"
-					},
-					"service_ticket": {
-						"$ref": "#/components/schemas/ResServiceTicket"
-					},
-					"device": {
-						"$ref": "#/components/schemas/ResDevice"
-					},
-					"is_under": {
-						"$ref": "#/components/schemas/ResUser"
-					}
-				},
-				"type": "object",
-				"additionalProperties": false
-			},
 			"ResServiceTicket": {
 				"properties": {
 					"date": {
@@ -134,17 +137,17 @@
 			},
 			"ResDevice": {
 				"properties": {
-					"assigned_to": {
+					"assignedTo": {
 						"$ref": "#/components/schemas/ResUser"
 					},
-					"created_at": {
+					"createdAt": {
 						"type": "string",
 						"format": "date-time"
 					},
-					"device_name": {
+					"deviceName": {
 						"type": "string"
 					},
-					"device_type": {
+					"deviceType": {
 						"type": "string"
 					},
 					"dongle": {
@@ -154,20 +157,20 @@
 						"type": "number",
 						"format": "double"
 					},
-					"os_version": {
+					"osVersion": {
 						"type": "string"
 					},
-					"registration_date": {
+					"registrationDate": {
 						"type": "string",
 						"format": "date-time"
 					},
-					"serial_number": {
+					"serialNumber": {
 						"type": "string"
 					},
 					"status": {
 						"$ref": "#/components/schemas/DeviceStatus"
 					},
-					"updated_at": {
+					"updatedAt": {
 						"type": "string",
 						"format": "date-time"
 					}
@@ -175,17 +178,50 @@
 				"type": "object",
 				"additionalProperties": false
 			},
+			"DongleStatus": {
+				"enum": [
+					"Available",
+					"Assigned",
+					"Defective"
+				],
+				"type": "string"
+			},
 			"ResDongle": {
 				"properties": {
+					"assignedDevice": {
+						"$ref": "#/components/schemas/ResDevice"
+					},
+					"createdAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"dongleSerialNumber": {
+						"type": "string"
+					},
+					"firmwareUpdatedAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"firmwareVersion": {
+						"type": "string"
+					},
 					"id": {
 						"type": "number",
 						"format": "double"
 					},
-					"name": {
+					"macAddress": {
 						"type": "string"
 					},
-					"device": {
-						"$ref": "#/components/schemas/ResDevice"
+					"manufactureDate": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"status": {
+						"$ref": "#/components/schemas/DongleStatus"
+					},
+					"updatedAt": {
+						"type": "string",
+						"format": "date-time"
 					}
 				},
 				"type": "object",
@@ -327,14 +363,6 @@
 				"type": "object",
 				"additionalProperties": false
 			},
-			"DongleStatus": {
-				"enum": [
-					"Available",
-					"Assigned",
-					"Defective"
-				],
-				"type": "string"
-			},
 			"Device": {
 				"properties": {
 					"id": {
@@ -347,11 +375,17 @@
 					"device_type": {
 						"type": "string"
 					},
+					"imei": {
+						"type": "string"
+					},
 					"os_version": {
 						"type": "string"
 					},
 					"serial_number": {
 						"type": "string"
+					},
+					"dongle_conn_status": {
+						"type": "boolean"
 					},
 					"registration_date": {
 						"type": "string",
@@ -395,6 +429,9 @@
 						"format": "double"
 					},
 					"dongle_serial_number": {
+						"type": "string"
+					},
+					"mac_address": {
 						"type": "string"
 					},
 					"model": {
@@ -514,6 +551,9 @@
 							"$ref": "#/components/schemas/User"
 						},
 						"type": "array"
+					},
+					"created_by": {
+						"$ref": "#/components/schemas/User"
 					}
 				},
 				"type": "object",
@@ -1130,10 +1170,17 @@
 			},
 			"ReqRole": {
 				"properties": {
-					"name": {
-						"type": "string"
+					"created_by": {
+						"$ref": "#/components/schemas/ResUser"
 					},
 					"description": {
+						"type": "string"
+					},
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"name": {
 						"type": "string"
 					}
 				},
@@ -1407,6 +1454,118 @@
 						"type": "number",
 						"format": "double",
 						"nullable": true
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ReqDongle": {
+				"properties": {
+					"assignedDevice": {
+						"type": "number",
+						"format": "double"
+					},
+					"createdAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"dongleSerialNumber": {
+						"type": "string"
+					},
+					"firmwareUpdatedAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"firmwareVersion": {
+						"type": "string"
+					},
+					"macAddress": {
+						"type": "string"
+					},
+					"manufactureDate": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"status": {
+						"$ref": "#/components/schemas/DongleStatus"
+					},
+					"updatedAt": {
+						"type": "string",
+						"format": "date-time"
+					}
+				},
+				"required": [
+					"assignedDevice",
+					"createdAt",
+					"dongleSerialNumber",
+					"firmwareUpdatedAt",
+					"firmwareVersion",
+					"macAddress",
+					"manufactureDate",
+					"status",
+					"updatedAt"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ReqDevice": {
+				"properties": {
+					"assignedTo": {
+						"type": "number",
+						"format": "double"
+					},
+					"createdAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"deviceName": {
+						"type": "string"
+					},
+					"deviceType": {
+						"type": "string"
+					},
+					"dongle": {
+						"type": "number",
+						"format": "double"
+					},
+					"imei": {
+						"type": "string"
+					},
+					"osVersion": {
+						"type": "string"
+					},
+					"registrationDate": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"serialNumber": {
+						"type": "string"
+					},
+					"status": {
+						"$ref": "#/components/schemas/DeviceStatus"
+					},
+					"updatedAt": {
+						"type": "string",
+						"format": "date-time"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ReqDongleAllot": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ReqDevConStatus": {
+				"properties": {
+					"devConnStatus": {
+						"type": "boolean"
 					}
 				},
 				"type": "object",
@@ -2275,7 +2434,11 @@
 				"tags": [
 					"Role"
 				],
-				"security": [],
+				"security": [
+					{
+						"Api-Token": []
+					}
+				],
 				"parameters": [],
 				"requestBody": {
 					"required": true,
@@ -2954,6 +3117,272 @@
 				}
 			}
 		},
+		"/dongle": {
+			"post": {
+				"operationId": "SaveDongle",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"$ref": "#/components/schemas/ResDongle"
+										},
+										{
+											"$ref": "#/components/schemas/ResError"
+										}
+									]
+								}
+							}
+						}
+					}
+				},
+				"description": "save dongle",
+				"summary": "save dongle",
+				"tags": [
+					"Dongle"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/ReqDongle"
+							}
+						}
+					}
+				}
+			},
+			"get": {
+				"operationId": "GetAllDongle",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"items": {
+												"$ref": "#/components/schemas/ResDongle"
+											},
+											"type": "array"
+										},
+										{
+											"$ref": "#/components/schemas/ResError"
+										}
+									]
+								}
+							}
+						}
+					}
+				},
+				"description": "get all dongle",
+				"summary": "get all dongle",
+				"tags": [
+					"Dongle"
+				],
+				"security": [],
+				"parameters": []
+			}
+		},
+		"/dongle/{dongleId}": {
+			"get": {
+				"operationId": "GetOneDongle",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"$ref": "#/components/schemas/ResDongle"
+										},
+										{
+											"$ref": "#/components/schemas/ResError"
+										}
+									]
+								}
+							}
+						}
+					}
+				},
+				"description": "get one dongle",
+				"summary": "get one dongle",
+				"tags": [
+					"Dongle"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "dongleId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			},
+			"delete": {
+				"operationId": "DeleteDongle",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"$ref": "#/components/schemas/ResSuccess"
+										},
+										{
+											"$ref": "#/components/schemas/ResError"
+										}
+									]
+								}
+							}
+						}
+					}
+				},
+				"description": "delete dongle",
+				"summary": "delete dongle",
+				"tags": [
+					"Dongle"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "dongleId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			}
+		},
+		"/device/{deviceId}": {
+			"get": {
+				"operationId": "GetOneDevice",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ResDevice"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Device"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "deviceId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			},
+			"delete": {
+				"operationId": "DeleteDevice",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"$ref": "#/components/schemas/ResSuccess"
+										},
+										{
+											"$ref": "#/components/schemas/ResError"
+										}
+									]
+								}
+							}
+						}
+					}
+				},
+				"description": "delete device",
+				"summary": "delete device",
+				"tags": [
+					"Device"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "deviceId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			},
+			"put": {
+				"operationId": "UpdateDeviceConnStatus",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ResDevice"
+								}
+							}
+						}
+					}
+				},
+				"description": "updates device to dongle connection status",
+				"summary": "updates device to dongle connection status",
+				"tags": [
+					"Device"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "deviceId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/ReqDevConStatus"
+							}
+						}
+					}
+				}
+			}
+		},
 		"/device": {
 			"get": {
 				"operationId": "GetAllDevice",
@@ -2994,6 +3423,104 @@
 				],
 				"security": [],
 				"parameters": []
+			},
+			"post": {
+				"operationId": "SaveDevice",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"$ref": "#/components/schemas/ResDevice"
+										},
+										{
+											"$ref": "#/components/schemas/ResError"
+										}
+									]
+								}
+							}
+						}
+					}
+				},
+				"description": "SAVES DEVICE",
+				"summary": "SAVES A DEVICE",
+				"tags": [
+					"Device"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/ReqDevice"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/device/allotDongle/{deviceId}": {
+			"put": {
+				"operationId": "AllotDongleToDevice",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"$ref": "#/components/schemas/Device"
+										},
+										{
+											"properties": {
+												"error": {
+													"type": "string"
+												}
+											},
+											"required": [
+												"error"
+											],
+											"type": "object"
+										}
+									]
+								}
+							}
+						}
+					}
+				},
+				"description": "allot dongle to a device",
+				"summary": "allot dongle to a device",
+				"tags": [
+					"Device"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "deviceId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/ReqDongleAllot"
+							}
+						}
+					}
+				}
 			}
 		},
 		"/banners": {

@@ -12,8 +12,11 @@ export class Dongle {
   @PrimaryGeneratedColumn()
   id?: number;
 
-  @Column({ unique: true, nullable: true })
+  @Column({ nullable: true })
   dongle_serial_number?: string;
+
+  @Column({ unique: true, nullable: true })
+  mac_address?: string;
 
   @Column({ nullable: true })
   model?: string;
