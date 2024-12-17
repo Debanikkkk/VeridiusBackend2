@@ -23,8 +23,7 @@ export class DongleController extends Controller {
   @Post()
   public async saveDongle(@Body() request: ReqDongle): Promise<ResDongle | ResError> {
     try {
-      const { assignedDevice, createdAt, dongleSerialNumber, firmwareUpdatedAt, firmwareVersion, macAddress, manufactureDate, status, updatedAt } =
-        request;
+      const { assignedDevice, dongleSerialNumber, firmwareUpdatedAt, firmwareVersion, macAddress, manufactureDate, status } = request;
 
       const device = await this.devicerepository.findOne({
         where: {
@@ -36,7 +35,7 @@ export class DongleController extends Controller {
       }
       const dongleToSave: Dongle = {
         assigned_device: device,
-        created_at: createdAt,
+        // created_at: createdAt,
         dongle_serial_number: dongleSerialNumber,
         firmware_updated_at: firmwareUpdatedAt,
         firmware_version: firmwareVersion,
@@ -45,7 +44,7 @@ export class DongleController extends Controller {
         manufacture_date: manufactureDate,
         // model:,
         status: status,
-        updated_at: updatedAt,
+        // updated_at: updatedAt,
       };
 
       const dongleSaver = Object.assign(new Dongle(), dongleToSave);

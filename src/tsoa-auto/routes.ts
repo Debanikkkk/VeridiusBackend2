@@ -39,6 +39,8 @@ import { BannerController } from './../controller/BannerController';
 import { expressAuthentication } from './../authentication';
 // @ts-ignore - no great way to install types from subpackage
 import type { Request as ExRequest, Response as ExResponse, RequestHandler, Router } from 'express';
+const multer = require('multer');
+const upload = multer({"limits":{"fileSize":8388608}});
 
 const expressAuthenticationRecasted = expressAuthentication as (req: ExRequest, securityName: string, scopes?: string[], res?: ExResponse) => Promise<any>;
 
@@ -777,6 +779,33 @@ const models: TsoaRoute.Models = {
         "properties": {
             "name": {"dataType":"string"},
             "polygon": {"dataType":"nestedObjectLiteral","nestedProperties":{"coordinates":{"dataType":"array","array":{"dataType":"array","array":{"dataType":"array","array":{"dataType":"double"}}},"required":true},"type":{"dataType":"enum","enums":["Polygon"],"required":true}}},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "ResFiles": {
+        "dataType": "refObject",
+        "properties": {
+            "createdAt": {"dataType":"datetime"},
+            "file": {"dataType":"string"},
+            "fileDescription": {"dataType":"string"},
+            "fileName": {"dataType":"string"},
+            "id": {"dataType":"double"},
+            "isActive": {"dataType":"boolean"},
+            "updatedAt": {"dataType":"datetime"},
+            "uploadedBy": {"ref":"ResUser"},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "ResFirmware": {
+        "dataType": "refObject",
+        "properties": {
+            "created_by": {"ref":"ResUser"},
+            "files": {"dataType":"array","array":{"dataType":"refObject","ref":"ResFiles"}},
+            "firmwareType": {"ref":"firmware_management"},
+            "firmwareVersion": {"dataType":"string"},
+            "id": {"dataType":"double"},
         },
         "additionalProperties": false,
     },
@@ -2427,12 +2456,15 @@ export function RegisterRoutes(app: Router) {
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         app.put('/firmware',
+            authenticateMiddleware([{"Api-Token":[]}]),
+            upload.fields([{"name":"file","maxCount":1,"multiple":false}]),
             ...(fetchMiddlewares<RequestHandler>(FirmwareController)),
             ...(fetchMiddlewares<RequestHandler>(FirmwareController.prototype.updateFirmwareWithFile)),
 
             async function FirmwareController_updateFirmwareWithFile(request: ExRequest, response: ExResponse, next: any) {
             const args: Record<string, TsoaRoute.ParameterSchema> = {
                     req: {"in":"request","name":"req","required":true,"dataType":"object"},
+                    file: {"in":"formData","name":"file","required":true,"dataType":"file"},
                     fileName: {"in":"query","name":"fileName","required":true,"dataType":"string"},
                     fileDescription: {"in":"query","name":"fileDescription","required":true,"dataType":"string"},
                     isActive: {"in":"query","name":"isActive","required":true,"dataType":"boolean"},
@@ -2450,6 +2482,36 @@ export function RegisterRoutes(app: Router) {
 
               await templateService.apiHandler({
                 methodName: 'updateFirmwareWithFile',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.get('/firmware/:firmwareId',
+            ...(fetchMiddlewares<RequestHandler>(FirmwareController)),
+            ...(fetchMiddlewares<RequestHandler>(FirmwareController.prototype.getOneFirmware)),
+
+            async function FirmwareController_getOneFirmware(request: ExRequest, response: ExResponse, next: any) {
+            const args: Record<string, TsoaRoute.ParameterSchema> = {
+                    firmwareId: {"in":"path","name":"firmwareId","required":true,"dataType":"double"},
+            };
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+
+                const controller = new FirmwareController();
+
+              await templateService.apiHandler({
+                methodName: 'getOneFirmware',
                 controller,
                 response,
                 next,

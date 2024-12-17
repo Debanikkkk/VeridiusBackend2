@@ -7,7 +7,7 @@ import { ResUser } from './ResUser';
 export interface ResFirmware {
   created_by?: ResUser;
   // ecus?:,
-  files?: ResFiles;
+  files?: ResFiles[];
   firmwareType?: firmware_management;
   firmwareVersion?: string;
   id?: number;
