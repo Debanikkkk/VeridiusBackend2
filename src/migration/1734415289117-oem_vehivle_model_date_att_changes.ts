@@ -1,7 +1,7 @@
 import { MigrationInterface, QueryRunner } from "typeorm";
 
-export class OemVehivleModelDateAttChanges1734413983065 implements MigrationInterface {
-    name = 'OemVehivleModelDateAttChanges1734413983065'
+export class OemVehivleModelDateAttChanges1734415289117 implements MigrationInterface {
+    name = 'OemVehivleModelDateAttChanges1734415289117'
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query(`ALTER TABLE "parameter_pid" DROP CONSTRAINT "FK_f3cc4d1b98879c5f935bbe52576"`);
@@ -15,16 +15,6 @@ export class OemVehivleModelDateAttChanges1734413983065 implements MigrationInte
         await queryRunner.query(`ALTER TABLE "ecu_pid_dataset" DROP CONSTRAINT "FK_9642825b253339f1dd096c5e257"`);
         await queryRunner.query(`ALTER TABLE "ecu_dtc_dataset" DROP CONSTRAINT "FK_d19b1857794dac857a9e29b47d9"`);
         await queryRunner.query(`ALTER TABLE "ecu_dtc_dataset" DROP CONSTRAINT "FK_bc92530a3bb4ba6548f5ccbc87c"`);
-        await queryRunner.query(`ALTER TABLE "file" RENAME COLUMN "uploaded_by" TO "user_id"`);
-        await queryRunner.query(`ALTER TABLE "oem" DROP COLUMN "founded_year"`);
-        await queryRunner.query(`ALTER TABLE "oem" ADD "founded_year" TIMESTAMP NOT NULL`);
-        await queryRunner.query(`ALTER TABLE "vehicle_model" DROP COLUMN "launch_year"`);
-        await queryRunner.query(`ALTER TABLE "vehicle_model" ADD "launch_year" TIMESTAMP NOT NULL`);
-        await queryRunner.query(`ALTER TABLE "vehicle_model" DROP COLUMN "discontinued_year"`);
-        await queryRunner.query(`ALTER TABLE "vehicle_model" ADD "discontinued_year" TIMESTAMP`);
-        await queryRunner.query(`ALTER TABLE "file" DROP COLUMN "user_id"`);
-        await queryRunner.query(`ALTER TABLE "file" ADD "user_id" integer`);
-        await queryRunner.query(`ALTER TABLE "file" ADD CONSTRAINT "FK_516f1cf15166fd07b732b4b6ab0" FOREIGN KEY ("user_id") REFERENCES "user"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`);
         await queryRunner.query(`ALTER TABLE "parameter_pid" ADD CONSTRAINT "FK_6bd37757d1cd557bcbf985dd3e5" FOREIGN KEY ("parameter_id") REFERENCES "parameters"("id") ON DELETE CASCADE ON UPDATE CASCADE`);
         await queryRunner.query(`ALTER TABLE "parameter_pid" ADD CONSTRAINT "FK_f3cc4d1b98879c5f935bbe52576" FOREIGN KEY ("pid_id") REFERENCES "pid"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`);
         await queryRunner.query(`ALTER TABLE "pid_dataset_pid" ADD CONSTRAINT "FK_9eff1d7cfde8b0520f7f3863365" FOREIGN KEY ("pid_id") REFERENCES "pid"("id") ON DELETE CASCADE ON UPDATE CASCADE`);
@@ -50,16 +40,6 @@ export class OemVehivleModelDateAttChanges1734413983065 implements MigrationInte
         await queryRunner.query(`ALTER TABLE "pid_dataset_pid" DROP CONSTRAINT "FK_9eff1d7cfde8b0520f7f3863365"`);
         await queryRunner.query(`ALTER TABLE "parameter_pid" DROP CONSTRAINT "FK_f3cc4d1b98879c5f935bbe52576"`);
         await queryRunner.query(`ALTER TABLE "parameter_pid" DROP CONSTRAINT "FK_6bd37757d1cd557bcbf985dd3e5"`);
-        await queryRunner.query(`ALTER TABLE "file" DROP CONSTRAINT "FK_516f1cf15166fd07b732b4b6ab0"`);
-        await queryRunner.query(`ALTER TABLE "file" DROP COLUMN "user_id"`);
-        await queryRunner.query(`ALTER TABLE "file" ADD "user_id" character varying(255)`);
-        await queryRunner.query(`ALTER TABLE "vehicle_model" DROP COLUMN "discontinued_year"`);
-        await queryRunner.query(`ALTER TABLE "vehicle_model" ADD "discontinued_year" integer`);
-        await queryRunner.query(`ALTER TABLE "vehicle_model" DROP COLUMN "launch_year"`);
-        await queryRunner.query(`ALTER TABLE "vehicle_model" ADD "launch_year" integer NOT NULL`);
-        await queryRunner.query(`ALTER TABLE "oem" DROP COLUMN "founded_year"`);
-        await queryRunner.query(`ALTER TABLE "oem" ADD "founded_year" integer NOT NULL`);
-        await queryRunner.query(`ALTER TABLE "file" RENAME COLUMN "user_id" TO "uploaded_by"`);
         await queryRunner.query(`ALTER TABLE "ecu_dtc_dataset" ADD CONSTRAINT "FK_bc92530a3bb4ba6548f5ccbc87c" FOREIGN KEY ("dtc_dataset_id") REFERENCES "dtc_dataset"("id") ON DELETE CASCADE ON UPDATE CASCADE`);
         await queryRunner.query(`ALTER TABLE "ecu_dtc_dataset" ADD CONSTRAINT "FK_d19b1857794dac857a9e29b47d9" FOREIGN KEY ("ecu_id") REFERENCES "ecu_management"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`);
         await queryRunner.query(`ALTER TABLE "ecu_pid_dataset" ADD CONSTRAINT "FK_9642825b253339f1dd096c5e257" FOREIGN KEY ("pid_dataset_id") REFERENCES "pid_dataset"("id") ON DELETE CASCADE ON UPDATE CASCADE`);
