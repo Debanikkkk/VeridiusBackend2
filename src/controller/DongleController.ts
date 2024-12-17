@@ -23,28 +23,14 @@ export class DongleController extends Controller {
   @Post()
   public async saveDongle(@Body() request: ReqDongle): Promise<ResDongle | ResError> {
     try {
-      const { assignedDevice, dongleSerialNumber, firmwareUpdatedAt, firmwareVersion, macAddress, manufactureDate, status } = request;
-
-      const device = await this.devicerepository.findOne({
-        where: {
-          id: assignedDevice,
-        },
-      });
-      if (!device) {
-        return Promise.reject(new Error('THIS DEVICE WAS NOT FOUND'));
-      }
+      const { dongleSerialNumber, firmwareUpdatedAt, firmwareVersion, macAddress, manufactureDate, status } = request;
       const dongleToSave: Dongle = {
-        assigned_device: device,
-        // created_at: createdAt,
         dongle_serial_number: dongleSerialNumber,
         firmware_updated_at: firmwareUpdatedAt,
         firmware_version: firmwareVersion,
-        // id:id,
         mac_address: macAddress,
         manufacture_date: manufactureDate,
-        // model:,
         status: status,
-        // updated_at: updatedAt,
       };
 
       const dongleSaver = Object.assign(new Dongle(), dongleToSave);
@@ -52,11 +38,9 @@ export class DongleController extends Controller {
 
       const resDongle: ResDongle = {
         assignedDevice: {
-          //   assignedTo: savedDongle.assigned_device?.assigned_to,
           createdAt: savedDongle.assigned_device?.created_at,
           deviceName: savedDongle.assigned_device?.device_name,
           deviceType: savedDongle.assigned_device?.device_type,
-          // dongle: savedDongle.assigned_device?.don,
           id: savedDongle.assigned_device?.id,
           osVersion: savedDongle.assigned_device?.os_version,
           registrationDate: savedDongle.assigned_device?.registration_date,

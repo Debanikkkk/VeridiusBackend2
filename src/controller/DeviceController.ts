@@ -30,6 +30,7 @@ export class DeviceController extends Controller {
         },
         relations: {
           assigned_to: true,
+          dongle: true,
         },
       })
       .then((dv) => {
@@ -53,6 +54,17 @@ export class DeviceController extends Controller {
           serialNumber: dv.serial_number,
           status: dv.status,
           updatedAt: dv.updated_at,
+          dongle: {
+            id: dv.dongle?.id,
+            // assignedDevice: dv.dongle?.assigned_device,
+            createdAt: dv.dongle?.created_at,
+            dongleSerialNumber: dv.dongle?.dongle_serial_number,
+            firmwareUpdatedAt: dv.dongle?.firmware_updated_at,
+            firmwareVersion: dv.dongle?.firmware_version,
+            macAddress: dv.dongle?.mac_address,
+            manufactureDate: dv.dongle?.manufacture_date,
+            status: dv.dongle?.status,
+          },
         };
         return resDevice;
       });
@@ -87,6 +99,15 @@ export class DeviceController extends Controller {
         resDevice.push({
           dongle: {
             id: dongle?.id,
+            // assignedDevice: dongle?.,
+            createdAt: dongle?.created_at,
+            dongleSerialNumber: dongle?.dongle_serial_number,
+            firmwareUpdatedAt: dongle?.firmware_updated_at,
+            firmwareVersion: dongle?.firmware_version,
+            macAddress: dongle?.mac_address,
+            manufactureDate: dongle?.manufacture_date,
+            status: dongle?.status,
+            // updatedAt
           },
           assignedTo: {
             address: assigned_to?.address,
@@ -130,12 +151,24 @@ export class DeviceController extends Controller {
           id: assignedTo,
         },
       });
+      if (!user_assign) {
+        return Promise.reject(new Error('THIS USER WAS NOT FOUND'));
+      }
+      const db_dongle = await this.donglerepository.findOne({
+        where: {
+          id: dongle,
+        },
+      });
+
+      if (!db_dongle) {
+        return Promise.reject(new Error('THIS DB DONGLE WAS NOT FOUND'));
+      }
       const deviceToSave: Device = {
         assigned_to: user_assign,
         // created_at: createdAt,
         device_name: deviceName,
         device_type: deviceType,
-        // dongle: ,
+        dongle: db_dongle,
         // id: ,
         imei: imei,
         os_version: osVersion,
@@ -162,7 +195,17 @@ export class DeviceController extends Controller {
         createdAt: savedDevice.created_at,
         deviceName: savedDevice.device_name,
         deviceType: savedDevice.device_name,
-        // dongle: savedDevice.dongle,
+        dongle: {
+          // assignedDevice: savedDevice.dongle?.assigned_device,
+          createdAt: savedDevice.dongle?.created_at,
+          dongleSerialNumber: savedDevice.dongle?.dongle_serial_number,
+          firmwareUpdatedAt: savedDevice.dongle?.firmware_updated_at,
+          firmwareVersion: savedDevice.dongle?.firmware_version,
+          id: savedDevice.dongle?.id,
+          macAddress: savedDevice.dongle?.mac_address,
+          manufactureDate: savedDevice.dongle?.manufacture_date,
+          status: savedDevice.dongle?.status,
+        },
         id: savedDevice.id,
         osVersion: savedDevice.os_version,
         registrationDate: savedDevice.registration_date,

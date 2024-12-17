@@ -813,7 +813,6 @@ const models: TsoaRoute.Models = {
     "ReqDongle": {
         "dataType": "refObject",
         "properties": {
-            "assignedDevice": {"dataType":"double","required":true},
             "dongleSerialNumber": {"dataType":"string","required":true},
             "firmwareUpdatedAt": {"dataType":"datetime","required":true},
             "firmwareVersion": {"dataType":"string","required":true},
