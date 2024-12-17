@@ -1,10 +1,9 @@
 import { MigrationInterface, QueryRunner } from "typeorm";
 
-export class RemovedDongleSideMappingToDevice1734435268330 implements MigrationInterface {
-    name = 'RemovedDongleSideMappingToDevice1734435268330'
+export class RemovedDongleSideMappingToDevice1734436633838 implements MigrationInterface {
+    name = 'RemovedDongleSideMappingToDevice1734436633838'
 
     public async up(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.query(`ALTER TABLE "dongle" DROP CONSTRAINT "FK_bb3b45dcc3bd8ad9b400991badd"`);
         await queryRunner.query(`ALTER TABLE "parameter_pid" DROP CONSTRAINT "FK_f3cc4d1b98879c5f935bbe52576"`);
         await queryRunner.query(`ALTER TABLE "parameter_pid" DROP CONSTRAINT "FK_6bd37757d1cd557bcbf985dd3e5"`);
         await queryRunner.query(`ALTER TABLE "pid_dataset_pid" DROP CONSTRAINT "FK_42e3cc1aecf0dd92ae884bb6e26"`);
@@ -16,8 +15,6 @@ export class RemovedDongleSideMappingToDevice1734435268330 implements MigrationI
         await queryRunner.query(`ALTER TABLE "ecu_pid_dataset" DROP CONSTRAINT "FK_9642825b253339f1dd096c5e257"`);
         await queryRunner.query(`ALTER TABLE "ecu_dtc_dataset" DROP CONSTRAINT "FK_d19b1857794dac857a9e29b47d9"`);
         await queryRunner.query(`ALTER TABLE "ecu_dtc_dataset" DROP CONSTRAINT "FK_bc92530a3bb4ba6548f5ccbc87c"`);
-        await queryRunner.query(`ALTER TABLE "dongle" DROP CONSTRAINT "UQ_bb3b45dcc3bd8ad9b400991badd"`);
-        await queryRunner.query(`ALTER TABLE "dongle" DROP COLUMN "assigned_device_id"`);
         await queryRunner.query(`ALTER TABLE "parameter_pid" ADD CONSTRAINT "FK_6bd37757d1cd557bcbf985dd3e5" FOREIGN KEY ("parameter_id") REFERENCES "parameters"("id") ON DELETE CASCADE ON UPDATE CASCADE`);
         await queryRunner.query(`ALTER TABLE "parameter_pid" ADD CONSTRAINT "FK_f3cc4d1b98879c5f935bbe52576" FOREIGN KEY ("pid_id") REFERENCES "pid"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`);
         await queryRunner.query(`ALTER TABLE "pid_dataset_pid" ADD CONSTRAINT "FK_9eff1d7cfde8b0520f7f3863365" FOREIGN KEY ("pid_id") REFERENCES "pid"("id") ON DELETE CASCADE ON UPDATE CASCADE`);
@@ -43,8 +40,6 @@ export class RemovedDongleSideMappingToDevice1734435268330 implements MigrationI
         await queryRunner.query(`ALTER TABLE "pid_dataset_pid" DROP CONSTRAINT "FK_9eff1d7cfde8b0520f7f3863365"`);
         await queryRunner.query(`ALTER TABLE "parameter_pid" DROP CONSTRAINT "FK_f3cc4d1b98879c5f935bbe52576"`);
         await queryRunner.query(`ALTER TABLE "parameter_pid" DROP CONSTRAINT "FK_6bd37757d1cd557bcbf985dd3e5"`);
-        await queryRunner.query(`ALTER TABLE "dongle" ADD "assigned_device_id" integer`);
-        await queryRunner.query(`ALTER TABLE "dongle" ADD CONSTRAINT "UQ_bb3b45dcc3bd8ad9b400991badd" UNIQUE ("assigned_device_id")`);
         await queryRunner.query(`ALTER TABLE "ecu_dtc_dataset" ADD CONSTRAINT "FK_bc92530a3bb4ba6548f5ccbc87c" FOREIGN KEY ("dtc_dataset_id") REFERENCES "dtc_dataset"("id") ON DELETE CASCADE ON UPDATE CASCADE`);
         await queryRunner.query(`ALTER TABLE "ecu_dtc_dataset" ADD CONSTRAINT "FK_d19b1857794dac857a9e29b47d9" FOREIGN KEY ("ecu_id") REFERENCES "ecu_management"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`);
         await queryRunner.query(`ALTER TABLE "ecu_pid_dataset" ADD CONSTRAINT "FK_9642825b253339f1dd096c5e257" FOREIGN KEY ("pid_dataset_id") REFERENCES "pid_dataset"("id") ON DELETE CASCADE ON UPDATE CASCADE`);
@@ -56,7 +51,6 @@ export class RemovedDongleSideMappingToDevice1734435268330 implements MigrationI
         await queryRunner.query(`ALTER TABLE "pid_dataset_pid" ADD CONSTRAINT "FK_42e3cc1aecf0dd92ae884bb6e26" FOREIGN KEY ("pid_dataset_id") REFERENCES "pid_dataset"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`);
         await queryRunner.query(`ALTER TABLE "parameter_pid" ADD CONSTRAINT "FK_6bd37757d1cd557bcbf985dd3e5" FOREIGN KEY ("parameter_id") REFERENCES "parameters"("id") ON DELETE CASCADE ON UPDATE CASCADE`);
         await queryRunner.query(`ALTER TABLE "parameter_pid" ADD CONSTRAINT "FK_f3cc4d1b98879c5f935bbe52576" FOREIGN KEY ("pid_id") REFERENCES "pid"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`);
-        await queryRunner.query(`ALTER TABLE "dongle" ADD CONSTRAINT "FK_bb3b45dcc3bd8ad9b400991badd" FOREIGN KEY ("assigned_device_id") REFERENCES "device"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`);
     }
 
 }
