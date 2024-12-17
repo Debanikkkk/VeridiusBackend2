@@ -2192,6 +2192,64 @@ export function RegisterRoutes(app: Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.get('/firmware/getFOTAfirmware',
+            ...(fetchMiddlewares<RequestHandler>(FirmwareController)),
+            ...(fetchMiddlewares<RequestHandler>(FirmwareController.prototype.getFirmwareFOTA)),
+
+            async function FirmwareController_getFirmwareFOTA(request: ExRequest, response: ExResponse, next: any) {
+            const args: Record<string, TsoaRoute.ParameterSchema> = {
+            };
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+
+                const controller = new FirmwareController();
+
+              await templateService.apiHandler({
+                methodName: 'getFirmwareFOTA',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.get('/firmware/getDevOTAfirmware',
+            ...(fetchMiddlewares<RequestHandler>(FirmwareController)),
+            ...(fetchMiddlewares<RequestHandler>(FirmwareController.prototype.getFirmwareDevOTA)),
+
+            async function FirmwareController_getFirmwareDevOTA(request: ExRequest, response: ExResponse, next: any) {
+            const args: Record<string, TsoaRoute.ParameterSchema> = {
+            };
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+
+                const controller = new FirmwareController();
+
+              await templateService.apiHandler({
+                methodName: 'getFirmwareDevOTA',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         app.delete('/firmware/:firmwareId',
             ...(fetchMiddlewares<RequestHandler>(FirmwareController)),
             ...(fetchMiddlewares<RequestHandler>(FirmwareController.prototype.deleteFirmware)),

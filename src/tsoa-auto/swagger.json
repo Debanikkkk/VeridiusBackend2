@@ -3596,6 +3596,56 @@
 				]
 			}
 		},
+		"/firmware/getFOTAfirmware": {
+			"get": {
+				"operationId": "GetFirmwareFOTA",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/Firmware"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Firmware"
+				],
+				"security": [],
+				"parameters": []
+			}
+		},
+		"/firmware/getDevOTAfirmware": {
+			"get": {
+				"operationId": "GetFirmwareDevOTA",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/Firmware"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Firmware"
+				],
+				"security": [],
+				"parameters": []
+			}
+		},
 		"/firmware/{firmwareId}": {
 			"delete": {
 				"operationId": "DeleteFirmware",
