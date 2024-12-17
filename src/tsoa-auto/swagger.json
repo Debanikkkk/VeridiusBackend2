@@ -1739,10 +1739,6 @@
 						"type": "number",
 						"format": "double"
 					},
-					"createdAt": {
-						"type": "string",
-						"format": "date-time"
-					},
 					"dongleSerialNumber": {
 						"type": "string"
 					},
@@ -1762,22 +1758,16 @@
 					},
 					"status": {
 						"$ref": "#/components/schemas/DongleStatus"
-					},
-					"updatedAt": {
-						"type": "string",
-						"format": "date-time"
 					}
 				},
 				"required": [
 					"assignedDevice",
-					"createdAt",
 					"dongleSerialNumber",
 					"firmwareUpdatedAt",
 					"firmwareVersion",
 					"macAddress",
 					"manufactureDate",
-					"status",
-					"updatedAt"
+					"status"
 				],
 				"type": "object",
 				"additionalProperties": false
@@ -1787,10 +1777,6 @@
 					"assignedTo": {
 						"type": "number",
 						"format": "double"
-					},
-					"createdAt": {
-						"type": "string",
-						"format": "date-time"
 					},
 					"deviceName": {
 						"type": "string"
@@ -1817,10 +1803,6 @@
 					},
 					"status": {
 						"$ref": "#/components/schemas/DeviceStatus"
-					},
-					"updatedAt": {
-						"type": "string",
-						"format": "date-time"
 					}
 				},
 				"type": "object",

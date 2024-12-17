@@ -4,7 +4,7 @@ import { DeviceStatus } from '../../entity/Device';
 
 export interface ReqDevice {
   assignedTo?: number;
-  createdAt?: Date;
+  // createdAt?: Date;
   deviceName?: string;
   deviceType?: string;
   dongle?: number;
@@ -14,5 +14,5 @@ export interface ReqDevice {
   registrationDate?: Date;
   serialNumber?: string;
   status?: DeviceStatus;
-  updatedAt?: Date;
+  // updatedAt?: Date;
 }
