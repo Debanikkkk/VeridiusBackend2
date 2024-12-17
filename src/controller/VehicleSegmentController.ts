@@ -1,10 +1,11 @@
-import { Body, Controller, Delete, Get, Path, Post } from 'tsoa';
+import { Body, Controller, Delete, Get, Path, Post, Route, Tags } from 'tsoa';
 import { AppDataSource } from '../data-source';
 import { VehicleSegment } from '../entity/VehicleSegment';
 import { ReqVehicleSegment } from '../models/req/ReqVehicleSegment';
 import { ResVehicleSegment } from '../models/res/ResVehicleSegemnt';
 import { ResSuccess } from '../models/res/Responses';
-
+@Tags('Vehicle Segment')
+@Route('/vehicleSegment')
 export class VehicleSegmentController extends Controller {
   private vehiclesegmentrepository = AppDataSource.getRepository(VehicleSegment);
 
@@ -37,7 +38,7 @@ export class VehicleSegmentController extends Controller {
     }
 
     const vehicleSegemntArr: ResVehicleSegment[] = [];
-    for (const vs of vehicleSegemntArr) {
+    for (const vs of vehicleSegments) {
       vehicleSegemntArr.push({
         description: vs.description,
         id: vs.id,
@@ -49,11 +50,11 @@ export class VehicleSegmentController extends Controller {
   }
 
   @Get('/{vehicleSegmentId}')
-  public async getOneVehicleSegment(@Path() vehicleSegmentid: number): Promise<ResVehicleSegment> {
+  public async getOneVehicleSegment(@Path() vehicleSegmentId: number): Promise<ResVehicleSegment> {
     const vehicleSegment = await this.vehiclesegmentrepository
       .findOne({
         where: {
-          id: vehicleSegmentid,
+          id: vehicleSegmentId,
         },
       })
       .then((vs) => {

@@ -22,9 +22,6 @@ export class Firmware {
     // default: firmware_management.,
   })
   firmware_type?: firmware_management;
-  // @ManyToOne(() => Vehicle, (vehicle) => vehicle.firmwares, { nullable: true })
-  // @JoinColumn({ name: 'vehicle_id' })
-  // vehicle?: Vehicle;
 
   @ManyToOne(
     () => User,

@@ -13,7 +13,7 @@ export class OEM {
   country?: string;
 
   @Column()
-  founded_year?: number;
+  founded_year?: Date;
 
   @Column()
   contact_information?: string;

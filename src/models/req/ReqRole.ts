@@ -1,8 +1,6 @@
-import { ResUser } from '../res/ResUser';
-
 export interface ReqRole {
-  created_by?: ResUser;
+  // createdBy?: number;
   description?: string;
-  id?: number;
+  // id?: number;
   name?: string;
 }
