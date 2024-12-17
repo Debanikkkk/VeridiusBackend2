@@ -3,7 +3,7 @@ import { DongleStatus } from '../../entity/Dongle';
 
 export interface ReqDongle {
   assignedDevice: number;
-  createdAt: Date;
+  // createdAt: Date;
   dongleSerialNumber: string;
   firmwareUpdatedAt: Date;
   firmwareVersion: string;
@@ -12,5 +12,5 @@ export interface ReqDongle {
   manufactureDate: Date;
   // model: ;
   status: DongleStatus;
-  updatedAt: Date;
+  // updatedAt: Date;
 }
