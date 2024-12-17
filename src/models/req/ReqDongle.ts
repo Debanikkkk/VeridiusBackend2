@@ -2,7 +2,7 @@ import { DongleStatus } from '../../entity/Dongle';
 // import { ResDevice } from '../res/ResDevice';
 
 export interface ReqDongle {
-  assignedDevice: number;
+  // assignedDevice: number;
   // createdAt: Date;
   dongleSerialNumber: string;
   firmwareUpdatedAt: Date;

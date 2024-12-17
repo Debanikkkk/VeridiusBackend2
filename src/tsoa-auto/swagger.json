@@ -1735,10 +1735,6 @@
 			},
 			"ReqDongle": {
 				"properties": {
-					"assignedDevice": {
-						"type": "number",
-						"format": "double"
-					},
 					"dongleSerialNumber": {
 						"type": "string"
 					},
@@ -1761,7 +1757,6 @@
 					}
 				},
 				"required": [
-					"assignedDevice",
 					"dongleSerialNumber",
 					"firmwareUpdatedAt",
 					"firmwareVersion",
