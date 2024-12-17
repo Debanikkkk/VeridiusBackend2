@@ -22,10 +22,10 @@ export class VehicleModel {
   vehicle_version?: VehicleVersion;
 
   @Column()
-  launch_year?: number;
+  launch_year?: Date;
 
   @Column({ nullable: true })
-  discontinued_year?: number;
+  discontinued_year?: Date;
 
   @ManyToOne(() => VehicleSegment, (segment) => segment.vehicle_models)
   @JoinColumn({ name: 'vehicle_segment_id' })

@@ -7,6 +7,167 @@
 		"requestBodies": {},
 		"responses": {},
 		"schemas": {
+			"ResVehicleVersion": {
+				"properties": {
+					"features": {
+						"type": "string"
+					},
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"name": {
+						"type": "string"
+					},
+					"price": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ReqVehicleVersion": {
+				"properties": {
+					"features": {
+						"type": "string"
+					},
+					"name": {
+						"type": "string"
+					},
+					"price": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ResSuccess": {
+				"properties": {
+					"result": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"result"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ResVehicleSegment": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"description": {
+						"type": "string"
+					},
+					"name": {
+						"type": "string"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ReqVehicleSegment": {
+				"properties": {
+					"description": {
+						"type": "string"
+					},
+					"name": {
+						"type": "string"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ResOEM": {
+				"properties": {
+					"contact_information": {
+						"type": "string"
+					},
+					"country": {
+						"type": "string"
+					},
+					"founded_year": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"name": {
+						"type": "string"
+					},
+					"website": {
+						"type": "string"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ResVehicleModel": {
+				"properties": {
+					"discontinuedYear": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"launchYear": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"name": {
+						"type": "string"
+					},
+					"oem": {
+						"$ref": "#/components/schemas/ResOEM"
+					},
+					"vehicleSegment": {
+						"$ref": "#/components/schemas/ResVehicleSegment"
+					},
+					"vehicleVersion": {
+						"$ref": "#/components/schemas/ResVehicleVersion"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ReqVehicleModel": {
+				"properties": {
+					"discontinuedYear": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"launchYear": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"name": {
+						"type": "string"
+					},
+					"oem": {
+						"type": "number",
+						"format": "double"
+					},
+					"vehicleSegment": {
+						"type": "number",
+						"format": "double"
+					},
+					"vehicleVersion": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
 			"ResUser": {
 				"properties": {
 					"id": {
@@ -351,18 +512,6 @@
 				"type": "object",
 				"additionalProperties": false
 			},
-			"ResSuccess": {
-				"properties": {
-					"result": {
-						"type": "string"
-					}
-				},
-				"required": [
-					"result"
-				],
-				"type": "object",
-				"additionalProperties": false
-			},
 			"Device": {
 				"properties": {
 					"id": {
@@ -503,6 +652,12 @@
 					"role": {
 						"$ref": "#/components/schemas/Role"
 					},
+					"files": {
+						"items": {
+							"$ref": "#/components/schemas/File"
+						},
+						"type": "array"
+					},
 					"service_ticket": {
 						"$ref": "#/components/schemas/ServiceTicket"
 					},
@@ -584,79 +739,13 @@
 				"type": "object",
 				"additionalProperties": false
 			},
-			"ServiceTicket": {
-				"properties": {
-					"id": {
-						"type": "number",
-						"format": "double"
-					},
-					"date": {
-						"type": "string",
-						"format": "date-time"
-					},
-					"created_on": {
-						"type": "string",
-						"format": "date-time"
-					},
-					"updated_on": {
-						"type": "string",
-						"format": "date-time"
-					},
-					"status": {
-						"$ref": "#/components/schemas/serviceTicketStatus"
-					},
-					"active": {
-						"type": "boolean"
-					},
-					"service_ticket_number": {
-						"type": "string"
-					},
-					"technician": {
-						"$ref": "#/components/schemas/User"
-					}
-				},
-				"type": "object",
-				"additionalProperties": false
-			},
-			"Trip": {
-				"properties": {
-					"id": {
-						"type": "number",
-						"format": "double"
-					},
-					"user": {
-						"$ref": "#/components/schemas/User"
-					},
-					"startLatitude": {
-						"type": "number",
-						"format": "double"
-					},
-					"startLongitude": {
-						"type": "number",
-						"format": "double"
-					},
-					"endLatitude": {
-						"type": "number",
-						"format": "double"
-					},
-					"endLongitude": {
-						"type": "number",
-						"format": "double"
-					},
-					"tariff": {
-						"type": "number",
-						"format": "double"
-					},
-					"paymentStatus": {
-						"type": "string"
-					},
-					"timestamp": {
-						"type": "string",
-						"format": "date-time"
-					}
-				},
-				"type": "object",
-				"additionalProperties": false
+			"file_type": {
+				"enum": [
+					"FSQ",
+					"JSON",
+					"BIN"
+				],
+				"type": "string"
 			},
 			"firmware_management": {
 				"enum": [
@@ -1086,11 +1175,91 @@
 						"type": "string",
 						"format": "date-time"
 					},
+					"created_by": {
+						"$ref": "#/components/schemas/User"
+					},
 					"is_active": {
 						"type": "boolean"
 					},
+					"file_type": {
+						"$ref": "#/components/schemas/file_type"
+					},
 					"firmware": {
 						"$ref": "#/components/schemas/Firmware"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ServiceTicket": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"date": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"created_on": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"updated_on": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"status": {
+						"$ref": "#/components/schemas/serviceTicketStatus"
+					},
+					"active": {
+						"type": "boolean"
+					},
+					"service_ticket_number": {
+						"type": "string"
+					},
+					"technician": {
+						"$ref": "#/components/schemas/User"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"Trip": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"user": {
+						"$ref": "#/components/schemas/User"
+					},
+					"startLatitude": {
+						"type": "number",
+						"format": "double"
+					},
+					"startLongitude": {
+						"type": "number",
+						"format": "double"
+					},
+					"endLatitude": {
+						"type": "number",
+						"format": "double"
+					},
+					"endLongitude": {
+						"type": "number",
+						"format": "double"
+					},
+					"tariff": {
+						"type": "number",
+						"format": "double"
+					},
+					"paymentStatus": {
+						"type": "string"
+					},
+					"timestamp": {
+						"type": "string",
+						"format": "date-time"
 					}
 				},
 				"type": "object",
@@ -1189,15 +1358,8 @@
 			},
 			"ReqRole": {
 				"properties": {
-					"created_by": {
-						"$ref": "#/components/schemas/ResUser"
-					},
 					"description": {
 						"type": "string"
-					},
-					"id": {
-						"type": "number",
-						"format": "double"
 					},
 					"name": {
 						"type": "string"
@@ -1243,6 +1405,28 @@
 						"$ref": "#/components/schemas/permType"
 					},
 					"name": {
+						"type": "string"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ReqOEM": {
+				"properties": {
+					"contact_information": {
+						"type": "string"
+					},
+					"country": {
+						"type": "string"
+					},
+					"founded_year": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"name": {
+						"type": "string"
+					},
+					"website": {
 						"type": "string"
 					}
 				},
@@ -1612,6 +1796,365 @@
 		"contact": {}
 	},
 	"paths": {
+		"/vehicleVersion": {
+			"post": {
+				"operationId": "SaveVehicleVersion",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ResVehicleVersion"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Vehicle Version"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/ReqVehicleVersion"
+							}
+						}
+					}
+				}
+			},
+			"get": {
+				"operationId": "GetAllVehicleVersion",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/ResVehicleVersion"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Vehicle Version"
+				],
+				"security": [],
+				"parameters": []
+			}
+		},
+		"/vehicleVersion/{vehicleVersionId}": {
+			"delete": {
+				"operationId": "DeleteVehicleVersion",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ResSuccess"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Vehicle Version"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "vehicleVersionId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			},
+			"get": {
+				"operationId": "GetOneVehicleVersion",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ResVehicleVersion"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Vehicle Version"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "vehicleVersionId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			}
+		},
+		"/vehicleSegment": {
+			"post": {
+				"operationId": "SaveVehicleSegment",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ResVehicleSegment"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Vehicle Segment"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/ReqVehicleSegment"
+							}
+						}
+					}
+				}
+			},
+			"get": {
+				"operationId": "GetAllVehicleSegment",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/ResVehicleSegment"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Vehicle Segment"
+				],
+				"security": [],
+				"parameters": []
+			}
+		},
+		"/vehicleSegment/{vehicleSegmentId}": {
+			"get": {
+				"operationId": "GetOneVehicleSegment",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ResVehicleSegment"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Vehicle Segment"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "vehicleSegmentId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			},
+			"delete": {
+				"operationId": "DeleteVehicleSegment",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ResSuccess"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Vehicle Segment"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "vehicleSegmentId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			}
+		},
+		"/vehicleModel": {
+			"post": {
+				"operationId": "SaveVehicleModel",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ResVehicleModel"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Vehicle Model"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/ReqVehicleModel"
+							}
+						}
+					}
+				}
+			},
+			"get": {
+				"operationId": "GetAllVehicleModel",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/ResVehicleModel"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Vehicle Model"
+				],
+				"security": [],
+				"parameters": []
+			}
+		},
+		"/vehicleModel/{vehicleModelId}": {
+			"get": {
+				"operationId": "GetOneVehicleModel",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ResVehicleModel"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Vehicle Model"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "vehicleModelId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			},
+			"delete": {
+				"operationId": "DeleteVehicleModel",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"properties": {
+										"result": {
+											"type": "string"
+										}
+									},
+									"required": [
+										"result"
+									],
+									"type": "object"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Vehicle Model"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "vehicleModelId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			}
+		},
 		"/user": {
 			"post": {
 				"operationId": "SaveUser",
@@ -2704,6 +3247,38 @@
 				]
 			}
 		},
+		"/oem": {
+			"post": {
+				"operationId": "SaveOem",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ResOEM"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"OEM"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/ReqOEM"
+							}
+						}
+					}
+				}
+			}
+		},
 		"/loginpacket": {
 			"post": {
 				"operationId": "SaveLoginPacket",
@@ -2907,6 +3482,151 @@
 					{
 						"in": "path",
 						"name": "userId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			}
+		},
+		"/firmware": {
+			"post": {
+				"operationId": "SaveFirmware",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Firmware"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Firmware"
+				],
+				"security": [
+					{
+						"Api-Token": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "query",
+						"name": "firmwareVersion",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "firmwareType",
+						"required": true,
+						"schema": {
+							"$ref": "#/components/schemas/firmware_management"
+						}
+					}
+				]
+			},
+			"put": {
+				"operationId": "UpdateFirmwareWithFile",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/File"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Firmware"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "query",
+						"name": "fileName",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "fileDescription",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "isActive",
+						"required": true,
+						"schema": {
+							"type": "boolean"
+						}
+					},
+					{
+						"in": "query",
+						"name": "fileType",
+						"required": true,
+						"schema": {
+							"$ref": "#/components/schemas/file_type"
+						}
+					},
+					{
+						"in": "query",
+						"name": "firmware",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			}
+		},
+		"/firmware/{firmwareId}": {
+			"delete": {
+				"operationId": "DeleteFirmware",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"properties": {
+										"result": {
+											"type": "string"
+										}
+									},
+									"required": [
+										"result"
+									],
+									"type": "object"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Firmware"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "firmwareId",
 						"required": true,
 						"schema": {
 							"format": "double",

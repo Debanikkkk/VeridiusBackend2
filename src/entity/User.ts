@@ -4,6 +4,7 @@ import { Role } from './Role';
 import { ServiceTicket } from './ServiceTickets';
 import { Trip } from './Trip';
 import { Firmware } from './Firmware';
+import { File } from './File';
 
 @Entity()
 export class User {
@@ -56,6 +57,15 @@ export class User {
     name: 'role_id',
   })
   role?: Promise<Role>;
+
+  @OneToMany(
+    () => File,
+    (file) => {
+      file.created_by;
+    },
+    { nullable: true },
+  )
+  files?: File[];
 
   @OneToOne(
     () => ServiceTicket,

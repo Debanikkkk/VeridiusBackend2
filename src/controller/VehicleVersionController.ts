@@ -1,10 +1,11 @@
-import { Body, Controller, Delete, Get, Path, Post } from 'tsoa';
+import { Body, Controller, Delete, Get, Path, Post, Route, Tags } from 'tsoa';
 import { AppDataSource } from '../data-source';
 import { VehicleVersion } from '../entity/VehicleVersion';
 import { ReqVehicleVersion } from '../models/req/ReqVehicleVersion';
 import { ResVehicleVersion } from '../models/res/ResVehicleVersion';
 import { ResSuccess } from '../models/res/Responses';
-
+@Tags('Vehicle Version')
+@Route('/vehicleVersion')
 export class VehicleVersionController extends Controller {
   private vehicleversionrepository = AppDataSource.getRepository(VehicleVersion);
 
