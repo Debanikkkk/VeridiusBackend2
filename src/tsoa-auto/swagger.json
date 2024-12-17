@@ -55,34 +55,6 @@
 				"type": "object",
 				"additionalProperties": false
 			},
-			"ResVehicleSegment": {
-				"properties": {
-					"id": {
-						"type": "number",
-						"format": "double"
-					},
-					"description": {
-						"type": "string"
-					},
-					"name": {
-						"type": "string"
-					}
-				},
-				"type": "object",
-				"additionalProperties": false
-			},
-			"ReqVehicleSegment": {
-				"properties": {
-					"description": {
-						"type": "string"
-					},
-					"name": {
-						"type": "string"
-					}
-				},
-				"type": "object",
-				"additionalProperties": false
-			},
 			"ResOEM": {
 				"properties": {
 					"contact_information": {
@@ -103,6 +75,22 @@
 						"type": "string"
 					},
 					"website": {
+						"type": "string"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ResVehicleSegment": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"description": {
+						"type": "string"
+					},
+					"name": {
 						"type": "string"
 					}
 				},
@@ -134,6 +122,66 @@
 					},
 					"vehicleVersion": {
 						"$ref": "#/components/schemas/ResVehicleVersion"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ResVehicleSubmodel": {
+				"properties": {
+					"engineCapacity": {
+						"type": "string"
+					},
+					"fuelEfficiency": {
+						"type": "string"
+					},
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"name": {
+						"type": "string"
+					},
+					"vehicleModel": {
+						"$ref": "#/components/schemas/ResVehicleModel"
+					},
+					"vehicleVersion": {
+						"$ref": "#/components/schemas/ResVehicleVersion"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ReqVehicleSubmodel": {
+				"properties": {
+					"engineCapacity": {
+						"type": "string"
+					},
+					"fuelEfficiency": {
+						"type": "string"
+					},
+					"name": {
+						"type": "string"
+					},
+					"vehicleModel": {
+						"type": "number",
+						"format": "double"
+					},
+					"vehicleVersion": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ReqVehicleSegment": {
+				"properties": {
+					"description": {
+						"type": "string"
+					},
+					"name": {
+						"type": "string"
 					}
 				},
 				"type": "object",
@@ -1904,6 +1952,131 @@
 					{
 						"in": "path",
 						"name": "vehicleVersionId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			}
+		},
+		"/vehicleSubModel": {
+			"post": {
+				"operationId": "SaveVehicleSubmodel",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ResVehicleSubmodel"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Vehicle SubModel"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/ReqVehicleSubmodel"
+							}
+						}
+					}
+				}
+			},
+			"get": {
+				"operationId": "GetVehicleSubModel",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/ResVehicleSubmodel"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Vehicle SubModel"
+				],
+				"security": [],
+				"parameters": []
+			}
+		},
+		"/vehicleSubModel/{vehicleSubModelId}": {
+			"get": {
+				"operationId": "GetOneVehicleSubModel",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ResVehicleSubmodel"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Vehicle SubModel"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "vehicleSubModelId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			},
+			"delete": {
+				"operationId": "DeleteVehicleSubmodel",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"properties": {
+										"result": {
+											"type": "string"
+										}
+									},
+									"required": [
+										"result"
+									],
+									"type": "object"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Vehicle SubModel"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "vehicleSubModelId",
 						"required": true,
 						"schema": {
 							"format": "double",
