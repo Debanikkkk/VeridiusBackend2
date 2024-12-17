@@ -30,6 +30,7 @@ export class DeviceController extends Controller {
         },
         relations: {
           assigned_to: true,
+          dongle: true,
         },
       })
       .then((dv) => {
@@ -53,6 +54,17 @@ export class DeviceController extends Controller {
           serialNumber: dv.serial_number,
           status: dv.status,
           updatedAt: dv.updated_at,
+          dongle: {
+            id: dv.dongle?.id,
+            // assignedDevice: dv.dongle?.assigned_device,
+            createdAt: dv.dongle?.created_at,
+            dongleSerialNumber: dv.dongle?.dongle_serial_number,
+            firmwareUpdatedAt: dv.dongle?.firmware_updated_at,
+            firmwareVersion: dv.dongle?.firmware_version,
+            macAddress: dv.dongle?.mac_address,
+            manufactureDate: dv.dongle?.manufacture_date,
+            status: dv.dongle?.status,
+          },
         };
         return resDevice;
       });
@@ -87,6 +99,15 @@ export class DeviceController extends Controller {
         resDevice.push({
           dongle: {
             id: dongle?.id,
+            // assignedDevice: dongle?.,
+            createdAt: dongle?.created_at,
+            dongleSerialNumber: dongle?.dongle_serial_number,
+            firmwareUpdatedAt: dongle?.firmware_updated_at,
+            firmwareVersion: dongle?.firmware_version,
+            macAddress: dongle?.mac_address,
+            manufactureDate: dongle?.manufacture_date,
+            status: dongle?.status,
+            // updatedAt
           },
           assignedTo: {
             address: assigned_to?.address,
