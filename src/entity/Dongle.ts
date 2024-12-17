@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToOne, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 import { Device } from './Device';
 
 export enum DongleStatus {
@@ -36,7 +36,7 @@ export class Dongle {
   status?: DongleStatus;
 
   @OneToOne(() => Device, (device) => device.dongle, { nullable: true })
-  @JoinColumn({ name: 'assigned_device_id' })
+  // @JoinColumn({ name: 'assigned_device_id' })
   assigned_device?: Device | null;
 
   @Column({ nullable: true })

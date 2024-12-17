@@ -1,4 +1,4 @@
-import { Controller, Delete, Get, Path, Post, Put, Query, Request, Route, Security, Tags } from 'tsoa';
+import { Controller, Delete, Get, Path, Post, Put, Query, Request, Route, Security, Tags, UploadedFile } from 'tsoa';
 import { AppDataSource } from '../data-source';
 import { Firmware, firmware_management } from '../entity/Firmware';
 // import { ReqFirmware } from '../models/req/ReqFirmware';
@@ -12,6 +12,7 @@ import { User } from '../entity/User';
 import { File, file_type } from '../entity/File';
 import path from 'path';
 import { ResFirmware } from '../models/res/ResFirmware';
+import { ResFiles } from '../models/res/ResFiles';
 
 @Tags('Firmware')
 @Route('/firmware')
@@ -239,18 +240,60 @@ export class FirmwareController extends Controller {
   }
 
   @Put()
+  @Security('Api-Token', [])
   public async updateFirmwareWithFile(
     @Request() req: JWTRequest,
-    // @UploadedFile() file: Express.Multer.File,
+    @UploadedFile() file: Express.Multer.File,
     @Query() fileName: string,
     @Query() fileDescription: string,
     @Query() isActive: boolean,
     @Query() fileType: file_type,
     @Query() firmware: number,
   ) {
+    const db_firmware = await this.firmwareRepository.findOne({
+      where: {
+        id: firmware,
+      },
+    });
+
+    if (!db_firmware) {
+      return Promise.reject(new Error('THIS FIRMWARE IS NOT FOUND'));
+    }
+
+    const fileExtension = path.extname(file.originalname).toLowerCase();
+
+    if (db_firmware.firmware_type == 'FOTA' && fileType == 'BIN' && fileExtension == '.bin') {
+      console.log('the file extension is ', fileExtension);
+      return { error: 'INVALID, CANNOT PUT A BIN FILE IN FOTA ' };
+    }
+    if (
+      db_firmware.firmware_type == 'DEVOTA' &&
+      ((fileType == 'JSON' && fileExtension == '.json') || (fileType == 'FSQ' && fileExtension == '.fsq'))
+    ) {
+      return { error: 'INVALID, CANNOT PUT FSQ/JSON FILES IN DEVOTA ' };
+    }
+
+    const fileArr: File[] = [];
+
+    const files = await this.filerepository.find({
+      where: {
+        firmware: {
+          id: db_firmware.id,
+        },
+      },
+    });
+
+    fileArr.push(...files);
+
+    const fileTypeArr: file_type[] = [];
+
+    for (const ft of fileArr) {
+      fileTypeArr.push(ft.file_type!);
+    }
+
     const user = await this.userrepository.findOne({
       where: {
-        id: req.user.id,
+        id: req.user?.id,
       },
     });
     const uploadDir = path.join(__dirname, '../../public/ecuUploads');
@@ -261,16 +304,12 @@ export class FirmwareController extends Controller {
     }
 
     // Create a unique filename and save the file
-    // const uniqueFilename = `${Date.now()}-${file.originalname}`;
     const filePath = path.join(uploadDir, fileName);
-    const db_firmware = await this.firmwareRepository.findOne({
-      where: {
-        id: firmware,
-      },
-    });
 
-    if (!db_firmware) {
-      return Promise.reject(new Error('THIS FIRMWARE IS NOT FOUND'));
+    try {
+      await fs.promises.writeFile(filePath, file.buffer); // Save the file buffer to disk
+    } catch (err) {
+      return Promise.reject(new Error(`Failed to save file:`));
     }
 
     if (!user) {
@@ -294,5 +333,57 @@ export class FirmwareController extends Controller {
     const savedFile = await this.filerepository.save(filesaver);
     // db_firmware.files
     return savedFile;
+  }
+
+  @Get('/{firmwareId}')
+  public async getOneFirmware(@Path() firmwareId: number) {
+    const firmware = await this.firmwareRepository.findOne({
+      where: {
+        id: firmwareId,
+      },
+      relations: {
+        created_by: true,
+      },
+    });
+
+    if (!firmware) {
+      return Promise.reject(new Error('THIS FIRMWARE WAS NOT FOUND'));
+    }
+    const files = await this.filerepository.find({
+      where: {
+        firmware: {
+          id: firmwareId,
+        },
+      },
+    });
+
+    if (!files) {
+      return Promise.reject(new Error('THIS FIRMWARE WAS NOT FOUND'));
+    }
+
+    const resFirmware: ResFirmware = {
+      created_by: {
+        address: firmware.created_by?.address,
+        email: firmware.created_by?.email,
+        id: firmware.created_by?.id,
+        name: firmware.created_by?.name,
+        password: firmware.created_by?.password,
+        phone_number: firmware.created_by?.phone_number,
+      },
+      firmwareType: firmware.firmware_type,
+      firmwareVersion: firmware.firmware_version,
+      id: firmware.id,
+    };
+
+    const filesArr: ResFiles[] = [];
+
+    for (const file of files) {
+      filesArr.push(file);
+    }
+    resFirmware.files = filesArr;
+    console.log('this is the files arr', filesArr);
+    console.log('this is the DB files ', files);
+
+    return resFirmware;
   }
 }

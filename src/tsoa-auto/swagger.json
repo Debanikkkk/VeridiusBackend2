@@ -1675,6 +1675,64 @@
 				"type": "object",
 				"additionalProperties": false
 			},
+			"ResFiles": {
+				"properties": {
+					"createdAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"file": {
+						"type": "string"
+					},
+					"fileDescription": {
+						"type": "string"
+					},
+					"fileName": {
+						"type": "string"
+					},
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"isActive": {
+						"type": "boolean"
+					},
+					"updatedAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"uploadedBy": {
+						"$ref": "#/components/schemas/ResUser"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ResFirmware": {
+				"properties": {
+					"created_by": {
+						"$ref": "#/components/schemas/ResUser"
+					},
+					"files": {
+						"items": {
+							"$ref": "#/components/schemas/ResFiles"
+						},
+						"type": "array"
+					},
+					"firmwareType": {
+						"$ref": "#/components/schemas/firmware_management"
+					},
+					"firmwareVersion": {
+						"type": "string"
+					},
+					"id": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
 			"ReqDongle": {
 				"properties": {
 					"assignedDevice": {
@@ -3714,7 +3772,22 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/File"
+									"anyOf": [
+										{
+											"$ref": "#/components/schemas/File"
+										},
+										{
+											"properties": {
+												"error": {
+													"type": "string"
+												}
+											},
+											"required": [
+												"error"
+											],
+											"type": "object"
+										}
+									]
 								}
 							}
 						}
@@ -3723,7 +3796,11 @@
 				"tags": [
 					"Firmware"
 				],
-				"security": [],
+				"security": [
+					{
+						"Api-Token": []
+					}
+				],
 				"parameters": [
 					{
 						"in": "query",
@@ -3766,7 +3843,26 @@
 							"type": "number"
 						}
 					}
-				]
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"multipart/form-data": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"file": {
+										"type": "string",
+										"format": "binary"
+									}
+								},
+								"required": [
+									"file"
+								]
+							}
+						}
+					}
+				}
 			}
 		},
 		"/firmware/getFOTAfirmware": {
@@ -3837,6 +3933,36 @@
 										"result"
 									],
 									"type": "object"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Firmware"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "firmwareId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			},
+			"get": {
+				"operationId": "GetOneFirmware",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ResFirmware"
 								}
 							}
 						}

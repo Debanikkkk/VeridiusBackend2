@@ -51,17 +51,17 @@ export class Vehicle {
   @Column()
   mileage?: number;
 
-  @ManyToOne(() => VehicleOwner, (owner) => owner.vehicles)
+  @ManyToOne(() => VehicleOwner, (owner) => owner.vehicles, { nullable: true })
   @JoinColumn({ name: 'vehicle_owner_id' })
   vehicle_owner?: VehicleOwner;
 
-  @OneToMany(() => VehiclePartsReplacement, (replacement) => replacement.vehicle)
+  @OneToMany(() => VehiclePartsReplacement, (replacement) => replacement.vehicle, { nullable: true })
   vehicle_parts_replacements?: VehiclePartsReplacement[];
 
-  @OneToMany(() => VehicleInsurance, (insurance) => insurance.vehicle)
+  @OneToMany(() => VehicleInsurance, (insurance) => insurance.vehicle, { nullable: true })
   vehicle_insurances?: VehicleInsurance[];
 
-  @ManyToOne(() => Dealer, (dealer) => dealer.vehicles)
+  @ManyToOne(() => Dealer, (dealer) => dealer.vehicles, { nullable: true })
   @JoinColumn({ name: 'dealer_id' })
   dealer?: Dealer;
 }

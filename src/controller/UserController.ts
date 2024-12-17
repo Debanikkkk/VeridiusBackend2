@@ -385,7 +385,7 @@ export class UserController extends Controller {
           id: userId,
         },
         relations: {
-          service_ticket: true,
+          // service_ticket: true,
           device: true,
           role: true,
         },
@@ -395,7 +395,7 @@ export class UserController extends Controller {
           if (!user) {
             return Promise.reject(new Error('THERE WAS A PROBLEM IN FINDING THE USER'));
           }
-          const serviceTicket = user.service_ticket;
+          // const serviceTicket = user.service_ticket;
           const device = user.device;
           const role = await this.rolerepository.findOne({
             where: {
@@ -421,13 +421,6 @@ export class UserController extends Controller {
               description: role?.description,
               id: role?.id,
               name: role?.name,
-            },
-            service_ticket: {
-              // date: serviceTicket.,
-              id: (await serviceTicket)?.id,
-              // service_ticket_number,
-              // status
-              // serviceTicketStatus
             },
           };
           return resUser;

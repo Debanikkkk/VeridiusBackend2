@@ -121,7 +121,7 @@ export class DeviceController extends Controller {
   @Post()
   public async saveDevice(@Body() request: ReqDevice): Promise<ResDevice | ResError> {
     try {
-      const { assignedTo, createdAt, deviceName, deviceType, dongle, imei, osVersion, registrationDate, serialNumber, status, updatedAt } = request;
+      const { assignedTo, deviceName, deviceType, dongle, imei, osVersion, registrationDate, serialNumber, status } = request;
 
       console.log('ignore logs', dongle);
       // console.log('ignore logs', id);
@@ -132,7 +132,7 @@ export class DeviceController extends Controller {
       });
       const deviceToSave: Device = {
         assigned_to: user_assign,
-        created_at: createdAt,
+        // created_at: createdAt,
         device_name: deviceName,
         device_type: deviceType,
         // dongle: ,
@@ -142,7 +142,7 @@ export class DeviceController extends Controller {
         registration_date: registrationDate,
         serial_number: serialNumber,
         status: status,
-        updated_at: updatedAt,
+        // updated_at: updatedAt,
       };
 
       const deviceSaver = Object.assign(new Device(), deviceToSave);
