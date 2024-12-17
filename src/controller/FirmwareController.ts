@@ -1,4 +1,4 @@
-import { Controller, Delete, Path, Post, Put, Query, Request, Route, Security, Tags } from 'tsoa';
+import { Controller, Delete, Get, Path, Post, Put, Query, Request, Route, Security, Tags } from 'tsoa';
 import { AppDataSource } from '../data-source';
 import { Firmware, firmware_management } from '../entity/Firmware';
 // import { ReqFirmware } from '../models/req/ReqFirmware';
@@ -11,6 +11,7 @@ import fs from 'fs';
 import { User } from '../entity/User';
 import { File, file_type } from '../entity/File';
 import path from 'path';
+import { ResFirmware } from '../models/res/ResFirmware';
 
 @Tags('Firmware')
 @Route('/firmware')
@@ -154,6 +155,72 @@ export class FirmwareController extends Controller {
     const savedFirmware = await this.firmwareRepository.save(firmwareToSave);
 
     return savedFirmware;
+  }
+
+  @Get('/getFOTAfirmware')
+  public async getFirmwareFOTA() {
+    const firmware = await this.firmwareRepository.find({
+      where: {
+        firmware_type: firmware_management.FOTA,
+      },
+    });
+
+    const firmwareArr: ResFirmware[] = [];
+    for (const fw of firmware) {
+      const user = await fw.created_by;
+      firmwareArr.push({
+        created_by: {
+          address: user?.address,
+          // device: user?.,
+          email: user?.email,
+          id: user?.id,
+          // is_under: user?.,
+          name: user?.name,
+          password: user?.password,
+          phone_number: user?.phone_number,
+          // role: user?.,
+          // service_ticket: user?.,
+        },
+        // files:fw.files,
+        firmwareType: fw.firmware_type,
+        firmwareVersion: fw.firmware_version,
+        id: fw.id,
+      });
+    }
+    return firmware;
+  }
+
+  @Get('/getDevOTAfirmware')
+  public async getFirmwareDevOTA() {
+    const firmware = await this.firmwareRepository.find({
+      where: {
+        firmware_type: firmware_management.DEVOTA,
+      },
+    });
+
+    const firmwareArr: ResFirmware[] = [];
+    for (const fw of firmware) {
+      const user = await fw.created_by;
+      firmwareArr.push({
+        created_by: {
+          address: user?.address,
+          // device: user?.,
+          email: user?.email,
+          id: user?.id,
+          // is_under: user?.,
+          name: user?.name,
+          password: user?.password,
+          phone_number: user?.phone_number,
+          // role: user?.,
+          // service_ticket: user?.,
+        },
+        // files:fw.files,
+        firmwareType: fw.firmware_type,
+        firmwareVersion: fw.firmware_version,
+        id: fw.id,
+      });
+    }
+    return firmware;
   }
 
   @Delete('/{firmwareId}')

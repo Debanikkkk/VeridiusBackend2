@@ -5,6 +5,8 @@ import { TsoaRoute, fetchMiddlewares, ExpressTemplateService } from '@tsoa/runti
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { VehicleVersionController } from './../controller/VehicleVersionController';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+import { VehicleSubmodelController } from './../controller/VehicleSubmodelController';
+// WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { VehicleSegmentController } from './../controller/VehicleSegmentController';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { VehicleModelController } from './../controller/VehicleModelController';
@@ -73,25 +75,6 @@ const models: TsoaRoute.Models = {
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "ResVehicleSegment": {
-        "dataType": "refObject",
-        "properties": {
-            "id": {"dataType":"double"},
-            "description": {"dataType":"string"},
-            "name": {"dataType":"string"},
-        },
-        "additionalProperties": false,
-    },
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "ReqVehicleSegment": {
-        "dataType": "refObject",
-        "properties": {
-            "description": {"dataType":"string"},
-            "name": {"dataType":"string"},
-        },
-        "additionalProperties": false,
-    },
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "ResOEM": {
         "dataType": "refObject",
         "properties": {
@@ -101,6 +84,16 @@ const models: TsoaRoute.Models = {
             "id": {"dataType":"double"},
             "name": {"dataType":"string"},
             "website": {"dataType":"string"},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "ResVehicleSegment": {
+        "dataType": "refObject",
+        "properties": {
+            "id": {"dataType":"double"},
+            "description": {"dataType":"string"},
+            "name": {"dataType":"string"},
         },
         "additionalProperties": false,
     },
@@ -115,6 +108,40 @@ const models: TsoaRoute.Models = {
             "oem": {"ref":"ResOEM"},
             "vehicleSegment": {"ref":"ResVehicleSegment"},
             "vehicleVersion": {"ref":"ResVehicleVersion"},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "ResVehicleSubmodel": {
+        "dataType": "refObject",
+        "properties": {
+            "engineCapacity": {"dataType":"string"},
+            "fuelEfficiency": {"dataType":"string"},
+            "id": {"dataType":"double"},
+            "name": {"dataType":"string"},
+            "vehicleModel": {"ref":"ResVehicleModel"},
+            "vehicleVersion": {"ref":"ResVehicleVersion"},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "ReqVehicleSubmodel": {
+        "dataType": "refObject",
+        "properties": {
+            "engineCapacity": {"dataType":"string"},
+            "fuelEfficiency": {"dataType":"string"},
+            "name": {"dataType":"string"},
+            "vehicleModel": {"dataType":"double"},
+            "vehicleVersion": {"dataType":"double"},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "ReqVehicleSegment": {
+        "dataType": "refObject",
+        "properties": {
+            "description": {"dataType":"string"},
+            "name": {"dataType":"string"},
         },
         "additionalProperties": false,
     },
@@ -939,6 +966,125 @@ export function RegisterRoutes(app: Router) {
 
               await templateService.apiHandler({
                 methodName: 'getOneVehicleVersion',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.post('/vehicleSubModel',
+            ...(fetchMiddlewares<RequestHandler>(VehicleSubmodelController)),
+            ...(fetchMiddlewares<RequestHandler>(VehicleSubmodelController.prototype.saveVehicleSubmodel)),
+
+            async function VehicleSubmodelController_saveVehicleSubmodel(request: ExRequest, response: ExResponse, next: any) {
+            const args: Record<string, TsoaRoute.ParameterSchema> = {
+                    request: {"in":"body","name":"request","required":true,"ref":"ReqVehicleSubmodel"},
+            };
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+
+                const controller = new VehicleSubmodelController();
+
+              await templateService.apiHandler({
+                methodName: 'saveVehicleSubmodel',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.get('/vehicleSubModel',
+            ...(fetchMiddlewares<RequestHandler>(VehicleSubmodelController)),
+            ...(fetchMiddlewares<RequestHandler>(VehicleSubmodelController.prototype.getVehicleSubModel)),
+
+            async function VehicleSubmodelController_getVehicleSubModel(request: ExRequest, response: ExResponse, next: any) {
+            const args: Record<string, TsoaRoute.ParameterSchema> = {
+            };
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+
+                const controller = new VehicleSubmodelController();
+
+              await templateService.apiHandler({
+                methodName: 'getVehicleSubModel',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.get('/vehicleSubModel/:vehicleSubModelId',
+            ...(fetchMiddlewares<RequestHandler>(VehicleSubmodelController)),
+            ...(fetchMiddlewares<RequestHandler>(VehicleSubmodelController.prototype.getOneVehicleSubModel)),
+
+            async function VehicleSubmodelController_getOneVehicleSubModel(request: ExRequest, response: ExResponse, next: any) {
+            const args: Record<string, TsoaRoute.ParameterSchema> = {
+                    vehicleSubModelId: {"in":"path","name":"vehicleSubModelId","required":true,"dataType":"double"},
+            };
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+
+                const controller = new VehicleSubmodelController();
+
+              await templateService.apiHandler({
+                methodName: 'getOneVehicleSubModel',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.delete('/vehicleSubModel/:vehicleSubModelId',
+            ...(fetchMiddlewares<RequestHandler>(VehicleSubmodelController)),
+            ...(fetchMiddlewares<RequestHandler>(VehicleSubmodelController.prototype.deleteVehicleSubmodel)),
+
+            async function VehicleSubmodelController_deleteVehicleSubmodel(request: ExRequest, response: ExResponse, next: any) {
+            const args: Record<string, TsoaRoute.ParameterSchema> = {
+                    vehicleSubModelId: {"in":"path","name":"vehicleSubModelId","required":true,"dataType":"double"},
+            };
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+
+                const controller = new VehicleSubmodelController();
+
+              await templateService.apiHandler({
+                methodName: 'deleteVehicleSubmodel',
                 controller,
                 response,
                 next,
@@ -2181,6 +2327,64 @@ export function RegisterRoutes(app: Router) {
 
               await templateService.apiHandler({
                 methodName: 'saveFirmware',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.get('/firmware/getFOTAfirmware',
+            ...(fetchMiddlewares<RequestHandler>(FirmwareController)),
+            ...(fetchMiddlewares<RequestHandler>(FirmwareController.prototype.getFirmwareFOTA)),
+
+            async function FirmwareController_getFirmwareFOTA(request: ExRequest, response: ExResponse, next: any) {
+            const args: Record<string, TsoaRoute.ParameterSchema> = {
+            };
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+
+                const controller = new FirmwareController();
+
+              await templateService.apiHandler({
+                methodName: 'getFirmwareFOTA',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.get('/firmware/getDevOTAfirmware',
+            ...(fetchMiddlewares<RequestHandler>(FirmwareController)),
+            ...(fetchMiddlewares<RequestHandler>(FirmwareController.prototype.getFirmwareDevOTA)),
+
+            async function FirmwareController_getFirmwareDevOTA(request: ExRequest, response: ExResponse, next: any) {
+            const args: Record<string, TsoaRoute.ParameterSchema> = {
+            };
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+
+                const controller = new FirmwareController();
+
+              await templateService.apiHandler({
+                methodName: 'getFirmwareDevOTA',
                 controller,
                 response,
                 next,
