@@ -3,11 +3,12 @@ import { AppDataSource } from '../data-source';
 import { Device } from '../entity/Device';
 import { User } from '../entity/User';
 import { ReqDongle } from '../models/req/ReqDongle';
-import { Dongle } from '../entity/Dongle';
+// import { Dongle } from '../entity/Dongle';
 import { ResDongle } from '../models/res/ResDongle';
 import { ResDevice } from '../models/res/ResDevice';
 import { ResError, ResSuccess } from '../models/res/Responses';
 import { DongleHistory } from '../entity/DongleHistory';
+import { Dongle } from '../entity/Dongle';
 @Tags('Dongle')
 @Route('/dongle')
 export class DongleController extends Controller {

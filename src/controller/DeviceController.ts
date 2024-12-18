@@ -2,7 +2,7 @@ import { Body, Controller, Delete, Get, Path, Post, Put, Route, Tags } from 'tso
 
 import { Device } from '../entity/Device';
 import { AppDataSource } from '../data-source';
-import { Dongle } from '../entity/Dongle';
+// import { Dongle } from '../entity/Dongle';
 
 import { ResDevice } from '../models/res/ResDevice';
 
@@ -12,6 +12,7 @@ import { ReqDevice } from '../models/req/ReqDevice';
 import { ResError, ResSuccess } from '../models/res/Responses';
 import { ReqDongleAllot } from '../models/req/ReqDongleAllot';
 import { ReqDevConStatus } from '../models/req/ReqDevConStatus';
+import { Dongle } from '../entity/Dongle';
 
 @Route('/device')
 @Tags('Device')

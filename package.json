@@ -66,7 +66,7 @@
     "socket.io": "^4.8.1",
     "socket.io-client": "^4.8.1",
     "swagger-ui-express": "^5.0.0",
-    "tsoa": "^6.3.1",
+    "tsoa": "^6.6.0",
     "typeorm": "^0.3.20",
     "websocket": "^1.0.35",
     "wkx": "^0.5.0",
