@@ -24,6 +24,8 @@ import { PermissionController } from './../controller/PermissionController';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { OEMController } from './../controller/OEMController';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+import { NegativeResponseCodeController } from './../controller/NegativeResponseCodeController';
+// WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { LoginPacketController } from './../controller/LoginPacketController';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { IMEICMDController } from './../controller/IMEICMDController';
@@ -33,6 +35,8 @@ import { GeofenceController } from './../controller/GeofenceController';
 import { FreeDongleUserDeviceController } from './../controller/FreeDongleUserDeviceController';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { FirmwareController } from './../controller/FirmwareController';
+// WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+import { DTCController } from './../controller/DTCController';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { DongleController } from './../controller/DongleController';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -766,6 +770,27 @@ const models: TsoaRoute.Models = {
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "ResNegativeResponseCode": {
+        "dataType": "refObject",
+        "properties": {
+            "id": {"dataType":"double","required":true},
+            "responseCode": {"dataType":"string","required":true},
+            "description": {"dataType":"string"},
+            "createdAt": {"dataType":"datetime","required":true},
+            "updatedAt": {"dataType":"datetime","required":true},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "ReqNegativeResponseCode": {
+        "dataType": "refObject",
+        "properties": {
+            "description": {"dataType":"string"},
+            "responseCode": {"dataType":"string"},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "LoginPacket": {
         "dataType": "refObject",
         "properties": {
@@ -854,6 +879,43 @@ const models: TsoaRoute.Models = {
             "firmwareType": {"ref":"firmware_management"},
             "firmwareVersion": {"dataType":"string"},
             "id": {"dataType":"double"},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "ResDtcDataset": {
+        "dataType": "refObject",
+        "properties": {
+            "id": {"dataType":"double"},
+            "name": {"dataType":"string"},
+            "description": {"dataType":"string"},
+            "isActive": {"dataType":"boolean"},
+            "createdAt": {"dataType":"datetime"},
+            "updatedAt": {"dataType":"datetime"},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "ResDTC": {
+        "dataType": "refObject",
+        "properties": {
+            "createdAt": {"dataType":"datetime"},
+            "description": {"dataType":"string"},
+            "dtcDataset": {"dataType":"array","array":{"dataType":"refObject","ref":"ResDtcDataset"}},
+            "id": {"dataType":"double"},
+            "isActive": {"dataType":"boolean"},
+            "name": {"dataType":"string"},
+            "updatedAt": {"dataType":"datetime"},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "ReqDTC": {
+        "dataType": "refObject",
+        "properties": {
+            "description": {"dataType":"string"},
+            "isActive": {"dataType":"boolean"},
+            "name": {"dataType":"string"},
         },
         "additionalProperties": false,
     },
@@ -2384,6 +2446,36 @@ export function RegisterRoutes(app: Router,opts?:{multer?:ReturnType<typeof mult
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsNegativeResponseCodeController_saveNegResCode: Record<string, TsoaRoute.ParameterSchema> = {
+                req: {"in":"body","name":"req","required":true,"ref":"ReqNegativeResponseCode"},
+        };
+        app.post('/negative_response',
+            ...(fetchMiddlewares<RequestHandler>(NegativeResponseCodeController)),
+            ...(fetchMiddlewares<RequestHandler>(NegativeResponseCodeController.prototype.saveNegResCode)),
+
+            async function NegativeResponseCodeController_saveNegResCode(request: ExRequest, response: ExResponse, next: any) {
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args: argsNegativeResponseCodeController_saveNegResCode, request, response });
+
+                const controller = new NegativeResponseCodeController();
+
+              await templateService.apiHandler({
+                methodName: 'saveNegResCode',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         const argsLoginPacketController_saveLoginPacket: Record<string, TsoaRoute.ParameterSchema> = {
                 req: {"in":"body","name":"req","required":true,"ref":"ReqLoginPacket"},
         };
@@ -2718,6 +2810,125 @@ export function RegisterRoutes(app: Router,opts?:{multer?:ReturnType<typeof mult
 
               await templateService.apiHandler({
                 methodName: 'getOneFirmware',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsDTCController_saveDtc: Record<string, TsoaRoute.ParameterSchema> = {
+                request: {"in":"body","name":"request","required":true,"ref":"ReqDTC"},
+        };
+        app.post('/dtc',
+            ...(fetchMiddlewares<RequestHandler>(DTCController)),
+            ...(fetchMiddlewares<RequestHandler>(DTCController.prototype.saveDtc)),
+
+            async function DTCController_saveDtc(request: ExRequest, response: ExResponse, next: any) {
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args: argsDTCController_saveDtc, request, response });
+
+                const controller = new DTCController();
+
+              await templateService.apiHandler({
+                methodName: 'saveDtc',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsDTCController_getAllDTC: Record<string, TsoaRoute.ParameterSchema> = {
+        };
+        app.get('/dtc',
+            ...(fetchMiddlewares<RequestHandler>(DTCController)),
+            ...(fetchMiddlewares<RequestHandler>(DTCController.prototype.getAllDTC)),
+
+            async function DTCController_getAllDTC(request: ExRequest, response: ExResponse, next: any) {
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args: argsDTCController_getAllDTC, request, response });
+
+                const controller = new DTCController();
+
+              await templateService.apiHandler({
+                methodName: 'getAllDTC',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsDTCController_getOneDTC: Record<string, TsoaRoute.ParameterSchema> = {
+                dtcId: {"in":"path","name":"dtcId","required":true,"dataType":"double"},
+        };
+        app.get('/dtc/:dtcId',
+            ...(fetchMiddlewares<RequestHandler>(DTCController)),
+            ...(fetchMiddlewares<RequestHandler>(DTCController.prototype.getOneDTC)),
+
+            async function DTCController_getOneDTC(request: ExRequest, response: ExResponse, next: any) {
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args: argsDTCController_getOneDTC, request, response });
+
+                const controller = new DTCController();
+
+              await templateService.apiHandler({
+                methodName: 'getOneDTC',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsDTCController_deleteDTC: Record<string, TsoaRoute.ParameterSchema> = {
+                dtcId: {"in":"path","name":"dtcId","required":true,"dataType":"double"},
+        };
+        app.delete('/dtc/:dtcId',
+            ...(fetchMiddlewares<RequestHandler>(DTCController)),
+            ...(fetchMiddlewares<RequestHandler>(DTCController.prototype.deleteDTC)),
+
+            async function DTCController_deleteDTC(request: ExRequest, response: ExResponse, next: any) {
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args: argsDTCController_deleteDTC, request, response });
+
+                const controller = new DTCController();
+
+              await templateService.apiHandler({
+                methodName: 'deleteDTC',
                 controller,
                 response,
                 next,

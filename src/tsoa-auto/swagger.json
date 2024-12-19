@@ -1581,6 +1581,48 @@
 				"type": "object",
 				"additionalProperties": false
 			},
+			"ResNegativeResponseCode": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"responseCode": {
+						"type": "string"
+					},
+					"description": {
+						"type": "string"
+					},
+					"createdAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"updatedAt": {
+						"type": "string",
+						"format": "date-time"
+					}
+				},
+				"required": [
+					"id",
+					"responseCode",
+					"createdAt",
+					"updatedAt"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ReqNegativeResponseCode": {
+				"properties": {
+					"description": {
+						"type": "string"
+					},
+					"responseCode": {
+						"type": "string"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
 			"LoginPacket": {
 				"properties": {
 					"id": {
@@ -1828,6 +1870,81 @@
 					"id": {
 						"type": "number",
 						"format": "double"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ResDtcDataset": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"name": {
+						"type": "string"
+					},
+					"description": {
+						"type": "string"
+					},
+					"isActive": {
+						"type": "boolean"
+					},
+					"createdAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"updatedAt": {
+						"type": "string",
+						"format": "date-time"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ResDTC": {
+				"properties": {
+					"createdAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"description": {
+						"type": "string"
+					},
+					"dtcDataset": {
+						"items": {
+							"$ref": "#/components/schemas/ResDtcDataset"
+						},
+						"type": "array"
+					},
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"isActive": {
+						"type": "boolean"
+					},
+					"name": {
+						"type": "string"
+					},
+					"updatedAt": {
+						"type": "string",
+						"format": "date-time"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ReqDTC": {
+				"properties": {
+					"description": {
+						"type": "string"
+					},
+					"isActive": {
+						"type": "boolean"
+					},
+					"name": {
+						"type": "string"
 					}
 				},
 				"type": "object",
@@ -3762,6 +3879,38 @@
 				}
 			}
 		},
+		"/negative_response": {
+			"post": {
+				"operationId": "SaveNegResCode",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ResNegativeResponseCode"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Negative Response"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/ReqNegativeResponseCode"
+							}
+						}
+					}
+				}
+			}
+		},
 		"/loginpacket": {
 			"post": {
 				"operationId": "SaveLoginPacket",
@@ -4228,6 +4377,131 @@
 					{
 						"in": "path",
 						"name": "firmwareId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			}
+		},
+		"/dtc": {
+			"post": {
+				"operationId": "SaveDtc",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ResDTC"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"DTC"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/ReqDTC"
+							}
+						}
+					}
+				}
+			},
+			"get": {
+				"operationId": "GetAllDTC",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/ResDTC"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"DTC"
+				],
+				"security": [],
+				"parameters": []
+			}
+		},
+		"/dtc/{dtcId}": {
+			"get": {
+				"operationId": "GetOneDTC",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ResDTC"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"DTC"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "dtcId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			},
+			"delete": {
+				"operationId": "DeleteDTC",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"properties": {
+										"result": {
+											"type": "string"
+										}
+									},
+									"required": [
+										"result"
+									],
+									"type": "object"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"DTC"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "dtcId",
 						"required": true,
 						"schema": {
 							"format": "double",
