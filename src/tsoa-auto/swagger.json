@@ -1444,6 +1444,16 @@
 				"type": "object",
 				"additionalProperties": false
 			},
+			"ReqPutRoleUnder": {
+				"properties": {
+					"role_sub": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
 			"ReqPermission": {
 				"properties": {
 					"description": {
@@ -3232,6 +3242,56 @@
 						"application/json": {
 							"schema": {
 								"$ref": "#/components/schemas/SetPermisisons"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/role/putRoleUnder/{role_main_id}": {
+			"put": {
+				"operationId": "PutRoleUnder",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"properties": {
+										"result": {
+											"type": "string"
+										}
+									},
+									"required": [
+										"result"
+									],
+									"type": "object"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Role"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "role_main_id",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/ReqPutRoleUnder"
 							}
 						}
 					}

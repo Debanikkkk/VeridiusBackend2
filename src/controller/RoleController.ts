@@ -12,6 +12,9 @@ import { ResError, ResSuccess } from '../models/res/Responses';
 import { ResPermission } from '../models/res/ResPermission';
 import { JWTRequest } from '../models/req/JWTRequest';
 import { User } from '../entity/User';
+import { ReqPutRoleUnder } from '../models/req/ReqPutRoleUnder';
+// import { ResPutRoleUnder } from '../models/res/ResPutRoleUnder';
+// import { ResPutRoleUnder } from '../models/res/ResPutRoleUnder';
 // import { create } from 'domain';
 @Tags('Role')
 @Route('/role')
@@ -365,5 +368,72 @@ export class RoleController extends Controller {
       console.log('there was an errror in fetching the permissions from the role');
       return { error: 'failed to load the permissions from the role' };
     }
+  }
+
+  @Put('/putRoleUnder/{role_main_id}')
+  public async putRoleUnder(@Body() request: ReqPutRoleUnder, @Path() role_main_id: number) {
+    const { role_sub } = request;
+    // console.log(role_main);
+    const role_main_db = await this.rolerepository.findOne({
+      where: {
+        id: role_main_id,
+      },
+    });
+
+    const role_sub_db = await this.rolerepository.findOne({
+      where: {
+        id: role_sub,
+      },
+    });
+
+    if (!role_main_db) {
+      return Promise.reject(new Error('THIS ROLE MAIN WAS NOT FOUND'));
+    }
+
+    if (!role_sub_db) {
+      return Promise.reject(new Error('THIS ROLE SUB WAS NOT FOUND'));
+    }
+
+    const sub_role_set = role_sub_db.permissions;
+    const mainPermArr = role_main_db.permissions;
+
+    const total_perm_arr: Permission[] = [];
+
+    if (!mainPermArr) {
+      return Promise.reject(new Error('THESE PERMISSIONS WERE NOT FOUND'));
+    }
+    for (const mp of await mainPermArr) {
+      total_perm_arr.push(mp);
+    }
+
+    if (!sub_role_set) {
+      return Promise.reject(new Error('THESE PERMISSIONS WERE NOT FOUND'));
+    }
+
+    for (const sr of await sub_role_set) {
+      total_perm_arr.push(sr);
+    }
+    // if(total_perm_arr){
+
+    // }
+    role_main_db.permissions = Promise.resolve(total_perm_arr);
+
+    const newRolePermission = await this.rolerepository.save(role_main_db);
+    if (!newRolePermission) {
+      return Promise.reject(new Error('THESE PERMISSIONS WERE NOT FOUND'));
+    }
+    // const resMainRoleUpdation: ResRole = {
+    //   // created_by: ,
+    //   description: newRolePermission.description,
+    //   id: newRolePermission.id,
+    //   name: newRolePermission.name,
+    //   // permissions: newRolePermission.permissions,
+    // };
+    // if (!newRolePermission.permissions) {
+    //   return resMainRoleUpdation;
+    // }
+
+    // console.log('these are the res role updation', resMainRoleUpdation.permissions);
+    return { result: `the role ${role_sub_db.name} has been put under ${role_main_db.name} ` };
   }
 }

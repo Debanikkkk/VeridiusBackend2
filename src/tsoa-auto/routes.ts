@@ -697,6 +697,14 @@ const models: TsoaRoute.Models = {
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "ReqPutRoleUnder": {
+        "dataType": "refObject",
+        "properties": {
+            "role_sub": {"dataType":"double"},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "ReqPermission": {
         "dataType": "refObject",
         "properties": {
@@ -1996,6 +2004,37 @@ export function RegisterRoutes(app: Router,opts?:{multer?:ReturnType<typeof mult
 
               await templateService.apiHandler({
                 methodName: 'getPermissionsFromRole',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsRoleController_putRoleUnder: Record<string, TsoaRoute.ParameterSchema> = {
+                request: {"in":"body","name":"request","required":true,"ref":"ReqPutRoleUnder"},
+                role_main_id: {"in":"path","name":"role_main_id","required":true,"dataType":"double"},
+        };
+        app.put('/role/putRoleUnder/:role_main_id',
+            ...(fetchMiddlewares<RequestHandler>(RoleController)),
+            ...(fetchMiddlewares<RequestHandler>(RoleController.prototype.putRoleUnder)),
+
+            async function RoleController_putRoleUnder(request: ExRequest, response: ExResponse, next: any) {
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args: argsRoleController_putRoleUnder, request, response });
+
+                const controller = new RoleController();
+
+              await templateService.apiHandler({
+                methodName: 'putRoleUnder',
                 controller,
                 response,
                 next,
