@@ -216,6 +216,96 @@
 				"type": "object",
 				"additionalProperties": false
 			},
+			"ResVehicle": {
+				"properties": {
+					"color": {
+						"type": "string"
+					},
+					"engineNumber": {
+						"type": "string"
+					},
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"manufactureYear": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"mileage": {
+						"type": "number",
+						"format": "double"
+					},
+					"transmissionType": {
+						"type": "string"
+					},
+					"vehicleModel": {
+						"$ref": "#/components/schemas/ResVehicleModel"
+					},
+					"vehicleNumber": {
+						"type": "string"
+					},
+					"vehicleSegment": {
+						"$ref": "#/components/schemas/ResVehicleSegment"
+					},
+					"vehicleSubModel": {
+						"$ref": "#/components/schemas/ResVehicleSubmodel"
+					},
+					"vehicleVersion": {
+						"$ref": "#/components/schemas/ResVehicleVersion"
+					},
+					"vin": {
+						"type": "string"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ReqVehicle": {
+				"properties": {
+					"color": {
+						"type": "string"
+					},
+					"engineNumber": {
+						"type": "string"
+					},
+					"manufactureYear": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"mileage": {
+						"type": "number",
+						"format": "double"
+					},
+					"transmissionType": {
+						"type": "string"
+					},
+					"vehicleModel": {
+						"type": "number",
+						"format": "double"
+					},
+					"vehicleNumber": {
+						"type": "string"
+					},
+					"vehicleSegment": {
+						"type": "number",
+						"format": "double"
+					},
+					"vehicleSubModel": {
+						"type": "number",
+						"format": "double"
+					},
+					"vehicleVersion": {
+						"type": "number",
+						"format": "double"
+					},
+					"vin": {
+						"type": "string"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
 			"ResUser": {
 				"properties": {
 					"id": {
@@ -2364,6 +2454,131 @@
 					{
 						"in": "path",
 						"name": "vehicleModelId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			}
+		},
+		"/vehicle": {
+			"post": {
+				"operationId": "SaveVehicle",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ResVehicle"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Vehicle"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/ReqVehicle"
+							}
+						}
+					}
+				}
+			},
+			"get": {
+				"operationId": "GetAllVehicle",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/ResVehicle"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Vehicle"
+				],
+				"security": [],
+				"parameters": []
+			}
+		},
+		"/vehicle/{vehicleId}": {
+			"get": {
+				"operationId": "GetOneVehicle",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ResVehicle"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Vehicle"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "vehicleId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			},
+			"delete": {
+				"operationId": "DeleteVehicle",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"properties": {
+										"result": {
+											"type": "string"
+										}
+									},
+									"required": [
+										"result"
+									],
+									"type": "object"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Vehicle"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "vehicleId",
 						"required": true,
 						"schema": {
 							"format": "double",

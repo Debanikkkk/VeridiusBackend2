@@ -12,6 +12,8 @@ import { VehicleSegmentController } from './../controller/VehicleSegmentControll
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { VehicleModelController } from './../controller/VehicleModelController';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+import { VehicleController } from './../controller/VehicleController';
+// WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { UserController } from './../controller/UserController';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { ServiceTicketController } from './../controller/ServiceTikcetController';
@@ -158,6 +160,43 @@ const models: TsoaRoute.Models = {
             "oem": {"dataType":"double"},
             "vehicleSegment": {"dataType":"double"},
             "vehicleVersion": {"dataType":"double"},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "ResVehicle": {
+        "dataType": "refObject",
+        "properties": {
+            "color": {"dataType":"string"},
+            "engineNumber": {"dataType":"string"},
+            "id": {"dataType":"double"},
+            "manufactureYear": {"dataType":"datetime"},
+            "mileage": {"dataType":"double"},
+            "transmissionType": {"dataType":"string"},
+            "vehicleModel": {"ref":"ResVehicleModel"},
+            "vehicleNumber": {"dataType":"string"},
+            "vehicleSegment": {"ref":"ResVehicleSegment"},
+            "vehicleSubModel": {"ref":"ResVehicleSubmodel"},
+            "vehicleVersion": {"ref":"ResVehicleVersion"},
+            "vin": {"dataType":"string"},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "ReqVehicle": {
+        "dataType": "refObject",
+        "properties": {
+            "color": {"dataType":"string"},
+            "engineNumber": {"dataType":"string"},
+            "manufactureYear": {"dataType":"datetime"},
+            "mileage": {"dataType":"double"},
+            "transmissionType": {"dataType":"string"},
+            "vehicleModel": {"dataType":"double"},
+            "vehicleNumber": {"dataType":"string"},
+            "vehicleSegment": {"dataType":"double"},
+            "vehicleSubModel": {"dataType":"double"},
+            "vehicleVersion": {"dataType":"double"},
+            "vin": {"dataType":"string"},
         },
         "additionalProperties": false,
     },
@@ -1364,6 +1403,125 @@ export function RegisterRoutes(app: Router,opts?:{multer?:ReturnType<typeof mult
 
               await templateService.apiHandler({
                 methodName: 'deleteVehicleModel',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsVehicleController_saveVehicle: Record<string, TsoaRoute.ParameterSchema> = {
+                req: {"in":"body","name":"req","required":true,"ref":"ReqVehicle"},
+        };
+        app.post('/vehicle',
+            ...(fetchMiddlewares<RequestHandler>(VehicleController)),
+            ...(fetchMiddlewares<RequestHandler>(VehicleController.prototype.saveVehicle)),
+
+            async function VehicleController_saveVehicle(request: ExRequest, response: ExResponse, next: any) {
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args: argsVehicleController_saveVehicle, request, response });
+
+                const controller = new VehicleController();
+
+              await templateService.apiHandler({
+                methodName: 'saveVehicle',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsVehicleController_getOneVehicle: Record<string, TsoaRoute.ParameterSchema> = {
+                vehicleId: {"in":"path","name":"vehicleId","required":true,"dataType":"double"},
+        };
+        app.get('/vehicle/:vehicleId',
+            ...(fetchMiddlewares<RequestHandler>(VehicleController)),
+            ...(fetchMiddlewares<RequestHandler>(VehicleController.prototype.getOneVehicle)),
+
+            async function VehicleController_getOneVehicle(request: ExRequest, response: ExResponse, next: any) {
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args: argsVehicleController_getOneVehicle, request, response });
+
+                const controller = new VehicleController();
+
+              await templateService.apiHandler({
+                methodName: 'getOneVehicle',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsVehicleController_getAllVehicle: Record<string, TsoaRoute.ParameterSchema> = {
+        };
+        app.get('/vehicle',
+            ...(fetchMiddlewares<RequestHandler>(VehicleController)),
+            ...(fetchMiddlewares<RequestHandler>(VehicleController.prototype.getAllVehicle)),
+
+            async function VehicleController_getAllVehicle(request: ExRequest, response: ExResponse, next: any) {
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args: argsVehicleController_getAllVehicle, request, response });
+
+                const controller = new VehicleController();
+
+              await templateService.apiHandler({
+                methodName: 'getAllVehicle',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsVehicleController_deleteVehicle: Record<string, TsoaRoute.ParameterSchema> = {
+                vehicleId: {"in":"path","name":"vehicleId","required":true,"dataType":"double"},
+        };
+        app.delete('/vehicle/:vehicleId',
+            ...(fetchMiddlewares<RequestHandler>(VehicleController)),
+            ...(fetchMiddlewares<RequestHandler>(VehicleController.prototype.deleteVehicle)),
+
+            async function VehicleController_deleteVehicle(request: ExRequest, response: ExResponse, next: any) {
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args: argsVehicleController_deleteVehicle, request, response });
+
+                const controller = new VehicleController();
+
+              await templateService.apiHandler({
+                methodName: 'deleteVehicle',
                 controller,
                 response,
                 next,
