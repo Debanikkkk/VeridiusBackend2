@@ -422,18 +422,7 @@ export class RoleController extends Controller {
     if (!newRolePermission) {
       return Promise.reject(new Error('THESE PERMISSIONS WERE NOT FOUND'));
     }
-    // const resMainRoleUpdation: ResRole = {
-    //   // created_by: ,
-    //   description: newRolePermission.description,
-    //   id: newRolePermission.id,
-    //   name: newRolePermission.name,
-    //   // permissions: newRolePermission.permissions,
-    // };
-    // if (!newRolePermission.permissions) {
-    //   return resMainRoleUpdation;
-    // }
 
-    // console.log('these are the res role updation', resMainRoleUpdation.permissions);
     return { result: `the role ${role_sub_db.name} has been put under ${role_main_db.name} ` };
   }
 }

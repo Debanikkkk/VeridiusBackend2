@@ -27,7 +27,7 @@ export class Vehicle {
   color?: string;
 
   @Column()
-  manufacture_year?: number;
+  manufacture_year?: Date;
 
   @Column()
   transmission_type?: string;
