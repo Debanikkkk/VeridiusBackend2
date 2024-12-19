@@ -4,6 +4,7 @@ export class SuperAdminActual1734590045727 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(` INSERT INTO "role" (name, description) VALUES('super_admin','the super admin');`);
     await queryRunner.query(` INSERT INTO "role" (name, description) VALUES('technician','technician which uses the application on mobile device');`);
+    await queryRunner.query(` INSERT INTO "role" (name, description) VALUES('admin','admin role to manage specific OEMs');`);
     await queryRunner.query(
       ` INSERT INTO "role" (name, description) VALUES('navmatic_user','user of omni navmatic, single person telematics user');`,
     );

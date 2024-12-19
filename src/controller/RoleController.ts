@@ -12,6 +12,7 @@ import { ResError, ResSuccess } from '../models/res/Responses';
 import { ResPermission } from '../models/res/ResPermission';
 import { JWTRequest } from '../models/req/JWTRequest';
 import { User } from '../entity/User';
+// import { create } from 'domain';
 @Tags('Role')
 @Route('/role')
 export class RoleController extends Controller {
@@ -163,7 +164,7 @@ export class RoleController extends Controller {
       }
       const super_user_role = await this.rolerepository.findOne({
         where: {
-          name: 'superUser',
+          name: 'super_admin',
         },
         relations: {
           // role: {
@@ -174,15 +175,39 @@ export class RoleController extends Controller {
       const perm_arr: Permission[] = [];
       perm_arr.push(permissionToSaveManage);
       perm_arr.push(permissionToSaveView);
+      const admin_perm_arr = perm_arr;
       // const super_user_role = super_user?.role;
       const currPerm = (await super_user_role)?.permissions;
-      if (!currPerm) {
-        return Promise.reject(new Error('THE CURRNET PERMISSIONS ARE EMPTY'));
-      }
-      for (const curr of await currPerm) {
-        perm_arr.push(curr);
+      if (currPerm) {
+        // return Promise.reject(new Error('THE CURRNET PERMISSIONS ARE EMPTY'));
+        // continue
+        console.log('this was empty but okay');
+        for (const curr of await currPerm) {
+          perm_arr.push(curr);
+        }
       }
 
+      const admin_role = await this.rolerepository.findOne({
+        where: {
+          name: 'admin',
+        },
+      });
+      const created_by_perms = admin_role?.permissions;
+
+      const admin_final_perms: Permission[] = [];
+      admin_final_perms.push(...admin_perm_arr);
+      if (!created_by_perms) {
+        return Promise.reject(new Error('THIS PERMS WAS NOT FOUND'));
+      }
+      for (const ap of await created_by_perms) {
+        admin_final_perms.push(ap);
+      }
+      const adminRoleTemp = user.role;
+      if (!adminRoleTemp) {
+        return Promise.reject(new Error('THIS PERMS WAS NOT FOUND'));
+      }
+      admin_role.permissions = Promise.resolve(admin_final_perms);
+      await this.rolerepository.save(admin_role);
       if (!super_user_role) {
         return Promise.reject(new Error('this role was not found'));
       }
