@@ -1,7 +1,8 @@
 /* tslint:disable */
 /* eslint-disable */
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-import { TsoaRoute, fetchMiddlewares, ExpressTemplateService } from '@tsoa/runtime';
+import type { TsoaRoute } from '@tsoa/runtime';
+import {  fetchMiddlewares, ExpressTemplateService } from '@tsoa/runtime';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { VehicleVersionController } from './../controller/VehicleVersionController';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -40,7 +41,7 @@ import { expressAuthentication } from './../authentication';
 // @ts-ignore - no great way to install types from subpackage
 import type { Request as ExRequest, Response as ExResponse, RequestHandler, Router } from 'express';
 const multer = require('multer');
-const upload = multer({"limits":{"fileSize":8388608}});
+
 
 const expressAuthenticationRecasted = expressAuthentication as (req: ExRequest, securityName: string, scopes?: string[], res?: ExResponse) => Promise<any>;
 
@@ -877,25 +878,33 @@ const templateService = new ExpressTemplateService(models, {"noImplicitAdditiona
 
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
-export function RegisterRoutes(app: Router) {
+
+
+
+export function RegisterRoutes(app: Router,opts?:{multer?:ReturnType<typeof multer>}) {
+
     // ###########################################################################################################
     //  NOTE: If you do not see routes for all of your controllers in this file, then you might not have informed tsoa of where to look
     //      Please look into the "controllerPathGlobs" config option described in the readme: https://github.com/lukeautry/tsoa
     // ###########################################################################################################
+
+    const upload = opts?.multer ||  multer({"limits":{"fileSize":8388608}});
+
+    
+        const argsVehicleVersionController_saveVehicleVersion: Record<string, TsoaRoute.ParameterSchema> = {
+                request: {"in":"body","name":"request","required":true,"ref":"ReqVehicleVersion"},
+        };
         app.post('/vehicleVersion',
             ...(fetchMiddlewares<RequestHandler>(VehicleVersionController)),
             ...(fetchMiddlewares<RequestHandler>(VehicleVersionController.prototype.saveVehicleVersion)),
 
             async function VehicleVersionController_saveVehicleVersion(request: ExRequest, response: ExResponse, next: any) {
-            const args: Record<string, TsoaRoute.ParameterSchema> = {
-                    request: {"in":"body","name":"request","required":true,"ref":"ReqVehicleVersion"},
-            };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
             let validatedArgs: any[] = [];
             try {
-                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+                validatedArgs = templateService.getValidatedArgs({ args: argsVehicleVersionController_saveVehicleVersion, request, response });
 
                 const controller = new VehicleVersionController();
 
@@ -912,20 +921,20 @@ export function RegisterRoutes(app: Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsVehicleVersionController_deleteVehicleVersion: Record<string, TsoaRoute.ParameterSchema> = {
+                vehicleVersionId: {"in":"path","name":"vehicleVersionId","required":true,"dataType":"double"},
+        };
         app.delete('/vehicleVersion/:vehicleVersionId',
             ...(fetchMiddlewares<RequestHandler>(VehicleVersionController)),
             ...(fetchMiddlewares<RequestHandler>(VehicleVersionController.prototype.deleteVehicleVersion)),
 
             async function VehicleVersionController_deleteVehicleVersion(request: ExRequest, response: ExResponse, next: any) {
-            const args: Record<string, TsoaRoute.ParameterSchema> = {
-                    vehicleVersionId: {"in":"path","name":"vehicleVersionId","required":true,"dataType":"double"},
-            };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
             let validatedArgs: any[] = [];
             try {
-                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+                validatedArgs = templateService.getValidatedArgs({ args: argsVehicleVersionController_deleteVehicleVersion, request, response });
 
                 const controller = new VehicleVersionController();
 
@@ -942,19 +951,19 @@ export function RegisterRoutes(app: Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsVehicleVersionController_getAllVehicleVersion: Record<string, TsoaRoute.ParameterSchema> = {
+        };
         app.get('/vehicleVersion',
             ...(fetchMiddlewares<RequestHandler>(VehicleVersionController)),
             ...(fetchMiddlewares<RequestHandler>(VehicleVersionController.prototype.getAllVehicleVersion)),
 
             async function VehicleVersionController_getAllVehicleVersion(request: ExRequest, response: ExResponse, next: any) {
-            const args: Record<string, TsoaRoute.ParameterSchema> = {
-            };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
             let validatedArgs: any[] = [];
             try {
-                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+                validatedArgs = templateService.getValidatedArgs({ args: argsVehicleVersionController_getAllVehicleVersion, request, response });
 
                 const controller = new VehicleVersionController();
 
@@ -971,20 +980,20 @@ export function RegisterRoutes(app: Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsVehicleVersionController_getOneVehicleVersion: Record<string, TsoaRoute.ParameterSchema> = {
+                vehicleVersionId: {"in":"path","name":"vehicleVersionId","required":true,"dataType":"double"},
+        };
         app.get('/vehicleVersion/:vehicleVersionId',
             ...(fetchMiddlewares<RequestHandler>(VehicleVersionController)),
             ...(fetchMiddlewares<RequestHandler>(VehicleVersionController.prototype.getOneVehicleVersion)),
 
             async function VehicleVersionController_getOneVehicleVersion(request: ExRequest, response: ExResponse, next: any) {
-            const args: Record<string, TsoaRoute.ParameterSchema> = {
-                    vehicleVersionId: {"in":"path","name":"vehicleVersionId","required":true,"dataType":"double"},
-            };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
             let validatedArgs: any[] = [];
             try {
-                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+                validatedArgs = templateService.getValidatedArgs({ args: argsVehicleVersionController_getOneVehicleVersion, request, response });
 
                 const controller = new VehicleVersionController();
 
@@ -1001,20 +1010,20 @@ export function RegisterRoutes(app: Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsVehicleSubmodelController_saveVehicleSubmodel: Record<string, TsoaRoute.ParameterSchema> = {
+                request: {"in":"body","name":"request","required":true,"ref":"ReqVehicleSubmodel"},
+        };
         app.post('/vehicleSubModel',
             ...(fetchMiddlewares<RequestHandler>(VehicleSubmodelController)),
             ...(fetchMiddlewares<RequestHandler>(VehicleSubmodelController.prototype.saveVehicleSubmodel)),
 
             async function VehicleSubmodelController_saveVehicleSubmodel(request: ExRequest, response: ExResponse, next: any) {
-            const args: Record<string, TsoaRoute.ParameterSchema> = {
-                    request: {"in":"body","name":"request","required":true,"ref":"ReqVehicleSubmodel"},
-            };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
             let validatedArgs: any[] = [];
             try {
-                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+                validatedArgs = templateService.getValidatedArgs({ args: argsVehicleSubmodelController_saveVehicleSubmodel, request, response });
 
                 const controller = new VehicleSubmodelController();
 
@@ -1031,19 +1040,19 @@ export function RegisterRoutes(app: Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsVehicleSubmodelController_getVehicleSubModel: Record<string, TsoaRoute.ParameterSchema> = {
+        };
         app.get('/vehicleSubModel',
             ...(fetchMiddlewares<RequestHandler>(VehicleSubmodelController)),
             ...(fetchMiddlewares<RequestHandler>(VehicleSubmodelController.prototype.getVehicleSubModel)),
 
             async function VehicleSubmodelController_getVehicleSubModel(request: ExRequest, response: ExResponse, next: any) {
-            const args: Record<string, TsoaRoute.ParameterSchema> = {
-            };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
             let validatedArgs: any[] = [];
             try {
-                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+                validatedArgs = templateService.getValidatedArgs({ args: argsVehicleSubmodelController_getVehicleSubModel, request, response });
 
                 const controller = new VehicleSubmodelController();
 
@@ -1060,20 +1069,20 @@ export function RegisterRoutes(app: Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsVehicleSubmodelController_getOneVehicleSubModel: Record<string, TsoaRoute.ParameterSchema> = {
+                vehicleSubModelId: {"in":"path","name":"vehicleSubModelId","required":true,"dataType":"double"},
+        };
         app.get('/vehicleSubModel/:vehicleSubModelId',
             ...(fetchMiddlewares<RequestHandler>(VehicleSubmodelController)),
             ...(fetchMiddlewares<RequestHandler>(VehicleSubmodelController.prototype.getOneVehicleSubModel)),
 
             async function VehicleSubmodelController_getOneVehicleSubModel(request: ExRequest, response: ExResponse, next: any) {
-            const args: Record<string, TsoaRoute.ParameterSchema> = {
-                    vehicleSubModelId: {"in":"path","name":"vehicleSubModelId","required":true,"dataType":"double"},
-            };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
             let validatedArgs: any[] = [];
             try {
-                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+                validatedArgs = templateService.getValidatedArgs({ args: argsVehicleSubmodelController_getOneVehicleSubModel, request, response });
 
                 const controller = new VehicleSubmodelController();
 
@@ -1090,20 +1099,20 @@ export function RegisterRoutes(app: Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsVehicleSubmodelController_deleteVehicleSubmodel: Record<string, TsoaRoute.ParameterSchema> = {
+                vehicleSubModelId: {"in":"path","name":"vehicleSubModelId","required":true,"dataType":"double"},
+        };
         app.delete('/vehicleSubModel/:vehicleSubModelId',
             ...(fetchMiddlewares<RequestHandler>(VehicleSubmodelController)),
             ...(fetchMiddlewares<RequestHandler>(VehicleSubmodelController.prototype.deleteVehicleSubmodel)),
 
             async function VehicleSubmodelController_deleteVehicleSubmodel(request: ExRequest, response: ExResponse, next: any) {
-            const args: Record<string, TsoaRoute.ParameterSchema> = {
-                    vehicleSubModelId: {"in":"path","name":"vehicleSubModelId","required":true,"dataType":"double"},
-            };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
             let validatedArgs: any[] = [];
             try {
-                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+                validatedArgs = templateService.getValidatedArgs({ args: argsVehicleSubmodelController_deleteVehicleSubmodel, request, response });
 
                 const controller = new VehicleSubmodelController();
 
@@ -1120,20 +1129,20 @@ export function RegisterRoutes(app: Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsVehicleSegmentController_saveVehicleSegment: Record<string, TsoaRoute.ParameterSchema> = {
+                request: {"in":"body","name":"request","required":true,"ref":"ReqVehicleSegment"},
+        };
         app.post('/vehicleSegment',
             ...(fetchMiddlewares<RequestHandler>(VehicleSegmentController)),
             ...(fetchMiddlewares<RequestHandler>(VehicleSegmentController.prototype.saveVehicleSegment)),
 
             async function VehicleSegmentController_saveVehicleSegment(request: ExRequest, response: ExResponse, next: any) {
-            const args: Record<string, TsoaRoute.ParameterSchema> = {
-                    request: {"in":"body","name":"request","required":true,"ref":"ReqVehicleSegment"},
-            };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
             let validatedArgs: any[] = [];
             try {
-                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+                validatedArgs = templateService.getValidatedArgs({ args: argsVehicleSegmentController_saveVehicleSegment, request, response });
 
                 const controller = new VehicleSegmentController();
 
@@ -1150,19 +1159,19 @@ export function RegisterRoutes(app: Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsVehicleSegmentController_getAllVehicleSegment: Record<string, TsoaRoute.ParameterSchema> = {
+        };
         app.get('/vehicleSegment',
             ...(fetchMiddlewares<RequestHandler>(VehicleSegmentController)),
             ...(fetchMiddlewares<RequestHandler>(VehicleSegmentController.prototype.getAllVehicleSegment)),
 
             async function VehicleSegmentController_getAllVehicleSegment(request: ExRequest, response: ExResponse, next: any) {
-            const args: Record<string, TsoaRoute.ParameterSchema> = {
-            };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
             let validatedArgs: any[] = [];
             try {
-                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+                validatedArgs = templateService.getValidatedArgs({ args: argsVehicleSegmentController_getAllVehicleSegment, request, response });
 
                 const controller = new VehicleSegmentController();
 
@@ -1179,20 +1188,20 @@ export function RegisterRoutes(app: Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsVehicleSegmentController_getOneVehicleSegment: Record<string, TsoaRoute.ParameterSchema> = {
+                vehicleSegmentId: {"in":"path","name":"vehicleSegmentId","required":true,"dataType":"double"},
+        };
         app.get('/vehicleSegment/:vehicleSegmentId',
             ...(fetchMiddlewares<RequestHandler>(VehicleSegmentController)),
             ...(fetchMiddlewares<RequestHandler>(VehicleSegmentController.prototype.getOneVehicleSegment)),
 
             async function VehicleSegmentController_getOneVehicleSegment(request: ExRequest, response: ExResponse, next: any) {
-            const args: Record<string, TsoaRoute.ParameterSchema> = {
-                    vehicleSegmentId: {"in":"path","name":"vehicleSegmentId","required":true,"dataType":"double"},
-            };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
             let validatedArgs: any[] = [];
             try {
-                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+                validatedArgs = templateService.getValidatedArgs({ args: argsVehicleSegmentController_getOneVehicleSegment, request, response });
 
                 const controller = new VehicleSegmentController();
 
@@ -1209,20 +1218,20 @@ export function RegisterRoutes(app: Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsVehicleSegmentController_deleteVehicleSegment: Record<string, TsoaRoute.ParameterSchema> = {
+                vehicleSegmentId: {"in":"path","name":"vehicleSegmentId","required":true,"dataType":"double"},
+        };
         app.delete('/vehicleSegment/:vehicleSegmentId',
             ...(fetchMiddlewares<RequestHandler>(VehicleSegmentController)),
             ...(fetchMiddlewares<RequestHandler>(VehicleSegmentController.prototype.deleteVehicleSegment)),
 
             async function VehicleSegmentController_deleteVehicleSegment(request: ExRequest, response: ExResponse, next: any) {
-            const args: Record<string, TsoaRoute.ParameterSchema> = {
-                    vehicleSegmentId: {"in":"path","name":"vehicleSegmentId","required":true,"dataType":"double"},
-            };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
             let validatedArgs: any[] = [];
             try {
-                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+                validatedArgs = templateService.getValidatedArgs({ args: argsVehicleSegmentController_deleteVehicleSegment, request, response });
 
                 const controller = new VehicleSegmentController();
 
@@ -1239,20 +1248,20 @@ export function RegisterRoutes(app: Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsVehicleModelController_saveVehicleModel: Record<string, TsoaRoute.ParameterSchema> = {
+                request: {"in":"body","name":"request","required":true,"ref":"ReqVehicleModel"},
+        };
         app.post('/vehicleModel',
             ...(fetchMiddlewares<RequestHandler>(VehicleModelController)),
             ...(fetchMiddlewares<RequestHandler>(VehicleModelController.prototype.saveVehicleModel)),
 
             async function VehicleModelController_saveVehicleModel(request: ExRequest, response: ExResponse, next: any) {
-            const args: Record<string, TsoaRoute.ParameterSchema> = {
-                    request: {"in":"body","name":"request","required":true,"ref":"ReqVehicleModel"},
-            };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
             let validatedArgs: any[] = [];
             try {
-                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+                validatedArgs = templateService.getValidatedArgs({ args: argsVehicleModelController_saveVehicleModel, request, response });
 
                 const controller = new VehicleModelController();
 
@@ -1269,19 +1278,19 @@ export function RegisterRoutes(app: Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsVehicleModelController_getAllVehicleModel: Record<string, TsoaRoute.ParameterSchema> = {
+        };
         app.get('/vehicleModel',
             ...(fetchMiddlewares<RequestHandler>(VehicleModelController)),
             ...(fetchMiddlewares<RequestHandler>(VehicleModelController.prototype.getAllVehicleModel)),
 
             async function VehicleModelController_getAllVehicleModel(request: ExRequest, response: ExResponse, next: any) {
-            const args: Record<string, TsoaRoute.ParameterSchema> = {
-            };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
             let validatedArgs: any[] = [];
             try {
-                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+                validatedArgs = templateService.getValidatedArgs({ args: argsVehicleModelController_getAllVehicleModel, request, response });
 
                 const controller = new VehicleModelController();
 
@@ -1298,20 +1307,20 @@ export function RegisterRoutes(app: Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsVehicleModelController_getOneVehicleModel: Record<string, TsoaRoute.ParameterSchema> = {
+                vehicleModelId: {"in":"path","name":"vehicleModelId","required":true,"dataType":"double"},
+        };
         app.get('/vehicleModel/:vehicleModelId',
             ...(fetchMiddlewares<RequestHandler>(VehicleModelController)),
             ...(fetchMiddlewares<RequestHandler>(VehicleModelController.prototype.getOneVehicleModel)),
 
             async function VehicleModelController_getOneVehicleModel(request: ExRequest, response: ExResponse, next: any) {
-            const args: Record<string, TsoaRoute.ParameterSchema> = {
-                    vehicleModelId: {"in":"path","name":"vehicleModelId","required":true,"dataType":"double"},
-            };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
             let validatedArgs: any[] = [];
             try {
-                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+                validatedArgs = templateService.getValidatedArgs({ args: argsVehicleModelController_getOneVehicleModel, request, response });
 
                 const controller = new VehicleModelController();
 
@@ -1328,20 +1337,20 @@ export function RegisterRoutes(app: Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsVehicleModelController_deleteVehicleModel: Record<string, TsoaRoute.ParameterSchema> = {
+                vehicleModelId: {"in":"path","name":"vehicleModelId","required":true,"dataType":"double"},
+        };
         app.delete('/vehicleModel/:vehicleModelId',
             ...(fetchMiddlewares<RequestHandler>(VehicleModelController)),
             ...(fetchMiddlewares<RequestHandler>(VehicleModelController.prototype.deleteVehicleModel)),
 
             async function VehicleModelController_deleteVehicleModel(request: ExRequest, response: ExResponse, next: any) {
-            const args: Record<string, TsoaRoute.ParameterSchema> = {
-                    vehicleModelId: {"in":"path","name":"vehicleModelId","required":true,"dataType":"double"},
-            };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
             let validatedArgs: any[] = [];
             try {
-                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+                validatedArgs = templateService.getValidatedArgs({ args: argsVehicleModelController_deleteVehicleModel, request, response });
 
                 const controller = new VehicleModelController();
 
@@ -1358,22 +1367,22 @@ export function RegisterRoutes(app: Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsUserController_saveUser: Record<string, TsoaRoute.ParameterSchema> = {
+                request: {"in":"request","name":"request","required":true,"dataType":"object"},
+                req: {"in":"body","name":"req","required":true,"ref":"ReqUser"},
+        };
         app.post('/user',
             authenticateMiddleware([{"Api-Token":[]}]),
             ...(fetchMiddlewares<RequestHandler>(UserController)),
             ...(fetchMiddlewares<RequestHandler>(UserController.prototype.saveUser)),
 
             async function UserController_saveUser(request: ExRequest, response: ExResponse, next: any) {
-            const args: Record<string, TsoaRoute.ParameterSchema> = {
-                    request: {"in":"request","name":"request","required":true,"dataType":"object"},
-                    req: {"in":"body","name":"req","required":true,"ref":"ReqUser"},
-            };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
             let validatedArgs: any[] = [];
             try {
-                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+                validatedArgs = templateService.getValidatedArgs({ args: argsUserController_saveUser, request, response });
 
                 const controller = new UserController();
 
@@ -1390,20 +1399,20 @@ export function RegisterRoutes(app: Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsUserController_userLogin: Record<string, TsoaRoute.ParameterSchema> = {
+                loginBody: {"in":"body","name":"loginBody","required":true,"ref":"ReqUserLogin"},
+        };
         app.post('/user/login',
             ...(fetchMiddlewares<RequestHandler>(UserController)),
             ...(fetchMiddlewares<RequestHandler>(UserController.prototype.userLogin)),
 
             async function UserController_userLogin(request: ExRequest, response: ExResponse, next: any) {
-            const args: Record<string, TsoaRoute.ParameterSchema> = {
-                    loginBody: {"in":"body","name":"loginBody","required":true,"ref":"ReqUserLogin"},
-            };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
             let validatedArgs: any[] = [];
             try {
-                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+                validatedArgs = templateService.getValidatedArgs({ args: argsUserController_userLogin, request, response });
 
                 const controller = new UserController();
 
@@ -1420,20 +1429,20 @@ export function RegisterRoutes(app: Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsUserController_getUsersUnder: Record<string, TsoaRoute.ParameterSchema> = {
+                userId: {"in":"path","name":"userId","required":true,"dataType":"union","subSchemas":[{"dataType":"double"},{"dataType":"undefined"}]},
+        };
         app.post('/user/getUsersUnder/:userId',
             ...(fetchMiddlewares<RequestHandler>(UserController)),
             ...(fetchMiddlewares<RequestHandler>(UserController.prototype.getUsersUnder)),
 
             async function UserController_getUsersUnder(request: ExRequest, response: ExResponse, next: any) {
-            const args: Record<string, TsoaRoute.ParameterSchema> = {
-                    userId: {"in":"path","name":"userId","required":true,"dataType":"union","subSchemas":[{"dataType":"double"},{"dataType":"undefined"}]},
-            };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
             let validatedArgs: any[] = [];
             try {
-                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+                validatedArgs = templateService.getValidatedArgs({ args: argsUserController_getUsersUnder, request, response });
 
                 const controller = new UserController();
 
@@ -1450,21 +1459,21 @@ export function RegisterRoutes(app: Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsUserController_putUsersUnder: Record<string, TsoaRoute.ParameterSchema> = {
+                userId: {"in":"path","name":"userId","required":true,"dataType":"double"},
+                req: {"in":"body","name":"req","required":true,"ref":"ReqUsersUnder"},
+        };
         app.put('/user/putUsersUnder/:userId',
             ...(fetchMiddlewares<RequestHandler>(UserController)),
             ...(fetchMiddlewares<RequestHandler>(UserController.prototype.putUsersUnder)),
 
             async function UserController_putUsersUnder(request: ExRequest, response: ExResponse, next: any) {
-            const args: Record<string, TsoaRoute.ParameterSchema> = {
-                    userId: {"in":"path","name":"userId","required":true,"dataType":"double"},
-                    req: {"in":"body","name":"req","required":true,"ref":"ReqUsersUnder"},
-            };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
             let validatedArgs: any[] = [];
             try {
-                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+                validatedArgs = templateService.getValidatedArgs({ args: argsUserController_putUsersUnder, request, response });
 
                 const controller = new UserController();
 
@@ -1481,20 +1490,20 @@ export function RegisterRoutes(app: Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsUserController_deleteUser: Record<string, TsoaRoute.ParameterSchema> = {
+                userId: {"in":"path","name":"userId","required":true,"dataType":"double"},
+        };
         app.delete('/user/:userId',
             ...(fetchMiddlewares<RequestHandler>(UserController)),
             ...(fetchMiddlewares<RequestHandler>(UserController.prototype.deleteUser)),
 
             async function UserController_deleteUser(request: ExRequest, response: ExResponse, next: any) {
-            const args: Record<string, TsoaRoute.ParameterSchema> = {
-                    userId: {"in":"path","name":"userId","required":true,"dataType":"double"},
-            };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
             let validatedArgs: any[] = [];
             try {
-                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+                validatedArgs = templateService.getValidatedArgs({ args: argsUserController_deleteUser, request, response });
 
                 const controller = new UserController();
 
@@ -1511,21 +1520,21 @@ export function RegisterRoutes(app: Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsUserController_assignUserDevice: Record<string, TsoaRoute.ParameterSchema> = {
+                userId: {"in":"path","name":"userId","required":true,"dataType":"double"},
+                request: {"in":"body","name":"request","required":true,"ref":"ReqDeviceAssign"},
+        };
         app.put('/user/userDeviceAllot/:userId',
             ...(fetchMiddlewares<RequestHandler>(UserController)),
             ...(fetchMiddlewares<RequestHandler>(UserController.prototype.assignUserDevice)),
 
             async function UserController_assignUserDevice(request: ExRequest, response: ExResponse, next: any) {
-            const args: Record<string, TsoaRoute.ParameterSchema> = {
-                    userId: {"in":"path","name":"userId","required":true,"dataType":"double"},
-                    request: {"in":"body","name":"request","required":true,"ref":"ReqDeviceAssign"},
-            };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
             let validatedArgs: any[] = [];
             try {
-                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+                validatedArgs = templateService.getValidatedArgs({ args: argsUserController_assignUserDevice, request, response });
 
                 const controller = new UserController();
 
@@ -1542,21 +1551,21 @@ export function RegisterRoutes(app: Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsUserController_getUsers: Record<string, TsoaRoute.ParameterSchema> = {
+                page: {"default":1,"in":"query","name":"page","dataType":"double"},
+                pageSize: {"default":10,"in":"query","name":"pageSize","dataType":"double"},
+        };
         app.get('/user',
             ...(fetchMiddlewares<RequestHandler>(UserController)),
             ...(fetchMiddlewares<RequestHandler>(UserController.prototype.getUsers)),
 
             async function UserController_getUsers(request: ExRequest, response: ExResponse, next: any) {
-            const args: Record<string, TsoaRoute.ParameterSchema> = {
-                    page: {"default":1,"in":"query","name":"page","dataType":"double"},
-                    pageSize: {"default":10,"in":"query","name":"pageSize","dataType":"double"},
-            };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
             let validatedArgs: any[] = [];
             try {
-                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+                validatedArgs = templateService.getValidatedArgs({ args: argsUserController_getUsers, request, response });
 
                 const controller = new UserController();
 
@@ -1573,20 +1582,20 @@ export function RegisterRoutes(app: Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsUserController_getOneUser: Record<string, TsoaRoute.ParameterSchema> = {
+                userId: {"in":"path","name":"userId","required":true,"dataType":"double"},
+        };
         app.get('/user/:userId',
             ...(fetchMiddlewares<RequestHandler>(UserController)),
             ...(fetchMiddlewares<RequestHandler>(UserController.prototype.getOneUser)),
 
             async function UserController_getOneUser(request: ExRequest, response: ExResponse, next: any) {
-            const args: Record<string, TsoaRoute.ParameterSchema> = {
-                    userId: {"in":"path","name":"userId","required":true,"dataType":"double"},
-            };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
             let validatedArgs: any[] = [];
             try {
-                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+                validatedArgs = templateService.getValidatedArgs({ args: argsUserController_getOneUser, request, response });
 
                 const controller = new UserController();
 
@@ -1603,21 +1612,21 @@ export function RegisterRoutes(app: Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsUserController_updateUser: Record<string, TsoaRoute.ParameterSchema> = {
+                userId: {"in":"path","name":"userId","required":true,"dataType":"double"},
+                request: {"in":"body","name":"request","required":true,"ref":"ResUserUpdate"},
+        };
         app.put('/user/:userId',
             ...(fetchMiddlewares<RequestHandler>(UserController)),
             ...(fetchMiddlewares<RequestHandler>(UserController.prototype.updateUser)),
 
             async function UserController_updateUser(request: ExRequest, response: ExResponse, next: any) {
-            const args: Record<string, TsoaRoute.ParameterSchema> = {
-                    userId: {"in":"path","name":"userId","required":true,"dataType":"double"},
-                    request: {"in":"body","name":"request","required":true,"ref":"ResUserUpdate"},
-            };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
             let validatedArgs: any[] = [];
             try {
-                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+                validatedArgs = templateService.getValidatedArgs({ args: argsUserController_updateUser, request, response });
 
                 const controller = new UserController();
 
@@ -1634,19 +1643,19 @@ export function RegisterRoutes(app: Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsUserController_getAllUsers: Record<string, TsoaRoute.ParameterSchema> = {
+        };
         app.post('/user/getAllUser',
             ...(fetchMiddlewares<RequestHandler>(UserController)),
             ...(fetchMiddlewares<RequestHandler>(UserController.prototype.getAllUsers)),
 
             async function UserController_getAllUsers(request: ExRequest, response: ExResponse, next: any) {
-            const args: Record<string, TsoaRoute.ParameterSchema> = {
-            };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
             let validatedArgs: any[] = [];
             try {
-                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+                validatedArgs = templateService.getValidatedArgs({ args: argsUserController_getAllUsers, request, response });
 
                 const controller = new UserController();
 
@@ -1663,21 +1672,21 @@ export function RegisterRoutes(app: Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsUserController_getUsersFromRole: Record<string, TsoaRoute.ParameterSchema> = {
+                userId: {"in":"path","name":"userId","required":true,"dataType":"double"},
+                request: {"in":"body","name":"request","required":true,"ref":"ReqUserRoleFind"},
+        };
         app.post('/user/:userId/getUserFromRole',
             ...(fetchMiddlewares<RequestHandler>(UserController)),
             ...(fetchMiddlewares<RequestHandler>(UserController.prototype.getUsersFromRole)),
 
             async function UserController_getUsersFromRole(request: ExRequest, response: ExResponse, next: any) {
-            const args: Record<string, TsoaRoute.ParameterSchema> = {
-                    userId: {"in":"path","name":"userId","required":true,"dataType":"double"},
-                    request: {"in":"body","name":"request","required":true,"ref":"ReqUserRoleFind"},
-            };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
             let validatedArgs: any[] = [];
             try {
-                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+                validatedArgs = templateService.getValidatedArgs({ args: argsUserController_getUsersFromRole, request, response });
 
                 const controller = new UserController();
 
@@ -1694,19 +1703,19 @@ export function RegisterRoutes(app: Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsServiceTicketController_getAllServiceTickets: Record<string, TsoaRoute.ParameterSchema> = {
+        };
         app.get('/serviceTicket',
             ...(fetchMiddlewares<RequestHandler>(ServiceTicketController)),
             ...(fetchMiddlewares<RequestHandler>(ServiceTicketController.prototype.getAllServiceTickets)),
 
             async function ServiceTicketController_getAllServiceTickets(request: ExRequest, response: ExResponse, next: any) {
-            const args: Record<string, TsoaRoute.ParameterSchema> = {
-            };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
             let validatedArgs: any[] = [];
             try {
-                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+                validatedArgs = templateService.getValidatedArgs({ args: argsServiceTicketController_getAllServiceTickets, request, response });
 
                 const controller = new ServiceTicketController();
 
@@ -1723,21 +1732,21 @@ export function RegisterRoutes(app: Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsServiceTicketController_saveServiceTicket: Record<string, TsoaRoute.ParameterSchema> = {
+                req: {"in":"request","name":"req","required":true,"dataType":"object"},
+        };
         app.post('/serviceTicket',
             authenticateMiddleware([{"Api-Token":[]}]),
             ...(fetchMiddlewares<RequestHandler>(ServiceTicketController)),
             ...(fetchMiddlewares<RequestHandler>(ServiceTicketController.prototype.saveServiceTicket)),
 
             async function ServiceTicketController_saveServiceTicket(request: ExRequest, response: ExResponse, next: any) {
-            const args: Record<string, TsoaRoute.ParameterSchema> = {
-                    req: {"in":"request","name":"req","required":true,"dataType":"object"},
-            };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
             let validatedArgs: any[] = [];
             try {
-                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+                validatedArgs = templateService.getValidatedArgs({ args: argsServiceTicketController_saveServiceTicket, request, response });
 
                 const controller = new ServiceTicketController();
 
@@ -1754,21 +1763,21 @@ export function RegisterRoutes(app: Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsServiceTicketController_updateServiceTicketStatus: Record<string, TsoaRoute.ParameterSchema> = {
+                serviceTicketId: {"in":"path","name":"serviceTicketId","required":true,"dataType":"double"},
+                request: {"in":"body","name":"request","required":true,"ref":"ReqSTstatus"},
+        };
         app.put('/serviceTicket/:serviceTicketId',
             ...(fetchMiddlewares<RequestHandler>(ServiceTicketController)),
             ...(fetchMiddlewares<RequestHandler>(ServiceTicketController.prototype.updateServiceTicketStatus)),
 
             async function ServiceTicketController_updateServiceTicketStatus(request: ExRequest, response: ExResponse, next: any) {
-            const args: Record<string, TsoaRoute.ParameterSchema> = {
-                    serviceTicketId: {"in":"path","name":"serviceTicketId","required":true,"dataType":"double"},
-                    request: {"in":"body","name":"request","required":true,"ref":"ReqSTstatus"},
-            };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
             let validatedArgs: any[] = [];
             try {
-                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+                validatedArgs = templateService.getValidatedArgs({ args: argsServiceTicketController_updateServiceTicketStatus, request, response });
 
                 const controller = new ServiceTicketController();
 
@@ -1785,20 +1794,20 @@ export function RegisterRoutes(app: Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsRoleController_getOneRole: Record<string, TsoaRoute.ParameterSchema> = {
+                roleId: {"in":"path","name":"roleId","required":true,"dataType":"double"},
+        };
         app.get('/role/:roleId',
             ...(fetchMiddlewares<RequestHandler>(RoleController)),
             ...(fetchMiddlewares<RequestHandler>(RoleController.prototype.getOneRole)),
 
             async function RoleController_getOneRole(request: ExRequest, response: ExResponse, next: any) {
-            const args: Record<string, TsoaRoute.ParameterSchema> = {
-                    roleId: {"in":"path","name":"roleId","required":true,"dataType":"double"},
-            };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
             let validatedArgs: any[] = [];
             try {
-                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+                validatedArgs = templateService.getValidatedArgs({ args: argsRoleController_getOneRole, request, response });
 
                 const controller = new RoleController();
 
@@ -1815,19 +1824,19 @@ export function RegisterRoutes(app: Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsRoleController_getAllRole: Record<string, TsoaRoute.ParameterSchema> = {
+        };
         app.get('/role',
             ...(fetchMiddlewares<RequestHandler>(RoleController)),
             ...(fetchMiddlewares<RequestHandler>(RoleController.prototype.getAllRole)),
 
             async function RoleController_getAllRole(request: ExRequest, response: ExResponse, next: any) {
-            const args: Record<string, TsoaRoute.ParameterSchema> = {
-            };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
             let validatedArgs: any[] = [];
             try {
-                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+                validatedArgs = templateService.getValidatedArgs({ args: argsRoleController_getAllRole, request, response });
 
                 const controller = new RoleController();
 
@@ -1844,20 +1853,20 @@ export function RegisterRoutes(app: Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsRoleController_deleteRole: Record<string, TsoaRoute.ParameterSchema> = {
+                roleId: {"in":"path","name":"roleId","required":true,"dataType":"double"},
+        };
         app.delete('/role/:roleId',
             ...(fetchMiddlewares<RequestHandler>(RoleController)),
             ...(fetchMiddlewares<RequestHandler>(RoleController.prototype.deleteRole)),
 
             async function RoleController_deleteRole(request: ExRequest, response: ExResponse, next: any) {
-            const args: Record<string, TsoaRoute.ParameterSchema> = {
-                    roleId: {"in":"path","name":"roleId","required":true,"dataType":"double"},
-            };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
             let validatedArgs: any[] = [];
             try {
-                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+                validatedArgs = templateService.getValidatedArgs({ args: argsRoleController_deleteRole, request, response });
 
                 const controller = new RoleController();
 
@@ -1874,22 +1883,22 @@ export function RegisterRoutes(app: Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsRoleController_saveRole: Record<string, TsoaRoute.ParameterSchema> = {
+                request: {"in":"body","name":"request","required":true,"ref":"ReqRole"},
+                req: {"in":"request","name":"req","required":true,"dataType":"object"},
+        };
         app.post('/role',
             authenticateMiddleware([{"Api-Token":[]}]),
             ...(fetchMiddlewares<RequestHandler>(RoleController)),
             ...(fetchMiddlewares<RequestHandler>(RoleController.prototype.saveRole)),
 
             async function RoleController_saveRole(request: ExRequest, response: ExResponse, next: any) {
-            const args: Record<string, TsoaRoute.ParameterSchema> = {
-                    request: {"in":"body","name":"request","required":true,"ref":"ReqRole"},
-                    req: {"in":"request","name":"req","required":true,"dataType":"object"},
-            };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
             let validatedArgs: any[] = [];
             try {
-                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+                validatedArgs = templateService.getValidatedArgs({ args: argsRoleController_saveRole, request, response });
 
                 const controller = new RoleController();
 
@@ -1906,21 +1915,21 @@ export function RegisterRoutes(app: Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsRoleController_givePermissionToRole: Record<string, TsoaRoute.ParameterSchema> = {
+                request: {"in":"body","name":"request","required":true,"ref":"SetPermisisons"},
+                roleId: {"in":"path","name":"roleId","required":true,"dataType":"double"},
+        };
         app.put('/role/:roleId/setPermissions',
             ...(fetchMiddlewares<RequestHandler>(RoleController)),
             ...(fetchMiddlewares<RequestHandler>(RoleController.prototype.givePermissionToRole)),
 
             async function RoleController_givePermissionToRole(request: ExRequest, response: ExResponse, next: any) {
-            const args: Record<string, TsoaRoute.ParameterSchema> = {
-                    request: {"in":"body","name":"request","required":true,"ref":"SetPermisisons"},
-                    roleId: {"in":"path","name":"roleId","required":true,"dataType":"double"},
-            };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
             let validatedArgs: any[] = [];
             try {
-                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+                validatedArgs = templateService.getValidatedArgs({ args: argsRoleController_givePermissionToRole, request, response });
 
                 const controller = new RoleController();
 
@@ -1937,21 +1946,21 @@ export function RegisterRoutes(app: Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsRoleController_updateRole: Record<string, TsoaRoute.ParameterSchema> = {
+                req: {"in":"body","name":"req","required":true,"ref":"ReqRole"},
+                roleId: {"in":"path","name":"roleId","required":true,"dataType":"double"},
+        };
         app.put('/role/:roleId',
             ...(fetchMiddlewares<RequestHandler>(RoleController)),
             ...(fetchMiddlewares<RequestHandler>(RoleController.prototype.updateRole)),
 
             async function RoleController_updateRole(request: ExRequest, response: ExResponse, next: any) {
-            const args: Record<string, TsoaRoute.ParameterSchema> = {
-                    req: {"in":"body","name":"req","required":true,"ref":"ReqRole"},
-                    roleId: {"in":"path","name":"roleId","required":true,"dataType":"double"},
-            };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
             let validatedArgs: any[] = [];
             try {
-                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+                validatedArgs = templateService.getValidatedArgs({ args: argsRoleController_updateRole, request, response });
 
                 const controller = new RoleController();
 
@@ -1968,20 +1977,20 @@ export function RegisterRoutes(app: Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsRoleController_getPermissionsFromRole: Record<string, TsoaRoute.ParameterSchema> = {
+                roleId: {"in":"path","name":"roleId","required":true,"dataType":"double"},
+        };
         app.post('/role/:roleId',
             ...(fetchMiddlewares<RequestHandler>(RoleController)),
             ...(fetchMiddlewares<RequestHandler>(RoleController.prototype.getPermissionsFromRole)),
 
             async function RoleController_getPermissionsFromRole(request: ExRequest, response: ExResponse, next: any) {
-            const args: Record<string, TsoaRoute.ParameterSchema> = {
-                    roleId: {"in":"path","name":"roleId","required":true,"dataType":"double"},
-            };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
             let validatedArgs: any[] = [];
             try {
-                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+                validatedArgs = templateService.getValidatedArgs({ args: argsRoleController_getPermissionsFromRole, request, response });
 
                 const controller = new RoleController();
 
@@ -1998,19 +2007,19 @@ export function RegisterRoutes(app: Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsPermissionController_getAllPermissions: Record<string, TsoaRoute.ParameterSchema> = {
+        };
         app.get('/permission',
             ...(fetchMiddlewares<RequestHandler>(PermissionController)),
             ...(fetchMiddlewares<RequestHandler>(PermissionController.prototype.getAllPermissions)),
 
             async function PermissionController_getAllPermissions(request: ExRequest, response: ExResponse, next: any) {
-            const args: Record<string, TsoaRoute.ParameterSchema> = {
-            };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
             let validatedArgs: any[] = [];
             try {
-                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+                validatedArgs = templateService.getValidatedArgs({ args: argsPermissionController_getAllPermissions, request, response });
 
                 const controller = new PermissionController();
 
@@ -2027,20 +2036,20 @@ export function RegisterRoutes(app: Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsPermissionController_deletePermission: Record<string, TsoaRoute.ParameterSchema> = {
+                permissionId: {"in":"path","name":"permissionId","required":true,"dataType":"double"},
+        };
         app.delete('/permission/:permissionId',
             ...(fetchMiddlewares<RequestHandler>(PermissionController)),
             ...(fetchMiddlewares<RequestHandler>(PermissionController.prototype.deletePermission)),
 
             async function PermissionController_deletePermission(request: ExRequest, response: ExResponse, next: any) {
-            const args: Record<string, TsoaRoute.ParameterSchema> = {
-                    permissionId: {"in":"path","name":"permissionId","required":true,"dataType":"double"},
-            };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
             let validatedArgs: any[] = [];
             try {
-                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+                validatedArgs = templateService.getValidatedArgs({ args: argsPermissionController_deletePermission, request, response });
 
                 const controller = new PermissionController();
 
@@ -2057,20 +2066,20 @@ export function RegisterRoutes(app: Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsPermissionController_savePermission: Record<string, TsoaRoute.ParameterSchema> = {
+                request: {"in":"body","name":"request","required":true,"ref":"ReqPermission"},
+        };
         app.post('/permission',
             ...(fetchMiddlewares<RequestHandler>(PermissionController)),
             ...(fetchMiddlewares<RequestHandler>(PermissionController.prototype.savePermission)),
 
             async function PermissionController_savePermission(request: ExRequest, response: ExResponse, next: any) {
-            const args: Record<string, TsoaRoute.ParameterSchema> = {
-                    request: {"in":"body","name":"request","required":true,"ref":"ReqPermission"},
-            };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
             let validatedArgs: any[] = [];
             try {
-                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+                validatedArgs = templateService.getValidatedArgs({ args: argsPermissionController_savePermission, request, response });
 
                 const controller = new PermissionController();
 
@@ -2087,20 +2096,20 @@ export function RegisterRoutes(app: Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsPermissionController_getPermissionsOfUser: Record<string, TsoaRoute.ParameterSchema> = {
+                userId: {"in":"path","name":"userId","required":true,"dataType":"double"},
+        };
         app.get('/permission/getUserPerms/:userId',
             ...(fetchMiddlewares<RequestHandler>(PermissionController)),
             ...(fetchMiddlewares<RequestHandler>(PermissionController.prototype.getPermissionsOfUser)),
 
             async function PermissionController_getPermissionsOfUser(request: ExRequest, response: ExResponse, next: any) {
-            const args: Record<string, TsoaRoute.ParameterSchema> = {
-                    userId: {"in":"path","name":"userId","required":true,"dataType":"double"},
-            };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
             let validatedArgs: any[] = [];
             try {
-                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+                validatedArgs = templateService.getValidatedArgs({ args: argsPermissionController_getPermissionsOfUser, request, response });
 
                 const controller = new PermissionController();
 
@@ -2117,21 +2126,21 @@ export function RegisterRoutes(app: Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsPermissionController_updatePermission: Record<string, TsoaRoute.ParameterSchema> = {
+                permissionId: {"in":"path","name":"permissionId","required":true,"dataType":"double"},
+                request: {"in":"body","name":"request","required":true,"ref":"ReqPermission"},
+        };
         app.put('/permission/:permissionId',
             ...(fetchMiddlewares<RequestHandler>(PermissionController)),
             ...(fetchMiddlewares<RequestHandler>(PermissionController.prototype.updatePermission)),
 
             async function PermissionController_updatePermission(request: ExRequest, response: ExResponse, next: any) {
-            const args: Record<string, TsoaRoute.ParameterSchema> = {
-                    permissionId: {"in":"path","name":"permissionId","required":true,"dataType":"double"},
-                    request: {"in":"body","name":"request","required":true,"ref":"ReqPermission"},
-            };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
             let validatedArgs: any[] = [];
             try {
-                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+                validatedArgs = templateService.getValidatedArgs({ args: argsPermissionController_updatePermission, request, response });
 
                 const controller = new PermissionController();
 
@@ -2148,20 +2157,20 @@ export function RegisterRoutes(app: Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsOEMController_saveOem: Record<string, TsoaRoute.ParameterSchema> = {
+                request: {"in":"body","name":"request","required":true,"ref":"ReqOEM"},
+        };
         app.post('/oem',
             ...(fetchMiddlewares<RequestHandler>(OEMController)),
             ...(fetchMiddlewares<RequestHandler>(OEMController.prototype.saveOem)),
 
             async function OEMController_saveOem(request: ExRequest, response: ExResponse, next: any) {
-            const args: Record<string, TsoaRoute.ParameterSchema> = {
-                    request: {"in":"body","name":"request","required":true,"ref":"ReqOEM"},
-            };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
             let validatedArgs: any[] = [];
             try {
-                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+                validatedArgs = templateService.getValidatedArgs({ args: argsOEMController_saveOem, request, response });
 
                 const controller = new OEMController();
 
@@ -2178,20 +2187,20 @@ export function RegisterRoutes(app: Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsLoginPacketController_saveLoginPacket: Record<string, TsoaRoute.ParameterSchema> = {
+                req: {"in":"body","name":"req","required":true,"ref":"ReqLoginPacket"},
+        };
         app.post('/loginpacket',
             ...(fetchMiddlewares<RequestHandler>(LoginPacketController)),
             ...(fetchMiddlewares<RequestHandler>(LoginPacketController.prototype.saveLoginPacket)),
 
             async function LoginPacketController_saveLoginPacket(request: ExRequest, response: ExResponse, next: any) {
-            const args: Record<string, TsoaRoute.ParameterSchema> = {
-                    req: {"in":"body","name":"req","required":true,"ref":"ReqLoginPacket"},
-            };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
             let validatedArgs: any[] = [];
             try {
-                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+                validatedArgs = templateService.getValidatedArgs({ args: argsLoginPacketController_saveLoginPacket, request, response });
 
                 const controller = new LoginPacketController();
 
@@ -2208,20 +2217,20 @@ export function RegisterRoutes(app: Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsIMEICMDController_sendCommand: Record<string, TsoaRoute.ParameterSchema> = {
+                body: {"in":"body","name":"body","required":true,"ref":"SendCommandRequest"},
+        };
         app.post('/cmd/send',
             ...(fetchMiddlewares<RequestHandler>(IMEICMDController)),
             ...(fetchMiddlewares<RequestHandler>(IMEICMDController.prototype.sendCommand)),
 
             async function IMEICMDController_sendCommand(request: ExRequest, response: ExResponse, next: any) {
-            const args: Record<string, TsoaRoute.ParameterSchema> = {
-                    body: {"in":"body","name":"body","required":true,"ref":"SendCommandRequest"},
-            };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
             let validatedArgs: any[] = [];
             try {
-                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+                validatedArgs = templateService.getValidatedArgs({ args: argsIMEICMDController_sendCommand, request, response });
 
                 const controller = new IMEICMDController();
 
@@ -2238,20 +2247,20 @@ export function RegisterRoutes(app: Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsGeofenceController_saveGeofence: Record<string, TsoaRoute.ParameterSchema> = {
+                req: {"in":"body","name":"req","required":true,"ref":"ReqGeofence"},
+        };
         app.post('/geofence',
             ...(fetchMiddlewares<RequestHandler>(GeofenceController)),
             ...(fetchMiddlewares<RequestHandler>(GeofenceController.prototype.saveGeofence)),
 
             async function GeofenceController_saveGeofence(request: ExRequest, response: ExResponse, next: any) {
-            const args: Record<string, TsoaRoute.ParameterSchema> = {
-                    req: {"in":"body","name":"req","required":true,"ref":"ReqGeofence"},
-            };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
             let validatedArgs: any[] = [];
             try {
-                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+                validatedArgs = templateService.getValidatedArgs({ args: argsGeofenceController_saveGeofence, request, response });
 
                 const controller = new GeofenceController();
 
@@ -2268,19 +2277,19 @@ export function RegisterRoutes(app: Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsGeofenceController_getAllGeofence: Record<string, TsoaRoute.ParameterSchema> = {
+        };
         app.get('/geofence',
             ...(fetchMiddlewares<RequestHandler>(GeofenceController)),
             ...(fetchMiddlewares<RequestHandler>(GeofenceController.prototype.getAllGeofence)),
 
             async function GeofenceController_getAllGeofence(request: ExRequest, response: ExResponse, next: any) {
-            const args: Record<string, TsoaRoute.ParameterSchema> = {
-            };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
             let validatedArgs: any[] = [];
             try {
-                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+                validatedArgs = templateService.getValidatedArgs({ args: argsGeofenceController_getAllGeofence, request, response });
 
                 const controller = new GeofenceController();
 
@@ -2297,22 +2306,22 @@ export function RegisterRoutes(app: Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsFreeDongleUserDeviceController_freeTheDongle: Record<string, TsoaRoute.ParameterSchema> = {
+                req: {"in":"request","name":"req","required":true,"dataType":"object"},
+                userId: {"in":"path","name":"userId","required":true,"dataType":"double"},
+        };
         app.put('/user/freeDongle/:userId',
             authenticateMiddleware([{"Api-Token":[]}]),
             ...(fetchMiddlewares<RequestHandler>(FreeDongleUserDeviceController)),
             ...(fetchMiddlewares<RequestHandler>(FreeDongleUserDeviceController.prototype.freeTheDongle)),
 
             async function FreeDongleUserDeviceController_freeTheDongle(request: ExRequest, response: ExResponse, next: any) {
-            const args: Record<string, TsoaRoute.ParameterSchema> = {
-                    req: {"in":"request","name":"req","required":true,"dataType":"object"},
-                    userId: {"in":"path","name":"userId","required":true,"dataType":"double"},
-            };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
             let validatedArgs: any[] = [];
             try {
-                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+                validatedArgs = templateService.getValidatedArgs({ args: argsFreeDongleUserDeviceController_freeTheDongle, request, response });
 
                 const controller = new FreeDongleUserDeviceController();
 
@@ -2329,23 +2338,23 @@ export function RegisterRoutes(app: Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsFirmwareController_saveFirmware: Record<string, TsoaRoute.ParameterSchema> = {
+                firmwareVersion: {"in":"query","name":"firmwareVersion","required":true,"dataType":"string"},
+                firmwareType: {"in":"query","name":"firmwareType","required":true,"ref":"firmware_management"},
+                req: {"in":"request","name":"req","required":true,"dataType":"object"},
+        };
         app.post('/firmware',
             authenticateMiddleware([{"Api-Token":[]}]),
             ...(fetchMiddlewares<RequestHandler>(FirmwareController)),
             ...(fetchMiddlewares<RequestHandler>(FirmwareController.prototype.saveFirmware)),
 
             async function FirmwareController_saveFirmware(request: ExRequest, response: ExResponse, next: any) {
-            const args: Record<string, TsoaRoute.ParameterSchema> = {
-                    firmwareVersion: {"in":"query","name":"firmwareVersion","required":true,"dataType":"string"},
-                    firmwareType: {"in":"query","name":"firmwareType","required":true,"ref":"firmware_management"},
-                    req: {"in":"request","name":"req","required":true,"dataType":"object"},
-            };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
             let validatedArgs: any[] = [];
             try {
-                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+                validatedArgs = templateService.getValidatedArgs({ args: argsFirmwareController_saveFirmware, request, response });
 
                 const controller = new FirmwareController();
 
@@ -2362,19 +2371,19 @@ export function RegisterRoutes(app: Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsFirmwareController_getFirmwareFOTA: Record<string, TsoaRoute.ParameterSchema> = {
+        };
         app.get('/firmware/getFOTAfirmware',
             ...(fetchMiddlewares<RequestHandler>(FirmwareController)),
             ...(fetchMiddlewares<RequestHandler>(FirmwareController.prototype.getFirmwareFOTA)),
 
             async function FirmwareController_getFirmwareFOTA(request: ExRequest, response: ExResponse, next: any) {
-            const args: Record<string, TsoaRoute.ParameterSchema> = {
-            };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
             let validatedArgs: any[] = [];
             try {
-                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+                validatedArgs = templateService.getValidatedArgs({ args: argsFirmwareController_getFirmwareFOTA, request, response });
 
                 const controller = new FirmwareController();
 
@@ -2391,19 +2400,19 @@ export function RegisterRoutes(app: Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsFirmwareController_getFirmwareDevOTA: Record<string, TsoaRoute.ParameterSchema> = {
+        };
         app.get('/firmware/getDevOTAfirmware',
             ...(fetchMiddlewares<RequestHandler>(FirmwareController)),
             ...(fetchMiddlewares<RequestHandler>(FirmwareController.prototype.getFirmwareDevOTA)),
 
             async function FirmwareController_getFirmwareDevOTA(request: ExRequest, response: ExResponse, next: any) {
-            const args: Record<string, TsoaRoute.ParameterSchema> = {
-            };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
             let validatedArgs: any[] = [];
             try {
-                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+                validatedArgs = templateService.getValidatedArgs({ args: argsFirmwareController_getFirmwareDevOTA, request, response });
 
                 const controller = new FirmwareController();
 
@@ -2420,20 +2429,20 @@ export function RegisterRoutes(app: Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsFirmwareController_deleteFirmware: Record<string, TsoaRoute.ParameterSchema> = {
+                firmwareId: {"in":"path","name":"firmwareId","required":true,"dataType":"double"},
+        };
         app.delete('/firmware/:firmwareId',
             ...(fetchMiddlewares<RequestHandler>(FirmwareController)),
             ...(fetchMiddlewares<RequestHandler>(FirmwareController.prototype.deleteFirmware)),
 
             async function FirmwareController_deleteFirmware(request: ExRequest, response: ExResponse, next: any) {
-            const args: Record<string, TsoaRoute.ParameterSchema> = {
-                    firmwareId: {"in":"path","name":"firmwareId","required":true,"dataType":"double"},
-            };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
             let validatedArgs: any[] = [];
             try {
-                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+                validatedArgs = templateService.getValidatedArgs({ args: argsFirmwareController_deleteFirmware, request, response });
 
                 const controller = new FirmwareController();
 
@@ -2450,28 +2459,33 @@ export function RegisterRoutes(app: Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsFirmwareController_updateFirmwareWithFile: Record<string, TsoaRoute.ParameterSchema> = {
+                req: {"in":"request","name":"req","required":true,"dataType":"object"},
+                file: {"in":"formData","name":"file","required":true,"dataType":"file"},
+                fileName: {"in":"query","name":"fileName","required":true,"dataType":"string"},
+                fileDescription: {"in":"query","name":"fileDescription","required":true,"dataType":"string"},
+                isActive: {"in":"query","name":"isActive","required":true,"dataType":"boolean"},
+                fileType: {"in":"query","name":"fileType","required":true,"ref":"file_type"},
+                firmware: {"in":"query","name":"firmware","required":true,"dataType":"double"},
+        };
         app.put('/firmware',
             authenticateMiddleware([{"Api-Token":[]}]),
-            upload.fields([{"name":"file","maxCount":1,"multiple":false}]),
+            upload.fields([
+                {
+                    name: "file",
+                    maxCount: 1
+                }
+            ]),
             ...(fetchMiddlewares<RequestHandler>(FirmwareController)),
             ...(fetchMiddlewares<RequestHandler>(FirmwareController.prototype.updateFirmwareWithFile)),
 
             async function FirmwareController_updateFirmwareWithFile(request: ExRequest, response: ExResponse, next: any) {
-            const args: Record<string, TsoaRoute.ParameterSchema> = {
-                    req: {"in":"request","name":"req","required":true,"dataType":"object"},
-                    file: {"in":"formData","name":"file","required":true,"dataType":"file"},
-                    fileName: {"in":"query","name":"fileName","required":true,"dataType":"string"},
-                    fileDescription: {"in":"query","name":"fileDescription","required":true,"dataType":"string"},
-                    isActive: {"in":"query","name":"isActive","required":true,"dataType":"boolean"},
-                    fileType: {"in":"query","name":"fileType","required":true,"ref":"file_type"},
-                    firmware: {"in":"query","name":"firmware","required":true,"dataType":"double"},
-            };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
             let validatedArgs: any[] = [];
             try {
-                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+                validatedArgs = templateService.getValidatedArgs({ args: argsFirmwareController_updateFirmwareWithFile, request, response });
 
                 const controller = new FirmwareController();
 
@@ -2488,20 +2502,20 @@ export function RegisterRoutes(app: Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsFirmwareController_getOneFirmware: Record<string, TsoaRoute.ParameterSchema> = {
+                firmwareId: {"in":"path","name":"firmwareId","required":true,"dataType":"double"},
+        };
         app.get('/firmware/:firmwareId',
             ...(fetchMiddlewares<RequestHandler>(FirmwareController)),
             ...(fetchMiddlewares<RequestHandler>(FirmwareController.prototype.getOneFirmware)),
 
             async function FirmwareController_getOneFirmware(request: ExRequest, response: ExResponse, next: any) {
-            const args: Record<string, TsoaRoute.ParameterSchema> = {
-                    firmwareId: {"in":"path","name":"firmwareId","required":true,"dataType":"double"},
-            };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
             let validatedArgs: any[] = [];
             try {
-                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+                validatedArgs = templateService.getValidatedArgs({ args: argsFirmwareController_getOneFirmware, request, response });
 
                 const controller = new FirmwareController();
 
@@ -2518,20 +2532,20 @@ export function RegisterRoutes(app: Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsDongleController_saveDongle: Record<string, TsoaRoute.ParameterSchema> = {
+                request: {"in":"body","name":"request","required":true,"ref":"ReqDongle"},
+        };
         app.post('/dongle',
             ...(fetchMiddlewares<RequestHandler>(DongleController)),
             ...(fetchMiddlewares<RequestHandler>(DongleController.prototype.saveDongle)),
 
             async function DongleController_saveDongle(request: ExRequest, response: ExResponse, next: any) {
-            const args: Record<string, TsoaRoute.ParameterSchema> = {
-                    request: {"in":"body","name":"request","required":true,"ref":"ReqDongle"},
-            };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
             let validatedArgs: any[] = [];
             try {
-                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+                validatedArgs = templateService.getValidatedArgs({ args: argsDongleController_saveDongle, request, response });
 
                 const controller = new DongleController();
 
@@ -2548,19 +2562,19 @@ export function RegisterRoutes(app: Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsDongleController_getAllDongle: Record<string, TsoaRoute.ParameterSchema> = {
+        };
         app.get('/dongle',
             ...(fetchMiddlewares<RequestHandler>(DongleController)),
             ...(fetchMiddlewares<RequestHandler>(DongleController.prototype.getAllDongle)),
 
             async function DongleController_getAllDongle(request: ExRequest, response: ExResponse, next: any) {
-            const args: Record<string, TsoaRoute.ParameterSchema> = {
-            };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
             let validatedArgs: any[] = [];
             try {
-                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+                validatedArgs = templateService.getValidatedArgs({ args: argsDongleController_getAllDongle, request, response });
 
                 const controller = new DongleController();
 
@@ -2577,20 +2591,20 @@ export function RegisterRoutes(app: Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsDongleController_getOneDongle: Record<string, TsoaRoute.ParameterSchema> = {
+                dongleId: {"in":"path","name":"dongleId","required":true,"dataType":"double"},
+        };
         app.get('/dongle/:dongleId',
             ...(fetchMiddlewares<RequestHandler>(DongleController)),
             ...(fetchMiddlewares<RequestHandler>(DongleController.prototype.getOneDongle)),
 
             async function DongleController_getOneDongle(request: ExRequest, response: ExResponse, next: any) {
-            const args: Record<string, TsoaRoute.ParameterSchema> = {
-                    dongleId: {"in":"path","name":"dongleId","required":true,"dataType":"double"},
-            };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
             let validatedArgs: any[] = [];
             try {
-                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+                validatedArgs = templateService.getValidatedArgs({ args: argsDongleController_getOneDongle, request, response });
 
                 const controller = new DongleController();
 
@@ -2607,20 +2621,20 @@ export function RegisterRoutes(app: Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsDongleController_deleteDongle: Record<string, TsoaRoute.ParameterSchema> = {
+                dongleId: {"in":"path","name":"dongleId","required":true,"dataType":"double"},
+        };
         app.delete('/dongle/:dongleId',
             ...(fetchMiddlewares<RequestHandler>(DongleController)),
             ...(fetchMiddlewares<RequestHandler>(DongleController.prototype.deleteDongle)),
 
             async function DongleController_deleteDongle(request: ExRequest, response: ExResponse, next: any) {
-            const args: Record<string, TsoaRoute.ParameterSchema> = {
-                    dongleId: {"in":"path","name":"dongleId","required":true,"dataType":"double"},
-            };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
             let validatedArgs: any[] = [];
             try {
-                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+                validatedArgs = templateService.getValidatedArgs({ args: argsDongleController_deleteDongle, request, response });
 
                 const controller = new DongleController();
 
@@ -2637,20 +2651,20 @@ export function RegisterRoutes(app: Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsDeviceController_getOneDevice: Record<string, TsoaRoute.ParameterSchema> = {
+                deviceId: {"in":"path","name":"deviceId","required":true,"dataType":"double"},
+        };
         app.get('/device/:deviceId',
             ...(fetchMiddlewares<RequestHandler>(DeviceController)),
             ...(fetchMiddlewares<RequestHandler>(DeviceController.prototype.getOneDevice)),
 
             async function DeviceController_getOneDevice(request: ExRequest, response: ExResponse, next: any) {
-            const args: Record<string, TsoaRoute.ParameterSchema> = {
-                    deviceId: {"in":"path","name":"deviceId","required":true,"dataType":"double"},
-            };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
             let validatedArgs: any[] = [];
             try {
-                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+                validatedArgs = templateService.getValidatedArgs({ args: argsDeviceController_getOneDevice, request, response });
 
                 const controller = new DeviceController();
 
@@ -2667,19 +2681,19 @@ export function RegisterRoutes(app: Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsDeviceController_getAllDevice: Record<string, TsoaRoute.ParameterSchema> = {
+        };
         app.get('/device',
             ...(fetchMiddlewares<RequestHandler>(DeviceController)),
             ...(fetchMiddlewares<RequestHandler>(DeviceController.prototype.getAllDevice)),
 
             async function DeviceController_getAllDevice(request: ExRequest, response: ExResponse, next: any) {
-            const args: Record<string, TsoaRoute.ParameterSchema> = {
-            };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
             let validatedArgs: any[] = [];
             try {
-                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+                validatedArgs = templateService.getValidatedArgs({ args: argsDeviceController_getAllDevice, request, response });
 
                 const controller = new DeviceController();
 
@@ -2696,20 +2710,20 @@ export function RegisterRoutes(app: Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsDeviceController_saveDevice: Record<string, TsoaRoute.ParameterSchema> = {
+                request: {"in":"body","name":"request","required":true,"ref":"ReqDevice"},
+        };
         app.post('/device',
             ...(fetchMiddlewares<RequestHandler>(DeviceController)),
             ...(fetchMiddlewares<RequestHandler>(DeviceController.prototype.saveDevice)),
 
             async function DeviceController_saveDevice(request: ExRequest, response: ExResponse, next: any) {
-            const args: Record<string, TsoaRoute.ParameterSchema> = {
-                    request: {"in":"body","name":"request","required":true,"ref":"ReqDevice"},
-            };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
             let validatedArgs: any[] = [];
             try {
-                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+                validatedArgs = templateService.getValidatedArgs({ args: argsDeviceController_saveDevice, request, response });
 
                 const controller = new DeviceController();
 
@@ -2726,20 +2740,20 @@ export function RegisterRoutes(app: Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsDeviceController_deleteDevice: Record<string, TsoaRoute.ParameterSchema> = {
+                deviceId: {"in":"path","name":"deviceId","required":true,"dataType":"double"},
+        };
         app.delete('/device/:deviceId',
             ...(fetchMiddlewares<RequestHandler>(DeviceController)),
             ...(fetchMiddlewares<RequestHandler>(DeviceController.prototype.deleteDevice)),
 
             async function DeviceController_deleteDevice(request: ExRequest, response: ExResponse, next: any) {
-            const args: Record<string, TsoaRoute.ParameterSchema> = {
-                    deviceId: {"in":"path","name":"deviceId","required":true,"dataType":"double"},
-            };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
             let validatedArgs: any[] = [];
             try {
-                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+                validatedArgs = templateService.getValidatedArgs({ args: argsDeviceController_deleteDevice, request, response });
 
                 const controller = new DeviceController();
 
@@ -2756,21 +2770,21 @@ export function RegisterRoutes(app: Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsDeviceController_allotDongleToDevice: Record<string, TsoaRoute.ParameterSchema> = {
+                deviceId: {"in":"path","name":"deviceId","required":true,"dataType":"double"},
+                request: {"in":"body","name":"request","required":true,"ref":"ReqDongleAllot"},
+        };
         app.put('/device/allotDongle/:deviceId',
             ...(fetchMiddlewares<RequestHandler>(DeviceController)),
             ...(fetchMiddlewares<RequestHandler>(DeviceController.prototype.allotDongleToDevice)),
 
             async function DeviceController_allotDongleToDevice(request: ExRequest, response: ExResponse, next: any) {
-            const args: Record<string, TsoaRoute.ParameterSchema> = {
-                    deviceId: {"in":"path","name":"deviceId","required":true,"dataType":"double"},
-                    request: {"in":"body","name":"request","required":true,"ref":"ReqDongleAllot"},
-            };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
             let validatedArgs: any[] = [];
             try {
-                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+                validatedArgs = templateService.getValidatedArgs({ args: argsDeviceController_allotDongleToDevice, request, response });
 
                 const controller = new DeviceController();
 
@@ -2787,21 +2801,21 @@ export function RegisterRoutes(app: Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsDeviceController_updateDeviceConnStatus: Record<string, TsoaRoute.ParameterSchema> = {
+                deviceId: {"in":"path","name":"deviceId","required":true,"dataType":"double"},
+                req: {"in":"body","name":"req","required":true,"ref":"ReqDevConStatus"},
+        };
         app.put('/device/:deviceId',
             ...(fetchMiddlewares<RequestHandler>(DeviceController)),
             ...(fetchMiddlewares<RequestHandler>(DeviceController.prototype.updateDeviceConnStatus)),
 
             async function DeviceController_updateDeviceConnStatus(request: ExRequest, response: ExResponse, next: any) {
-            const args: Record<string, TsoaRoute.ParameterSchema> = {
-                    deviceId: {"in":"path","name":"deviceId","required":true,"dataType":"double"},
-                    req: {"in":"body","name":"req","required":true,"ref":"ReqDevConStatus"},
-            };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
             let validatedArgs: any[] = [];
             try {
-                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+                validatedArgs = templateService.getValidatedArgs({ args: argsDeviceController_updateDeviceConnStatus, request, response });
 
                 const controller = new DeviceController();
 
@@ -2818,19 +2832,19 @@ export function RegisterRoutes(app: Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsBannerController_getAllBanners: Record<string, TsoaRoute.ParameterSchema> = {
+        };
         app.get('/banners',
             ...(fetchMiddlewares<RequestHandler>(BannerController)),
             ...(fetchMiddlewares<RequestHandler>(BannerController.prototype.getAllBanners)),
 
             async function BannerController_getAllBanners(request: ExRequest, response: ExResponse, next: any) {
-            const args: Record<string, TsoaRoute.ParameterSchema> = {
-            };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
             let validatedArgs: any[] = [];
             try {
-                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+                validatedArgs = templateService.getValidatedArgs({ args: argsBannerController_getAllBanners, request, response });
 
                 const controller = new BannerController();
 

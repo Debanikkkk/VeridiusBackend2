@@ -154,12 +154,42 @@ export class RoleController extends Controller {
         role: Promise.resolve(roleArr),
         type: permType.user,
       };
+
       await this.permissionrepository.save(permissionToSaveManage);
       await this.permissionrepository.save(permissionToSaveView);
       const created_by = savedRole.created_by;
       if (!created_by) {
         return Promise.reject(new Error('CREATED BY USER NOT FOUND'));
       }
+      const super_user_role = await this.rolerepository.findOne({
+        where: {
+          name: 'superUser',
+        },
+        relations: {
+          // role: {
+          permissions: true,
+          // },
+        },
+      });
+      const perm_arr: Permission[] = [];
+      perm_arr.push(permissionToSaveManage);
+      perm_arr.push(permissionToSaveView);
+      // const super_user_role = super_user?.role;
+      const currPerm = (await super_user_role)?.permissions;
+      if (!currPerm) {
+        return Promise.reject(new Error('THE CURRNET PERMISSIONS ARE EMPTY'));
+      }
+      for (const curr of await currPerm) {
+        perm_arr.push(curr);
+      }
+
+      if (!super_user_role) {
+        return Promise.reject(new Error('this role was not found'));
+      }
+      super_user_role.permissions = Promise.resolve(perm_arr);
+      await this.rolerepository.save(super_user_role);
+      // super_user.role.permissions = currPerm;
+
       const resRole: ResRole = {
         description,
         id: savedRole.id,
