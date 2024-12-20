@@ -1,6 +1,8 @@
 import { ResDtcDataset } from './ResDTCDataset';
+import { ResFirmware } from './ResFirmware';
 import { ResNegativeResponseCode } from './ResNegativeResponse';
 import { ResPIDDataset } from './ResPIDDataset';
+import { ResVehicle } from './ResVehicle';
 // import { ResVehicle } from './ResVehicle';
 
 export interface ResECU {
@@ -16,5 +18,6 @@ export interface ResECU {
   createdAt?: Date;
   updatedAt?: Date;
   negativeResponses?: ResNegativeResponseCode[]; // Array of IDs for associated NegativeResponseCode
-  // vehicle?: ResVehicle; // Assuming `vehicle` refers to an ID of a vehicle
+  vehicles?: ResVehicle[];
+  firmwares?: ResFirmware[];
 }

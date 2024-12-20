@@ -1,6 +1,6 @@
 export interface ReqECU {
   id?: number;
-  vehicle?: number; // Assuming vehicleManagementId is the related vehicle ID in many-to-one relation
+  vehicles?: number[]; // Assuming vehicleManagementId is the related vehicle ID in many-to-one relation
   isActive?: boolean;
   macId?: string;
   ecuName?: string;

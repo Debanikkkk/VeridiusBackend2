@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany, JoinColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany, JoinColumn, ManyToMany, JoinTable } from 'typeorm';
 
 import { VehicleModel } from './VehicleModel';
 import { VehicleSubModel } from './VehicleSubModel';
@@ -8,6 +8,7 @@ import { VehicleOwner } from './VehicleOwner';
 import { VehiclePartsReplacement } from './VehiclePartsReplacement';
 import { VehicleInsurance } from './VehicleInsurance';
 import { Dealer } from './Dealer';
+import { ECU } from './ECU';
 
 @Entity()
 export class Vehicle {
@@ -47,6 +48,20 @@ export class Vehicle {
   @ManyToOne(() => VehicleVersion, (version) => version.vehicles)
   @JoinColumn({ name: 'vehicle_version_id' })
   vehicle_version?: VehicleVersion;
+
+  @ManyToMany(
+    () => ECU,
+    (ecu) => {
+      ecu.vehicle;
+    },
+    { nullable: true },
+  )
+  @JoinTable({
+    name: 'ecu_vehicle',
+    joinColumn: { name: 'vehicle_id' },
+    inverseJoinColumn: { name: 'ecu_id' },
+  })
+  ecus?: Promise<ECU[]>;
 
   @Column()
   mileage?: number;

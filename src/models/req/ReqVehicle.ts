@@ -2,6 +2,7 @@ export interface ReqVehicle {
   color?: string;
   engineNumber?: string;
   // id?: number;
+  ecus?: number[];
   manufactureYear?: Date;
   mileage?: number;
   transmissionType?: string;

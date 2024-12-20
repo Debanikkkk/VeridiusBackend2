@@ -1,3 +1,4 @@
+import { ResECU } from './ResECU';
 import { ResVehicleModel } from './ResVehicleModel';
 import { ResVehicleSegment } from './ResVehicleSegemnt';
 import { ResVehicleSubmodel } from './ResVehicleSubmodel';
@@ -16,4 +17,5 @@ export interface ResVehicle {
   vehicleSubModel?: ResVehicleSubmodel;
   vehicleVersion?: ResVehicleVersion;
   vin?: string;
+  ecus?: ResECU[];
 }
