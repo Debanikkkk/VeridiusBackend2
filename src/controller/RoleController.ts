@@ -324,15 +324,11 @@ export class RoleController extends Controller {
       name: updatedRole.name,
       created_by: {
         address: (await updatedRole.created_by)?.address,
-        // device: :(await updatedRole.created_by)?.,
         email: (await updatedRole.created_by)?.email,
         id: (await updatedRole.created_by)?.id,
-        // is_under:(await updatedRole.created_by)?.,
         name: (await updatedRole.created_by)?.name,
         password: (await updatedRole.created_by)?.password,
         phone_number: (await updatedRole.created_by)?.phone_number,
-        // role:(await updatedRole.created_by)?.,
-        // service_ticket:(await updatedRole.created_by)?.
       },
     };
     return resUpdatedRole;

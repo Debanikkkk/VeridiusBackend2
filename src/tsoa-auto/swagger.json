@@ -216,6 +216,223 @@
 				"type": "object",
 				"additionalProperties": false
 			},
+			"ResDtcDataset": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"name": {
+						"type": "string"
+					},
+					"description": {
+						"type": "string"
+					},
+					"isActive": {
+						"type": "boolean"
+					},
+					"createdAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"updatedAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"dtcs": {
+						"items": {
+							"$ref": "#/components/schemas/ResDTC"
+						},
+						"type": "array"
+					},
+					"ecus": {
+						"items": {
+							"$ref": "#/components/schemas/ResECU"
+						},
+						"type": "array"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ResDTC": {
+				"properties": {
+					"createdAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"description": {
+						"type": "string"
+					},
+					"dtcDataset": {
+						"items": {
+							"$ref": "#/components/schemas/ResDtcDataset"
+						},
+						"type": "array"
+					},
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"isActive": {
+						"type": "boolean"
+					},
+					"name": {
+						"type": "string"
+					},
+					"updatedAt": {
+						"type": "string",
+						"format": "date-time"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ResECU": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"isActive": {
+						"type": "boolean"
+					},
+					"macId": {
+						"type": "string"
+					},
+					"ecuName": {
+						"type": "string"
+					},
+					"protocol": {
+						"type": "string"
+					},
+					"rxHeader": {
+						"type": "string"
+					},
+					"txHeader": {
+						"type": "string"
+					},
+					"dtcDataset": {
+						"items": {
+							"$ref": "#/components/schemas/ResDtcDataset"
+						},
+						"type": "array"
+					},
+					"pidDataset": {
+						"items": {
+							"$ref": "#/components/schemas/ResPIDDataset"
+						},
+						"type": "array"
+					},
+					"createdAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"updatedAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"negativeResponses": {
+						"items": {
+							"$ref": "#/components/schemas/ResNegativeResponseCode"
+						},
+						"type": "array"
+					},
+					"vehicles": {
+						"items": {
+							"$ref": "#/components/schemas/ResVehicle"
+						},
+						"type": "array"
+					},
+					"firmwares": {
+						"items": {
+							"$ref": "#/components/schemas/ResFirmware"
+						},
+						"type": "array"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ResPIDDataset": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"name": {
+						"type": "string"
+					},
+					"description": {
+						"type": "string"
+					},
+					"active": {
+						"type": "boolean"
+					},
+					"createdAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"updatedAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"ecus": {
+						"$ref": "#/components/schemas/ResECU"
+					},
+					"messageTypes": {
+						"items": {
+							"properties": {
+								"typeName": {
+									"type": "string"
+								},
+								"id": {
+									"type": "number",
+									"format": "double"
+								}
+							},
+							"required": [
+								"typeName",
+								"id"
+							],
+							"type": "object"
+						},
+						"type": "array"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ResNegativeResponseCode": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"responseCode": {
+						"type": "string"
+					},
+					"description": {
+						"type": "string"
+					},
+					"createdAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"updatedAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"ecus": {
+						"items": {
+							"$ref": "#/components/schemas/ResECU"
+						},
+						"type": "array"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
 			"ResVehicle": {
 				"properties": {
 					"color": {
@@ -256,51 +473,12 @@
 					},
 					"vin": {
 						"type": "string"
-					}
-				},
-				"type": "object",
-				"additionalProperties": false
-			},
-			"ReqVehicle": {
-				"properties": {
-					"color": {
-						"type": "string"
 					},
-					"engineNumber": {
-						"type": "string"
-					},
-					"manufactureYear": {
-						"type": "string",
-						"format": "date-time"
-					},
-					"mileage": {
-						"type": "number",
-						"format": "double"
-					},
-					"transmissionType": {
-						"type": "string"
-					},
-					"vehicleModel": {
-						"type": "number",
-						"format": "double"
-					},
-					"vehicleNumber": {
-						"type": "string"
-					},
-					"vehicleSegment": {
-						"type": "number",
-						"format": "double"
-					},
-					"vehicleSubModel": {
-						"type": "number",
-						"format": "double"
-					},
-					"vehicleVersion": {
-						"type": "number",
-						"format": "double"
-					},
-					"vin": {
-						"type": "string"
+					"ecus": {
+						"items": {
+							"$ref": "#/components/schemas/ResECU"
+						},
+						"type": "array"
 					}
 				},
 				"type": "object",
@@ -533,6 +711,123 @@
 					"Suspended"
 				],
 				"type": "string"
+			},
+			"ResFiles": {
+				"properties": {
+					"createdAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"file": {
+						"type": "string"
+					},
+					"fileDescription": {
+						"type": "string"
+					},
+					"fileName": {
+						"type": "string"
+					},
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"isActive": {
+						"type": "boolean"
+					},
+					"updatedAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"uploadedBy": {
+						"$ref": "#/components/schemas/ResUser"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"firmware_management": {
+				"enum": [
+					"DEVOTA",
+					"FOTA"
+				],
+				"type": "string"
+			},
+			"ResFirmware": {
+				"properties": {
+					"created_by": {
+						"$ref": "#/components/schemas/ResUser"
+					},
+					"files": {
+						"items": {
+							"$ref": "#/components/schemas/ResFiles"
+						},
+						"type": "array"
+					},
+					"firmwareType": {
+						"$ref": "#/components/schemas/firmware_management"
+					},
+					"firmwareVersion": {
+						"type": "string"
+					},
+					"id": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ReqVehicle": {
+				"properties": {
+					"color": {
+						"type": "string"
+					},
+					"engineNumber": {
+						"type": "string"
+					},
+					"ecus": {
+						"items": {
+							"type": "number",
+							"format": "double"
+						},
+						"type": "array"
+					},
+					"manufactureYear": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"mileage": {
+						"type": "number",
+						"format": "double"
+					},
+					"transmissionType": {
+						"type": "string"
+					},
+					"vehicleModel": {
+						"type": "number",
+						"format": "double"
+					},
+					"vehicleNumber": {
+						"type": "string"
+					},
+					"vehicleSegment": {
+						"type": "number",
+						"format": "double"
+					},
+					"vehicleSubModel": {
+						"type": "number",
+						"format": "double"
+					},
+					"vehicleVersion": {
+						"type": "number",
+						"format": "double"
+					},
+					"vin": {
+						"type": "string"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
 			},
 			"ResError": {
 				"properties": {
@@ -885,13 +1180,6 @@
 				],
 				"type": "string"
 			},
-			"firmware_management": {
-				"enum": [
-					"DEVOTA",
-					"FOTA"
-				],
-				"type": "string"
-			},
 			"ECU": {
 				"properties": {
 					"id": {
@@ -962,6 +1250,12 @@
 					},
 					"firmware": {
 						"$ref": "#/components/schemas/Firmware"
+					},
+					"vehicle": {
+						"items": {
+							"$ref": "#/components/schemas/Vehicle"
+						},
+						"type": "array"
 					}
 				},
 				"type": "object",
@@ -1290,6 +1584,369 @@
 				"type": "object",
 				"additionalProperties": false
 			},
+			"VehicleModel": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"name": {
+						"type": "string"
+					},
+					"oem": {
+						"$ref": "#/components/schemas/OEM"
+					},
+					"vehicle_version": {
+						"$ref": "#/components/schemas/VehicleVersion"
+					},
+					"launch_year": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"discontinued_year": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"vehicle_segment": {
+						"$ref": "#/components/schemas/VehicleSegment"
+					},
+					"vehicle_sub_models": {
+						"items": {
+							"$ref": "#/components/schemas/VehicleSubModel"
+						},
+						"type": "array"
+					},
+					"vehicles": {
+						"items": {
+							"$ref": "#/components/schemas/Vehicle"
+						},
+						"type": "array"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"OEM": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"name": {
+						"type": "string"
+					},
+					"country": {
+						"type": "string"
+					},
+					"founded_year": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"contact_information": {
+						"type": "string"
+					},
+					"website": {
+						"type": "string"
+					},
+					"vehicle_models": {
+						"items": {
+							"$ref": "#/components/schemas/VehicleModel"
+						},
+						"type": "array"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"Vehicle": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"vin": {
+						"type": "string"
+					},
+					"engine_number": {
+						"type": "string"
+					},
+					"vehicle_number": {
+						"type": "string"
+					},
+					"color": {
+						"type": "string"
+					},
+					"manufacture_year": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"transmission_type": {
+						"type": "string"
+					},
+					"vehicle_model": {
+						"$ref": "#/components/schemas/VehicleModel"
+					},
+					"vehicle_sub_model": {
+						"$ref": "#/components/schemas/VehicleSubModel"
+					},
+					"vehicle_segment": {
+						"$ref": "#/components/schemas/VehicleSegment"
+					},
+					"vehicle_version": {
+						"$ref": "#/components/schemas/VehicleVersion"
+					},
+					"ecus": {
+						"items": {
+							"$ref": "#/components/schemas/ECU"
+						},
+						"type": "array"
+					},
+					"mileage": {
+						"type": "number",
+						"format": "double"
+					},
+					"vehicle_owner": {
+						"$ref": "#/components/schemas/VehicleOwner"
+					},
+					"vehicle_parts_replacements": {
+						"items": {
+							"$ref": "#/components/schemas/VehiclePartsReplacement"
+						},
+						"type": "array"
+					},
+					"vehicle_insurances": {
+						"items": {
+							"$ref": "#/components/schemas/VehicleInsurance"
+						},
+						"type": "array"
+					},
+					"dealer": {
+						"$ref": "#/components/schemas/Dealer"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"VehicleVersion": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"name": {
+						"type": "string"
+					},
+					"vehicle_sub_models": {
+						"items": {
+							"$ref": "#/components/schemas/VehicleSubModel"
+						},
+						"type": "array"
+					},
+					"vehicle_models": {
+						"items": {
+							"$ref": "#/components/schemas/VehicleModel"
+						},
+						"type": "array"
+					},
+					"price": {
+						"type": "number",
+						"format": "double"
+					},
+					"features": {
+						"type": "string"
+					},
+					"vehicles": {
+						"items": {
+							"$ref": "#/components/schemas/Vehicle"
+						},
+						"type": "array"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"VehicleSubModel": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"name": {
+						"type": "string"
+					},
+					"vehicle_model": {
+						"$ref": "#/components/schemas/VehicleModel"
+					},
+					"engine_capacity": {
+						"type": "string"
+					},
+					"fuel_efficiency": {
+						"type": "string"
+					},
+					"vehicles": {
+						"items": {
+							"$ref": "#/components/schemas/Vehicle"
+						},
+						"type": "array"
+					},
+					"vehicle_version": {
+						"$ref": "#/components/schemas/VehicleVersion"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"VehicleSegment": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"name": {
+						"type": "string"
+					},
+					"description": {
+						"type": "string"
+					},
+					"vehicle_models": {
+						"items": {
+							"$ref": "#/components/schemas/VehicleModel"
+						},
+						"type": "array"
+					},
+					"vehicles": {
+						"items": {
+							"$ref": "#/components/schemas/Vehicle"
+						},
+						"type": "array"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"VehicleOwner": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"name": {
+						"type": "string"
+					},
+					"email": {
+						"type": "string"
+					},
+					"phone_number": {
+						"type": "string"
+					},
+					"address": {
+						"type": "string"
+					},
+					"purchase_date": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"vehicles": {
+						"items": {
+							"$ref": "#/components/schemas/Vehicle"
+						},
+						"type": "array"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"VehiclePartsReplacement": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"vehicle": {
+						"$ref": "#/components/schemas/Vehicle"
+					},
+					"part_name": {
+						"type": "string"
+					},
+					"part_number": {
+						"type": "string"
+					},
+					"replacement_date": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"cost": {
+						"type": "number",
+						"format": "double"
+					},
+					"warranty_expiry": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"replaced_by": {
+						"type": "string"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"VehicleInsurance": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"vehicle": {
+						"$ref": "#/components/schemas/Vehicle"
+					},
+					"policy_number": {
+						"type": "string"
+					},
+					"provider_name": {
+						"type": "string"
+					},
+					"start_date": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"end_date": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"coverage_details": {
+						"additionalProperties": false,
+						"type": "object"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"Dealer": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"name": {
+						"type": "string"
+					},
+					"location": {
+						"type": "string"
+					},
+					"contact_information": {
+						"additionalProperties": false,
+						"type": "object"
+					},
+					"vehicles": {
+						"items": {
+							"$ref": "#/components/schemas/Vehicle"
+						},
+						"type": "array"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
 			"File": {
 				"properties": {
 					"id": {
@@ -1581,40 +2238,17 @@
 				"type": "object",
 				"additionalProperties": false
 			},
-			"ResNegativeResponseCode": {
-				"properties": {
-					"id": {
-						"type": "number",
-						"format": "double"
-					},
-					"responseCode": {
-						"type": "string"
-					},
-					"description": {
-						"type": "string"
-					},
-					"createdAt": {
-						"type": "string",
-						"format": "date-time"
-					},
-					"updatedAt": {
-						"type": "string",
-						"format": "date-time"
-					}
-				},
-				"required": [
-					"id",
-					"responseCode",
-					"createdAt",
-					"updatedAt"
-				],
-				"type": "object",
-				"additionalProperties": false
-			},
 			"ReqNegativeResponseCode": {
 				"properties": {
 					"description": {
 						"type": "string"
+					},
+					"ecus": {
+						"items": {
+							"type": "number",
+							"format": "double"
+						},
+						"type": "array"
 					},
 					"responseCode": {
 						"type": "string"
@@ -1812,124 +2446,6 @@
 							"type"
 						],
 						"type": "object"
-					}
-				},
-				"type": "object",
-				"additionalProperties": false
-			},
-			"ResFiles": {
-				"properties": {
-					"createdAt": {
-						"type": "string",
-						"format": "date-time"
-					},
-					"file": {
-						"type": "string"
-					},
-					"fileDescription": {
-						"type": "string"
-					},
-					"fileName": {
-						"type": "string"
-					},
-					"id": {
-						"type": "number",
-						"format": "double"
-					},
-					"isActive": {
-						"type": "boolean"
-					},
-					"updatedAt": {
-						"type": "string",
-						"format": "date-time"
-					},
-					"uploadedBy": {
-						"$ref": "#/components/schemas/ResUser"
-					}
-				},
-				"type": "object",
-				"additionalProperties": false
-			},
-			"ResFirmware": {
-				"properties": {
-					"created_by": {
-						"$ref": "#/components/schemas/ResUser"
-					},
-					"files": {
-						"items": {
-							"$ref": "#/components/schemas/ResFiles"
-						},
-						"type": "array"
-					},
-					"firmwareType": {
-						"$ref": "#/components/schemas/firmware_management"
-					},
-					"firmwareVersion": {
-						"type": "string"
-					},
-					"id": {
-						"type": "number",
-						"format": "double"
-					}
-				},
-				"type": "object",
-				"additionalProperties": false
-			},
-			"ResDtcDataset": {
-				"properties": {
-					"id": {
-						"type": "number",
-						"format": "double"
-					},
-					"name": {
-						"type": "string"
-					},
-					"description": {
-						"type": "string"
-					},
-					"isActive": {
-						"type": "boolean"
-					},
-					"createdAt": {
-						"type": "string",
-						"format": "date-time"
-					},
-					"updatedAt": {
-						"type": "string",
-						"format": "date-time"
-					}
-				},
-				"type": "object",
-				"additionalProperties": false
-			},
-			"ResDTC": {
-				"properties": {
-					"createdAt": {
-						"type": "string",
-						"format": "date-time"
-					},
-					"description": {
-						"type": "string"
-					},
-					"dtcDataset": {
-						"items": {
-							"$ref": "#/components/schemas/ResDtcDataset"
-						},
-						"type": "array"
-					},
-					"id": {
-						"type": "number",
-						"format": "double"
-					},
-					"isActive": {
-						"type": "boolean"
-					},
-					"name": {
-						"type": "string"
-					},
-					"updatedAt": {
-						"type": "string",
-						"format": "date-time"
 					}
 				},
 				"type": "object",
@@ -3909,6 +4425,99 @@
 						}
 					}
 				}
+			},
+			"get": {
+				"operationId": "GetAllNegres",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/ResNegativeResponseCode"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Negative Response"
+				],
+				"security": [],
+				"parameters": []
+			}
+		},
+		"/negative_response/{negresId}": {
+			"get": {
+				"operationId": "GetOneNegres",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ResNegativeResponseCode"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Negative Response"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "negresId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			},
+			"delete": {
+				"operationId": "DeleteNegres",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"properties": {
+										"result": {
+											"type": "string"
+										}
+									},
+									"required": [
+										"result"
+									],
+									"type": "object"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Negative Response"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "negresId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
 			}
 		},
 		"/loginpacket": {
@@ -4381,6 +4990,51 @@
 						"schema": {
 							"format": "double",
 							"type": "number"
+						}
+					}
+				]
+			}
+		},
+		"/firmware/{filename}": {
+			"post": {
+				"operationId": "GetFile",
+				"responses": {
+					"200": {
+						"description": ""
+					},
+					"204": {
+						"description": "No content"
+					},
+					"404": {
+						"description": "",
+						"content": {
+							"application/json": {
+								"schema": {
+									"properties": {
+										"message": {
+											"type": "string"
+										}
+									},
+									"required": [
+										"message"
+									],
+									"type": "object"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Firmware"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "filename",
+						"required": true,
+						"schema": {
+							"type": "string"
 						}
 					}
 				]

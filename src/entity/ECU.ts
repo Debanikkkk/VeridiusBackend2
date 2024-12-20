@@ -4,6 +4,7 @@ import { PIDDataset } from './PIDDataset';
 import { DtcDataset } from './DTCDataset';
 import { Firmware } from './Firmware';
 import { NegativeResponseCode } from './NegativeCode';
+import { Vehicle } from './Vehicle';
 // import { NegativeResponseCode } from 'src/entity/NegativeResponseCode'; // Import the NegativeResponseCode entity
 
 @Entity('ecu_management')
@@ -92,4 +93,18 @@ export class ECU {
   )
   @JoinColumn({ name: 'firmware_id' })
   firmware?: Firmware;
+
+  @ManyToMany(
+    () => Vehicle,
+    (vehicle) => {
+      vehicle.ecus;
+    },
+    { nullable: true },
+  )
+  @JoinTable({
+    name: 'ecu_vehicle',
+    joinColumn: { name: 'ecu_id' },
+    inverseJoinColumn: { name: 'vehicle_id' },
+  })
+  vehicle?: Promise<Vehicle[]>;
 }

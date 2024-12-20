@@ -14,6 +14,11 @@
 // import { PIDDataset } from '../entity/PIDDataset';
 // import { NegativeResponseCode } from '../entity/NegativeCode';
 // import { Vehicle } from '../entity/Vehicle';
+// import { ResDtcDataset } from '../models/res/ResDTCDataset';
+// import { ResNegativeResponseCode } from '../models/res/ResNegativeResponse';
+// import { ResPIDDataset } from '../models/res/ResPIDDataset';
+// import { ResFirmware } from '../models/res/ResFirmware';
+// import { ResVehicle } from '../models/res/ResVehicle';
 
 // // // import { ReqECU } from '../models/req/ReqECU';
 // // // import { In } from 'typeorm';
@@ -161,7 +166,7 @@
 //       seedkeyalgoFnIndex,
 //       txHeader,
 //       updatedAt,
-//       vehicle,
+//       vehicles,
 //       writeDataFnIndex,
 //     } = req;
 
@@ -210,14 +215,17 @@
 
 //       negativeResArr.push(...negativeResArr);
 //     }
-
-//     const db_vehicle = await this.vehiclerepository.findOne({
-//       where: {
-//         id: vehicle,
-//       },
-//     });
-//     if (!db_vehicle) {
-//       return Promise.reject(new Error('THIS VEHICLE WAS NOT FOUND'));
+//     const vehicleArr;
+//     let db_vehicle;
+//     if (vehicles) {
+//       const db_vehicle = await this.vehiclerepository.findOne({
+//         where: {
+//           id: In(vehicles),
+//         },
+//       });
+//       if (!db_vehicle) {
+//         return Promise.reject(new Error('THIS VEHICLE WAS NOT FOUND'));
+//       }
 //     }
 //     const saveECU: ECU = {
 //       clear_dtc_fn_index: clearDtcFnIndex,
@@ -248,19 +256,86 @@
 
 //     const resEcu: ResECU = {
 //       createdAt: savedECU.created_at,
-//       dtcDataset: savedECU.dtc_datasets,
+//       //   dtcDataset: savedECU.dtc_datasets,
 //       ecuName: savedECU.ecu_name,
 //       id: savedECU.id,
 //       isActive: savedECU.is_active,
 //       macId: savedECU.mac_id,
-//       negativeResponses: savedECU.negative_responses,
-//       pidDataset: savedECU.pid_datasets,
+//       //   negativeResponses: savedECU.negative_responses,
+//       //   pidDataset: savedECU.pid_datasets,
+//       //   firmwares,
+//       //   vehicles,
 //       protocol: savedECU.protocol,
 //       rxHeader: savedECU.rx_header,
 //       txHeader: savedECU.tx_header,
 //       updatedAt: savedECU.updated_at,
-//       vehicle: savedECU.vehicle,
+//       //   vehicle: savedECU.vehicle,
 //     };
+
+//     const resDtcDatasetArr: ResDtcDataset[] = [];
+//     const resNegresArr: ResNegativeResponseCode[] = [];
+//     const resPidDatasetArr: ResPIDDataset[] = [];
+//     // const resFirmwareArr: ResFirmware[] = [];
+//     const resVehicle: ResVehicle[] = [];
+
+//     savedECU.dtc_datasets?.map((dtc) => {
+//       const resDtc: ResDtcDataset = {
+//         createdAt: dtc.created_at,
+//         description: dtc.description,
+//         // dtcs: dtc.d,
+//         // ecus: dtc.,
+//         id: dtc.id,
+//         isActive: dtc.is_active,
+//         name: dtc.name,
+//         updatedAt: dtc.updated_at,
+//       };
+
+//       resDtcDatasetArr.push(resDtc);
+//     });
+//     savedECU.negative_responses?.map((nr) => {
+//       const resNegres: ResNegativeResponseCode = {
+//         createdAt: nr.created_at,
+//         id: nr.id,
+//         responseCode: nr.response_code,
+//         updatedAt: nr.updated_at,
+//         description: nr.description,
+//         // ecus: nr.,
+//       };
+
+//       resNegresArr.push(resNegres);
+//     });
+
+//     saveECU.pid_datasets?.map((pd) => {
+//       const resPid: ResPIDDataset = {
+//         active: pd.active,
+//         createdAt: pd.created_at,
+//         id: pd.id,
+//         updatedAt: pd.updated_at,
+//         description: pd.description,
+//         // ecus,
+//         // messageTypes,
+//         name: pd.name,
+//       };
+//       resPidDatasetArr.push(resPid);
+//     });
+
+//     (await savedECU.vehicle)?.map((vh) => {
+//       const resVehicle: ResVehicle = {
+//         color: vh.color,
+//         engineNumber: vh.engine_number,
+//         id: vh.id,
+//         manufactureYear: vh.manufacture_year,
+//         mileage: vh.mileage,
+//         transmissionType: vh.transmission_type,
+//         vehicleNumber: vh.vehicle_number,
+//         vin: vh.vin,
+//       };
+
+//     });
+//     resEcu.pidDataset = resPidDatasetArr;
+//     resEcu.negativeResponses = resNegresArr;
+//     resEcu.dtcDataset = resDtcDatasetArr;
+
 //     return resEcu;
 //   }
 //   @Get()
@@ -287,8 +362,8 @@
 //         id: ecu.id,
 //         isActive: ecu.is_active,
 //         macId: ecu.mac_id,
-//         negativeResponses: ecu.negative_responses,
-//         pidDataset: ecu.pid_datasets,
+//         // negativeResponses: ecu.negative_responses,
+//         // pidDataset: ecu.pid_datasets,
 //         protocol: ecu.protocol,
 //         rxHeader: ecu.rx_header,
 //         txHeader: ecu.tx_header,
@@ -299,5 +374,4 @@
 
 //     return ecuArr;
 //   }
-
 // }

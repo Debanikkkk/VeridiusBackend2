@@ -43,6 +43,7 @@ AppDataSource.initialize()
     app.use(cors(options));
     app.use(bodyParser.json());
     app.use('/public/uploads', express.static('./public/uploads'));
+    app.use('/public/ecuUploads', express.static('./public/ecuUploads'));
 
     // Swagger docs
     app.use('/docs', swaggerUi.serve, async (_req: Request, res: Response) => res.send(swaggerUi.generateHTML(swaggerJson)));

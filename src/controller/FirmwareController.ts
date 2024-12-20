@@ -1,8 +1,9 @@
-import { Controller, Delete, Get, Path, Post, Put, Query, Request, Route, Security, Tags, UploadedFile } from 'tsoa';
+import { Controller, Delete, Get, Path, Post, Put, Query, Request, Res, Route, Security, Tags, TsoaResponse, UploadedFile } from 'tsoa';
 import { AppDataSource } from '../data-source';
 import { Firmware, firmware_management } from '../entity/Firmware';
 // import { ReqFirmware } from '../models/req/ReqFirmware';
 // import { ResFirmware } from '../models/res/ResFirmware';
+// import { Response } from 'express';
 
 // import { ReqFirmware } from '../models/req/ReqFirmware';
 import { JWTRequest } from '../models/req/JWTRequest';
@@ -377,13 +378,48 @@ export class FirmwareController extends Controller {
 
     const filesArr: ResFiles[] = [];
 
-    for (const file of files) {
-      filesArr.push(file);
-    }
+    // for (const file of files) {
+    //   filesArr.push(file);
+    // }
+    // resFirmware.files = filesArr;
+
+    files.map((f) => {
+      const resFile: ResFiles = {
+        createdAt: f.created_at,
+        file: 'https://omni-backend.navigolabs.com/' + f.file,
+        fileDescription: f.file_description,
+        fileName: f.file_name,
+        id: f.id,
+        isActive: f.is_active,
+        updatedAt: f.updated_at,
+        // uploadedBy: f.,
+      };
+
+      filesArr.push(resFile);
+    });
+
     resFirmware.files = filesArr;
     console.log('this is the files arr', filesArr);
     console.log('this is the DB files ', files);
 
     return resFirmware;
+  }
+  @Post('/{filename}')
+  public async getFile(
+    @Path() filename: string,
+    @Res() notFoundResponse: TsoaResponse<404, { message: string }>,
+    @Res() fileResponse: TsoaResponse<200, void>,
+  ): Promise<void> {
+    const filePath = path.join(__dirname, 'localhost:3000/public/ecuUploads', filename);
+
+    if (!fs.existsSync(filePath)) {
+      return notFoundResponse(404, { message: 'File not found' });
+    }
+
+    fileResponse(200);
+    // Use Express's response to send the file.
+    this.setStatus(200); // Inform TSOA of the response status code
+    // eslint-disable-next-line
+    (this as any).res.sendFile(filePath);
   }
 }
