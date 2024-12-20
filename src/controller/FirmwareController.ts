@@ -318,7 +318,7 @@ export class FirmwareController extends Controller {
     }
     const fileToSave: File = {
       // created_at: ,
-      file: filePath,
+      file: 'https://omni-backend.navigolabs.com/public/ecuUploads/' + fileName,
       file_description: fileDescription,
       file_name: fileName,
       file_type: fileType,
@@ -386,7 +386,7 @@ export class FirmwareController extends Controller {
     files.map((f) => {
       const resFile: ResFiles = {
         createdAt: f.created_at,
-        file: 'https://omni-backend.navigolabs.com/' + f.file,
+        file: 'https://omni-backend.navigolabs.com/public/ecuUploads/' + f.file_name,
         fileDescription: f.file_description,
         fileName: f.file_name,
         id: f.id,
