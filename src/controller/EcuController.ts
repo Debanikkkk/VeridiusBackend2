@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Route, Tags } from 'tsoa';
+import { Body, Controller, Delete, Get, Path, Post, Route, Tags } from 'tsoa';
 import { AppDataSource } from '../data-source';
 import { ECU } from '../entity/ECU';
 import { ReqECU } from '../models/req/ReqECU';
@@ -440,5 +440,113 @@ export class EcuController extends Controller {
     }
 
     return ecuArr;
+  }
+
+  @Get('/{ecuId}')
+  public async getOneECU(@Path() ecuId: number): Promise<ResECU> {
+    const ecu = await this.ecurepository.findOne({
+      where: {
+        id: ecuId,
+      },
+    });
+
+    if (!ecu) {
+      return Promise.reject(new Error('THE ECU WAS NOT FOUND'));
+    }
+
+    const resDtcDatasetArr: ResDtcDataset[] = [];
+    const resNegresArr: ResNegativeResponseCode[] = [];
+    const resPidDatasetArr: ResPIDDataset[] = [];
+    // const resFirmwareArr: ResFirmware[] = [];
+    const resVehicleArr: ResVehicle[] = [];
+
+    ecu.dtc_datasets?.map((dtc) => {
+      const resDtc: ResDtcDataset = {
+        createdAt: dtc.created_at,
+        description: dtc.description,
+        // dtcs: dtc.d,
+        // ecus: dtc.,
+        id: dtc.id,
+        isActive: dtc.is_active,
+        name: dtc.name,
+        updatedAt: dtc.updated_at,
+      };
+
+      resDtcDatasetArr.push(resDtc);
+    });
+    ecu.negative_responses?.map((nr) => {
+      const resNegres: ResNegativeResponseCode = {
+        createdAt: nr.created_at,
+        id: nr.id,
+        responseCode: nr.response_code,
+        updatedAt: nr.updated_at,
+        description: nr.description,
+        // ecus: nr.,
+      };
+
+      resNegresArr.push(resNegres);
+    });
+
+    ecu.pid_datasets?.map((pd) => {
+      const resPid: ResPIDDataset = {
+        active: pd.active,
+        createdAt: pd.created_at,
+        id: pd.id,
+        updatedAt: pd.updated_at,
+        description: pd.description,
+        // ecus,
+        // messageTypes,
+        name: pd.name,
+      };
+      resPidDatasetArr.push(resPid);
+    });
+
+    (await ecu.vehicle)?.map((vh) => {
+      const resVehicle: ResVehicle = {
+        color: vh.color,
+        engineNumber: vh.engine_number,
+        id: vh.id,
+        manufactureYear: vh.manufacture_year,
+        mileage: vh.mileage,
+        transmissionType: vh.transmission_type,
+        vehicleNumber: vh.vehicle_number,
+        vin: vh.vin,
+      };
+      resVehicleArr.push(resVehicle);
+    });
+    const resECU: ResECU = {
+      createdAt: ecu.created_at,
+      dtcDataset: resDtcDatasetArr,
+      ecuName: ecu.ecu_name,
+      // firmwares: res,
+      id: ecu.id,
+      isActive: ecu.is_active,
+      macId: ecu.mac_id,
+      negativeResponses: resNegresArr,
+      pidDataset: resPidDatasetArr,
+      protocol: ecu.protocol,
+      rxHeader: ecu.rx_header,
+      txHeader: ecu.tx_header,
+      updatedAt: ecu.updated_at,
+      vehicles: resVehicleArr,
+    };
+
+    return resECU;
+  }
+
+  @Delete('/{ecuId}')
+  public async deleteECU(@Path() ecuId: number) {
+    const ecu = await this.ecurepository.findOne({
+      where: {
+        id: ecuId,
+      },
+    });
+
+    if (!ecu) {
+      return Promise.reject(new Error('THE ECU WAS NOT FOUND'));
+    }
+
+    await this.ecurepository.remove(ecu);
+    return { result: 'THE ECU WAS DELETED SUCCESSFULLY' };
   }
 }
