@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from 'tsoa';
+import { Body, Controller, Post, Route, Tags } from 'tsoa';
 import { AppDataSource } from '../data-source';
 import { PID } from '../entity/PID';
 import { ReqPID } from '../models/req/ReqPID';
@@ -9,6 +9,8 @@ import { PIDDataset } from '../entity/PIDDataset';
 import { ResPIDDataset } from '../models/res/ResPIDDataset';
 import { ResParameter } from '../models/res/ResParameter';
 
+@Route('/pid')
+@Tags('PID')
 export class PIDController extends Controller {
   private pidrepository = AppDataSource.getRepository(PID);
   private parameterrepository = AppDataSource.getRepository(Parameters);

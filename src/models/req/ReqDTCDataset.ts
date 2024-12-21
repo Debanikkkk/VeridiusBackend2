@@ -1,5 +1,5 @@
 export interface ReqDtcDataset {
-  id?: number; // Optional for update operations
+  // id?: number; // Optional for update operations
   name?: string; // Dataset name
   description?: string; // Dataset description
   isActive?: boolean; // Whether the dataset is active
