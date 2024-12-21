@@ -412,6 +412,30 @@ export class RoleController extends Controller {
     // if(total_perm_arr){
 
     // }
+    const viewperm = await this.permissionrepository.findOne({
+      where: {
+        name: 'view' + role_sub_db.name,
+      },
+    });
+    console.log('this s the view perm', viewperm);
+    const manageperm = await this.permissionrepository.findOne({
+      where: {
+        name: 'manage' + role_sub_db.name,
+      },
+    });
+    console.log('this s the manage perm', manageperm);
+
+    if (manageperm) {
+      console.log('this was found');
+      total_perm_arr.push(manageperm);
+    }
+
+    if (viewperm) {
+      console.log('this was found');
+
+      total_perm_arr.push(viewperm);
+    }
+
     role_main_db.permissions = Promise.resolve(total_perm_arr);
 
     const newRolePermission = await this.rolerepository.save(role_main_db);
