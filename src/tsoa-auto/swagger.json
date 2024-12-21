@@ -375,24 +375,8 @@
 						"format": "date-time"
 					},
 					"ecus": {
-						"$ref": "#/components/schemas/ResECU"
-					},
-					"messageTypes": {
 						"items": {
-							"properties": {
-								"typeName": {
-									"type": "string"
-								},
-								"id": {
-									"type": "number",
-									"format": "double"
-								}
-							},
-							"required": [
-								"typeName",
-								"id"
-							],
-							"type": "object"
+							"$ref": "#/components/schemas/ResECU"
 						},
 						"type": "array"
 					}
@@ -2213,6 +2197,207 @@
 				"type": "object",
 				"additionalProperties": false
 			},
+			"ResPID": {
+				"properties": {
+					"active": {
+						"type": "boolean"
+					},
+					"bit_coded": {
+						"type": "boolean"
+					},
+					"byte_position": {
+						"type": "number",
+						"format": "double"
+					},
+					"created_at": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"description": {
+						"type": "string"
+					},
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"length_bytes": {
+						"type": "number",
+						"format": "double"
+					},
+					"long_name": {
+						"type": "string"
+					},
+					"max": {
+						"type": "number",
+						"format": "double"
+					},
+					"min": {
+						"type": "number",
+						"format": "double"
+					},
+					"offset": {
+						"type": "number",
+						"format": "double"
+					},
+					"parameters": {
+						"items": {
+							"$ref": "#/components/schemas/ResParameter"
+						},
+						"type": "array"
+					},
+					"pid_code": {
+						"type": "string"
+					},
+					"pid_datasets": {
+						"items": {
+							"$ref": "#/components/schemas/ResPIDDataset"
+						},
+						"type": "array"
+					},
+					"read": {
+						"type": "boolean"
+					},
+					"resolution": {
+						"type": "number",
+						"format": "double"
+					},
+					"short_name": {
+						"type": "string"
+					},
+					"total_length": {
+						"type": "number",
+						"format": "double"
+					},
+					"unit": {
+						"type": "string"
+					},
+					"updated_at": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"write": {
+						"type": "boolean"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ResParameter": {
+				"properties": {
+					"active": {
+						"type": "boolean"
+					},
+					"created_at": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"description": {
+						"type": "string"
+					},
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"name": {
+						"type": "string"
+					},
+					"pids": {
+						"items": {
+							"$ref": "#/components/schemas/ResPID"
+						},
+						"type": "array"
+					},
+					"updated_at": {
+						"type": "string",
+						"format": "date-time"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ReqPID": {
+				"properties": {
+					"active": {
+						"type": "boolean"
+					},
+					"bitCoded": {
+						"type": "boolean"
+					},
+					"bytePosition": {
+						"type": "number",
+						"format": "double"
+					},
+					"createdAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"description": {
+						"type": "string"
+					},
+					"lengthBytes": {
+						"type": "number",
+						"format": "double"
+					},
+					"longName": {
+						"type": "string"
+					},
+					"max": {
+						"type": "number",
+						"format": "double"
+					},
+					"min": {
+						"type": "number",
+						"format": "double"
+					},
+					"offset": {
+						"type": "number",
+						"format": "double"
+					},
+					"parameters": {
+						"items": {
+							"type": "number",
+							"format": "double"
+						},
+						"type": "array"
+					},
+					"pidCode": {
+						"type": "string"
+					},
+					"pidDatasets": {
+						"items": {
+							"type": "number",
+							"format": "double"
+						},
+						"type": "array"
+					},
+					"read": {
+						"type": "boolean"
+					},
+					"resolution": {
+						"type": "number",
+						"format": "double"
+					},
+					"shortName": {
+						"type": "string"
+					},
+					"totalLength": {
+						"type": "number",
+						"format": "double"
+					},
+					"unit": {
+						"type": "string"
+					},
+					"updatedAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"write": {
+						"type": "boolean"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
 			"ReqPermission": {
 				"properties": {
 					"description": {
@@ -2223,6 +2408,28 @@
 					},
 					"name": {
 						"type": "string"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ReqParameter": {
+				"properties": {
+					"active": {
+						"type": "boolean"
+					},
+					"description": {
+						"type": "string"
+					},
+					"name": {
+						"type": "string"
+					},
+					"pids": {
+						"items": {
+							"type": "number",
+							"format": "double"
+						},
+						"type": "array"
 					}
 				},
 				"type": "object",
@@ -2531,6 +2738,35 @@
 						"type": "string"
 					},
 					"negativeResponses": {
+						"items": {
+							"type": "number",
+							"format": "double"
+						},
+						"type": "array"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ReqDtcDataset": {
+				"properties": {
+					"name": {
+						"type": "string"
+					},
+					"description": {
+						"type": "string"
+					},
+					"isActive": {
+						"type": "boolean"
+					},
+					"dtcs": {
+						"items": {
+							"type": "number",
+							"format": "double"
+						},
+						"type": "array"
+					},
+					"ecus": {
 						"items": {
 							"type": "number",
 							"format": "double"
@@ -4266,6 +4502,133 @@
 						}
 					}
 				}
+			},
+			"get": {
+				"operationId": "GetAllPIDdataset",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/ResPIDDataset"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"PID Dataset"
+				],
+				"security": [],
+				"parameters": []
+			}
+		},
+		"/pidDataset/{piddatasetId}": {
+			"get": {
+				"operationId": "GetOnePIDDataset",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ResPIDDataset"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"PID Dataset"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "piddatasetId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			}
+		},
+		"/pidDataset/{pidDatasetId}": {
+			"delete": {
+				"operationId": "DeletePIDDataset",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"properties": {
+										"result": {
+											"type": "string"
+										}
+									},
+									"required": [
+										"result"
+									],
+									"type": "object"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"PID Dataset"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "pidDatasetId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			}
+		},
+		"/pid": {
+			"post": {
+				"operationId": "SavePID",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ResPID"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"PID"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/ReqPID"
+							}
+						}
+					}
+				}
 			}
 		},
 		"/permission": {
@@ -4483,6 +4846,38 @@
 						}
 					}
 				]
+			}
+		},
+		"/parameter": {
+			"post": {
+				"operationId": "SaveParameter",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ResParameter"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Parameter"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/ReqParameter"
+							}
+						}
+					}
+				}
 			}
 		},
 		"/oem": {
@@ -5215,6 +5610,201 @@
 				],
 				"security": [],
 				"parameters": []
+			}
+		},
+		"/ecu/{ecuId}": {
+			"get": {
+				"operationId": "GetOneECU",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ResECU"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"ECU"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "ecuId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			},
+			"delete": {
+				"operationId": "DeleteECU",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"properties": {
+										"result": {
+											"type": "string"
+										}
+									},
+									"required": [
+										"result"
+									],
+									"type": "object"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"ECU"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "ecuId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			}
+		},
+		"/dtc_dataset": {
+			"post": {
+				"operationId": "SaveDtcDataset",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ResDtcDataset"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"DTC Dataset"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/ReqDtcDataset"
+							}
+						}
+					}
+				}
+			},
+			"get": {
+				"operationId": "GetAllDtcDataset",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/ResDtcDataset"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"DTC Dataset"
+				],
+				"security": [],
+				"parameters": []
+			}
+		},
+		"/dtc_dataset/{dtcDatasetId}": {
+			"get": {
+				"operationId": "GetOneDtcDataset",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ResDtcDataset"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"DTC Dataset"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "dtcDatasetId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			},
+			"delete": {
+				"operationId": "DeleteDTCDataset",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"properties": {
+										"result": {
+											"type": "string"
+										}
+									},
+									"required": [
+										"result"
+									],
+									"type": "object"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"DTC Dataset"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "dtcDatasetId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
 			}
 		},
 		"/dtc": {

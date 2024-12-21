@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from 'tsoa';
+import { Body, Controller, Post, Route, Tags } from 'tsoa';
 import { AppDataSource } from '../data-source';
 import { Parameters } from '../entity/Parameters';
 import { ReqParameter } from '../models/req/ReqParameter';
@@ -7,6 +7,8 @@ import { PID } from '../entity/PID';
 import { In } from 'typeorm';
 import { ResPID } from '../models/res/ResPID';
 
+@Route('/parameter')
+@Tags('Parameter')
 export class ParameterController extends Controller {
   private parameterrepository = AppDataSource.getRepository(Parameters);
   private pidrepository = AppDataSource.getRepository(PID);
