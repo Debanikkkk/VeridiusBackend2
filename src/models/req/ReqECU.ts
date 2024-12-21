@@ -17,6 +17,6 @@ export interface ReqECU {
   seedkeyalgoFnIndex?: string;
   iorTestIndex?: string;
   negativeResponses?: number[];
-  createdAt?: Date;
-  updatedAt?: Date;
+  // createdAt?: Date;
+  // updatedAt?: Date;
 }
