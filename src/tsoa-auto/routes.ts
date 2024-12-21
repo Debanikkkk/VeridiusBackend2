@@ -20,6 +20,8 @@ import { ServiceTicketController } from './../controller/ServiceTikcetController
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { RoleController } from './../controller/RoleController';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+import { PIDDatasetController } from './../controller/PIDDatasetController';
+// WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { PermissionController } from './../controller/PermissionController';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { OEMController } from './../controller/OEMController';
@@ -35,6 +37,8 @@ import { GeofenceController } from './../controller/GeofenceController';
 import { FreeDongleUserDeviceController } from './../controller/FreeDongleUserDeviceController';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { FirmwareController } from './../controller/FirmwareController';
+// WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+import { EcuController } from './../controller/EcuController';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { DTCController } from './../controller/DTCController';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -213,7 +217,7 @@ const models: TsoaRoute.Models = {
             "updatedAt": {"dataType":"datetime"},
             "negativeResponses": {"dataType":"array","array":{"dataType":"refObject","ref":"ResNegativeResponseCode"}},
             "vehicles": {"dataType":"array","array":{"dataType":"refObject","ref":"ResVehicle"}},
-            "firmwares": {"dataType":"array","array":{"dataType":"refObject","ref":"ResFirmware"}},
+            "firmwares": {"ref":"ResFirmware"},
         },
         "additionalProperties": false,
     },
@@ -397,7 +401,7 @@ const models: TsoaRoute.Models = {
     "ResFirmware": {
         "dataType": "refObject",
         "properties": {
-            "created_by": {"ref":"ResUser"},
+            "createdBy": {"ref":"ResUser"},
             "files": {"dataType":"array","array":{"dataType":"refObject","ref":"ResFiles"}},
             "firmwareType": {"ref":"firmware_management"},
             "firmwareVersion": {"dataType":"string"},
@@ -1005,6 +1009,16 @@ const models: TsoaRoute.Models = {
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "ReqPIDDataset": {
+        "dataType": "refObject",
+        "properties": {
+            "name": {"dataType":"string"},
+            "description": {"dataType":"string"},
+            "active": {"dataType":"boolean"},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "ReqPermission": {
         "dataType": "refObject",
         "properties": {
@@ -1098,6 +1112,31 @@ const models: TsoaRoute.Models = {
         "properties": {
             "name": {"dataType":"string"},
             "polygon": {"dataType":"nestedObjectLiteral","nestedProperties":{"coordinates":{"dataType":"array","array":{"dataType":"array","array":{"dataType":"array","array":{"dataType":"double"}}},"required":true},"type":{"dataType":"enum","enums":["Polygon"],"required":true}}},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "ReqECU": {
+        "dataType": "refObject",
+        "properties": {
+            "id": {"dataType":"double"},
+            "vehicles": {"dataType":"array","array":{"dataType":"double"}},
+            "isActive": {"dataType":"boolean"},
+            "macId": {"dataType":"string"},
+            "ecuName": {"dataType":"string"},
+            "protocol": {"dataType":"string"},
+            "dtcDataset": {"dataType":"array","array":{"dataType":"double"}},
+            "pidDataset": {"dataType":"array","array":{"dataType":"double"}},
+            "firmware": {"dataType":"double"},
+            "rxHeader": {"dataType":"string"},
+            "txHeader": {"dataType":"string"},
+            "readDtcFcIndex": {"dataType":"string"},
+            "clearDtcFnIndex": {"dataType":"string"},
+            "readDataFnIndex": {"dataType":"string"},
+            "writeDataFnIndex": {"dataType":"string"},
+            "seedkeyalgoFnIndex": {"dataType":"string"},
+            "iorTestIndex": {"dataType":"string"},
+            "negativeResponses": {"dataType":"array","array":{"dataType":"double"}},
         },
         "additionalProperties": false,
     },
@@ -2458,6 +2497,36 @@ export function RegisterRoutes(app: Router,opts?:{multer?:ReturnType<typeof mult
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsPIDDatasetController_savePID: Record<string, TsoaRoute.ParameterSchema> = {
+                request: {"in":"body","name":"request","required":true,"ref":"ReqPIDDataset"},
+        };
+        app.post('/pidDataset',
+            ...(fetchMiddlewares<RequestHandler>(PIDDatasetController)),
+            ...(fetchMiddlewares<RequestHandler>(PIDDatasetController.prototype.savePID)),
+
+            async function PIDDatasetController_savePID(request: ExRequest, response: ExResponse, next: any) {
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args: argsPIDDatasetController_savePID, request, response });
+
+                const controller = new PIDDatasetController();
+
+              await templateService.apiHandler({
+                methodName: 'savePID',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         const argsPermissionController_getAllPermissions: Record<string, TsoaRoute.ParameterSchema> = {
         };
         app.get('/permission',
@@ -3123,6 +3192,65 @@ export function RegisterRoutes(app: Router,opts?:{multer?:ReturnType<typeof mult
 
               await templateService.apiHandler({
                 methodName: 'getFile',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsEcuController_saveECU: Record<string, TsoaRoute.ParameterSchema> = {
+                req: {"in":"body","name":"req","required":true,"ref":"ReqECU"},
+        };
+        app.post('/ecu',
+            ...(fetchMiddlewares<RequestHandler>(EcuController)),
+            ...(fetchMiddlewares<RequestHandler>(EcuController.prototype.saveECU)),
+
+            async function EcuController_saveECU(request: ExRequest, response: ExResponse, next: any) {
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args: argsEcuController_saveECU, request, response });
+
+                const controller = new EcuController();
+
+              await templateService.apiHandler({
+                methodName: 'saveECU',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsEcuController_getAllECU: Record<string, TsoaRoute.ParameterSchema> = {
+        };
+        app.get('/ecu',
+            ...(fetchMiddlewares<RequestHandler>(EcuController)),
+            ...(fetchMiddlewares<RequestHandler>(EcuController.prototype.getAllECU)),
+
+            async function EcuController_getAllECU(request: ExRequest, response: ExResponse, next: any) {
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args: argsEcuController_getAllECU, request, response });
+
+                const controller = new EcuController();
+
+              await templateService.apiHandler({
+                methodName: 'getAllECU',
                 controller,
                 response,
                 next,

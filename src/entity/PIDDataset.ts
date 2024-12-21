@@ -24,7 +24,7 @@ export class PIDDataset {
   updated_at?: Date;
 
   // Many-to-many relationship with PID
-  @ManyToMany(() => PID, (pid) => pid.pid_datasets)
+  @ManyToMany(() => PID, (pid) => pid.pid_datasets, { nullable: true })
   @JoinTable({
     name: 'pid_dataset_pid',
     joinColumn: { name: 'pid_dataset_id' },
@@ -32,7 +32,7 @@ export class PIDDataset {
   })
   pids?: PID[];
 
-  @ManyToMany(() => ECU, (ecu) => ecu.pid_datasets)
+  @ManyToMany(() => ECU, (ecu) => ecu.pid_datasets, { nullable: true })
   @JoinTable({
     name: 'ecu_pid_dataset',
     joinColumn: { name: 'pid_dataset_id' },

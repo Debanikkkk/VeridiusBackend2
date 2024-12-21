@@ -169,9 +169,23 @@ export class FirmwareController extends Controller {
 
     const firmwareArr: ResFirmware[] = [];
     for (const fw of firmware) {
+      const resFilesArr: ResFiles[] = [];
+      (await fw.files)?.map((fs) => {
+        const resFile: ResFiles = {
+          createdAt: fs.created_at,
+          file: fs.file,
+          fileDescription: fs.file_description,
+          fileName: fs.file_name,
+          id: fs.id,
+          isActive: fs.is_active,
+          updatedAt: fs.updated_at,
+          // uploadedBy,
+        };
+        resFilesArr.push(resFile);
+      });
       const user = await fw.created_by;
       firmwareArr.push({
-        created_by: {
+        createdBy: {
           address: user?.address,
           // device: user?.,
           email: user?.email,
@@ -183,13 +197,13 @@ export class FirmwareController extends Controller {
           // role: user?.,
           // service_ticket: user?.,
         },
-        // files:fw.files,
+        files: resFilesArr,
         firmwareType: fw.firmware_type,
         firmwareVersion: fw.firmware_version,
         id: fw.id,
       });
     }
-    return firmware;
+    return firmwareArr;
   }
 
   @Get('/getDevOTAfirmware')
@@ -202,9 +216,24 @@ export class FirmwareController extends Controller {
 
     const firmwareArr: ResFirmware[] = [];
     for (const fw of firmware) {
+      const resFilesArr: ResFiles[] = [];
+      (await fw.files)?.map((fs) => {
+        const resFile: ResFiles = {
+          createdAt: fs.created_at,
+          file: fs.file,
+          fileDescription: fs.file_description,
+          fileName: fs.file_name,
+          id: fs.id,
+          isActive: fs.is_active,
+          updatedAt: fs.updated_at,
+          // uploadedBy,
+        };
+        resFilesArr.push(resFile);
+      });
+
       const user = await fw.created_by;
       firmwareArr.push({
-        created_by: {
+        createdBy: {
           address: user?.address,
           // device: user?.,
           email: user?.email,
@@ -216,13 +245,13 @@ export class FirmwareController extends Controller {
           // role: user?.,
           // service_ticket: user?.,
         },
-        // files:fw.files,
+        files: resFilesArr,
         firmwareType: fw.firmware_type,
         firmwareVersion: fw.firmware_version,
         id: fw.id,
       });
     }
-    return firmware;
+    return firmwareArr;
   }
 
   @Delete('/{firmwareId}')
@@ -363,7 +392,7 @@ export class FirmwareController extends Controller {
     }
 
     const resFirmware: ResFirmware = {
-      created_by: {
+      createdBy: {
         address: firmware.created_by?.address,
         email: firmware.created_by?.email,
         id: firmware.created_by?.id,

@@ -19,5 +19,5 @@ export interface ResECU {
   updatedAt?: Date;
   negativeResponses?: ResNegativeResponseCode[]; // Array of IDs for associated NegativeResponseCode
   vehicles?: ResVehicle[];
-  firmwares?: ResFirmware[];
+  firmwares?: ResFirmware;
 }

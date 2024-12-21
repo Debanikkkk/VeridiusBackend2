@@ -32,6 +32,7 @@ export class Firmware {
   )
   @JoinColumn({ name: 'created_by' })
   created_by?: User;
+
   @OneToMany(
     () => ECU,
     (ecu) => {

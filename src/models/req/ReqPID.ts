@@ -1,28 +1,23 @@
-// import { PID } from '../../entity/PID';
-
-// export interface ReqPID {}
-// const p: PID = {
-//   active,
-//   bit_coded,
-//   byte_position,
-//   created_at,
-//   description,
-//   id,
-//   length_bytes,
-//   long_name,
-//   max,
-//   min,
-//   offset,
-//   parameters,
-//   pid_code,
-
-//   pid_datasets,
-
-//   read,
-//   resolution,
-//   short_name,
-//   total_length,
-//   unit,
-//   updated_at,
-//   write,
-// };
+export interface ReqPID {
+  active?: boolean;
+  bitCoded?: boolean;
+  bytePosition?: number;
+  createdAt?: Date;
+  description?: string;
+  //   id?: number;
+  lengthBytes?: number;
+  longName?: string;
+  max?: number;
+  min?: number;
+  offset?: number;
+  parameters?: number[];
+  pidCode?: string;
+  pidDatasets?: number[];
+  read?: boolean;
+  resolution?: number;
+  shortName?: string;
+  totalLength?: number;
+  unit?: string;
+  updatedAt?: Date;
+  write?: boolean;
+}

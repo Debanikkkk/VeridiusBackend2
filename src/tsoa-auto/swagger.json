@@ -345,10 +345,7 @@
 						"type": "array"
 					},
 					"firmwares": {
-						"items": {
-							"$ref": "#/components/schemas/ResFirmware"
-						},
-						"type": "array"
+						"$ref": "#/components/schemas/ResFirmware"
 					}
 				},
 				"type": "object",
@@ -754,7 +751,7 @@
 			},
 			"ResFirmware": {
 				"properties": {
-					"created_by": {
+					"createdBy": {
 						"$ref": "#/components/schemas/ResUser"
 					},
 					"files": {
@@ -2201,6 +2198,21 @@
 				"type": "object",
 				"additionalProperties": false
 			},
+			"ReqPIDDataset": {
+				"properties": {
+					"name": {
+						"type": "string"
+					},
+					"description": {
+						"type": "string"
+					},
+					"active": {
+						"type": "boolean"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
 			"ReqPermission": {
 				"properties": {
 					"description": {
@@ -2446,6 +2458,84 @@
 							"type"
 						],
 						"type": "object"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ReqECU": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"vehicles": {
+						"items": {
+							"type": "number",
+							"format": "double"
+						},
+						"type": "array"
+					},
+					"isActive": {
+						"type": "boolean"
+					},
+					"macId": {
+						"type": "string"
+					},
+					"ecuName": {
+						"type": "string"
+					},
+					"protocol": {
+						"type": "string"
+					},
+					"dtcDataset": {
+						"items": {
+							"type": "number",
+							"format": "double"
+						},
+						"type": "array"
+					},
+					"pidDataset": {
+						"items": {
+							"type": "number",
+							"format": "double"
+						},
+						"type": "array"
+					},
+					"firmware": {
+						"type": "number",
+						"format": "double"
+					},
+					"rxHeader": {
+						"type": "string"
+					},
+					"txHeader": {
+						"type": "string"
+					},
+					"readDtcFcIndex": {
+						"type": "string"
+					},
+					"clearDtcFnIndex": {
+						"type": "string"
+					},
+					"readDataFnIndex": {
+						"type": "string"
+					},
+					"writeDataFnIndex": {
+						"type": "string"
+					},
+					"seedkeyalgoFnIndex": {
+						"type": "string"
+					},
+					"iorTestIndex": {
+						"type": "string"
+					},
+					"negativeResponses": {
+						"items": {
+							"type": "number",
+							"format": "double"
+						},
+						"type": "array"
 					}
 				},
 				"type": "object",
@@ -4146,6 +4236,38 @@
 				}
 			}
 		},
+		"/pidDataset": {
+			"post": {
+				"operationId": "SavePID",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ResPIDDataset"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"PID Dataset"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/ReqPIDDataset"
+							}
+						}
+					}
+				}
+			}
+		},
 		"/permission": {
 			"get": {
 				"operationId": "GetAllPermissions",
@@ -4885,7 +5007,7 @@
 							"application/json": {
 								"schema": {
 									"items": {
-										"$ref": "#/components/schemas/Firmware"
+										"$ref": "#/components/schemas/ResFirmware"
 									},
 									"type": "array"
 								}
@@ -4910,7 +5032,7 @@
 							"application/json": {
 								"schema": {
 									"items": {
-										"$ref": "#/components/schemas/Firmware"
+										"$ref": "#/components/schemas/ResFirmware"
 									},
 									"type": "array"
 								}
@@ -5038,6 +5160,61 @@
 						}
 					}
 				]
+			}
+		},
+		"/ecu": {
+			"post": {
+				"operationId": "SaveECU",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ResECU"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"ECU"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/ReqECU"
+							}
+						}
+					}
+				}
+			},
+			"get": {
+				"operationId": "GetAllECU",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/ResECU"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"ECU"
+				],
+				"security": [],
+				"parameters": []
 			}
 		},
 		"/dtc": {
