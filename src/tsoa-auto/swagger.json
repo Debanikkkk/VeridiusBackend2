@@ -5419,6 +5419,56 @@
 				"parameters": []
 			}
 		},
+		"/geofence/getCircleGeofence": {
+			"get": {
+				"operationId": "GetCircleGeofence",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/ResGeofence"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Geofence"
+				],
+				"security": [],
+				"parameters": []
+			}
+		},
+		"/geofence/getPolygonGeofence": {
+			"get": {
+				"operationId": "GetPolygonGeofence",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/ResGeofence"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Geofence"
+				],
+				"security": [],
+				"parameters": []
+			}
+		},
 		"/user/freeDongle/{userId}": {
 			"put": {
 				"operationId": "FreeTheDongle",
@@ -5481,7 +5531,7 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/Firmware"
+									"$ref": "#/components/schemas/ResFirmware"
 								}
 							}
 						}

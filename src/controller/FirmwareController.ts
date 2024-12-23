@@ -156,7 +156,21 @@ export class FirmwareController extends Controller {
     // fs.writeFileSync(filePath, file.buffer);
     const savedFirmware = await this.firmwareRepository.save(firmwareToSave);
 
-    return savedFirmware;
+    const resFirmware: ResFirmware = {
+      createdBy: {
+        address: savedFirmware.created_by?.address,
+        email: savedFirmware.created_by?.email,
+        id: savedFirmware.created_by?.id,
+        name: savedFirmware.created_by?.name,
+        password: savedFirmware.created_by?.password,
+        phone_number: savedFirmware.created_by?.phone_number,
+      },
+      // files: savedFirmware.,
+      firmwareType: savedFirmware.firmware_type,
+      firmwareVersion: savedFirmware.firmware_version,
+      id: savedFirmware.id,
+    };
+    return resFirmware;
   }
 
   @Get('/getFOTAfirmware')

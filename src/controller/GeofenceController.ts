@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Post, Route, Tags } from 'tsoa';
 import { AppDataSource } from '../data-source';
-import { Geofence } from '../entity/Geofence';
+import { Geofence, geofenceShape } from '../entity/Geofence';
 import { ReqGeofence } from '../models/req/ReqGeofence';
 import { ResGeofence } from '../models/res/ResGeofence';
 import wkx from 'wkx';
@@ -66,6 +66,58 @@ export class GeofenceController extends Controller {
       geofenceArr.push({
         name: geofence.name,
         polygon: geofence.polygon,
+      });
+    }
+    return geofenceArr;
+  }
+
+  @Get('/getCircleGeofence')
+  public async getCircleGeofence() {
+    const geofences = await this.geofencerepository.find({
+      where: {
+        geofence_type: geofenceShape.circle,
+      },
+    });
+    if (!geofences) {
+      return Promise.reject(new Error('THE GEOFENCE DOES NOT EXIST'));
+    }
+
+    const geofenceArr: ResGeofence[] = [];
+    for (const geofence of geofences) {
+      geofenceArr.push({
+        name: geofence.name,
+        polygon: geofence.polygon,
+        geofenceType: geofence.geofence_type,
+        id: geofence.id,
+        latitude: geofence.latitude,
+        longitude: geofence.longitude,
+        radius: geofence.radius,
+      });
+    }
+    return geofenceArr;
+  }
+
+  @Get('/getPolygonGeofence')
+  public async getPolygonGeofence() {
+    const geofences = await this.geofencerepository.find({
+      where: {
+        geofence_type: geofenceShape.polygon,
+      },
+    });
+    if (!geofences) {
+      return Promise.reject(new Error('THE GEOFENCE DOES NOT EXIST'));
+    }
+
+    const geofenceArr: ResGeofence[] = [];
+    for (const geofence of geofences) {
+      geofenceArr.push({
+        name: geofence.name,
+        polygon: geofence.polygon,
+        geofenceType: geofence.geofence_type,
+        id: geofence.id,
+        latitude: geofence.latitude,
+        longitude: geofence.longitude,
+        radius: geofence.radius,
       });
     }
     return geofenceArr;

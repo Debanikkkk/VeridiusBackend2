@@ -3382,6 +3382,64 @@ export function RegisterRoutes(app: Router,opts?:{multer?:ReturnType<typeof mult
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsGeofenceController_getCircleGeofence: Record<string, TsoaRoute.ParameterSchema> = {
+        };
+        app.get('/geofence/getCircleGeofence',
+            ...(fetchMiddlewares<RequestHandler>(GeofenceController)),
+            ...(fetchMiddlewares<RequestHandler>(GeofenceController.prototype.getCircleGeofence)),
+
+            async function GeofenceController_getCircleGeofence(request: ExRequest, response: ExResponse, next: any) {
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args: argsGeofenceController_getCircleGeofence, request, response });
+
+                const controller = new GeofenceController();
+
+              await templateService.apiHandler({
+                methodName: 'getCircleGeofence',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsGeofenceController_getPolygonGeofence: Record<string, TsoaRoute.ParameterSchema> = {
+        };
+        app.get('/geofence/getPolygonGeofence',
+            ...(fetchMiddlewares<RequestHandler>(GeofenceController)),
+            ...(fetchMiddlewares<RequestHandler>(GeofenceController.prototype.getPolygonGeofence)),
+
+            async function GeofenceController_getPolygonGeofence(request: ExRequest, response: ExResponse, next: any) {
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args: argsGeofenceController_getPolygonGeofence, request, response });
+
+                const controller = new GeofenceController();
+
+              await templateService.apiHandler({
+                methodName: 'getPolygonGeofence',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         const argsFreeDongleUserDeviceController_freeTheDongle: Record<string, TsoaRoute.ParameterSchema> = {
                 req: {"in":"request","name":"req","required":true,"dataType":"object"},
                 userId: {"in":"path","name":"userId","required":true,"dataType":"double"},
