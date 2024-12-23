@@ -2590,12 +2590,15 @@
 				"type": "object",
 				"additionalProperties": false
 			},
+			"geofenceShape": {
+				"enum": [
+					"CIRCLE",
+					"POLYGON"
+				],
+				"type": "string"
+			},
 			"ResGeofence": {
 				"properties": {
-					"id": {
-						"type": "number",
-						"format": "double"
-					},
 					"name": {
 						"type": "string"
 					},
@@ -2627,6 +2630,25 @@
 							"type"
 						],
 						"type": "object"
+					},
+					"geofenceType": {
+						"$ref": "#/components/schemas/geofenceShape"
+					},
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"latitude": {
+						"type": "number",
+						"format": "double"
+					},
+					"longitude": {
+						"type": "number",
+						"format": "double"
+					},
+					"radius": {
+						"type": "number",
+						"format": "double"
 					}
 				},
 				"type": "object",
@@ -2665,6 +2687,21 @@
 							"type"
 						],
 						"type": "object"
+					},
+					"geofenceType": {
+						"$ref": "#/components/schemas/geofenceShape"
+					},
+					"latitude": {
+						"type": "number",
+						"format": "double"
+					},
+					"longitude": {
+						"type": "number",
+						"format": "double"
+					},
+					"radius": {
+						"type": "number",
+						"format": "double"
 					}
 				},
 				"type": "object",
@@ -4629,6 +4666,99 @@
 						}
 					}
 				}
+			},
+			"get": {
+				"operationId": "GetAllPIDs",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/ResPID"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"PID"
+				],
+				"security": [],
+				"parameters": []
+			}
+		},
+		"/pid/{pidId}": {
+			"get": {
+				"operationId": "GetOnePID",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ResPID"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"PID"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "pidId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			},
+			"delete": {
+				"operationId": "DeletePID",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"properties": {
+										"result": {
+											"type": "string"
+										}
+									},
+									"required": [
+										"result"
+									],
+									"type": "object"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"PID"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "pidId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
 			}
 		},
 		"/permission": {
@@ -4878,6 +5008,99 @@
 						}
 					}
 				}
+			},
+			"get": {
+				"operationId": "GetAllParameters",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/ResParameter"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Parameter"
+				],
+				"security": [],
+				"parameters": []
+			}
+		},
+		"/parameter/{parameterId}": {
+			"get": {
+				"operationId": "GetOneParameter",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ResParameter"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Parameter"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "parameterId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			},
+			"delete": {
+				"operationId": "DeleteParameter",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"properties": {
+										"result": {
+											"type": "string"
+										}
+									},
+									"required": [
+										"result"
+									],
+									"type": "object"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Parameter"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "parameterId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
 			}
 		},
 		"/oem": {

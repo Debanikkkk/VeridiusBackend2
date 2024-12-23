@@ -18,7 +18,7 @@ export class GeofenceController extends Controller {
 
   @Post()
   public async saveGeofence(@Body() req: ReqGeofence): Promise<ResGeofence> {
-    const { name, polygon } = req;
+    const { geofenceType, latitude, longitude, name, polygon, radius } = req;
     if (!name) {
       return Promise.reject(new Error('NAME HAS TO BE PROVIDED'));
     }
@@ -27,9 +27,18 @@ export class GeofenceController extends Controller {
     }
     const polygonToSave: Geofence = {
       name: name,
-      polygon: polygon,
+      geofence_type: geofenceType,
     };
+    console.log('this is the geofence type ', geofenceType);
+    if (geofenceType == 'CIRCLE') {
+      polygonToSave.latitude = latitude;
+      polygonToSave.longitude = longitude;
+      polygonToSave.radius = radius;
+    }
 
+    if (geofenceType == 'POLYGON') {
+      polygonToSave.polygon = polygon;
+    }
     const savePolygon = Object.assign(new Geofence(), polygonToSave);
     const savedPolygon = await this.geofencerepository.save(savePolygon);
     // const geo = savedPolygon.polygon;

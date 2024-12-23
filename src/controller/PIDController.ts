@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Route, Tags } from 'tsoa';
+import { Body, Controller, Delete, Get, Path, Post, Route, Tags } from 'tsoa';
 import { AppDataSource } from '../data-source';
 import { PID } from '../entity/PID';
 import { ReqPID } from '../models/req/ReqPID';
@@ -143,5 +143,163 @@ export class PIDController extends Controller {
     resPid.pid_datasets = resPiddatasetArr;
 
     return resPid;
+  }
+
+  @Get()
+  public async getAllPIDs() {
+    const pids = await this.pidrepository.find({
+      relations: {
+        pid_datasets: true,
+      },
+    });
+
+    if (!pids) {
+      return Promise.reject(new Error('THE PIDS WERE NOT FOUND  '));
+    }
+
+    const pidArr: ResPID[] = [];
+
+    for (const pid of pids) {
+      const resPiddatasetArr: ResPIDDataset[] = [];
+      const resParameterArr: ResParameter[] = [];
+      // const resPidArr: PID[] = [];
+      pid.pid_datasets?.map((ppd) => {
+        const resPidDataset: ResPIDDataset = {
+          active: ppd.active,
+          createdAt: ppd.created_at,
+          description: ppd.description,
+          // ecus: ppd.,
+          id: ppd.id,
+          // messageTypes: ppd,
+          name: ppd.name,
+          updatedAt: ppd.updated_at,
+        };
+        resPiddatasetArr.push(resPidDataset);
+      });
+
+      pid.parameters?.map((pdp) => {
+        const resParameter: ResParameter = {
+          active: pdp.active,
+          created_at: pdp.created_at,
+          description: pdp.description,
+          id: pdp.id,
+          name: pdp.name,
+          // pids: pdp.,
+          updated_at: pdp.updated_at,
+        };
+        resParameterArr.push(resParameter);
+      });
+
+      pidArr.push({
+        active: pid.active,
+        bit_coded: pid.bit_coded,
+        byte_position: pid.byte_position,
+        created_at: pid.created_at,
+        description: pid.description,
+        id: pid.id,
+        length_bytes: pid.length_bytes,
+        long_name: pid.long_name,
+        max: pid.max,
+        min: pid.min,
+        offset: pid.offset,
+        parameters: resParameterArr,
+        pid_code: pid.pid_code,
+        pid_datasets: resPiddatasetArr,
+        read: pid.read,
+        resolution: pid.resolution,
+        short_name: pid.short_name,
+        total_length: pid.total_length,
+        unit: pid.unit,
+        updated_at: pid.updated_at,
+        write: pid.write,
+      });
+    }
+
+    return pidArr;
+  }
+
+  @Get('/{pidId}')
+  public async getOnePID(@Path() pidId: number) {
+    const pid = await this.pidrepository.findOne({
+      where: {
+        id: pidId,
+      },
+    });
+
+    if (!pid) {
+      return Promise.reject(new Error('THE PID WAS NOT FOUND  '));
+    }
+    const resPid: ResPID = {
+      active: pid.active,
+      bit_coded: pid.bit_coded,
+      byte_position: pid.byte_position,
+      created_at: pid.created_at,
+      description: pid.description,
+      id: pid.id,
+      length_bytes: pid.length_bytes,
+      long_name: pid.long_name,
+      max: pid.max,
+      min: pid.min,
+      offset: pid.offset,
+      read: pid.read,
+      resolution: pid.resolution,
+      short_name: pid.short_name,
+      total_length: pid.total_length,
+      unit: pid.unit,
+      updated_at: pid.updated_at,
+      write: pid.write,
+      pid_code: pid.pid_code,
+      //   parameters: ,
+      //   pid_datasets,
+    };
+    const resPiddatasetArr: ResPIDDataset[] = [];
+    const resParameterArr: ResParameter[] = [];
+    // const resPidArr: PID[] = [];
+    pid.pid_datasets?.map((ppd) => {
+      const resPidDataset: ResPIDDataset = {
+        active: ppd.active,
+        createdAt: ppd.created_at,
+        description: ppd.description,
+        // ecus: ppd.,
+        id: ppd.id,
+        // messageTypes: ppd,
+        name: ppd.name,
+        updatedAt: ppd.updated_at,
+      };
+      resPiddatasetArr.push(resPidDataset);
+    });
+
+    pid.parameters?.map((pdp) => {
+      const resParameter: ResParameter = {
+        active: pdp.active,
+        created_at: pdp.created_at,
+        description: pdp.description,
+        id: pdp.id,
+        name: pdp.name,
+        // pids: pdp.,
+        updated_at: pdp.updated_at,
+      };
+      resParameterArr.push(resParameter);
+    });
+    resPid.parameters = resParameterArr;
+    resPid.pid_datasets = resPiddatasetArr;
+
+    return resPid;
+  }
+
+  @Delete('/{pidId}')
+  public async deletePID(@Path() pidId: number) {
+    const pid = await this.pidrepository.findOne({
+      where: {
+        id: pidId,
+      },
+    });
+
+    if (!pid) {
+      return Promise.reject(new Error('THE PID WAS NOT FOUND  '));
+    }
+
+    await this.pidrepository.remove(pid);
+    return { result: 'THE PID WAS DELETED SUCCESSFULLY' };
   }
 }
