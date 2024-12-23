@@ -39,7 +39,7 @@ export class File {
   })
   file_type?: file_type;
 
-  @ManyToOne(() => Firmware, (firmware) => firmware.files, { nullable: true })
+  @ManyToOne(() => Firmware, (firmware) => firmware.files, { nullable: true, onDelete: 'CASCADE', onUpdate: 'CASCADE' })
   @JoinColumn({ name: 'firmware_id' })
   firmware?: Firmware;
 }
