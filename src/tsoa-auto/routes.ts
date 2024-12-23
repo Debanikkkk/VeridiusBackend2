@@ -1182,12 +1182,21 @@ const models: TsoaRoute.Models = {
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "geofenceShape": {
+        "dataType": "refEnum",
+        "enums": ["CIRCLE","POLYGON"],
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "ResGeofence": {
         "dataType": "refObject",
         "properties": {
-            "id": {"dataType":"double"},
             "name": {"dataType":"string"},
             "polygon": {"dataType":"nestedObjectLiteral","nestedProperties":{"coordinates":{"dataType":"array","array":{"dataType":"array","array":{"dataType":"array","array":{"dataType":"double"}}},"required":true},"type":{"dataType":"enum","enums":["Polygon"],"required":true}}},
+            "geofenceType": {"ref":"geofenceShape"},
+            "id": {"dataType":"double"},
+            "latitude": {"dataType":"double"},
+            "longitude": {"dataType":"double"},
+            "radius": {"dataType":"double"},
         },
         "additionalProperties": false,
     },
@@ -1197,6 +1206,10 @@ const models: TsoaRoute.Models = {
         "properties": {
             "name": {"dataType":"string"},
             "polygon": {"dataType":"nestedObjectLiteral","nestedProperties":{"coordinates":{"dataType":"array","array":{"dataType":"array","array":{"dataType":"array","array":{"dataType":"double"}}},"required":true},"type":{"dataType":"enum","enums":["Polygon"],"required":true}}},
+            "geofenceType": {"ref":"geofenceShape"},
+            "latitude": {"dataType":"double"},
+            "longitude": {"dataType":"double"},
+            "radius": {"dataType":"double"},
         },
         "additionalProperties": false,
     },
@@ -2743,6 +2756,95 @@ export function RegisterRoutes(app: Router,opts?:{multer?:ReturnType<typeof mult
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsPIDController_getAllPIDs: Record<string, TsoaRoute.ParameterSchema> = {
+        };
+        app.get('/pid',
+            ...(fetchMiddlewares<RequestHandler>(PIDController)),
+            ...(fetchMiddlewares<RequestHandler>(PIDController.prototype.getAllPIDs)),
+
+            async function PIDController_getAllPIDs(request: ExRequest, response: ExResponse, next: any) {
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args: argsPIDController_getAllPIDs, request, response });
+
+                const controller = new PIDController();
+
+              await templateService.apiHandler({
+                methodName: 'getAllPIDs',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsPIDController_getOnePID: Record<string, TsoaRoute.ParameterSchema> = {
+                pidId: {"in":"path","name":"pidId","required":true,"dataType":"double"},
+        };
+        app.get('/pid/:pidId',
+            ...(fetchMiddlewares<RequestHandler>(PIDController)),
+            ...(fetchMiddlewares<RequestHandler>(PIDController.prototype.getOnePID)),
+
+            async function PIDController_getOnePID(request: ExRequest, response: ExResponse, next: any) {
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args: argsPIDController_getOnePID, request, response });
+
+                const controller = new PIDController();
+
+              await templateService.apiHandler({
+                methodName: 'getOnePID',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsPIDController_deletePID: Record<string, TsoaRoute.ParameterSchema> = {
+                pidId: {"in":"path","name":"pidId","required":true,"dataType":"double"},
+        };
+        app.delete('/pid/:pidId',
+            ...(fetchMiddlewares<RequestHandler>(PIDController)),
+            ...(fetchMiddlewares<RequestHandler>(PIDController.prototype.deletePID)),
+
+            async function PIDController_deletePID(request: ExRequest, response: ExResponse, next: any) {
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args: argsPIDController_deletePID, request, response });
+
+                const controller = new PIDController();
+
+              await templateService.apiHandler({
+                methodName: 'deletePID',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         const argsPermissionController_getAllPermissions: Record<string, TsoaRoute.ParameterSchema> = {
         };
         app.get('/permission',
@@ -2912,6 +3014,95 @@ export function RegisterRoutes(app: Router,opts?:{multer?:ReturnType<typeof mult
 
               await templateService.apiHandler({
                 methodName: 'saveParameter',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsParameterController_getOneParameter: Record<string, TsoaRoute.ParameterSchema> = {
+                parameterId: {"in":"path","name":"parameterId","required":true,"dataType":"double"},
+        };
+        app.get('/parameter/:parameterId',
+            ...(fetchMiddlewares<RequestHandler>(ParameterController)),
+            ...(fetchMiddlewares<RequestHandler>(ParameterController.prototype.getOneParameter)),
+
+            async function ParameterController_getOneParameter(request: ExRequest, response: ExResponse, next: any) {
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args: argsParameterController_getOneParameter, request, response });
+
+                const controller = new ParameterController();
+
+              await templateService.apiHandler({
+                methodName: 'getOneParameter',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsParameterController_getAllParameters: Record<string, TsoaRoute.ParameterSchema> = {
+        };
+        app.get('/parameter',
+            ...(fetchMiddlewares<RequestHandler>(ParameterController)),
+            ...(fetchMiddlewares<RequestHandler>(ParameterController.prototype.getAllParameters)),
+
+            async function ParameterController_getAllParameters(request: ExRequest, response: ExResponse, next: any) {
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args: argsParameterController_getAllParameters, request, response });
+
+                const controller = new ParameterController();
+
+              await templateService.apiHandler({
+                methodName: 'getAllParameters',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsParameterController_deleteParameter: Record<string, TsoaRoute.ParameterSchema> = {
+                parameterId: {"in":"path","name":"parameterId","required":true,"dataType":"double"},
+        };
+        app.delete('/parameter/:parameterId',
+            ...(fetchMiddlewares<RequestHandler>(ParameterController)),
+            ...(fetchMiddlewares<RequestHandler>(ParameterController.prototype.deleteParameter)),
+
+            async function ParameterController_deleteParameter(request: ExRequest, response: ExResponse, next: any) {
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args: argsParameterController_deleteParameter, request, response });
+
+                const controller = new ParameterController();
+
+              await templateService.apiHandler({
+                methodName: 'deleteParameter',
                 controller,
                 response,
                 next,

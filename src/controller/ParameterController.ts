@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Route, Tags } from 'tsoa';
+import { Body, Controller, Delete, Get, Path, Post, Route, Tags } from 'tsoa';
 import { AppDataSource } from '../data-source';
 import { Parameters } from '../entity/Parameters';
 import { ReqParameter } from '../models/req/ReqParameter';
@@ -68,5 +68,109 @@ export class ParameterController extends Controller {
     resParameter.pids = resPidArr;
 
     return resParameter;
+  }
+
+  @Get('/{parameterId}')
+  public async getOneParameter(@Path() parameterId: number) {
+    const parameter = await this.parameterrepository.findOne({
+      where: {
+        id: parameterId,
+      },
+    });
+
+    if (!parameter) {
+      return Promise.reject(new Error('THE PARAMETER WAS NOT FOUND  '));
+    }
+
+    const resParameter: ResParameter = {
+      active: parameter.active,
+      created_at: parameter.created_at,
+      description: parameter.description,
+      id: parameter.id,
+      name: parameter.name,
+      updated_at: parameter.updated_at,
+    };
+    const resPidArr: ResPID[] = [];
+    parameter.pids?.map((ppid) => {
+      const resPid: ResPID = {
+        active: ppid.active,
+        bit_coded: ppid.bit_coded,
+        byte_position: ppid.byte_position,
+        created_at: ppid.created_at,
+        description: ppid.description,
+        id: ppid.id,
+        length_bytes: ppid.length_bytes,
+        long_name: ppid.long_name,
+        max: ppid.max,
+        min: ppid.min,
+        offset: ppid.offset,
+        read: ppid.read,
+        resolution: ppid.resolution,
+      };
+      resPidArr.push(resPid);
+    });
+    resParameter.pids = resPidArr;
+
+    return resParameter;
+  }
+
+  @Get()
+  public async getAllParameters() {
+    const parameters = await this.parameterrepository.find();
+
+    if (!parameters) {
+      return Promise.reject(new Error('THE PARAMETERS WERE NOT FOUND'));
+    }
+
+    const parameterArr: ResParameter[] = [];
+    for (const parameter of parameters) {
+      const resPidArr: ResPID[] = [];
+      parameter.pids?.map((ppid) => {
+        const resPid: ResPID = {
+          active: ppid.active,
+          bit_coded: ppid.bit_coded,
+          byte_position: ppid.byte_position,
+          created_at: ppid.created_at,
+          description: ppid.description,
+          id: ppid.id,
+          length_bytes: ppid.length_bytes,
+          long_name: ppid.long_name,
+          max: ppid.max,
+          min: ppid.min,
+          offset: ppid.offset,
+          read: ppid.read,
+          resolution: ppid.resolution,
+        };
+        resPidArr.push(resPid);
+      });
+
+      parameterArr.push({
+        active: parameter.active,
+        created_at: parameter.created_at,
+        description: parameter.description,
+        id: parameter.id,
+        name: parameter.name,
+        pids: resPidArr,
+        updated_at: parameter.updated_at,
+      });
+    }
+
+    return parameterArr;
+  }
+
+  @Delete('/{parameterId}')
+  public async deleteParameter(@Path() parameterId: number) {
+    const parameter = await this.parameterrepository.findOne({
+      where: {
+        id: parameterId,
+      },
+    });
+
+    if (!parameter) {
+      return Promise.reject(new Error('THE PARAMETER WAS NOT FOUND  '));
+    }
+
+    await this.parameterrepository.remove(parameter);
+    return { result: 'PARAMETER WAS DELETED SUCCESSFULLY' };
   }
 }
