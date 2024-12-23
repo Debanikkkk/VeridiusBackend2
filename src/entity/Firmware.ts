@@ -42,6 +42,6 @@ export class Firmware {
   )
   ecus?: ECU[];
 
-  @OneToMany(() => File, (file) => file.firmware, { nullable: true })
+  @OneToMany(() => File, (file) => file.firmware, { nullable: true, onDelete: 'CASCADE', onUpdate: 'CASCADE' })
   files?: Promise<File[]>;
 }
