@@ -222,7 +222,7 @@ export class RoleController extends Controller {
         description,
         id: savedRole.id,
         name: savedRole.name,
-        created_by: {
+        createdBy: {
           address: (await created_by).address,
           // device: (await created_by).device,
           email: (await created_by).email,
@@ -322,7 +322,7 @@ export class RoleController extends Controller {
       description: updatedRole.description,
       id: updatedRole.id,
       name: updatedRole.name,
-      created_by: {
+      createdBy: {
         address: (await updatedRole.created_by)?.address,
         email: (await updatedRole.created_by)?.email,
         id: (await updatedRole.created_by)?.id,

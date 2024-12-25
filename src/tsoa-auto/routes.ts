@@ -303,7 +303,7 @@ const models: TsoaRoute.Models = {
             "id": {"dataType":"double"},
             "name": {"dataType":"string"},
             "description": {"dataType":"string"},
-            "created_by": {"ref":"ResUser"},
+            "createdBy": {"ref":"ResUser"},
             "permissions": {"dataType":"array","array":{"dataType":"refObject","ref":"ResPermission"}},
         },
         "additionalProperties": false,
@@ -939,10 +939,10 @@ const models: TsoaRoute.Models = {
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "PaginatedResponse_User_": {
+    "PaginatedResponse_ResUser_": {
         "dataType": "refObject",
         "properties": {
-            "items": {"dataType":"array","array":{"dataType":"refObject","ref":"User"},"required":true},
+            "items": {"dataType":"array","array":{"dataType":"refObject","ref":"ResUser"},"required":true},
             "totalCount": {"dataType":"double","required":true},
             "page": {"dataType":"double","required":true},
             "pageSize": {"dataType":"double","required":true},
