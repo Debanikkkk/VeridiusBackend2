@@ -343,14 +343,40 @@ export class UserController extends Controller {
     }
   }
 
-  public async getUsersPagination(page: number, pageSize: number): Promise<{ items: User[]; totalCount: number }> {
+  public async getUsersPagination(page: number, pageSize: number): Promise<{ items: ResUser[]; totalCount: number }> {
     const offset = (page - 1) * pageSize;
     const limit = pageSize;
 
     // Mock data for illustration purposes
-    const allUsers: User[] = await this.userrepository.find();
+    const allUsers: User[] = await this.userrepository.find({
+      relations: {
+        role: true,
+      },
+    });
 
-    const paginatedUsers = allUsers.slice(offset, offset + limit);
+    const resUser: ResUser[] = [];
+    for (const user of allUsers) {
+      const role = await user.role;
+      resUser.push({
+        address: user.address,
+        // device: user.,
+        email: user.email,
+        id: user.id,
+        // is_under: user.,
+        name: user.name,
+        password: user.password,
+        phone_number: user.phone_number,
+        role: {
+          // createdBy: role?.created_by,
+          description: role?.description,
+          id: role?.id,
+          name: role?.name,
+          // permissions: role?.
+        },
+        // service_ticket: user.,
+      });
+    }
+    const paginatedUsers = resUser.slice(offset, offset + limit);
 
     return {
       items: paginatedUsers,
@@ -367,7 +393,7 @@ export class UserController extends Controller {
    * @returns A paginated list of users
    */
   @Get('/')
-  public async getUsers(@Query('page') page: number = 1, @Query('pageSize') pageSize: number = 10): Promise<PaginatedResponse<User>> {
+  public async getUsers(@Query('page') page: number = 1, @Query('pageSize') pageSize: number = 10): Promise<PaginatedResponse<ResUser>> {
     const users = await this.getUsersPagination(page, pageSize);
     return {
       items: users.items,

@@ -521,7 +521,7 @@
 					"description": {
 						"type": "string"
 					},
-					"created_by": {
+					"createdBy": {
 						"$ref": "#/components/schemas/ResUser"
 					},
 					"permissions": {
@@ -2051,11 +2051,11 @@
 				"type": "object",
 				"additionalProperties": false
 			},
-			"PaginatedResponse_User_": {
+			"PaginatedResponse_ResUser_": {
 				"properties": {
 					"items": {
 						"items": {
-							"$ref": "#/components/schemas/User"
+							"$ref": "#/components/schemas/ResUser"
 						},
 						"type": "array"
 					},
@@ -3634,7 +3634,7 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/PaginatedResponse_User_"
+									"$ref": "#/components/schemas/PaginatedResponse_ResUser_"
 								}
 							}
 						}
