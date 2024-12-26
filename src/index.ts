@@ -40,10 +40,14 @@ AppDataSource.initialize()
     const ecudir = './public/ecuUploads/';
     if (!fs.existsSync(ecudir)) fs.mkdirSync(ecudir, { recursive: true });
 
+    const bannerdir = './public/bannerUploads/';
+    if (!fs.existsSync(bannerdir)) fs.mkdirSync(bannerdir, { recursive: true });
+
     app.use(cors(options));
     app.use(bodyParser.json());
     app.use('/public/uploads', express.static('./public/uploads'));
     app.use('/public/ecuUploads', express.static('./public/ecuUploads'));
+    app.use('/public/bannerUploads', express.static('./public/bannerUploads'));
 
     // Swagger docs
     app.use('/docs', swaggerUi.serve, async (_req: Request, res: Response) => res.send(swaggerUi.generateHTML(swaggerJson)));
