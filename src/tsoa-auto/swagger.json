@@ -761,6 +761,65 @@
 				"type": "object",
 				"additionalProperties": false
 			},
+			"ResVehicleInsurance": {
+				"properties": {
+					"coverageDetails": {
+						"additionalProperties": false,
+						"type": "object"
+					},
+					"endDate": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"policyNumber": {
+						"type": "string"
+					},
+					"providerName": {
+						"type": "string"
+					},
+					"startDate": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"vehicle": {
+						"$ref": "#/components/schemas/ResVehicle"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ReqVehicleInsurance": {
+				"properties": {
+					"coverageDetails": {
+						"additionalProperties": false,
+						"type": "object"
+					},
+					"endDate": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"policyNumber": {
+						"type": "string"
+					},
+					"providerName": {
+						"type": "string"
+					},
+					"startDate": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"vehicle": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
 			"ReqVehicle": {
 				"properties": {
 					"color": {
@@ -3499,6 +3558,93 @@
 				]
 			}
 		},
+		"/vehicle_insurance": {
+			"post": {
+				"operationId": "SaveVehicleInsurance",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ResVehicleInsurance"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Vehicle Insurance"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/ReqVehicleInsurance"
+							}
+						}
+					}
+				}
+			},
+			"get": {
+				"operationId": "GetAllVehicleInsurances",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/ResVehicleInsurance"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Vehicle Insurance"
+				],
+				"security": [],
+				"parameters": []
+			}
+		},
+		"/vehicle_insurance/{vehicleInsuranceId}": {
+			"get": {
+				"operationId": "GetOneVehicleInsurance",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ResVehicleInsurance"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Vehicle Insurance"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "vehicleInsuranceId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			}
+		},
 		"/vehicle": {
 			"post": {
 				"operationId": "SaveVehicle",
@@ -4114,6 +4260,41 @@
 				],
 				"security": [],
 				"parameters": []
+			}
+		},
+		"/user/getAllUserFromRole/{roleId}": {
+			"post": {
+				"operationId": "GetAllUsersFromARole",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/ResUser"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"User"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "roleId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
 			}
 		},
 		"/user/{userId}/getUserFromRole": {
@@ -5390,6 +5571,21 @@
 						}
 					}
 				]
+			}
+		},
+		"/message_type": {
+			"post": {
+				"operationId": "SaveMessageType",
+				"responses": {
+					"204": {
+						"description": "No content"
+					}
+				},
+				"tags": [
+					"Message Type"
+				],
+				"security": [],
+				"parameters": []
 			}
 		},
 		"/loginpacket": {
