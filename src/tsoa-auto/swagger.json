@@ -6792,6 +6792,46 @@
 						}
 					}
 				]
+			},
+			"put": {
+				"operationId": "UpdateBanner",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ResBanner"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Banners"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "bannerId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/ResBanner"
+							}
+						}
+					}
+				}
 			}
 		}
 	},

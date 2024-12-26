@@ -4500,6 +4500,37 @@ export function RegisterRoutes(app: Router,opts?:{multer?:ReturnType<typeof mult
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsBannerController_updateBanner: Record<string, TsoaRoute.ParameterSchema> = {
+                req: {"in":"body","name":"req","required":true,"ref":"ResBanner"},
+                bannerId: {"in":"path","name":"bannerId","required":true,"dataType":"double"},
+        };
+        app.put('/banners/:bannerId',
+            ...(fetchMiddlewares<RequestHandler>(BannerController)),
+            ...(fetchMiddlewares<RequestHandler>(BannerController.prototype.updateBanner)),
+
+            async function BannerController_updateBanner(request: ExRequest, response: ExResponse, next: any) {
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args: argsBannerController_updateBanner, request, response });
+
+                const controller = new BannerController();
+
+              await templateService.apiHandler({
+                methodName: 'updateBanner',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 

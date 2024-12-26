@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Path, Post, Route, Tags } from 'tsoa';
+import { Body, Controller, Delete, Get, Path, Post, Put, Route, Tags } from 'tsoa';
 import { AppDataSource } from '../data-source';
 import { Banners } from '../entity/Banner';
 import { ResBanner } from '../models/res/ResBanner';
@@ -112,5 +112,45 @@ export class BannerController extends Controller {
 
     await this.bannerrepository.remove(banner);
     return { result: 'THE BANNER WAS DELETED SUCCESSFULLY' };
+  }
+
+  @Put('/{bannerId}')
+  public async updateBanner(@Body() req: ResBanner, @Path() bannerId: number): Promise<ResBanner> {
+    const banner = await this.bannerrepository.findOne({
+      where: {
+        id: bannerId,
+      },
+    });
+
+    const { priority, productDescription, productImg, productLink, productName, productTag, rating } = req;
+    if (!banner) {
+      return Promise.reject(new Error('BANNER NOT FOUND'));
+    }
+
+    // banner.created_at=createdAt,
+    // banner.id=id,
+    (banner.priority = priority),
+      (banner.product_description = productDescription),
+      (banner.product_img = productImg),
+      (banner.product_link = productLink),
+      (banner.product_name = productName),
+      (banner.product_tag = productTag),
+      (banner.rating = rating);
+    // banner.updated_at=updatedAt,
+
+    const newBanner = await this.bannerrepository.save(banner);
+    const resBanner: ResBanner = {
+      createdAt: newBanner.created_at,
+      id: newBanner.id,
+      priority: newBanner.priority,
+      productDescription: newBanner.product_description,
+      productImg: newBanner.product_img,
+      productLink: newBanner.product_link,
+      productName: newBanner.product_name,
+      productTag: newBanner.product_tag,
+      rating: newBanner.rating,
+      updatedAt: newBanner.updated_at,
+    };
+    return resBanner;
   }
 }
