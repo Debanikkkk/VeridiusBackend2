@@ -6,6 +6,8 @@ import { User } from '../entity/User';
 import { ResServiceTicket } from '../models/res/ResServiceTicket';
 import { ReqSTstatus } from '../models/req/ReqSTstatus';
 import { ResError } from '../models/res/Responses';
+import { ReqServiceTicket } from '../models/req/ReqServiceTicket';
+import { Vehicle } from '../entity/Vehicle';
 function generateRandomString(length: number) {
   const characters = 'abcdefghijklmnopqrstuvwxyz0123456789';
   let result = '';
@@ -19,6 +21,7 @@ function generateRandomString(length: number) {
 export class ServiceTicketController extends Controller {
   private serviceticketrepository = AppDataSource.getRepository(ServiceTicket);
   private userrepository = AppDataSource.getRepository(User);
+  private vehiclerepository = AppDataSource.getRepository(Vehicle);
 
   @Get()
   public async getAllServiceTickets(): Promise<ResServiceTicket[] | ResError> {
@@ -57,8 +60,9 @@ export class ServiceTicketController extends Controller {
    */
   @Post()
   @Security('Api-Token', [])
-  public async saveServiceTicket(@Request() req: JWTRequest): Promise<ResServiceTicket | ResError> {
+  public async saveServiceTicket(@Request() req: JWTRequest, @Body() request: ReqServiceTicket): Promise<ResServiceTicket | ResError> {
     try {
+      const { vehicle } = request;
       const serviceTicketNumber = generateRandomString(16);
       const user = await this.userrepository.findOne({
         where: {
@@ -68,9 +72,20 @@ export class ServiceTicketController extends Controller {
       if (!user) {
         return Promise.reject(new Error('USER NOT FODUN '));
       }
+
+      const vehicle_db = await this.vehiclerepository.findOne({
+        where: {
+          id: vehicle,
+        },
+      });
+
+      if (!vehicle_db) {
+        return Promise.reject(new Error('VEHICLE FROM DB NOT FOUND '));
+      }
       const serviceTicketToSave: ServiceTicket = {
         // date:,
         // id,
+        vehicle: Promise.resolve(vehicle_db),
         service_ticket_number: serviceTicketNumber,
         status: serviceTicketStatus.new,
         technician: Promise.resolve(user),
@@ -82,6 +97,16 @@ export class ServiceTicketController extends Controller {
       const resServiceTicket: ResServiceTicket = {
         date: savedSt.date,
         id: savedSt.id,
+        vehicle: {
+          color: vehicle_db.color,
+          engineNumber: vehicle_db.engine_number,
+          id: vehicle_db.id,
+          manufactureYear: vehicle_db.manufacture_year,
+          mileage: vehicle_db.mileage,
+          transmissionType: vehicle_db.transmission_type,
+          vehicleNumber: vehicle_db.vehicle_number,
+          vin: vehicle_db.vin,
+        },
         service_ticket_number: savedSt.service_ticket_number,
         status: savedSt.status,
         technician: {

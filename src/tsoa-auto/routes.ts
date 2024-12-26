@@ -334,6 +334,7 @@ const models: TsoaRoute.Models = {
             "service_ticket_number": {"dataType":"string"},
             "status": {"ref":"serviceTicketStatus"},
             "technician": {"ref":"ResUser"},
+            "vehicle": {"ref":"ResVehicle"},
         },
         "additionalProperties": false,
     },
@@ -784,6 +785,7 @@ const models: TsoaRoute.Models = {
             "vehicle_parts_replacements": {"dataType":"array","array":{"dataType":"refObject","ref":"VehiclePartsReplacement"}},
             "vehicle_insurances": {"dataType":"array","array":{"dataType":"refObject","ref":"VehicleInsurance"}},
             "dealer": {"ref":"Dealer"},
+            "service_ticket": {"ref":"ServiceTicket"},
         },
         "additionalProperties": false,
     },
@@ -883,6 +885,22 @@ const models: TsoaRoute.Models = {
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "ServiceTicket": {
+        "dataType": "refObject",
+        "properties": {
+            "id": {"dataType":"double"},
+            "date": {"dataType":"datetime"},
+            "created_on": {"dataType":"datetime"},
+            "updated_on": {"dataType":"datetime"},
+            "status": {"ref":"serviceTicketStatus"},
+            "active": {"dataType":"boolean"},
+            "service_ticket_number": {"dataType":"string"},
+            "technician": {"ref":"User"},
+            "vehicle": {"ref":"Vehicle"},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "File": {
         "dataType": "refObject",
         "properties": {
@@ -896,21 +914,6 @@ const models: TsoaRoute.Models = {
             "is_active": {"dataType":"boolean"},
             "file_type": {"ref":"file_type"},
             "firmware": {"ref":"Firmware"},
-        },
-        "additionalProperties": false,
-    },
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "ServiceTicket": {
-        "dataType": "refObject",
-        "properties": {
-            "id": {"dataType":"double"},
-            "date": {"dataType":"datetime"},
-            "created_on": {"dataType":"datetime"},
-            "updated_on": {"dataType":"datetime"},
-            "status": {"ref":"serviceTicketStatus"},
-            "active": {"dataType":"boolean"},
-            "service_ticket_number": {"dataType":"string"},
-            "technician": {"ref":"User"},
         },
         "additionalProperties": false,
     },
@@ -968,6 +971,14 @@ const models: TsoaRoute.Models = {
         "dataType": "refObject",
         "properties": {
             "role": {"dataType":"double"},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "ReqServiceTicket": {
+        "dataType": "refObject",
+        "properties": {
+            "vehicle": {"dataType":"double"},
         },
         "additionalProperties": false,
     },
@@ -1312,13 +1323,27 @@ const models: TsoaRoute.Models = {
             "createdAt": {"dataType":"datetime"},
             "id": {"dataType":"double"},
             "priority": {"dataType":"double"},
-            "product_description": {"dataType":"string"},
-            "product_img": {"dataType":"string"},
-            "product_link": {"dataType":"string"},
-            "product_name": {"dataType":"string"},
-            "product_tag": {"dataType":"string"},
+            "productDescription": {"dataType":"string"},
+            "productImg": {"dataType":"string"},
+            "productLink": {"dataType":"string"},
+            "productName": {"dataType":"string"},
+            "productTag": {"dataType":"string"},
             "rating": {"dataType":"double"},
             "updatedAt": {"dataType":"datetime"},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "ReqBanner": {
+        "dataType": "refObject",
+        "properties": {
+            "priority": {"dataType":"double"},
+            "productDescription": {"dataType":"string"},
+            "productImg": {"dataType":"string"},
+            "productLink": {"dataType":"string"},
+            "productName": {"dataType":"string"},
+            "productTag": {"dataType":"string"},
+            "rating": {"dataType":"double"},
         },
         "additionalProperties": false,
     },
@@ -2303,6 +2328,7 @@ export function RegisterRoutes(app: Router,opts?:{multer?:ReturnType<typeof mult
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         const argsServiceTicketController_saveServiceTicket: Record<string, TsoaRoute.ParameterSchema> = {
                 req: {"in":"request","name":"req","required":true,"dataType":"object"},
+                request: {"in":"body","name":"request","required":true,"ref":"ReqServiceTicket"},
         };
         app.post('/serviceTicket',
             authenticateMiddleware([{"Api-Token":[]}]),
@@ -4355,6 +4381,36 @@ export function RegisterRoutes(app: Router,opts?:{multer?:ReturnType<typeof mult
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsBannerController_saveBanner: Record<string, TsoaRoute.ParameterSchema> = {
+                req: {"in":"body","name":"req","required":true,"ref":"ReqBanner"},
+        };
+        app.post('/banners',
+            ...(fetchMiddlewares<RequestHandler>(BannerController)),
+            ...(fetchMiddlewares<RequestHandler>(BannerController.prototype.saveBanner)),
+
+            async function BannerController_saveBanner(request: ExRequest, response: ExResponse, next: any) {
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args: argsBannerController_saveBanner, request, response });
+
+                const controller = new BannerController();
+
+              await templateService.apiHandler({
+                methodName: 'saveBanner',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         const argsBannerController_getAllBanners: Record<string, TsoaRoute.ParameterSchema> = {
         };
         app.get('/banners',
@@ -4373,6 +4429,97 @@ export function RegisterRoutes(app: Router,opts?:{multer?:ReturnType<typeof mult
 
               await templateService.apiHandler({
                 methodName: 'getAllBanners',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsBannerController_getOneBanner: Record<string, TsoaRoute.ParameterSchema> = {
+                bannerId: {"in":"path","name":"bannerId","required":true,"dataType":"double"},
+        };
+        app.get('/banners/:bannerId',
+            ...(fetchMiddlewares<RequestHandler>(BannerController)),
+            ...(fetchMiddlewares<RequestHandler>(BannerController.prototype.getOneBanner)),
+
+            async function BannerController_getOneBanner(request: ExRequest, response: ExResponse, next: any) {
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args: argsBannerController_getOneBanner, request, response });
+
+                const controller = new BannerController();
+
+              await templateService.apiHandler({
+                methodName: 'getOneBanner',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsBannerController_deleteBanner: Record<string, TsoaRoute.ParameterSchema> = {
+                bannerId: {"in":"path","name":"bannerId","required":true,"dataType":"double"},
+        };
+        app.delete('/banners/:bannerId',
+            ...(fetchMiddlewares<RequestHandler>(BannerController)),
+            ...(fetchMiddlewares<RequestHandler>(BannerController.prototype.deleteBanner)),
+
+            async function BannerController_deleteBanner(request: ExRequest, response: ExResponse, next: any) {
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args: argsBannerController_deleteBanner, request, response });
+
+                const controller = new BannerController();
+
+              await templateService.apiHandler({
+                methodName: 'deleteBanner',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsBannerController_updateBanner: Record<string, TsoaRoute.ParameterSchema> = {
+                req: {"in":"body","name":"req","required":true,"ref":"ResBanner"},
+                bannerId: {"in":"path","name":"bannerId","required":true,"dataType":"double"},
+        };
+        app.put('/banners/:bannerId',
+            ...(fetchMiddlewares<RequestHandler>(BannerController)),
+            ...(fetchMiddlewares<RequestHandler>(BannerController.prototype.updateBanner)),
+
+            async function BannerController_updateBanner(request: ExRequest, response: ExResponse, next: any) {
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args: argsBannerController_updateBanner, request, response });
+
+                const controller = new BannerController();
+
+              await templateService.apiHandler({
+                methodName: 'updateBanner',
                 controller,
                 response,
                 next,

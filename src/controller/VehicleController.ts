@@ -48,11 +48,11 @@ export class VehicleController extends Controller {
         },
       });
 
-      if (db_ecus) {
+      if (!db_ecus) {
         return Promise.reject(new Error('THESE ECUS WERE NOT FOUND'));
       }
 
-      ecuArr.push(...ecuArr);
+      ecuArr.push(...db_ecus);
     }
     const vehicle_model_db = await this.vehiclemodelrepository.findOne({
       where: {
