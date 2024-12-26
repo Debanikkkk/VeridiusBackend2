@@ -20,6 +20,7 @@ import { JWTRequest } from '../models/req/JWTRequest';
 import { ReqUsersUnder } from '../models/req/ReqUsersUnder';
 import { In } from 'typeorm';
 import { ReqUserRoleFind } from '../models/req/ReqUserRoleFind';
+import { ReqUserRegister } from '../models/req/RequserRegister';
 // import { And } from 'typeorm';
 // import { serviceTicketStatus } from "../entity/ServiceTickets";
 @Tags('User')
@@ -28,6 +29,110 @@ export class UserController extends Controller {
   private userrepository = AppDataSource.getRepository(User);
   private devicerepository = AppDataSource.getRepository(Device);
   private rolerepository = AppDataSource.getRepository(Role);
+
+  /**
+   * register ELM user
+   * @summary register ELM user
+   */
+  @Post('/elm_register')
+  public async registerELMUser(@Body() req: ReqUserRegister): Promise<ResUser | ResError> {
+    try {
+      const { address, email, password, name, phone_number } = req;
+
+      const db_role = await this.rolerepository.findOne({
+        where: {
+          name: 'elm_user',
+        },
+      });
+      console.log('the saved role is ', db_role);
+      if (!db_role) {
+        return Promise.reject(new Error('PLEASE INSERT ROLE'));
+      }
+      const userToSave: User = {
+        password: password,
+        address: address,
+        email: email,
+        name: name,
+        phone_number: phone_number,
+        role: Promise.resolve(db_role),
+        // is_under: Promise.resolve(user),
+      };
+      console.log('the user to save is', userToSave);
+
+      const userSaver = Object.assign(new User(), userToSave);
+      const savedUser = await this.userrepository.save(userSaver);
+      const resUser: ResUser = {
+        id: savedUser.id,
+        address: savedUser.address,
+        email: savedUser.email,
+        name: savedUser.name,
+        phone_number: savedUser.phone_number,
+        password: savedUser.password,
+        role: {
+          description: (await savedUser.role)?.description,
+          id: (await savedUser.role)?.id,
+          name: (await savedUser.role)?.name,
+        },
+      };
+
+      return resUser;
+    } catch (error) {
+      console.log('there was an errror in saving the user', error);
+      return { error: 'failed to save the user' };
+    }
+  }
+
+  /**
+   * register Navmatic user
+   * @summary register Navmatic user
+   */
+  @Post('/navmatic_register')
+  public async registerNavmaticUser(@Body() req: ReqUserRegister): Promise<ResUser | ResError> {
+    try {
+      const { address, email, password, name, phone_number } = req;
+
+      const db_role = await this.rolerepository.findOne({
+        where: {
+          name: 'navmatic_user',
+        },
+      });
+      console.log('the saved role is ', db_role);
+      if (!db_role) {
+        return Promise.reject(new Error('PLEASE INSERT ROLE'));
+      }
+      const userToSave: User = {
+        password: password,
+        address: address,
+        email: email,
+        name: name,
+        phone_number: phone_number,
+        role: Promise.resolve(db_role),
+        // is_under: Promise.resolve(user),
+      };
+      console.log('the user to save is', userToSave);
+
+      const userSaver = Object.assign(new User(), userToSave);
+      const savedUser = await this.userrepository.save(userSaver);
+      const resUser: ResUser = {
+        id: savedUser.id,
+        address: savedUser.address,
+        email: savedUser.email,
+        name: savedUser.name,
+        phone_number: savedUser.phone_number,
+        password: savedUser.password,
+        role: {
+          description: (await savedUser.role)?.description,
+          id: (await savedUser.role)?.id,
+          name: (await savedUser.role)?.name,
+        },
+      };
+
+      return resUser;
+    } catch (error) {
+      console.log('there was an errror in saving the user', error);
+      return { error: 'failed to save the user' };
+    }
+  }
 
   @Post()
   @Security('Api-Token', [])

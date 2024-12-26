@@ -1,22 +1,42 @@
-import { Body, Controller, Delete, Get, Path, Post, Put, Route, Tags } from 'tsoa';
+import { Controller, Delete, Get, Path, Post, Put, Query, Route, Tags, UploadedFile } from 'tsoa';
 import { AppDataSource } from '../data-source';
 import { Banners } from '../entity/Banner';
 import { ResBanner } from '../models/res/ResBanner';
-import { ReqBanner } from '../models/req/ReqBanner';
-
+// import { ReqBanner } from '../models/req/ReqBanner';
+import path from 'path';
+import fs from 'fs';
 @Tags('Banners')
 @Route('/banners')
 export class BannerController extends Controller {
   private bannerrepository = AppDataSource.getRepository(Banners);
 
   @Post()
-  public async saveBanner(@Body() req: ReqBanner): Promise<ResBanner> {
-    const { priority, productDescription, productImg, productLink, productName, productTag, rating } = req;
+  public async saveBanner(
+    @UploadedFile() productImg: Express.Multer.File,
+    @Query() priority: number,
+    @Query() productDescription: string,
+    // @Query() productDescription: string,
+    // @Query() productImg: string,
+    @Query() productLink: string,
+    @Query() productName: string,
+    @Query() productTag: string,
+    @Query() rating: number,
+  ): Promise<ResBanner> {
+    // const {  } = req;
+    const uploadDir = path.join(__dirname, '../../public/bannerUploads');
+    if (!fs.existsSync(uploadDir)) {
+      fs.mkdirSync(uploadDir, { recursive: true });
+    }
 
+    // Save the uploaded file
+    // const uniqueSuffix = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
+    const fileExtension = path.extname(productImg.originalname);
+    const filePath = path.join(uploadDir, `${productName}${fileExtension}`);
+    fs.writeFileSync(filePath, productImg.buffer);
     const bannerSaver: Banners = {
       priority: priority,
       product_description: productDescription,
-      product_img: productImg,
+      product_img: 'https://omni-backend.navigolabs.com/public/bannerUploads/' + productName + fileExtension,
       product_link: productLink,
       product_name: productName,
       product_tag: productTag,
@@ -115,23 +135,44 @@ export class BannerController extends Controller {
   }
 
   @Put('/{bannerId}')
-  public async updateBanner(@Body() req: ResBanner, @Path() bannerId: number): Promise<ResBanner> {
+  public async updateBanner(
+    @UploadedFile() productImg: Express.Multer.File,
+    @Query() priority: number,
+    @Query() productDescription: string,
+    // @Query() productDescription: string,
+    // @Query() productImg: string,
+    @Query() productLink: string,
+    @Query() productName: string,
+    @Query() productTag: string,
+    @Query() rating: number,
+    @Path() bannerId: number,
+  ): Promise<ResBanner> {
     const banner = await this.bannerrepository.findOne({
       where: {
         id: bannerId,
       },
     });
 
-    const { priority, productDescription, productImg, productLink, productName, productTag, rating } = req;
+    const fileExtension = path.extname(productImg.originalname);
+
+    const uploadDir = path.join(__dirname, '../../public/bannerUploads');
+    if (!fs.existsSync(uploadDir)) {
+      fs.mkdirSync(uploadDir, { recursive: true });
+    }
+    // const { priority, productDescription, productImg, productLink, productName, productTag, rating } = req;
     if (!banner) {
       return Promise.reject(new Error('BANNER NOT FOUND'));
     }
 
     // banner.created_at=createdAt,
     // banner.id=id,
+
+    const filePath = path.join(uploadDir, `${productName}${fileExtension}`);
+    fs.writeFileSync(filePath, productImg.buffer);
+
     (banner.priority = priority),
       (banner.product_description = productDescription),
-      (banner.product_img = productImg),
+      (banner.product_img = 'https://omni-backend.navigolabs.com/public/bannerUploads/' + productName + fileExtension),
       (banner.product_link = productLink),
       (banner.product_name = productName),
       (banner.product_tag = productTag),

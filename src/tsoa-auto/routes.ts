@@ -443,6 +443,18 @@ const models: TsoaRoute.Models = {
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "ReqUserRegister": {
+        "dataType": "refObject",
+        "properties": {
+            "name": {"dataType":"string"},
+            "password": {"dataType":"string"},
+            "address": {"dataType":"string"},
+            "email": {"dataType":"string"},
+            "phone_number": {"dataType":"string"},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "ReqUser": {
         "dataType": "refObject",
         "properties": {
@@ -1334,20 +1346,6 @@ const models: TsoaRoute.Models = {
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "ReqBanner": {
-        "dataType": "refObject",
-        "properties": {
-            "priority": {"dataType":"double"},
-            "productDescription": {"dataType":"string"},
-            "productImg": {"dataType":"string"},
-            "productLink": {"dataType":"string"},
-            "productName": {"dataType":"string"},
-            "productTag": {"dataType":"string"},
-            "rating": {"dataType":"double"},
-        },
-        "additionalProperties": false,
-    },
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 };
 const templateService = new ExpressTemplateService(models, {"noImplicitAdditionalProperties":"throw-on-extras","bodyCoercion":true});
 
@@ -1950,6 +1948,66 @@ export function RegisterRoutes(app: Router,opts?:{multer?:ReturnType<typeof mult
 
               await templateService.apiHandler({
                 methodName: 'deleteVehicle',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsUserController_registerELMUser: Record<string, TsoaRoute.ParameterSchema> = {
+                req: {"in":"body","name":"req","required":true,"ref":"ReqUserRegister"},
+        };
+        app.post('/user/elm_register',
+            ...(fetchMiddlewares<RequestHandler>(UserController)),
+            ...(fetchMiddlewares<RequestHandler>(UserController.prototype.registerELMUser)),
+
+            async function UserController_registerELMUser(request: ExRequest, response: ExResponse, next: any) {
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args: argsUserController_registerELMUser, request, response });
+
+                const controller = new UserController();
+
+              await templateService.apiHandler({
+                methodName: 'registerELMUser',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsUserController_registerNavmaticUser: Record<string, TsoaRoute.ParameterSchema> = {
+                req: {"in":"body","name":"req","required":true,"ref":"ReqUserRegister"},
+        };
+        app.post('/user/navmatic_register',
+            ...(fetchMiddlewares<RequestHandler>(UserController)),
+            ...(fetchMiddlewares<RequestHandler>(UserController.prototype.registerNavmaticUser)),
+
+            async function UserController_registerNavmaticUser(request: ExRequest, response: ExResponse, next: any) {
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args: argsUserController_registerNavmaticUser, request, response });
+
+                const controller = new UserController();
+
+              await templateService.apiHandler({
+                methodName: 'registerNavmaticUser',
                 controller,
                 response,
                 next,
@@ -4382,9 +4440,21 @@ export function RegisterRoutes(app: Router,opts?:{multer?:ReturnType<typeof mult
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         const argsBannerController_saveBanner: Record<string, TsoaRoute.ParameterSchema> = {
-                req: {"in":"body","name":"req","required":true,"ref":"ReqBanner"},
+                productImg: {"in":"formData","name":"productImg","required":true,"dataType":"file"},
+                priority: {"in":"query","name":"priority","required":true,"dataType":"double"},
+                productDescription: {"in":"query","name":"productDescription","required":true,"dataType":"string"},
+                productLink: {"in":"query","name":"productLink","required":true,"dataType":"string"},
+                productName: {"in":"query","name":"productName","required":true,"dataType":"string"},
+                productTag: {"in":"query","name":"productTag","required":true,"dataType":"string"},
+                rating: {"in":"query","name":"rating","required":true,"dataType":"double"},
         };
         app.post('/banners',
+            upload.fields([
+                {
+                    name: "productImg",
+                    maxCount: 1
+                }
+            ]),
             ...(fetchMiddlewares<RequestHandler>(BannerController)),
             ...(fetchMiddlewares<RequestHandler>(BannerController.prototype.saveBanner)),
 
@@ -4501,10 +4571,22 @@ export function RegisterRoutes(app: Router,opts?:{multer?:ReturnType<typeof mult
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         const argsBannerController_updateBanner: Record<string, TsoaRoute.ParameterSchema> = {
-                req: {"in":"body","name":"req","required":true,"ref":"ResBanner"},
+                productImg: {"in":"formData","name":"productImg","required":true,"dataType":"file"},
+                priority: {"in":"query","name":"priority","required":true,"dataType":"double"},
+                productDescription: {"in":"query","name":"productDescription","required":true,"dataType":"string"},
+                productLink: {"in":"query","name":"productLink","required":true,"dataType":"string"},
+                productName: {"in":"query","name":"productName","required":true,"dataType":"string"},
+                productTag: {"in":"query","name":"productTag","required":true,"dataType":"string"},
+                rating: {"in":"query","name":"rating","required":true,"dataType":"double"},
                 bannerId: {"in":"path","name":"bannerId","required":true,"dataType":"double"},
         };
         app.put('/banners/:bannerId',
+            upload.fields([
+                {
+                    name: "productImg",
+                    maxCount: 1
+                }
+            ]),
             ...(fetchMiddlewares<RequestHandler>(BannerController)),
             ...(fetchMiddlewares<RequestHandler>(BannerController.prototype.updateBanner)),
 

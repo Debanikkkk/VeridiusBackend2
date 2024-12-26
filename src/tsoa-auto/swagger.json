@@ -825,6 +825,27 @@
 				"type": "object",
 				"additionalProperties": false
 			},
+			"ReqUserRegister": {
+				"properties": {
+					"name": {
+						"type": "string"
+					},
+					"password": {
+						"type": "string"
+					},
+					"address": {
+						"type": "string"
+					},
+					"email": {
+						"type": "string"
+					},
+					"phone_number": {
+						"type": "string"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
 			"ReqUser": {
 				"properties": {
 					"name": {
@@ -2977,35 +2998,6 @@
 				},
 				"type": "object",
 				"additionalProperties": false
-			},
-			"ReqBanner": {
-				"properties": {
-					"priority": {
-						"type": "number",
-						"format": "double"
-					},
-					"productDescription": {
-						"type": "string"
-					},
-					"productImg": {
-						"type": "string"
-					},
-					"productLink": {
-						"type": "string"
-					},
-					"productName": {
-						"type": "string"
-					},
-					"productTag": {
-						"type": "string"
-					},
-					"rating": {
-						"type": "number",
-						"format": "double"
-					}
-				},
-				"type": "object",
-				"additionalProperties": false
 			}
 		},
 		"securitySchemes": {
@@ -3630,6 +3622,88 @@
 						}
 					}
 				]
+			}
+		},
+		"/user/elm_register": {
+			"post": {
+				"operationId": "RegisterELMUser",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"$ref": "#/components/schemas/ResUser"
+										},
+										{
+											"$ref": "#/components/schemas/ResError"
+										}
+									]
+								}
+							}
+						}
+					}
+				},
+				"description": "register ELM user",
+				"summary": "register ELM user",
+				"tags": [
+					"User"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/ReqUserRegister"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/user/navmatic_register": {
+			"post": {
+				"operationId": "RegisterNavmaticUser",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"$ref": "#/components/schemas/ResUser"
+										},
+										{
+											"$ref": "#/components/schemas/ResError"
+										}
+									]
+								}
+							}
+						}
+					}
+				},
+				"description": "register Navmatic user",
+				"summary": "register Navmatic user",
+				"tags": [
+					"User"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/ReqUserRegister"
+							}
+						}
+					}
+				}
 			}
 		},
 		"/user": {
@@ -6688,13 +6762,73 @@
 					"Banners"
 				],
 				"security": [],
-				"parameters": [],
+				"parameters": [
+					{
+						"in": "query",
+						"name": "priority",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"in": "query",
+						"name": "productDescription",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "productLink",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "productName",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "productTag",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "rating",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				],
 				"requestBody": {
 					"required": true,
 					"content": {
-						"application/json": {
+						"multipart/form-data": {
 							"schema": {
-								"$ref": "#/components/schemas/ReqBanner"
+								"type": "object",
+								"properties": {
+									"productImg": {
+										"type": "string",
+										"format": "binary"
+									}
+								},
+								"required": [
+									"productImg"
+								]
 							}
 						}
 					}
@@ -6813,6 +6947,56 @@
 				"security": [],
 				"parameters": [
 					{
+						"in": "query",
+						"name": "priority",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"in": "query",
+						"name": "productDescription",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "productLink",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "productName",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "productTag",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "rating",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
 						"in": "path",
 						"name": "bannerId",
 						"required": true,
@@ -6825,9 +7009,18 @@
 				"requestBody": {
 					"required": true,
 					"content": {
-						"application/json": {
+						"multipart/form-data": {
 							"schema": {
-								"$ref": "#/components/schemas/ResBanner"
+								"type": "object",
+								"properties": {
+									"productImg": {
+										"type": "string",
+										"format": "binary"
+									}
+								},
+								"required": [
+									"productImg"
+								]
 							}
 						}
 					}
