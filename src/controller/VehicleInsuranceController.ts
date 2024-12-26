@@ -1,10 +1,12 @@
-import { Body, Controller, Get, Path, Post } from 'tsoa';
+import { Body, Controller, Get, Path, Post, Route, Tags } from 'tsoa';
 import { AppDataSource } from '../data-source';
 import { VehicleInsurance } from '../entity/VehicleInsurance';
 import { ReqVehicleInsurance } from '../models/req/ReqVehicleInsurance';
 import { ResVehicleInsurance } from '../models/res/ResVehicleInsurance';
 import { Vehicle } from '../entity/Vehicle';
 
+@Route('/vehicle_insurance')
+@Tags('Vehicle Insurance')
 export class VehicleInsuranceController extends Controller {
   private vehicleinsuranccerepository = AppDataSource.getRepository(VehicleInsurance);
   private vehiclerepository = AppDataSource.getRepository(Vehicle);

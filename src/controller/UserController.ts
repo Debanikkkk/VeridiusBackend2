@@ -664,6 +664,44 @@ export class UserController extends Controller {
     }
     return resUser;
   }
+
+  @Post('/getAllUserFromRole/{roleId}')
+  public async getAllUsersFromARole(@Path() roleId: number): Promise<ResUser[]> {
+    const users = await this.userrepository.find({
+      where: {
+        role: {
+          id: roleId,
+        },
+      },
+      relations: {
+        role: true,
+      },
+    });
+
+    if (!users) {
+      return Promise.reject(new Error('USER NOT FOUND'));
+    }
+
+    const resUser: ResUser[] = [];
+
+    for (const user of users) {
+      resUser.push({
+        address: user.address,
+        // device: user.device,
+        email: user.email,
+        id: user.id,
+        name: user.name,
+        password: user.password,
+        phone_number: user.phone_number,
+        role: {
+          description: (await user.role)?.description,
+          id: (await user.role)?.id,
+          name: (await user.role)?.name,
+        },
+      });
+    }
+    return resUser;
+  }
   /**
    * get users under from role
    * @summary get users under from role
