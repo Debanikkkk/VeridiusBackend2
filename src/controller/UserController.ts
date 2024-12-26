@@ -48,6 +48,17 @@ export class UserController extends Controller {
       if (!db_role) {
         return Promise.reject(new Error('PLEASE INSERT ROLE'));
       }
+
+      const super_user = await this.userrepository.find({
+        where: {
+          role: {
+            name: 'super_admin',
+          },
+        },
+      });
+      if (!super_user) {
+        return Promise.reject(new Error('PLEASE INSERT ROLE'));
+      }
       const userToSave: User = {
         password: password,
         address: address,
@@ -55,7 +66,7 @@ export class UserController extends Controller {
         name: name,
         phone_number: phone_number,
         role: Promise.resolve(db_role),
-        // is_under: Promise.resolve(user),
+        is_under: Promise.resolve(super_user),
       };
       console.log('the user to save is', userToSave);
 
@@ -100,6 +111,18 @@ export class UserController extends Controller {
       if (!db_role) {
         return Promise.reject(new Error('PLEASE INSERT ROLE'));
       }
+
+      const super_user = await this.userrepository.find({
+        where: {
+          role: {
+            name: 'super_admin',
+          },
+        },
+      });
+      if (!super_user) {
+        return Promise.reject(new Error('PLEASE INSERT ROLE'));
+      }
+      console.log('super user is', super_user);
       const userToSave: User = {
         password: password,
         address: address,
@@ -107,7 +130,7 @@ export class UserController extends Controller {
         name: name,
         phone_number: phone_number,
         role: Promise.resolve(db_role),
-        // is_under: Promise.resolve(user),
+        is_under: Promise.resolve(super_user),
       };
       console.log('the user to save is', userToSave);
 
@@ -152,9 +175,16 @@ export class UserController extends Controller {
         return Promise.reject(new Error('PLEASE INSERT ROLE'));
       }
       const user = await this.userrepository.find({
-        where: {
-          id: request.user.id,
-        },
+        where: [
+          {
+            id: request.user.id,
+          },
+          {
+            role: {
+              name: 'super_admin',
+            },
+          },
+        ],
       });
       if (!user) {
         return Promise.reject(new Error('USER IS NOT FOUND'));
@@ -408,7 +438,7 @@ export class UserController extends Controller {
 
     await this.userrepository.remove(usertodelete);
 
-    return { result: 'ROLE DELETED SUCCESSFULLY' };
+    return { result: 'USER DELETED SUCCESSFULLY' };
   }
 
   @Put('userDeviceAllot/{userId}')
