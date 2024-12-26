@@ -588,6 +588,9 @@
 					},
 					"technician": {
 						"$ref": "#/components/schemas/ResUser"
+					},
+					"vehicle": {
+						"$ref": "#/components/schemas/ResVehicle"
 					}
 				},
 				"type": "object",
@@ -1703,6 +1706,9 @@
 					},
 					"dealer": {
 						"$ref": "#/components/schemas/Dealer"
+					},
+					"service_ticket": {
+						"$ref": "#/components/schemas/ServiceTicket"
 					}
 				},
 				"type": "object",
@@ -1928,6 +1934,43 @@
 				"type": "object",
 				"additionalProperties": false
 			},
+			"ServiceTicket": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"date": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"created_on": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"updated_on": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"status": {
+						"$ref": "#/components/schemas/serviceTicketStatus"
+					},
+					"active": {
+						"type": "boolean"
+					},
+					"service_ticket_number": {
+						"type": "string"
+					},
+					"technician": {
+						"$ref": "#/components/schemas/User"
+					},
+					"vehicle": {
+						"$ref": "#/components/schemas/Vehicle"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
 			"File": {
 				"properties": {
 					"id": {
@@ -1962,40 +2005,6 @@
 					},
 					"firmware": {
 						"$ref": "#/components/schemas/Firmware"
-					}
-				},
-				"type": "object",
-				"additionalProperties": false
-			},
-			"ServiceTicket": {
-				"properties": {
-					"id": {
-						"type": "number",
-						"format": "double"
-					},
-					"date": {
-						"type": "string",
-						"format": "date-time"
-					},
-					"created_on": {
-						"type": "string",
-						"format": "date-time"
-					},
-					"updated_on": {
-						"type": "string",
-						"format": "date-time"
-					},
-					"status": {
-						"$ref": "#/components/schemas/serviceTicketStatus"
-					},
-					"active": {
-						"type": "boolean"
-					},
-					"service_ticket_number": {
-						"type": "string"
-					},
-					"technician": {
-						"$ref": "#/components/schemas/User"
 					}
 				},
 				"type": "object",
@@ -2113,6 +2122,16 @@
 			"ReqUserRoleFind": {
 				"properties": {
 					"role": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ReqServiceTicket": {
+				"properties": {
+					"vehicle": {
 						"type": "number",
 						"format": "double"
 					}
@@ -2932,19 +2951,19 @@
 						"type": "number",
 						"format": "double"
 					},
-					"product_description": {
+					"productDescription": {
 						"type": "string"
 					},
-					"product_img": {
+					"productImg": {
 						"type": "string"
 					},
-					"product_link": {
+					"productLink": {
 						"type": "string"
 					},
-					"product_name": {
+					"productName": {
 						"type": "string"
 					},
-					"product_tag": {
+					"productTag": {
 						"type": "string"
 					},
 					"rating": {
@@ -2954,6 +2973,35 @@
 					"updatedAt": {
 						"type": "string",
 						"format": "date-time"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ReqBanner": {
+				"properties": {
+					"priority": {
+						"type": "number",
+						"format": "double"
+					},
+					"productDescription": {
+						"type": "string"
+					},
+					"productImg": {
+						"type": "string"
+					},
+					"productLink": {
+						"type": "string"
+					},
+					"productName": {
+						"type": "string"
+					},
+					"productTag": {
+						"type": "string"
+					},
+					"rating": {
+						"type": "number",
+						"format": "double"
 					}
 				},
 				"type": "object",
@@ -4101,7 +4149,17 @@
 						"Api-Token": []
 					}
 				],
-				"parameters": []
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/ReqServiceTicket"
+							}
+						}
+					}
+				}
 			}
 		},
 		"/serviceTicket/{serviceTicketId}": {
@@ -6612,6 +6670,36 @@
 			}
 		},
 		"/banners": {
+			"post": {
+				"operationId": "SaveBanner",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ResBanner"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Banners"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/ReqBanner"
+							}
+						}
+					}
+				}
+			},
 			"get": {
 				"operationId": "GetAllBanners",
 				"responses": {
@@ -6634,6 +6722,76 @@
 				],
 				"security": [],
 				"parameters": []
+			}
+		},
+		"/banners/{bannerId}": {
+			"get": {
+				"operationId": "GetOneBanner",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ResBanner"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Banners"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "bannerId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			},
+			"delete": {
+				"operationId": "DeleteBanner",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"properties": {
+										"result": {
+											"type": "string"
+										}
+									},
+									"required": [
+										"result"
+									],
+									"type": "object"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Banners"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "bannerId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
 			}
 		}
 	},

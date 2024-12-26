@@ -1,6 +1,6 @@
-export interface ResBanner {
-  createdAt?: Date;
-  id?: number;
+export interface ReqBanner {
+  //   createdAt,
+  //   id,
   priority?: number;
   productDescription?: string;
   productImg?: string;
@@ -8,5 +8,5 @@ export interface ResBanner {
   productName?: string;
   productTag?: string;
   rating?: number;
-  updatedAt?: Date;
+  //   updatedAt,
 }

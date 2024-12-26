@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany, JoinColumn, ManyToMany, JoinTable } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany, JoinColumn, ManyToMany, JoinTable, OneToOne } from 'typeorm';
 
 import { VehicleModel } from './VehicleModel';
 import { VehicleSubModel } from './VehicleSubModel';
@@ -9,6 +9,7 @@ import { VehiclePartsReplacement } from './VehiclePartsReplacement';
 import { VehicleInsurance } from './VehicleInsurance';
 import { Dealer } from './Dealer';
 import { ECU } from './ECU';
+import { ServiceTicket } from './ServiceTickets';
 
 @Entity()
 export class Vehicle {
@@ -79,4 +80,14 @@ export class Vehicle {
   @ManyToOne(() => Dealer, (dealer) => dealer.vehicles, { nullable: true })
   @JoinColumn({ name: 'dealer_id' })
   dealer?: Dealer;
+
+  @OneToOne(
+    () => ServiceTicket,
+    (service_ticket) => {
+      service_ticket.vehicle;
+    },
+    { onUpdate: 'CASCADE', onDelete: 'CASCADE', nullable: true },
+  )
+  // @JoinColumn({ name: 'vehicle_id' })
+  service_ticket?: Promise<ServiceTicket>;
 }
