@@ -2884,6 +2884,54 @@
 				"type": "object",
 				"additionalProperties": false
 			},
+			"ResECUAtt": {
+				"properties": {
+					"attributeName": {
+						"type": "string"
+					},
+					"attributeValue": {
+						"type": "string"
+					},
+					"createdAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"isActive": {
+						"type": "boolean"
+					},
+					"status": {
+						"type": "boolean"
+					},
+					"updatedAt": {
+						"type": "string",
+						"format": "date-time"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ReqECUAtt": {
+				"properties": {
+					"attributeName": {
+						"type": "string"
+					},
+					"attributeValue": {
+						"type": "string"
+					},
+					"isActive": {
+						"type": "boolean"
+					},
+					"status": {
+						"type": "boolean"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
 			"ReqDtcDataset": {
 				"properties": {
 					"name": {
@@ -3012,6 +3060,55 @@
 				"properties": {
 					"devConnStatus": {
 						"type": "boolean"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ResDealer": {
+				"properties": {
+					"contactInformation": {
+						"additionalProperties": false,
+						"type": "object"
+					},
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"location": {
+						"type": "string"
+					},
+					"name": {
+						"type": "string"
+					},
+					"vehicles": {
+						"items": {
+							"$ref": "#/components/schemas/ResDealer"
+						},
+						"type": "array"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ReqDealer": {
+				"properties": {
+					"contactInformation": {
+						"additionalProperties": false,
+						"type": "object"
+					},
+					"location": {
+						"type": "string"
+					},
+					"name": {
+						"type": "string"
+					},
+					"vehicles": {
+						"items": {
+							"type": "number",
+							"format": "double"
+						},
+						"type": "array"
 					}
 				},
 				"type": "object",
@@ -6283,6 +6380,131 @@
 				]
 			}
 		},
+		"/ecuAttList": {
+			"post": {
+				"operationId": "SaveEcuAtt",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ResECUAtt"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"ECU Attribute List"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/ReqECUAtt"
+							}
+						}
+					}
+				}
+			},
+			"get": {
+				"operationId": "GetAllECUAtt",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/ResECUAtt"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"ECU Attribute List"
+				],
+				"security": [],
+				"parameters": []
+			}
+		},
+		"/ecuAttList/{ecuAttId}": {
+			"get": {
+				"operationId": "GetOneECUAtt",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ResECUAtt"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"ECU Attribute List"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "ecuAttId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			},
+			"delete": {
+				"operationId": "DeleteECUAtt",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"properties": {
+										"result": {
+											"type": "string"
+										}
+									},
+									"required": [
+										"result"
+									],
+									"type": "object"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"ECU Attribute List"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "ecuAttId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			}
+		},
 		"/dtc_dataset": {
 			"post": {
 				"operationId": "SaveDtcDataset",
@@ -6937,6 +7159,70 @@
 						}
 					}
 				}
+			}
+		},
+		"/dealer": {
+			"post": {
+				"operationId": "SaveDealer",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ResDealer"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Dealer"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/ReqDealer"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/dealer/{dealerId}": {
+			"get": {
+				"operationId": "GetOneDealer",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ResDealer"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Dealer"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "dealerId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
 			}
 		},
 		"/banners": {

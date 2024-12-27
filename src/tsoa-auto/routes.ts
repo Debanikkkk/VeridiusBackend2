@@ -48,6 +48,8 @@ import { FirmwareController } from './../controller/FirmwareController';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { EcuController } from './../controller/EcuController';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+import { ECUAttributeListController } from './../controller/ECUAttributeListController';
+// WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { DTCDatasetController } from './../controller/DTCDatasetController';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { DTCController } from './../controller/DTCController';
@@ -55,6 +57,8 @@ import { DTCController } from './../controller/DTCController';
 import { DongleController } from './../controller/DongleController';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { DeviceController } from './../controller/DeviceController';
+// WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+import { DealerController } from './../controller/DealerController';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { BannerController } from './../controller/BannerController';
 import { expressAuthentication } from './../authentication';
@@ -1293,6 +1297,31 @@ const models: TsoaRoute.Models = {
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "ResECUAtt": {
+        "dataType": "refObject",
+        "properties": {
+            "attributeName": {"dataType":"string"},
+            "attributeValue": {"dataType":"string"},
+            "createdAt": {"dataType":"datetime"},
+            "id": {"dataType":"double"},
+            "isActive": {"dataType":"boolean"},
+            "status": {"dataType":"boolean"},
+            "updatedAt": {"dataType":"datetime"},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "ReqECUAtt": {
+        "dataType": "refObject",
+        "properties": {
+            "attributeName": {"dataType":"string"},
+            "attributeValue": {"dataType":"string"},
+            "isActive": {"dataType":"boolean"},
+            "status": {"dataType":"boolean"},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "ReqDtcDataset": {
         "dataType": "refObject",
         "properties": {
@@ -1356,6 +1385,29 @@ const models: TsoaRoute.Models = {
         "dataType": "refObject",
         "properties": {
             "devConnStatus": {"dataType":"boolean"},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "ResDealer": {
+        "dataType": "refObject",
+        "properties": {
+            "contactInformation": {"dataType":"object"},
+            "id": {"dataType":"double"},
+            "location": {"dataType":"string"},
+            "name": {"dataType":"string"},
+            "vehicles": {"dataType":"array","array":{"dataType":"refObject","ref":"ResDealer"}},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "ReqDealer": {
+        "dataType": "refObject",
+        "properties": {
+            "contactInformation": {"dataType":"object"},
+            "location": {"dataType":"string"},
+            "name": {"dataType":"string"},
+            "vehicles": {"dataType":"array","array":{"dataType":"double"}},
         },
         "additionalProperties": false,
     },
@@ -4080,6 +4132,125 @@ export function RegisterRoutes(app: Router,opts?:{multer?:ReturnType<typeof mult
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsECUAttributeListController_saveEcuAtt: Record<string, TsoaRoute.ParameterSchema> = {
+                req: {"in":"body","name":"req","required":true,"ref":"ReqECUAtt"},
+        };
+        app.post('/ecuAttList',
+            ...(fetchMiddlewares<RequestHandler>(ECUAttributeListController)),
+            ...(fetchMiddlewares<RequestHandler>(ECUAttributeListController.prototype.saveEcuAtt)),
+
+            async function ECUAttributeListController_saveEcuAtt(request: ExRequest, response: ExResponse, next: any) {
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args: argsECUAttributeListController_saveEcuAtt, request, response });
+
+                const controller = new ECUAttributeListController();
+
+              await templateService.apiHandler({
+                methodName: 'saveEcuAtt',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsECUAttributeListController_getAllECUAtt: Record<string, TsoaRoute.ParameterSchema> = {
+        };
+        app.get('/ecuAttList',
+            ...(fetchMiddlewares<RequestHandler>(ECUAttributeListController)),
+            ...(fetchMiddlewares<RequestHandler>(ECUAttributeListController.prototype.getAllECUAtt)),
+
+            async function ECUAttributeListController_getAllECUAtt(request: ExRequest, response: ExResponse, next: any) {
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args: argsECUAttributeListController_getAllECUAtt, request, response });
+
+                const controller = new ECUAttributeListController();
+
+              await templateService.apiHandler({
+                methodName: 'getAllECUAtt',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsECUAttributeListController_getOneECUAtt: Record<string, TsoaRoute.ParameterSchema> = {
+                ecuAttId: {"in":"path","name":"ecuAttId","required":true,"dataType":"double"},
+        };
+        app.get('/ecuAttList/:ecuAttId',
+            ...(fetchMiddlewares<RequestHandler>(ECUAttributeListController)),
+            ...(fetchMiddlewares<RequestHandler>(ECUAttributeListController.prototype.getOneECUAtt)),
+
+            async function ECUAttributeListController_getOneECUAtt(request: ExRequest, response: ExResponse, next: any) {
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args: argsECUAttributeListController_getOneECUAtt, request, response });
+
+                const controller = new ECUAttributeListController();
+
+              await templateService.apiHandler({
+                methodName: 'getOneECUAtt',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsECUAttributeListController_deleteECUAtt: Record<string, TsoaRoute.ParameterSchema> = {
+                ecuAttId: {"in":"path","name":"ecuAttId","required":true,"dataType":"double"},
+        };
+        app.delete('/ecuAttList/:ecuAttId',
+            ...(fetchMiddlewares<RequestHandler>(ECUAttributeListController)),
+            ...(fetchMiddlewares<RequestHandler>(ECUAttributeListController.prototype.deleteECUAtt)),
+
+            async function ECUAttributeListController_deleteECUAtt(request: ExRequest, response: ExResponse, next: any) {
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args: argsECUAttributeListController_deleteECUAtt, request, response });
+
+                const controller = new ECUAttributeListController();
+
+              await templateService.apiHandler({
+                methodName: 'deleteECUAtt',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         const argsDTCDatasetController_saveDtcDataset: Record<string, TsoaRoute.ParameterSchema> = {
                 request: {"in":"body","name":"request","required":true,"ref":"ReqDtcDataset"},
         };
@@ -4607,6 +4778,66 @@ export function RegisterRoutes(app: Router,opts?:{multer?:ReturnType<typeof mult
 
               await templateService.apiHandler({
                 methodName: 'updateDeviceConnStatus',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsDealerController_saveDealer: Record<string, TsoaRoute.ParameterSchema> = {
+                req: {"in":"body","name":"req","required":true,"ref":"ReqDealer"},
+        };
+        app.post('/dealer',
+            ...(fetchMiddlewares<RequestHandler>(DealerController)),
+            ...(fetchMiddlewares<RequestHandler>(DealerController.prototype.saveDealer)),
+
+            async function DealerController_saveDealer(request: ExRequest, response: ExResponse, next: any) {
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args: argsDealerController_saveDealer, request, response });
+
+                const controller = new DealerController();
+
+              await templateService.apiHandler({
+                methodName: 'saveDealer',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsDealerController_getOneDealer: Record<string, TsoaRoute.ParameterSchema> = {
+                dealerId: {"in":"path","name":"dealerId","required":true,"dataType":"double"},
+        };
+        app.get('/dealer/:dealerId',
+            ...(fetchMiddlewares<RequestHandler>(DealerController)),
+            ...(fetchMiddlewares<RequestHandler>(DealerController.prototype.getOneDealer)),
+
+            async function DealerController_getOneDealer(request: ExRequest, response: ExResponse, next: any) {
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args: argsDealerController_getOneDealer, request, response });
+
+                const controller = new DealerController();
+
+              await templateService.apiHandler({
+                methodName: 'getOneDealer',
                 controller,
                 response,
                 next,

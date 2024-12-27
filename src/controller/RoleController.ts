@@ -54,7 +54,6 @@ export class RoleController extends Controller {
           description: p.description,
           id: p.id,
           name: p.name,
-          // roles: p.,
         };
         resPermArr.push(resPerm);
       });
