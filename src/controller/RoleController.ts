@@ -30,6 +30,9 @@ export class RoleController extends Controller {
         where: {
           id: roleId,
         },
+        relations: {
+          permissions: true,
+        },
       });
 
       if (!role) {
@@ -40,8 +43,23 @@ export class RoleController extends Controller {
         description: role.description,
         id: role.id,
         name: role.name,
-      };
+        // permissions:{
 
+        // }
+      };
+      const resPermArr: ResPermission[] = [];
+      (await role.permissions)?.map((p) => {
+        const resPerm: ResPermission = {
+          type: p.type!,
+          description: p.description,
+          id: p.id,
+          name: p.name,
+          // roles: p.,
+        };
+        resPermArr.push(resPerm);
+      });
+
+      resRole.permissions = resPermArr;
       return resRole;
     } catch (error) {
       console.log('there was an errror in fetching the role', error);
