@@ -13,6 +13,7 @@ import { ResPermission } from '../models/res/ResPermission';
 import { JWTRequest } from '../models/req/JWTRequest';
 import { User } from '../entity/User';
 import { ReqPutRoleUnder } from '../models/req/ReqPutRoleUnder';
+import { ReqStatus } from '../models/req/ReqStatus';
 // import { ResPutRoleUnder } from '../models/res/ResPutRoleUnder';
 // import { ResPutRoleUnder } from '../models/res/ResPutRoleUnder';
 // import { create } from 'domain';
@@ -43,6 +44,7 @@ export class RoleController extends Controller {
         description: role.description,
         id: role.id,
         name: role.name,
+        status: role.status,
         // permissions:{
 
         // }
@@ -54,7 +56,6 @@ export class RoleController extends Controller {
           description: p.description,
           id: p.id,
           name: p.name,
-          // roles: p.,
         };
         resPermArr.push(resPerm);
       });
@@ -101,6 +102,7 @@ export class RoleController extends Controller {
         }
         roleArr.push({
           description: role.description,
+          status: role.status,
           id: role.id,
           name: role.name,
           permissions: resPermArr,
@@ -240,6 +242,7 @@ export class RoleController extends Controller {
         description,
         id: savedRole.id,
         name: savedRole.name,
+        status: savedRole.status,
         createdBy: {
           address: (await created_by).address,
           // device: (await created_by).device,
@@ -340,6 +343,7 @@ export class RoleController extends Controller {
       description: updatedRole.description,
       id: updatedRole.id,
       name: updatedRole.name,
+      status: updatedRole.status,
       createdBy: {
         address: (await updatedRole.created_by)?.address,
         email: (await updatedRole.created_by)?.email,
@@ -462,5 +466,32 @@ export class RoleController extends Controller {
     }
 
     return { result: `the role ${role_sub_db.name} has been put under ${role_main_db.name} ` };
+  }
+
+  @Put('updateRoleStatusHTWT/{roleId}')
+  public async updateRoleStatus(@Path() roleId: number, @Body() req: ReqStatus) {
+    const { status } = req;
+    const role = await this.rolerepository.findOne({
+      where: {
+        id: roleId,
+      },
+    });
+
+    if (!role) {
+      return Promise.reject(new Error('THIS ROLE WAS NOT FOUND'));
+    }
+
+    role.status = status;
+    const newRole = await this.rolerepository.save(role);
+    const resRole: ResRole = {
+      // createdBy: newRole.created_by,
+      description: newRole.description,
+      id: newRole.id,
+      name: newRole.name,
+      // permissions: newRole.p,
+      status: newRole.status,
+    };
+
+    return resRole;
   }
 }

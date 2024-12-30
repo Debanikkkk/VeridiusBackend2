@@ -1,4 +1,4 @@
-import { Controller, Delete, Get, Path, Post, Put, Query, Request, Res, Route, Security, Tags, TsoaResponse, UploadedFile } from 'tsoa';
+import { Body, Controller, Delete, Get, Path, Post, Put, Query, Request, Res, Route, Security, Tags, TsoaResponse, UploadedFile } from 'tsoa';
 import { AppDataSource } from '../data-source';
 import { Firmware, firmware_management } from '../entity/Firmware';
 // import { ReqFirmware } from '../models/req/ReqFirmware';
@@ -14,6 +14,8 @@ import { File, file_type } from '../entity/File';
 import path from 'path';
 import { ResFirmware } from '../models/res/ResFirmware';
 import { ResFiles } from '../models/res/ResFiles';
+// import { ReqSTstatus } from '../models/req/ReqSTstatus';
+import { ReqStatus } from '../models/req/ReqStatus';
 
 @Tags('Firmware')
 @Route('/firmware')
@@ -159,6 +161,7 @@ export class FirmwareController extends Controller {
     const resFirmware: ResFirmware = {
       createdBy: {
         address: savedFirmware.created_by?.address,
+        // status: savedFirmware.status,
         email: savedFirmware.created_by?.email,
         id: savedFirmware.created_by?.id,
         name: savedFirmware.created_by?.name,
@@ -166,6 +169,8 @@ export class FirmwareController extends Controller {
         phone_number: savedFirmware.created_by?.phone_number,
       },
       // files: savedFirmware.,
+      status: savedFirmware.status,
+
       firmwareType: savedFirmware.firmware_type,
       firmwareVersion: savedFirmware.firmware_version,
       id: savedFirmware.id,
@@ -214,6 +219,7 @@ export class FirmwareController extends Controller {
         files: resFilesArr,
         firmwareType: fw.firmware_type,
         firmwareVersion: fw.firmware_version,
+        status: fw.status,
         id: fw.id,
       });
     }
@@ -249,6 +255,7 @@ export class FirmwareController extends Controller {
       firmwareArr.push({
         createdBy: {
           address: user?.address,
+          status: user?.status,
           // device: user?.,
           email: user?.email,
           id: user?.id,
@@ -262,6 +269,7 @@ export class FirmwareController extends Controller {
         files: resFilesArr,
         firmwareType: fw.firmware_type,
         firmwareVersion: fw.firmware_version,
+        status: fw.status,
         id: fw.id,
       });
     }
@@ -416,6 +424,10 @@ export class FirmwareController extends Controller {
       },
       firmwareType: firmware.firmware_type,
       firmwareVersion: firmware.firmware_version,
+      status: firmware.status,
+      // files:{
+
+      // },
       id: firmware.id,
     };
 
@@ -464,5 +476,65 @@ export class FirmwareController extends Controller {
     this.setStatus(200); // Inform TSOA of the response status code
     // eslint-disable-next-line
     (this as any).res.sendFile(filePath);
+  }
+
+  @Put('/updateFirmwareStatusWLHL/{firmwareId}')
+  public async updateFirmwareStatusWLHL(@Body() req: ReqStatus, @Path() firmwareId: number): Promise<ResFirmware> {
+    const { status } = req;
+
+    const firmware = await this.firmwareRepository.findOne({
+      where: {
+        id: firmwareId,
+      },
+    });
+
+    if (!firmware) {
+      return Promise.reject(new Error('THIS FIRMWARE WAS NOT FOUND'));
+    }
+
+    firmware.status = status;
+
+    const newfirmware = await this.firmwareRepository.save(firmware);
+
+    const resFirmware: ResFirmware = {
+      createdBy: {
+        address: newfirmware.created_by?.address,
+        // device:newfirmware.created_by?,
+        email: newfirmware.created_by?.email,
+        id: newfirmware.created_by?.id,
+        // is_under:newfirmware.created_by?.,
+        name: newfirmware.created_by?.name,
+        password: newfirmware.created_by?.password,
+
+        phone_number: newfirmware.created_by?.phone_number,
+        // role:newfirmware.created_by?,
+        // service_ticket:newfirmware.created_by?,
+        status: newfirmware.created_by?.status,
+      },
+      // files: newfirmware.,
+      firmwareType: newfirmware.firmware_type,
+      firmwareVersion: newfirmware.firmware_version,
+      id: newfirmware.id,
+      status: newfirmware.status,
+    };
+
+    const resFilesArr: ResFiles[] = [];
+    (await newfirmware.files)?.map((d) => {
+      const resFile: ResFiles = {
+        createdAt: d.created_at,
+        file: d.file,
+        fileDescription: d.file_description,
+        fileName: d.file_name,
+        id: d.id,
+        isActive: d.is_active,
+        updatedAt: d.updated_at,
+        // uploadedBy: d.,
+      };
+      resFilesArr.push(resFile);
+    });
+
+    resFirmware.files = resFilesArr;
+
+    return resFirmware;
   }
 }

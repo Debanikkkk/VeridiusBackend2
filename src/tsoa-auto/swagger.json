@@ -483,6 +483,9 @@
 					"email": {
 						"type": "string"
 					},
+					"status": {
+						"type": "boolean"
+					},
 					"phone_number": {
 						"type": "string"
 					},
@@ -523,6 +526,9 @@
 					},
 					"createdBy": {
 						"$ref": "#/components/schemas/ResUser"
+					},
+					"status": {
+						"type": "boolean"
 					},
 					"permissions": {
 						"items": {
@@ -740,6 +746,9 @@
 				"properties": {
 					"createdBy": {
 						"$ref": "#/components/schemas/ResUser"
+					},
+					"status": {
+						"type": "boolean"
 					},
 					"files": {
 						"items": {
@@ -1135,6 +1144,9 @@
 					"phone_number": {
 						"type": "string"
 					},
+					"status": {
+						"type": "boolean"
+					},
 					"email": {
 						"type": "string"
 					},
@@ -1206,6 +1218,9 @@
 					},
 					"created_by": {
 						"$ref": "#/components/schemas/User"
+					},
+					"status": {
+						"type": "boolean"
 					}
 				},
 				"type": "object",
@@ -1625,6 +1640,9 @@
 					},
 					"firmware_version": {
 						"type": "string"
+					},
+					"status": {
+						"type": "boolean"
 					},
 					"firmware_type": {
 						"$ref": "#/components/schemas/firmware_management"
@@ -2204,6 +2222,15 @@
 					"role": {
 						"type": "number",
 						"format": "double"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ReqStatus": {
+				"properties": {
+					"status": {
+						"type": "boolean"
 					}
 				},
 				"type": "object",
@@ -2884,6 +2911,54 @@
 				"type": "object",
 				"additionalProperties": false
 			},
+			"ResECUAtt": {
+				"properties": {
+					"attributeName": {
+						"type": "string"
+					},
+					"attributeValue": {
+						"type": "string"
+					},
+					"createdAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"isActive": {
+						"type": "boolean"
+					},
+					"status": {
+						"type": "boolean"
+					},
+					"updatedAt": {
+						"type": "string",
+						"format": "date-time"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ReqECUAtt": {
+				"properties": {
+					"attributeName": {
+						"type": "string"
+					},
+					"attributeValue": {
+						"type": "string"
+					},
+					"isActive": {
+						"type": "boolean"
+					},
+					"status": {
+						"type": "boolean"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
 			"ReqDtcDataset": {
 				"properties": {
 					"name": {
@@ -3012,6 +3087,55 @@
 				"properties": {
 					"devConnStatus": {
 						"type": "boolean"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ResDealer": {
+				"properties": {
+					"contactInformation": {
+						"additionalProperties": false,
+						"type": "object"
+					},
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"location": {
+						"type": "string"
+					},
+					"name": {
+						"type": "string"
+					},
+					"vehicles": {
+						"items": {
+							"$ref": "#/components/schemas/ResDealer"
+						},
+						"type": "array"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ReqDealer": {
+				"properties": {
+					"contactInformation": {
+						"additionalProperties": false,
+						"type": "object"
+					},
+					"location": {
+						"type": "string"
+					},
+					"name": {
+						"type": "string"
+					},
+					"vehicles": {
+						"items": {
+							"type": "number",
+							"format": "double"
+						},
+						"type": "array"
 					}
 				},
 				"type": "object",
@@ -4342,6 +4466,48 @@
 				}
 			}
 		},
+		"/user/userStatusChangeWTHT/{userId}": {
+			"put": {
+				"operationId": "UpdateUserStatus",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ResUser"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"User"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "userId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/ReqStatus"
+							}
+						}
+					}
+				}
+			}
+		},
 		"/serviceTicket": {
 			"get": {
 				"operationId": "GetAllServiceTickets",
@@ -4816,6 +4982,48 @@
 						"application/json": {
 							"schema": {
 								"$ref": "#/components/schemas/ReqPutRoleUnder"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/role/updateRoleStatusHTWT/{roleId}": {
+			"put": {
+				"operationId": "UpdateRoleStatus",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ResRole"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Role"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "roleId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/ReqStatus"
 							}
 						}
 					}
@@ -6158,6 +6366,48 @@
 				]
 			}
 		},
+		"/firmware/updateFirmwareStatusWLHL/{firmwareId}": {
+			"put": {
+				"operationId": "UpdateFirmwareStatusWLHL",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ResFirmware"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Firmware"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "firmwareId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/ReqStatus"
+							}
+						}
+					}
+				}
+			}
+		},
 		"/ecu": {
 			"post": {
 				"operationId": "SaveECU",
@@ -6274,6 +6524,131 @@
 					{
 						"in": "path",
 						"name": "ecuId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			}
+		},
+		"/ecuAttList": {
+			"post": {
+				"operationId": "SaveEcuAtt",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ResECUAtt"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"ECU Attribute List"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/ReqECUAtt"
+							}
+						}
+					}
+				}
+			},
+			"get": {
+				"operationId": "GetAllECUAtt",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/ResECUAtt"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"ECU Attribute List"
+				],
+				"security": [],
+				"parameters": []
+			}
+		},
+		"/ecuAttList/{ecuAttId}": {
+			"get": {
+				"operationId": "GetOneECUAtt",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ResECUAtt"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"ECU Attribute List"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "ecuAttId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			},
+			"delete": {
+				"operationId": "DeleteECUAtt",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"properties": {
+										"result": {
+											"type": "string"
+										}
+									},
+									"required": [
+										"result"
+									],
+									"type": "object"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"ECU Attribute List"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "ecuAttId",
 						"required": true,
 						"schema": {
 							"format": "double",
@@ -6937,6 +7312,70 @@
 						}
 					}
 				}
+			}
+		},
+		"/dealer": {
+			"post": {
+				"operationId": "SaveDealer",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ResDealer"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Dealer"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/ReqDealer"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/dealer/{dealerId}": {
+			"get": {
+				"operationId": "GetOneDealer",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ResDealer"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Dealer"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "dealerId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
 			}
 		},
 		"/banners": {

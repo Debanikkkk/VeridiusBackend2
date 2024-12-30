@@ -6,20 +6,20 @@ export class ECUAttributeList {
   id?: number;
 
   @Column({ type: 'varchar', length: 255 })
-  attributeName?: string;
+  attribute_name?: string;
 
   @Column({ type: 'varchar', length: 255 })
-  attributeValue?: string;
+  attribute_value?: string;
 
   @Column({ type: 'boolean' })
   status?: boolean;
 
   @Column({ type: 'boolean' })
-  isActive?: boolean;
+  is_active?: boolean;
 
   @CreateDateColumn()
-  createdAt?: Date;
+  created_at?: Date;
 
   @UpdateDateColumn()
-  updatedAt?: Date;
+  updated_at?: Date;
 }

@@ -21,6 +21,7 @@ import { ReqUsersUnder } from '../models/req/ReqUsersUnder';
 import { In } from 'typeorm';
 import { ReqUserRoleFind } from '../models/req/ReqUserRoleFind';
 import { ReqUserRegister } from '../models/req/RequserRegister';
+import { ReqStatus } from '../models/req/ReqStatus';
 // import { And } from 'typeorm';
 // import { serviceTicketStatus } from "../entity/ServiceTickets";
 @Tags('User')
@@ -75,6 +76,7 @@ export class UserController extends Controller {
       const resUser: ResUser = {
         id: savedUser.id,
         address: savedUser.address,
+        status: savedUser.status,
         email: savedUser.email,
         name: savedUser.name,
         phone_number: savedUser.phone_number,
@@ -126,6 +128,7 @@ export class UserController extends Controller {
       const userToSave: User = {
         password: password,
         address: address,
+        // status:
         email: email,
         name: name,
         phone_number: phone_number,
@@ -142,6 +145,7 @@ export class UserController extends Controller {
         email: savedUser.email,
         name: savedUser.name,
         phone_number: savedUser.phone_number,
+        status: savedUser.status,
         password: savedUser.password,
         role: {
           description: (await savedUser.role)?.description,
@@ -208,6 +212,7 @@ export class UserController extends Controller {
         address: savedUser.address,
         email: savedUser.email,
         name: savedUser.name,
+        status: savedUser.status,
         phone_number: savedUser.phone_number,
         password: savedUser.password,
         role: {
@@ -497,6 +502,7 @@ export class UserController extends Controller {
         // device: user.,
         email: user.email,
         id: user.id,
+        status: user.status,
         // is_under: user.,
         name: user.name,
         password: user.password,
@@ -570,6 +576,7 @@ export class UserController extends Controller {
             address: user.address,
             email: user.email,
             id: user.id,
+            status: user.status,
             name: user.name,
             password: user.password,
             phone_number: user.phone_number,
@@ -647,6 +654,7 @@ export class UserController extends Controller {
       },
       email: savedUser.email,
       id: savedUser.id,
+      status: savedUser.status,
       name: savedUser.name,
       password: savedUser.password,
       phone_number: savedUser.phone_number,
@@ -682,6 +690,7 @@ export class UserController extends Controller {
         // device: user.device,
         email: user.email,
         id: user.id,
+        status: user.status,
         name: user.name,
         password: user.password,
         phone_number: user.phone_number,
@@ -720,6 +729,7 @@ export class UserController extends Controller {
         // device: user.device,
         email: user.email,
         id: user.id,
+        status: user.status,
         name: user.name,
         password: user.password,
         phone_number: user.phone_number,
@@ -767,5 +777,40 @@ export class UserController extends Controller {
 
     const users_under = await this.getUsersRecursivelyUsingRole(goal_user, role);
     return users_under;
+  }
+
+  @Put('/userStatusChangeWTHT/{userId}')
+  public async updateUserStatus(@Path() userId: number, @Body() req: ReqStatus) {
+    const { status } = req;
+    const user = await this.userrepository.findOne({
+      where: {
+        id: userId,
+      },
+    });
+
+    if (!user) {
+      return Promise.reject(new Error('THIS USER WAS NOT FOUND'));
+    }
+
+    user.status = status;
+
+    const newUser = await this.userrepository.save(user);
+
+    const resUser: ResUser = {
+      address: newUser.address,
+      // devic: newUser.e,
+      email: newUser.email,
+      id: newUser.id,
+      // is_under,
+
+      name: newUser.name,
+      password: newUser.password,
+      phone_number: newUser.phone_number,
+      // role,
+      // service_ticket,
+      status: newUser.status,
+    };
+
+    return resUser;
   }
 }
