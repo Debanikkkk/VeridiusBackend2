@@ -21,6 +21,7 @@ import { ReqUsersUnder } from '../models/req/ReqUsersUnder';
 import { In } from 'typeorm';
 import { ReqUserRoleFind } from '../models/req/ReqUserRoleFind';
 import { ReqUserRegister } from '../models/req/RequserRegister';
+import { ReqStatus } from '../models/req/ReqStatus';
 // import { And } from 'typeorm';
 // import { serviceTicketStatus } from "../entity/ServiceTickets";
 @Tags('User')
@@ -776,5 +777,40 @@ export class UserController extends Controller {
 
     const users_under = await this.getUsersRecursivelyUsingRole(goal_user, role);
     return users_under;
+  }
+
+  @Put('/userStatusChangeWTHT/{userId}')
+  public async updateUserStatus(@Path() userId: number, @Body() req: ReqStatus) {
+    const { status } = req;
+    const user = await this.userrepository.findOne({
+      where: {
+        id: userId,
+      },
+    });
+
+    if (!user) {
+      return Promise.reject(new Error('THIS USER WAS NOT FOUND'));
+    }
+
+    user.status = status;
+
+    const newUser = await this.userrepository.save(user);
+
+    const resUser: ResUser = {
+      address: newUser.address,
+      // devic: newUser.e,
+      email: newUser.email,
+      id: newUser.id,
+      // is_under,
+
+      name: newUser.name,
+      password: newUser.password,
+      phone_number: newUser.phone_number,
+      // role,
+      // service_ticket,
+      status: newUser.status,
+    };
+
+    return resUser;
   }
 }

@@ -13,6 +13,7 @@ import { ResPermission } from '../models/res/ResPermission';
 import { JWTRequest } from '../models/req/JWTRequest';
 import { User } from '../entity/User';
 import { ReqPutRoleUnder } from '../models/req/ReqPutRoleUnder';
+import { ReqStatus } from '../models/req/ReqStatus';
 // import { ResPutRoleUnder } from '../models/res/ResPutRoleUnder';
 // import { ResPutRoleUnder } from '../models/res/ResPutRoleUnder';
 // import { create } from 'domain';
@@ -465,5 +466,32 @@ export class RoleController extends Controller {
     }
 
     return { result: `the role ${role_sub_db.name} has been put under ${role_main_db.name} ` };
+  }
+
+  @Put('updateRoleStatusHTWT/{roleId}')
+  public async updateRoleStatus(@Path() roleId: number, @Body() req: ReqStatus) {
+    const { status } = req;
+    const role = await this.rolerepository.findOne({
+      where: {
+        id: roleId,
+      },
+    });
+
+    if (!role) {
+      return Promise.reject(new Error('THIS ROLE WAS NOT FOUND'));
+    }
+
+    role.status = status;
+    const newRole = await this.rolerepository.save(role);
+    const resRole: ResRole = {
+      // createdBy: newRole.created_by,
+      description: newRole.description,
+      id: newRole.id,
+      name: newRole.name,
+      // permissions: newRole.p,
+      status: newRole.status,
+    };
+
+    return resRole;
   }
 }
