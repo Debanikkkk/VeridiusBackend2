@@ -75,6 +75,7 @@ export class UserController extends Controller {
       const resUser: ResUser = {
         id: savedUser.id,
         address: savedUser.address,
+        status: savedUser.status,
         email: savedUser.email,
         name: savedUser.name,
         phone_number: savedUser.phone_number,
@@ -126,6 +127,7 @@ export class UserController extends Controller {
       const userToSave: User = {
         password: password,
         address: address,
+        // status:
         email: email,
         name: name,
         phone_number: phone_number,
@@ -142,6 +144,7 @@ export class UserController extends Controller {
         email: savedUser.email,
         name: savedUser.name,
         phone_number: savedUser.phone_number,
+        status: savedUser.status,
         password: savedUser.password,
         role: {
           description: (await savedUser.role)?.description,
@@ -208,6 +211,7 @@ export class UserController extends Controller {
         address: savedUser.address,
         email: savedUser.email,
         name: savedUser.name,
+        status: savedUser.status,
         phone_number: savedUser.phone_number,
         password: savedUser.password,
         role: {
@@ -497,6 +501,7 @@ export class UserController extends Controller {
         // device: user.,
         email: user.email,
         id: user.id,
+        status: user.status,
         // is_under: user.,
         name: user.name,
         password: user.password,
@@ -570,6 +575,7 @@ export class UserController extends Controller {
             address: user.address,
             email: user.email,
             id: user.id,
+            status: user.status,
             name: user.name,
             password: user.password,
             phone_number: user.phone_number,
@@ -647,6 +653,7 @@ export class UserController extends Controller {
       },
       email: savedUser.email,
       id: savedUser.id,
+      status: savedUser.status,
       name: savedUser.name,
       password: savedUser.password,
       phone_number: savedUser.phone_number,
@@ -682,6 +689,7 @@ export class UserController extends Controller {
         // device: user.device,
         email: user.email,
         id: user.id,
+        status: user.status,
         name: user.name,
         password: user.password,
         phone_number: user.phone_number,
@@ -720,6 +728,7 @@ export class UserController extends Controller {
         // device: user.device,
         email: user.email,
         id: user.id,
+        status: user.status,
         name: user.name,
         password: user.password,
         phone_number: user.phone_number,

@@ -159,6 +159,7 @@ export class FirmwareController extends Controller {
     const resFirmware: ResFirmware = {
       createdBy: {
         address: savedFirmware.created_by?.address,
+        // status: savedFirmware.status,
         email: savedFirmware.created_by?.email,
         id: savedFirmware.created_by?.id,
         name: savedFirmware.created_by?.name,
@@ -166,6 +167,8 @@ export class FirmwareController extends Controller {
         phone_number: savedFirmware.created_by?.phone_number,
       },
       // files: savedFirmware.,
+      status: savedFirmware.status,
+
       firmwareType: savedFirmware.firmware_type,
       firmwareVersion: savedFirmware.firmware_version,
       id: savedFirmware.id,
@@ -214,6 +217,7 @@ export class FirmwareController extends Controller {
         files: resFilesArr,
         firmwareType: fw.firmware_type,
         firmwareVersion: fw.firmware_version,
+        status: fw.status,
         id: fw.id,
       });
     }
@@ -249,6 +253,7 @@ export class FirmwareController extends Controller {
       firmwareArr.push({
         createdBy: {
           address: user?.address,
+          status: user?.status,
           // device: user?.,
           email: user?.email,
           id: user?.id,
@@ -262,6 +267,7 @@ export class FirmwareController extends Controller {
         files: resFilesArr,
         firmwareType: fw.firmware_type,
         firmwareVersion: fw.firmware_version,
+        status: fw.status,
         id: fw.id,
       });
     }
@@ -416,6 +422,10 @@ export class FirmwareController extends Controller {
       },
       firmwareType: firmware.firmware_type,
       firmwareVersion: firmware.firmware_version,
+      status: firmware.status,
+      // files:{
+
+      // },
       id: firmware.id,
     };
 

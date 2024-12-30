@@ -43,19 +43,9 @@ export class Role {
   @JoinColumn({ name: 'created_by' })
   created_by?: Promise<User>;
 
-  // @ManyToMany(()=>(Role), (role)=>(role.role), {onDelete: 'CASCADE', onUpdate: 'CASCADE', nullable: false})
-  // @JoinTable({
-  //     name:'role_role',
-  //     joinColumn:{name: 'role_id'},
-  //     inverseJoinColumn:{name:'sub_role_id'}
-  // })
-  // sub_role?: Promise<Role[]>
-
-  // @ManyToMany(()=>(Role), (role)=>(role.role), {onDelete: 'CASCADE', onUpdate: 'CASCADE', nullable: false})
-  // @JoinTable({
-  //     name:'role_role',
-  //     joinColumn:{name: 'sub_role_id'},
-  //     inverseJoinColumn:{name:'role_id'}
-  // })
-  // role?: Promise<Role[]>
+  @Column({
+    nullable: true,
+    default: true,
+  })
+  status?: boolean;
 }

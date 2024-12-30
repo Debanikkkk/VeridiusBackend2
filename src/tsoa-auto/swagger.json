@@ -483,6 +483,9 @@
 					"email": {
 						"type": "string"
 					},
+					"status": {
+						"type": "boolean"
+					},
 					"phone_number": {
 						"type": "string"
 					},
@@ -523,6 +526,9 @@
 					},
 					"createdBy": {
 						"$ref": "#/components/schemas/ResUser"
+					},
+					"status": {
+						"type": "boolean"
 					},
 					"permissions": {
 						"items": {
@@ -740,6 +746,9 @@
 				"properties": {
 					"createdBy": {
 						"$ref": "#/components/schemas/ResUser"
+					},
+					"status": {
+						"type": "boolean"
 					},
 					"files": {
 						"items": {
@@ -1135,6 +1144,9 @@
 					"phone_number": {
 						"type": "string"
 					},
+					"status": {
+						"type": "boolean"
+					},
 					"email": {
 						"type": "string"
 					},
@@ -1206,6 +1218,9 @@
 					},
 					"created_by": {
 						"$ref": "#/components/schemas/User"
+					},
+					"status": {
+						"type": "boolean"
 					}
 				},
 				"type": "object",
@@ -1625,6 +1640,9 @@
 					},
 					"firmware_version": {
 						"type": "string"
+					},
+					"status": {
+						"type": "boolean"
 					},
 					"firmware_type": {
 						"$ref": "#/components/schemas/firmware_management"

@@ -8,6 +8,7 @@ export interface ResUser {
   address?: string;
   password?: string;
   email?: string;
+  status?: boolean;
   phone_number?: string;
   role?: ResRole;
   service_ticket?: ResServiceTicket;

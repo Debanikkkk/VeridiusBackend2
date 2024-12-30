@@ -32,6 +32,12 @@ export class User {
   phone_number?: string;
 
   @Column({
+    nullable: true,
+    default: true,
+  })
+  status?: boolean;
+
+  @Column({
     length: 64,
   })
   email?: string;

@@ -17,6 +17,12 @@ export class Firmware {
   firmware_version?: string;
 
   @Column({
+    nullable: true,
+    default: true,
+  })
+  status?: boolean;
+
+  @Column({
     type: 'enum',
     enum: firmware_management,
     // default: firmware_management.,

@@ -43,6 +43,7 @@ export class RoleController extends Controller {
         description: role.description,
         id: role.id,
         name: role.name,
+        status: role.status,
         // permissions:{
 
         // }
@@ -100,6 +101,7 @@ export class RoleController extends Controller {
         }
         roleArr.push({
           description: role.description,
+          status: role.status,
           id: role.id,
           name: role.name,
           permissions: resPermArr,
@@ -239,6 +241,7 @@ export class RoleController extends Controller {
         description,
         id: savedRole.id,
         name: savedRole.name,
+        status: savedRole.status,
         createdBy: {
           address: (await created_by).address,
           // device: (await created_by).device,
@@ -339,6 +342,7 @@ export class RoleController extends Controller {
       description: updatedRole.description,
       id: updatedRole.id,
       name: updatedRole.name,
+      status: updatedRole.status,
       createdBy: {
         address: (await updatedRole.created_by)?.address,
         email: (await updatedRole.created_by)?.email,

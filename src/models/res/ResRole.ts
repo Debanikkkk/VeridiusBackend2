@@ -6,6 +6,7 @@ export interface ResRole {
   name?: string;
   description?: string;
   createdBy?: ResUser;
+  status?: boolean;
   permissions?: ResPermission[];
   // subRole?: ResRole[],
 }
