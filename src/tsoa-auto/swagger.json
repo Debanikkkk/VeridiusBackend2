@@ -187,34 +187,116 @@
 				"type": "object",
 				"additionalProperties": false
 			},
-			"ReqVehicleModel": {
+			"ResUser": {
 				"properties": {
-					"discontinuedYear": {
-						"type": "string",
-						"format": "date-time"
-					},
-					"launchYear": {
-						"type": "string",
-						"format": "date-time"
+					"id": {
+						"type": "number",
+						"format": "double"
 					},
 					"name": {
 						"type": "string"
 					},
-					"oem": {
-						"type": "number",
-						"format": "double"
+					"address": {
+						"type": "string"
 					},
-					"vehicleSegment": {
-						"type": "number",
-						"format": "double"
+					"password": {
+						"type": "string"
 					},
-					"vehicleVersion": {
-						"type": "number",
-						"format": "double"
+					"email": {
+						"type": "string"
+					},
+					"status": {
+						"type": "boolean"
+					},
+					"phone_number": {
+						"type": "string"
+					},
+					"role": {
+						"$ref": "#/components/schemas/ResRole"
+					},
+					"service_ticket": {
+						"$ref": "#/components/schemas/ResServiceTicket"
+					},
+					"device": {
+						"$ref": "#/components/schemas/ResDevice"
+					},
+					"is_under": {
+						"$ref": "#/components/schemas/ResUser"
 					}
 				},
 				"type": "object",
 				"additionalProperties": false
+			},
+			"permType": {
+				"enum": [
+					"user",
+					"product"
+				],
+				"type": "string"
+			},
+			"ResRole": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"name": {
+						"type": "string"
+					},
+					"description": {
+						"type": "string"
+					},
+					"createdBy": {
+						"$ref": "#/components/schemas/ResUser"
+					},
+					"status": {
+						"type": "boolean"
+					},
+					"permissions": {
+						"items": {
+							"$ref": "#/components/schemas/ResPermission"
+						},
+						"type": "array"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ResPermission": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"description": {
+						"type": "string"
+					},
+					"type": {
+						"$ref": "#/components/schemas/permType"
+					},
+					"name": {
+						"type": "string"
+					},
+					"roles": {
+						"items": {
+							"$ref": "#/components/schemas/ResRole"
+						},
+						"type": "array"
+					}
+				},
+				"required": [
+					"type"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"serviceTicketStatus": {
+				"enum": [
+					"open",
+					"closed",
+					"new"
+				],
+				"type": "string"
 			},
 			"ResDtcDataset": {
 				"properties": {
@@ -465,116 +547,73 @@
 				"type": "object",
 				"additionalProperties": false
 			},
-			"ResUser": {
+			"ResFiles": {
 				"properties": {
+					"createdAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"file": {
+						"type": "string"
+					},
+					"fileDescription": {
+						"type": "string"
+					},
+					"fileName": {
+						"type": "string"
+					},
 					"id": {
 						"type": "number",
 						"format": "double"
 					},
-					"name": {
-						"type": "string"
-					},
-					"address": {
-						"type": "string"
-					},
-					"password": {
-						"type": "string"
-					},
-					"email": {
-						"type": "string"
-					},
-					"status": {
+					"isActive": {
 						"type": "boolean"
 					},
-					"phone_number": {
-						"type": "string"
+					"updatedAt": {
+						"type": "string",
+						"format": "date-time"
 					},
-					"role": {
-						"$ref": "#/components/schemas/ResRole"
-					},
-					"service_ticket": {
-						"$ref": "#/components/schemas/ResServiceTicket"
-					},
-					"device": {
-						"$ref": "#/components/schemas/ResDevice"
-					},
-					"is_under": {
+					"uploadedBy": {
 						"$ref": "#/components/schemas/ResUser"
 					}
 				},
 				"type": "object",
 				"additionalProperties": false
 			},
-			"permType": {
+			"firmware_management": {
 				"enum": [
-					"user",
-					"product"
+					"DEVOTA",
+					"FOTA"
 				],
 				"type": "string"
 			},
-			"ResRole": {
+			"ResFirmware": {
 				"properties": {
-					"id": {
-						"type": "number",
-						"format": "double"
-					},
-					"name": {
-						"type": "string"
-					},
-					"description": {
-						"type": "string"
-					},
 					"createdBy": {
 						"$ref": "#/components/schemas/ResUser"
 					},
 					"status": {
 						"type": "boolean"
 					},
-					"permissions": {
+					"files": {
 						"items": {
-							"$ref": "#/components/schemas/ResPermission"
+							"$ref": "#/components/schemas/ResFiles"
 						},
 						"type": "array"
-					}
-				},
-				"type": "object",
-				"additionalProperties": false
-			},
-			"ResPermission": {
-				"properties": {
+					},
+					"firmwareType": {
+						"$ref": "#/components/schemas/firmware_management"
+					},
+					"firmwareVersion": {
+						"type": "string"
+					},
 					"id": {
 						"type": "number",
 						"format": "double"
-					},
-					"description": {
-						"type": "string"
-					},
-					"type": {
-						"$ref": "#/components/schemas/permType"
-					},
-					"name": {
-						"type": "string"
-					},
-					"roles": {
-						"items": {
-							"$ref": "#/components/schemas/ResRole"
-						},
-						"type": "array"
 					}
 				},
-				"required": [
-					"type"
-				],
 				"type": "object",
 				"additionalProperties": false
-			},
-			"serviceTicketStatus": {
-				"enum": [
-					"open",
-					"closed",
-					"new"
-				],
-				"type": "string"
 			},
 			"ResServiceTicket": {
 				"properties": {
@@ -702,67 +741,98 @@
 				],
 				"type": "string"
 			},
-			"ResFiles": {
+			"ResVehiclePartsReplacement": {
 				"properties": {
-					"createdAt": {
-						"type": "string",
-						"format": "date-time"
-					},
-					"file": {
-						"type": "string"
-					},
-					"fileDescription": {
-						"type": "string"
-					},
-					"fileName": {
-						"type": "string"
+					"cost": {
+						"type": "number",
+						"format": "double"
 					},
 					"id": {
 						"type": "number",
 						"format": "double"
 					},
-					"isActive": {
-						"type": "boolean"
+					"partName": {
+						"type": "string"
 					},
-					"updatedAt": {
+					"partNumber": {
+						"type": "string"
+					},
+					"technician": {
+						"$ref": "#/components/schemas/ResUser"
+					},
+					"replacementDate": {
 						"type": "string",
 						"format": "date-time"
 					},
-					"uploadedBy": {
-						"$ref": "#/components/schemas/ResUser"
+					"vehicle": {
+						"$ref": "#/components/schemas/ResVehicle"
+					},
+					"warrantyExpiry": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"replacedAt": {
+						"type": "string",
+						"format": "date-time"
 					}
 				},
 				"type": "object",
 				"additionalProperties": false
 			},
-			"firmware_management": {
-				"enum": [
-					"DEVOTA",
-					"FOTA"
-				],
-				"type": "string"
-			},
-			"ResFirmware": {
+			"ReqVehiclePartsReplacement": {
 				"properties": {
-					"createdBy": {
-						"$ref": "#/components/schemas/ResUser"
+					"cost": {
+						"type": "number",
+						"format": "double"
 					},
-					"status": {
-						"type": "boolean"
-					},
-					"files": {
-						"items": {
-							"$ref": "#/components/schemas/ResFiles"
-						},
-						"type": "array"
-					},
-					"firmwareType": {
-						"$ref": "#/components/schemas/firmware_management"
-					},
-					"firmwareVersion": {
+					"partName": {
 						"type": "string"
 					},
-					"id": {
+					"partNumber": {
+						"type": "string"
+					},
+					"replacementDate": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"vehicle": {
+						"type": "number",
+						"format": "double"
+					},
+					"warrantyExpiry": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"technician": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ReqVehicleModel": {
+				"properties": {
+					"discontinuedYear": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"launchYear": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"name": {
+						"type": "string"
+					},
+					"oem": {
+						"type": "number",
+						"format": "double"
+					},
+					"vehicleSegment": {
+						"type": "number",
+						"format": "double"
+					},
+					"vehicleVersion": {
 						"type": "number",
 						"format": "double"
 					}
@@ -3558,6 +3628,133 @@
 					{
 						"in": "path",
 						"name": "vehicleSegmentId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			}
+		},
+		"/vehiclePartsRepository": {
+			"post": {
+				"operationId": "SaveVehiclePartsRep",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ResVehiclePartsReplacement"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Vehicle Part Repository"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/ReqVehiclePartsReplacement"
+							}
+						}
+					}
+				}
+			},
+			"get": {
+				"operationId": "GetAllVehiclePartsReplacement",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/ResVehiclePartsReplacement"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Vehicle Part Repository"
+				],
+				"security": [],
+				"parameters": []
+			}
+		},
+		"/vehiclePartsRepository/{vehiclePartsId}": {
+			"get": {
+				"operationId": "GetOneVehiclePartsReplacement",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ResVehiclePartsReplacement"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Vehicle Part Repository"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "vehiclePartsId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			}
+		},
+		"/vehiclePartsRepository/{vprId}": {
+			"delete": {
+				"operationId": "DeleteVehiclePartsReplacement",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"properties": {
+										"result": {
+											"type": "string"
+										}
+									},
+									"required": [
+										"result"
+									],
+									"type": "object"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Vehicle Part Repository"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "vprId",
 						"required": true,
 						"schema": {
 							"format": "double",

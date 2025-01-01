@@ -10,6 +10,8 @@ import { VehicleSubmodelController } from './../controller/VehicleSubmodelContro
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { VehicleSegmentController } from './../controller/VehicleSegmentController';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+import { VehiclePartsReplacementController } from './../controller/VehiclePartsReplacementController';
+// WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { VehicleModelController } from './../controller/VehicleModelController';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { VehicleInsuranceController } from './../controller/VehicleInsuranceController';
@@ -173,17 +175,57 @@ const models: TsoaRoute.Models = {
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "ReqVehicleModel": {
+    "ResUser": {
         "dataType": "refObject",
         "properties": {
-            "discontinuedYear": {"dataType":"datetime"},
-            "launchYear": {"dataType":"datetime"},
+            "id": {"dataType":"double"},
             "name": {"dataType":"string"},
-            "oem": {"dataType":"double"},
-            "vehicleSegment": {"dataType":"double"},
-            "vehicleVersion": {"dataType":"double"},
+            "address": {"dataType":"string"},
+            "password": {"dataType":"string"},
+            "email": {"dataType":"string"},
+            "status": {"dataType":"boolean"},
+            "phone_number": {"dataType":"string"},
+            "role": {"ref":"ResRole"},
+            "service_ticket": {"ref":"ResServiceTicket"},
+            "device": {"ref":"ResDevice"},
+            "is_under": {"ref":"ResUser"},
         },
         "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "permType": {
+        "dataType": "refEnum",
+        "enums": ["user","product"],
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "ResRole": {
+        "dataType": "refObject",
+        "properties": {
+            "id": {"dataType":"double"},
+            "name": {"dataType":"string"},
+            "description": {"dataType":"string"},
+            "createdBy": {"ref":"ResUser"},
+            "status": {"dataType":"boolean"},
+            "permissions": {"dataType":"array","array":{"dataType":"refObject","ref":"ResPermission"}},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "ResPermission": {
+        "dataType": "refObject",
+        "properties": {
+            "id": {"dataType":"double"},
+            "description": {"dataType":"string"},
+            "type": {"ref":"permType","required":true},
+            "name": {"dataType":"string"},
+            "roles": {"dataType":"array","array":{"dataType":"refObject","ref":"ResRole"}},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "serviceTicketStatus": {
+        "dataType": "refEnum",
+        "enums": ["open","closed","new"],
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "ResDtcDataset": {
@@ -283,57 +325,37 @@ const models: TsoaRoute.Models = {
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "ResUser": {
+    "ResFiles": {
         "dataType": "refObject",
         "properties": {
+            "createdAt": {"dataType":"datetime"},
+            "file": {"dataType":"string"},
+            "fileDescription": {"dataType":"string"},
+            "fileName": {"dataType":"string"},
             "id": {"dataType":"double"},
-            "name": {"dataType":"string"},
-            "address": {"dataType":"string"},
-            "password": {"dataType":"string"},
-            "email": {"dataType":"string"},
-            "status": {"dataType":"boolean"},
-            "phone_number": {"dataType":"string"},
-            "role": {"ref":"ResRole"},
-            "service_ticket": {"ref":"ResServiceTicket"},
-            "device": {"ref":"ResDevice"},
-            "is_under": {"ref":"ResUser"},
+            "isActive": {"dataType":"boolean"},
+            "updatedAt": {"dataType":"datetime"},
+            "uploadedBy": {"ref":"ResUser"},
         },
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "permType": {
+    "firmware_management": {
         "dataType": "refEnum",
-        "enums": ["user","product"],
+        "enums": ["DEVOTA","FOTA"],
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "ResRole": {
+    "ResFirmware": {
         "dataType": "refObject",
         "properties": {
-            "id": {"dataType":"double"},
-            "name": {"dataType":"string"},
-            "description": {"dataType":"string"},
             "createdBy": {"ref":"ResUser"},
             "status": {"dataType":"boolean"},
-            "permissions": {"dataType":"array","array":{"dataType":"refObject","ref":"ResPermission"}},
-        },
-        "additionalProperties": false,
-    },
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "ResPermission": {
-        "dataType": "refObject",
-        "properties": {
+            "files": {"dataType":"array","array":{"dataType":"refObject","ref":"ResFiles"}},
+            "firmwareType": {"ref":"firmware_management"},
+            "firmwareVersion": {"dataType":"string"},
             "id": {"dataType":"double"},
-            "description": {"dataType":"string"},
-            "type": {"ref":"permType","required":true},
-            "name": {"dataType":"string"},
-            "roles": {"dataType":"array","array":{"dataType":"refObject","ref":"ResRole"}},
         },
         "additionalProperties": false,
-    },
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "serviceTicketStatus": {
-        "dataType": "refEnum",
-        "enums": ["open","closed","new"],
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "ResServiceTicket": {
@@ -394,35 +416,45 @@ const models: TsoaRoute.Models = {
         "enums": ["Active","Inactive","Suspended"],
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "ResFiles": {
+    "ResVehiclePartsReplacement": {
         "dataType": "refObject",
         "properties": {
-            "createdAt": {"dataType":"datetime"},
-            "file": {"dataType":"string"},
-            "fileDescription": {"dataType":"string"},
-            "fileName": {"dataType":"string"},
+            "cost": {"dataType":"double"},
             "id": {"dataType":"double"},
-            "isActive": {"dataType":"boolean"},
-            "updatedAt": {"dataType":"datetime"},
-            "uploadedBy": {"ref":"ResUser"},
+            "partName": {"dataType":"string"},
+            "partNumber": {"dataType":"string"},
+            "technician": {"ref":"ResUser"},
+            "replacementDate": {"dataType":"datetime"},
+            "vehicle": {"ref":"ResVehicle"},
+            "warrantyExpiry": {"dataType":"datetime"},
+            "replacedAt": {"dataType":"datetime"},
         },
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "firmware_management": {
-        "dataType": "refEnum",
-        "enums": ["DEVOTA","FOTA"],
-    },
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "ResFirmware": {
+    "ReqVehiclePartsReplacement": {
         "dataType": "refObject",
         "properties": {
-            "createdBy": {"ref":"ResUser"},
-            "status": {"dataType":"boolean"},
-            "files": {"dataType":"array","array":{"dataType":"refObject","ref":"ResFiles"}},
-            "firmwareType": {"ref":"firmware_management"},
-            "firmwareVersion": {"dataType":"string"},
-            "id": {"dataType":"double"},
+            "cost": {"dataType":"double"},
+            "partName": {"dataType":"string"},
+            "partNumber": {"dataType":"string"},
+            "replacementDate": {"dataType":"datetime"},
+            "vehicle": {"dataType":"double"},
+            "warrantyExpiry": {"dataType":"datetime"},
+            "technician": {"dataType":"double"},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "ReqVehicleModel": {
+        "dataType": "refObject",
+        "properties": {
+            "discontinuedYear": {"dataType":"datetime"},
+            "launchYear": {"dataType":"datetime"},
+            "name": {"dataType":"string"},
+            "oem": {"dataType":"double"},
+            "vehicleSegment": {"dataType":"double"},
+            "vehicleVersion": {"dataType":"double"},
         },
         "additionalProperties": false,
     },
@@ -1809,6 +1841,125 @@ export function RegisterRoutes(app: Router,opts?:{multer?:ReturnType<typeof mult
 
               await templateService.apiHandler({
                 methodName: 'deleteVehicleSegment',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsVehiclePartsReplacementController_saveVehiclePartsRep: Record<string, TsoaRoute.ParameterSchema> = {
+                req: {"in":"body","name":"req","required":true,"ref":"ReqVehiclePartsReplacement"},
+        };
+        app.post('/vehiclePartsRepository',
+            ...(fetchMiddlewares<RequestHandler>(VehiclePartsReplacementController)),
+            ...(fetchMiddlewares<RequestHandler>(VehiclePartsReplacementController.prototype.saveVehiclePartsRep)),
+
+            async function VehiclePartsReplacementController_saveVehiclePartsRep(request: ExRequest, response: ExResponse, next: any) {
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args: argsVehiclePartsReplacementController_saveVehiclePartsRep, request, response });
+
+                const controller = new VehiclePartsReplacementController();
+
+              await templateService.apiHandler({
+                methodName: 'saveVehiclePartsRep',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsVehiclePartsReplacementController_getOneVehiclePartsReplacement: Record<string, TsoaRoute.ParameterSchema> = {
+                vehiclePartsId: {"in":"path","name":"vehiclePartsId","required":true,"dataType":"double"},
+        };
+        app.get('/vehiclePartsRepository/:vehiclePartsId',
+            ...(fetchMiddlewares<RequestHandler>(VehiclePartsReplacementController)),
+            ...(fetchMiddlewares<RequestHandler>(VehiclePartsReplacementController.prototype.getOneVehiclePartsReplacement)),
+
+            async function VehiclePartsReplacementController_getOneVehiclePartsReplacement(request: ExRequest, response: ExResponse, next: any) {
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args: argsVehiclePartsReplacementController_getOneVehiclePartsReplacement, request, response });
+
+                const controller = new VehiclePartsReplacementController();
+
+              await templateService.apiHandler({
+                methodName: 'getOneVehiclePartsReplacement',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsVehiclePartsReplacementController_getAllVehiclePartsReplacement: Record<string, TsoaRoute.ParameterSchema> = {
+        };
+        app.get('/vehiclePartsRepository',
+            ...(fetchMiddlewares<RequestHandler>(VehiclePartsReplacementController)),
+            ...(fetchMiddlewares<RequestHandler>(VehiclePartsReplacementController.prototype.getAllVehiclePartsReplacement)),
+
+            async function VehiclePartsReplacementController_getAllVehiclePartsReplacement(request: ExRequest, response: ExResponse, next: any) {
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args: argsVehiclePartsReplacementController_getAllVehiclePartsReplacement, request, response });
+
+                const controller = new VehiclePartsReplacementController();
+
+              await templateService.apiHandler({
+                methodName: 'getAllVehiclePartsReplacement',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsVehiclePartsReplacementController_deleteVehiclePartsReplacement: Record<string, TsoaRoute.ParameterSchema> = {
+                vprId: {"in":"path","name":"vprId","required":true,"dataType":"double"},
+        };
+        app.delete('/vehiclePartsRepository/:vprId',
+            ...(fetchMiddlewares<RequestHandler>(VehiclePartsReplacementController)),
+            ...(fetchMiddlewares<RequestHandler>(VehiclePartsReplacementController.prototype.deleteVehiclePartsReplacement)),
+
+            async function VehiclePartsReplacementController_deleteVehiclePartsReplacement(request: ExRequest, response: ExResponse, next: any) {
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args: argsVehiclePartsReplacementController_deleteVehiclePartsReplacement, request, response });
+
+                const controller = new VehiclePartsReplacementController();
+
+              await templateService.apiHandler({
+                methodName: 'deleteVehiclePartsReplacement',
                 controller,
                 response,
                 next,

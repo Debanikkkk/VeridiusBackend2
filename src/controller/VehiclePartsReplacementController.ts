@@ -1,19 +1,23 @@
-import { Body, Controller, Delete, Get, Path, Post } from 'tsoa';
+import { Body, Controller, Delete, Get, Path, Post, Route, Tags } from 'tsoa';
 import { AppDataSource } from '../data-source';
 import { VehiclePartsReplacement } from '../entity/VehiclePartsReplacement';
 import { ResVehiclePartsReplacement } from '../models/res/ResVehiclePartsReplacement';
 import { ReqVehiclePartsReplacement } from '../models/req/ReqVehiclePartsReplacement';
 import { User } from '../entity/User';
+import { Vehicle } from '../entity/Vehicle';
 // import { VehicleVersion } from '../entity/VehicleVersion';
 
+@Tags('Vehicle Part Repository')
+@Route('/vehiclePartsRepository')
 export class VehiclePartsReplacementController extends Controller {
   private veihclepartsrepplacementrep = AppDataSource.getRepository(VehiclePartsReplacement);
   private userrepository = AppDataSource.getRepository(User);
+  private vehiclerep = AppDataSource.getRepository(Vehicle);
   @Post()
   public async saveVehiclePartsRep(@Body() req: ReqVehiclePartsReplacement): Promise<ResVehiclePartsReplacement> {
     const { cost, partName, partNumber, replacementDate, vehicle, warrantyExpiry, technician } = req;
 
-    const vehicle_db = await this.veihclepartsrepplacementrep.findOne({
+    const vehicle_db = await this.vehiclerep.findOne({
       where: {
         id: vehicle,
       },
@@ -105,7 +109,7 @@ export class VehiclePartsReplacementController extends Controller {
       return Promise.reject(new Error('THIS VEHICLE PART WAS NOT FOUND'));
     }
 
-    const vehicle_db = await this.veihclepartsrepplacementrep.findOne({
+    const vehicle_db = await this.vehiclerep.findOne({
       where: {
         id: vpr.vehicle?.id,
       },
