@@ -5,6 +5,7 @@ import { ServiceTicket } from './ServiceTickets';
 import { Trip } from './Trip';
 import { Firmware } from './Firmware';
 import { File } from './File';
+import { VehiclePartsReplacement } from './VehiclePartsReplacement';
 
 @Entity()
 export class User {
@@ -91,6 +92,15 @@ export class User {
     { nullable: true, onDelete: 'CASCADE', onUpdate: 'CASCADE' },
   )
   trips?: Promise<Trip[]>;
+
+  @OneToMany(
+    () => VehiclePartsReplacement,
+    (vpr) => {
+      vpr.technician;
+    },
+    { nullable: true, onDelete: 'CASCADE', onUpdate: 'CASCADE' },
+  )
+  vehicleparts?: Promise<VehiclePartsReplacement[]>;
 
   @ManyToMany(() => User)
   @JoinTable({

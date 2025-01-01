@@ -1176,6 +1176,12 @@
 						},
 						"type": "array"
 					},
+					"vehicleparts": {
+						"items": {
+							"$ref": "#/components/schemas/VehiclePartsReplacement"
+						},
+						"type": "array"
+					},
 					"is_under": {
 						"items": {
 							"$ref": "#/components/schemas/User"
@@ -1964,12 +1970,16 @@
 						"type": "number",
 						"format": "double"
 					},
+					"replaced_at": {
+						"type": "string",
+						"format": "date-time"
+					},
 					"warranty_expiry": {
 						"type": "string",
 						"format": "date-time"
 					},
-					"replaced_by": {
-						"type": "string"
+					"technician": {
+						"$ref": "#/components/schemas/User"
 					}
 				},
 				"type": "object",
