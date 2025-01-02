@@ -88,24 +88,24 @@ export class PIDController extends Controller {
 
     const resPid: ResPID = {
       active: savedPid.active,
-      bit_coded: savedPid.bit_coded,
-      byte_position: savedPid.byte_position,
-      created_at: savedPid.created_at,
+      bitCoded: savedPid.bit_coded,
+      bytePosition: savedPid.byte_position,
+      createdAt: savedPid.created_at,
       description: savedPid.description,
       id: savedPid.id,
-      length_bytes: savedPid.length_bytes,
-      long_name: savedPid.long_name,
+      lengthBytes: savedPid.length_bytes,
+      longName: savedPid.long_name,
       max: savedPid.max,
       min: savedPid.min,
       offset: savedPid.offset,
       read: savedPid.read,
       resolution: savedPid.resolution,
-      short_name: savedPid.short_name,
-      total_length: savedPid.total_length,
+      shortName: savedPid.short_name,
+      totalLength: savedPid.total_length,
       unit: savedPid.unit,
-      updated_at: savedPid.updated_at,
+      updatedAt: savedPid.updated_at,
       write: savedPid.write,
-      pid_code: savedPid.pid_code,
+      pidCode: savedPid.pid_code,
       //   parameters: ,
       //   pid_datasets,
     };
@@ -140,7 +140,7 @@ export class PIDController extends Controller {
       resParameterArr.push(resParameter);
     });
     resPid.parameters = resParameterArr;
-    resPid.pid_datasets = resPiddatasetArr;
+    resPid.pidDatasets = resPiddatasetArr;
 
     return resPid;
   }
@@ -192,25 +192,25 @@ export class PIDController extends Controller {
 
       pidArr.push({
         active: pid.active,
-        bit_coded: pid.bit_coded,
-        byte_position: pid.byte_position,
-        created_at: pid.created_at,
+        bitCoded: pid.bit_coded,
+        bytePosition: pid.byte_position,
+        createdAt: pid.created_at,
         description: pid.description,
         id: pid.id,
-        length_bytes: pid.length_bytes,
-        long_name: pid.long_name,
+        lengthBytes: pid.length_bytes,
+        longName: pid.long_name,
         max: pid.max,
         min: pid.min,
         offset: pid.offset,
         parameters: resParameterArr,
-        pid_code: pid.pid_code,
-        pid_datasets: resPiddatasetArr,
+        pidCode: pid.pid_code,
+        pidDatasets: resPiddatasetArr,
         read: pid.read,
         resolution: pid.resolution,
-        short_name: pid.short_name,
-        total_length: pid.total_length,
+        shortName: pid.short_name,
+        totalLength: pid.total_length,
         unit: pid.unit,
-        updated_at: pid.updated_at,
+        updatedAt: pid.updated_at,
         write: pid.write,
       });
     }
@@ -231,24 +231,24 @@ export class PIDController extends Controller {
     }
     const resPid: ResPID = {
       active: pid.active,
-      bit_coded: pid.bit_coded,
-      byte_position: pid.byte_position,
-      created_at: pid.created_at,
+      bitCoded: pid.bit_coded,
+      bytePosition: pid.byte_position,
+      createdAt: pid.created_at,
       description: pid.description,
       id: pid.id,
-      length_bytes: pid.length_bytes,
-      long_name: pid.long_name,
+      lengthBytes: pid.length_bytes,
+      longName: pid.long_name,
       max: pid.max,
       min: pid.min,
       offset: pid.offset,
       read: pid.read,
       resolution: pid.resolution,
-      short_name: pid.short_name,
-      total_length: pid.total_length,
+      shortName: pid.short_name,
+      totalLength: pid.total_length,
       unit: pid.unit,
-      updated_at: pid.updated_at,
+      updatedAt: pid.updated_at,
       write: pid.write,
-      pid_code: pid.pid_code,
+      pidCode: pid.pid_code,
       //   parameters: ,
       //   pid_datasets,
     };
@@ -282,7 +282,7 @@ export class PIDController extends Controller {
       resParameterArr.push(resParameter);
     });
     resPid.parameters = resParameterArr;
-    resPid.pid_datasets = resPiddatasetArr;
+    resPid.pidDatasets = resPiddatasetArr;
 
     return resPid;
   }

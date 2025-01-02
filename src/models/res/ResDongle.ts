@@ -8,6 +8,7 @@ export interface ResDongle {
   firmwareUpdatedAt?: Date;
   firmwareVersion?: string;
   id?: number;
+  isActive?: boolean;
   macAddress?: string;
   manufactureDate?: Date;
   // model?: ResVehicle;

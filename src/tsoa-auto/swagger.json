@@ -433,6 +433,124 @@
 				"type": "object",
 				"additionalProperties": false
 			},
+			"ResPID": {
+				"properties": {
+					"active": {
+						"type": "boolean"
+					},
+					"bitCoded": {
+						"type": "boolean"
+					},
+					"bytePosition": {
+						"type": "number",
+						"format": "double"
+					},
+					"createdAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"description": {
+						"type": "string"
+					},
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"lengthBytes": {
+						"type": "number",
+						"format": "double"
+					},
+					"longName": {
+						"type": "string"
+					},
+					"max": {
+						"type": "number",
+						"format": "double"
+					},
+					"min": {
+						"type": "number",
+						"format": "double"
+					},
+					"offset": {
+						"type": "number",
+						"format": "double"
+					},
+					"parameters": {
+						"items": {
+							"$ref": "#/components/schemas/ResParameter"
+						},
+						"type": "array"
+					},
+					"pidCode": {
+						"type": "string"
+					},
+					"pidDatasets": {
+						"items": {
+							"$ref": "#/components/schemas/ResPIDDataset"
+						},
+						"type": "array"
+					},
+					"read": {
+						"type": "boolean"
+					},
+					"resolution": {
+						"type": "number",
+						"format": "double"
+					},
+					"shortName": {
+						"type": "string"
+					},
+					"totalLength": {
+						"type": "number",
+						"format": "double"
+					},
+					"unit": {
+						"type": "string"
+					},
+					"updatedAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"write": {
+						"type": "boolean"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ResParameter": {
+				"properties": {
+					"active": {
+						"type": "boolean"
+					},
+					"created_at": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"description": {
+						"type": "string"
+					},
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"name": {
+						"type": "string"
+					},
+					"pids": {
+						"items": {
+							"$ref": "#/components/schemas/ResPID"
+						},
+						"type": "array"
+					},
+					"updated_at": {
+						"type": "string",
+						"format": "date-time"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
 			"ResPIDDataset": {
 				"properties": {
 					"id": {
@@ -455,6 +573,12 @@
 					"updatedAt": {
 						"type": "string",
 						"format": "date-time"
+					},
+					"pids": {
+						"items": {
+							"$ref": "#/components/schemas/ResPID"
+						},
+						"type": "array"
 					},
 					"ecus": {
 						"items": {
@@ -714,6 +838,9 @@
 					"id": {
 						"type": "number",
 						"format": "double"
+					},
+					"isActive": {
+						"type": "boolean"
 					},
 					"macAddress": {
 						"type": "string"
@@ -1183,6 +1310,9 @@
 					"firmware_updated_at": {
 						"type": "string",
 						"format": "date-time"
+					},
+					"is_active": {
+						"type": "boolean"
 					},
 					"created_at": {
 						"type": "string",
@@ -2398,124 +2528,20 @@
 					},
 					"active": {
 						"type": "boolean"
-					}
-				},
-				"type": "object",
-				"additionalProperties": false
-			},
-			"ResPID": {
-				"properties": {
-					"active": {
-						"type": "boolean"
-					},
-					"bit_coded": {
-						"type": "boolean"
-					},
-					"byte_position": {
-						"type": "number",
-						"format": "double"
-					},
-					"created_at": {
-						"type": "string",
-						"format": "date-time"
-					},
-					"description": {
-						"type": "string"
-					},
-					"id": {
-						"type": "number",
-						"format": "double"
-					},
-					"length_bytes": {
-						"type": "number",
-						"format": "double"
-					},
-					"long_name": {
-						"type": "string"
-					},
-					"max": {
-						"type": "number",
-						"format": "double"
-					},
-					"min": {
-						"type": "number",
-						"format": "double"
-					},
-					"offset": {
-						"type": "number",
-						"format": "double"
-					},
-					"parameters": {
-						"items": {
-							"$ref": "#/components/schemas/ResParameter"
-						},
-						"type": "array"
-					},
-					"pid_code": {
-						"type": "string"
-					},
-					"pid_datasets": {
-						"items": {
-							"$ref": "#/components/schemas/ResPIDDataset"
-						},
-						"type": "array"
-					},
-					"read": {
-						"type": "boolean"
-					},
-					"resolution": {
-						"type": "number",
-						"format": "double"
-					},
-					"short_name": {
-						"type": "string"
-					},
-					"total_length": {
-						"type": "number",
-						"format": "double"
-					},
-					"unit": {
-						"type": "string"
-					},
-					"updated_at": {
-						"type": "string",
-						"format": "date-time"
-					},
-					"write": {
-						"type": "boolean"
-					}
-				},
-				"type": "object",
-				"additionalProperties": false
-			},
-			"ResParameter": {
-				"properties": {
-					"active": {
-						"type": "boolean"
-					},
-					"created_at": {
-						"type": "string",
-						"format": "date-time"
-					},
-					"description": {
-						"type": "string"
-					},
-					"id": {
-						"type": "number",
-						"format": "double"
-					},
-					"name": {
-						"type": "string"
 					},
 					"pids": {
 						"items": {
-							"$ref": "#/components/schemas/ResPID"
+							"type": "number",
+							"format": "double"
 						},
 						"type": "array"
 					},
-					"updated_at": {
-						"type": "string",
-						"format": "date-time"
+					"ecus": {
+						"items": {
+							"type": "number",
+							"format": "double"
+						},
+						"type": "array"
 					}
 				},
 				"type": "object",
@@ -2677,6 +2703,49 @@
 					},
 					"responseCode": {
 						"type": "string"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ResMessageType": {
+				"properties": {
+					"createdAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"name": {
+						"type": "string"
+					},
+					"pidDatasets": {
+						"items": {
+							"$ref": "#/components/schemas/ResPIDDataset"
+						},
+						"type": "array"
+					},
+					"updatedAt": {
+						"type": "string",
+						"format": "date-time"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ReqMessageType": {
+				"properties": {
+					"name": {
+						"type": "string"
+					},
+					"pidDatasets": {
+						"items": {
+							"type": "number",
+							"format": "double"
+						},
+						"type": "array"
 					}
 				},
 				"type": "object",
@@ -3104,6 +3173,9 @@
 					},
 					"status": {
 						"$ref": "#/components/schemas/DongleStatus"
+					},
+					"isActive": {
+						"type": "boolean"
 					}
 				},
 				"required": [
@@ -3112,7 +3184,8 @@
 					"firmwareVersion",
 					"macAddress",
 					"manufactureDate",
-					"status"
+					"status",
+					"isActive"
 				],
 				"type": "object",
 				"additionalProperties": false
@@ -5992,8 +6065,48 @@
 			"post": {
 				"operationId": "SaveMessageType",
 				"responses": {
-					"204": {
-						"description": "No content"
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ResMessageType"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Message Type"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/ReqMessageType"
+							}
+						}
+					}
+				}
+			},
+			"get": {
+				"operationId": "GetAllMessageType",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/ResMessageType"
+									},
+									"type": "array"
+								}
+							}
+						}
 					}
 				},
 				"tags": [
@@ -6001,6 +6114,38 @@
 				],
 				"security": [],
 				"parameters": []
+			}
+		},
+		"/message_type/{messageTypeId}": {
+			"get": {
+				"operationId": "GetOneMessageType",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ResMessageType"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Message Type"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "messageTypeId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
 			}
 		},
 		"/loginpacket": {

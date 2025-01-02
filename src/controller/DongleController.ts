@@ -24,7 +24,7 @@ export class DongleController extends Controller {
   @Post()
   public async saveDongle(@Body() request: ReqDongle): Promise<ResDongle | ResError> {
     try {
-      const { dongleSerialNumber, firmwareUpdatedAt, firmwareVersion, macAddress, manufactureDate, status } = request;
+      const { dongleSerialNumber, firmwareUpdatedAt, isActive, firmwareVersion, macAddress, manufactureDate, status } = request;
       const dongleToSave: Dongle = {
         dongle_serial_number: dongleSerialNumber,
         firmware_updated_at: firmwareUpdatedAt,
@@ -32,6 +32,7 @@ export class DongleController extends Controller {
         mac_address: macAddress,
         manufacture_date: manufactureDate,
         status: status,
+        is_active: isActive,
       };
 
       const dongleSaver = Object.assign(new Dongle(), dongleToSave);
@@ -49,11 +50,13 @@ export class DongleController extends Controller {
           status: savedDongle.assigned_device?.status,
         },
         createdAt: savedDongle.created_at,
+
         dongleSerialNumber: savedDongle.dongle_serial_number,
         firmwareUpdatedAt: savedDongle.firmware_updated_at,
         firmwareVersion: savedDongle.firmware_version,
         id: savedDongle.id,
         macAddress: savedDongle.mac_address,
+        isActive: savedDongle.is_active,
         manufactureDate: savedDongle.manufacture_date,
         status: savedDongle.status,
         updatedAt: savedDongle.updated_at,
@@ -117,6 +120,7 @@ export class DongleController extends Controller {
           firmwareUpdatedAt: dongle.firmware_updated_at,
           firmwareVersion: dongle.firmware_version,
           id: dongle.id,
+          isActive: dongle.is_active,
           macAddress: dongle.mac_address,
           manufactureDate: dongle.manufacture_date,
           status: dongle.status,
@@ -174,6 +178,7 @@ export class DongleController extends Controller {
             firmwareUpdatedAt: dongle.firmware_updated_at,
             firmwareVersion: dongle.firmware_version,
             id: dongle.id,
+            isActive: dongle.is_active,
             macAddress: dongle.mac_address,
             manufactureDate: dongle.manufacture_date,
             status: dongle.status,

@@ -12,5 +12,6 @@ export interface ReqDongle {
   manufactureDate: Date;
   // model: ;
   status: DongleStatus;
+  isActive: boolean;
   // updatedAt: Date;
 }

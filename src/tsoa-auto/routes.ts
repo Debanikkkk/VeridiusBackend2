@@ -278,6 +278,48 @@ const models: TsoaRoute.Models = {
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "ResPID": {
+        "dataType": "refObject",
+        "properties": {
+            "active": {"dataType":"boolean"},
+            "bitCoded": {"dataType":"boolean"},
+            "bytePosition": {"dataType":"double"},
+            "createdAt": {"dataType":"datetime"},
+            "description": {"dataType":"string"},
+            "id": {"dataType":"double"},
+            "lengthBytes": {"dataType":"double"},
+            "longName": {"dataType":"string"},
+            "max": {"dataType":"double"},
+            "min": {"dataType":"double"},
+            "offset": {"dataType":"double"},
+            "parameters": {"dataType":"array","array":{"dataType":"refObject","ref":"ResParameter"}},
+            "pidCode": {"dataType":"string"},
+            "pidDatasets": {"dataType":"array","array":{"dataType":"refObject","ref":"ResPIDDataset"}},
+            "read": {"dataType":"boolean"},
+            "resolution": {"dataType":"double"},
+            "shortName": {"dataType":"string"},
+            "totalLength": {"dataType":"double"},
+            "unit": {"dataType":"string"},
+            "updatedAt": {"dataType":"datetime"},
+            "write": {"dataType":"boolean"},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "ResParameter": {
+        "dataType": "refObject",
+        "properties": {
+            "active": {"dataType":"boolean"},
+            "created_at": {"dataType":"datetime"},
+            "description": {"dataType":"string"},
+            "id": {"dataType":"double"},
+            "name": {"dataType":"string"},
+            "pids": {"dataType":"array","array":{"dataType":"refObject","ref":"ResPID"}},
+            "updated_at": {"dataType":"datetime"},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "ResPIDDataset": {
         "dataType": "refObject",
         "properties": {
@@ -287,6 +329,7 @@ const models: TsoaRoute.Models = {
             "active": {"dataType":"boolean"},
             "createdAt": {"dataType":"datetime"},
             "updatedAt": {"dataType":"datetime"},
+            "pids": {"dataType":"array","array":{"dataType":"refObject","ref":"ResPID"}},
             "ecus": {"dataType":"array","array":{"dataType":"refObject","ref":"ResECU"}},
         },
         "additionalProperties": false,
@@ -403,6 +446,7 @@ const models: TsoaRoute.Models = {
             "firmwareUpdatedAt": {"dataType":"datetime"},
             "firmwareVersion": {"dataType":"string"},
             "id": {"dataType":"double"},
+            "isActive": {"dataType":"boolean"},
             "macAddress": {"dataType":"string"},
             "manufactureDate": {"dataType":"datetime"},
             "status": {"ref":"DongleStatus"},
@@ -609,6 +653,7 @@ const models: TsoaRoute.Models = {
             "status": {"ref":"DongleStatus"},
             "assigned_device": {"dataType":"union","subSchemas":[{"ref":"Device"},{"dataType":"enum","enums":[null]}]},
             "firmware_updated_at": {"dataType":"datetime"},
+            "is_active": {"dataType":"boolean"},
             "created_at": {"dataType":"datetime"},
             "updated_at": {"dataType":"datetime"},
         },
@@ -1126,48 +1171,8 @@ const models: TsoaRoute.Models = {
             "name": {"dataType":"string"},
             "description": {"dataType":"string"},
             "active": {"dataType":"boolean"},
-        },
-        "additionalProperties": false,
-    },
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "ResPID": {
-        "dataType": "refObject",
-        "properties": {
-            "active": {"dataType":"boolean"},
-            "bit_coded": {"dataType":"boolean"},
-            "byte_position": {"dataType":"double"},
-            "created_at": {"dataType":"datetime"},
-            "description": {"dataType":"string"},
-            "id": {"dataType":"double"},
-            "length_bytes": {"dataType":"double"},
-            "long_name": {"dataType":"string"},
-            "max": {"dataType":"double"},
-            "min": {"dataType":"double"},
-            "offset": {"dataType":"double"},
-            "parameters": {"dataType":"array","array":{"dataType":"refObject","ref":"ResParameter"}},
-            "pid_code": {"dataType":"string"},
-            "pid_datasets": {"dataType":"array","array":{"dataType":"refObject","ref":"ResPIDDataset"}},
-            "read": {"dataType":"boolean"},
-            "resolution": {"dataType":"double"},
-            "short_name": {"dataType":"string"},
-            "total_length": {"dataType":"double"},
-            "unit": {"dataType":"string"},
-            "updated_at": {"dataType":"datetime"},
-            "write": {"dataType":"boolean"},
-        },
-        "additionalProperties": false,
-    },
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "ResParameter": {
-        "dataType": "refObject",
-        "properties": {
-            "active": {"dataType":"boolean"},
-            "created_at": {"dataType":"datetime"},
-            "description": {"dataType":"string"},
-            "id": {"dataType":"double"},
-            "name": {"dataType":"string"},
-            "pids": {"dataType":"array","array":{"dataType":"refObject","ref":"ResPID"}},
-            "updated_at": {"dataType":"datetime"},
+            "pids": {"dataType":"array","array":{"dataType":"double"}},
+            "ecus": {"dataType":"array","array":{"dataType":"double"}},
         },
         "additionalProperties": false,
     },
@@ -1238,6 +1243,27 @@ const models: TsoaRoute.Models = {
             "description": {"dataType":"string"},
             "ecus": {"dataType":"array","array":{"dataType":"double"}},
             "responseCode": {"dataType":"string"},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "ResMessageType": {
+        "dataType": "refObject",
+        "properties": {
+            "createdAt": {"dataType":"datetime"},
+            "id": {"dataType":"double"},
+            "name": {"dataType":"string"},
+            "pidDatasets": {"dataType":"array","array":{"dataType":"refObject","ref":"ResPIDDataset"}},
+            "updatedAt": {"dataType":"datetime"},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "ReqMessageType": {
+        "dataType": "refObject",
+        "properties": {
+            "name": {"dataType":"string"},
+            "pidDatasets": {"dataType":"array","array":{"dataType":"double"}},
         },
         "additionalProperties": false,
     },
@@ -1401,6 +1427,7 @@ const models: TsoaRoute.Models = {
             "macAddress": {"dataType":"string","required":true},
             "manufactureDate": {"dataType":"datetime","required":true},
             "status": {"ref":"DongleStatus","required":true},
+            "isActive": {"dataType":"boolean","required":true},
         },
         "additionalProperties": false,
     },
@@ -3779,6 +3806,7 @@ export function RegisterRoutes(app: Router,opts?:{multer?:ReturnType<typeof mult
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         const argsMessageTypeController_saveMessageType: Record<string, TsoaRoute.ParameterSchema> = {
+                req: {"in":"body","name":"req","required":true,"ref":"ReqMessageType"},
         };
         app.post('/message_type',
             ...(fetchMiddlewares<RequestHandler>(MessageTypeController)),
@@ -3796,6 +3824,65 @@ export function RegisterRoutes(app: Router,opts?:{multer?:ReturnType<typeof mult
 
               await templateService.apiHandler({
                 methodName: 'saveMessageType',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsMessageTypeController_getOneMessageType: Record<string, TsoaRoute.ParameterSchema> = {
+                messageTypeId: {"in":"path","name":"messageTypeId","required":true,"dataType":"double"},
+        };
+        app.get('/message_type/:messageTypeId',
+            ...(fetchMiddlewares<RequestHandler>(MessageTypeController)),
+            ...(fetchMiddlewares<RequestHandler>(MessageTypeController.prototype.getOneMessageType)),
+
+            async function MessageTypeController_getOneMessageType(request: ExRequest, response: ExResponse, next: any) {
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args: argsMessageTypeController_getOneMessageType, request, response });
+
+                const controller = new MessageTypeController();
+
+              await templateService.apiHandler({
+                methodName: 'getOneMessageType',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsMessageTypeController_getAllMessageType: Record<string, TsoaRoute.ParameterSchema> = {
+        };
+        app.get('/message_type',
+            ...(fetchMiddlewares<RequestHandler>(MessageTypeController)),
+            ...(fetchMiddlewares<RequestHandler>(MessageTypeController.prototype.getAllMessageType)),
+
+            async function MessageTypeController_getAllMessageType(request: ExRequest, response: ExResponse, next: any) {
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args: argsMessageTypeController_getAllMessageType, request, response });
+
+                const controller = new MessageTypeController();
+
+              await templateService.apiHandler({
+                methodName: 'getAllMessageType',
                 controller,
                 response,
                 next,

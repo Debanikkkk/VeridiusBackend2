@@ -1,4 +1,5 @@
 import { ResECU } from './ResECU';
+import { ResPID } from './ResPID';
 
 export interface ResPIDDataset {
   id?: number; // ID of the PID dataset
@@ -7,7 +8,7 @@ export interface ResPIDDataset {
   active?: boolean; // Whether the dataset is active
   createdAt?: Date; // Creation timestamp
   updatedAt?: Date; // Update timestamp
-  // pids?: ResPID; // Array of associated PIDs with minimal details
+  pids?: ResPID[]; // Array of associated PIDs with minimal details
   ecus?: ResECU[]; // Array of associated ECUs with minimal details
   // messageTypes?: { id: number; typeName: string }[]; // Array of associated MessageTypes with minimal details
 }

@@ -42,6 +42,8 @@ export class Dongle {
   @Column({ nullable: true })
   firmware_updated_at?: Date;
 
+  @Column({ default: true, nullable: true })
+  is_active?: boolean;
   @CreateDateColumn({ nullable: true })
   created_at?: Date;
 
