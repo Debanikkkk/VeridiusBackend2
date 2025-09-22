@@ -1,14 +1,14 @@
-import { ResPermission } from './ResPermission';
+// import { ResPermission } from './ResPermission';
 
 interface UserLoginRole {
-  id: number;
-  role_name: string;
-  role_description: string;
+  id?: number|null;
+  role_name?: string|null;
+  role_description?: string|null;
 }
 export interface ResUserLogin {
   // roles: ResRole;
   name: string;
-  permissions?: ResPermission[];
-  role: UserLoginRole;
+  // permissions?: ResPermission[];
+  role: UserLoginRole | null;
   token?: string;
 }

@@ -1,44 +1,22 @@
-import { Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { Role } from './Role';
-export enum permType {
-  user = 'user',
-  product = 'product',
-}
+import { Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Role } from "./Role";
+
 @Entity()
-export class Permission {
-  @PrimaryGeneratedColumn()
-  id?: number;
+export class Permission{
+    @PrimaryGeneratedColumn()
+    id?: number
 
-  @Column({
-    length: 64,
-  })
-  name?: string;
+    @Column({nullable: true})
+    name?: string
 
-  @Column({
-    length: 64,
-    nullable: true,
-  })
-  description?: string;
+    @Column({nullable: true})
+    description?: string
 
-  @Column({
-    type: 'enum',
-    enum: permType,
-    nullable: true,
-    // default: permType,
-  })
-  type?: permType;
-
-  @ManyToMany(
-    () => Role,
-    (role) => {
-      role.permissions;
-    },
-    { onDelete: 'CASCADE', onUpdate: 'CASCADE', nullable: false },
-  )
-  @JoinTable({
-    name: 'role_permission',
-    joinColumn: { name: 'permission_id' },
-    inverseJoinColumn: { name: 'role_id' },
-  })
-  role?: Promise<Role[]>;
+    @ManyToMany(()=>(Role), (role)=>{role.permissions}, {nullable: true, onDelete:'CASCADE', onUpdate:'CASCADE'})
+   @JoinTable({
+       name: 'role_n_permission',
+       joinColumn: { name:'perimission_id' },
+       inverseJoinColumn: { name: 'role_id' },
+     })
+    roles?: Role[]
 }

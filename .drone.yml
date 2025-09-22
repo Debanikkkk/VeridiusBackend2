@@ -1,52 +1,52 @@
-kind: pipeline
-name: Build Image
+# kind: pipeline
+# name: Build Image
 
-steps:
-  - name: Lint Check
-    image: node:21-alpine
-    commands:
-      - npm install
-      - npm run lint
+# steps:
+#   - name: Lint Check
+#     image: node:21-alpine
+#     commands:
+#       - npm install
+#       - npm run lint
 
-  - name: Build Docker Image
-    image: plugins/docker
-    settings:
-      build_args: ''
-      username:
-        from_secret: docker_username
-      password:
-        from_secret: docker_password
-      repo: git.navigolabs.com/mayank/omni-backend
-      registry: git.navigolabs.com
-    when:
-      branch:
-        - main
-      event:
-        - push
+#   - name: Build Docker Image
+#     image: plugins/docker
+#     settings:
+#       build_args: ''
+#       username:
+#         from_secret: docker_username
+#       password:
+#         from_secret: docker_password
+#       repo: git.navigolabs.com/mayank/omni-backend
+#       registry: git.navigolabs.com
+#     when:
+#       branch:
+#         - main
+#       event:
+#         - push
 
-  - name: Deploy image
-    image: appleboy/drone-ssh
-    settings:
-      host: omni-backend.navigolabs.com
-      username: omni-backend
-      key:
-        from_secret: server_ssh_pkey
-      port: 22
-      command_timeout: 3m
-      script:
-        - echo "Deploying image"
-        - sudo /opt/deployable/omni-backend/docker/deploy.sh
-        - echo "Completed Deployment"
-    when:
-      branch:
-        - main
-      event:
-        - push
-# trigger:
-#   branch:
-#     - main
-#     - feature/api_dev
-#     - feature/openapi
-#     - feature/oem_apis
-#   event:
-#     - push
+#   - name: Deploy image
+#     image: appleboy/drone-ssh
+#     settings:
+#       host: omni-backend.navigolabs.com
+#       username: omni-backend
+#       key:
+#         from_secret: server_ssh_pkey
+#       port: 22
+#       command_timeout: 3m
+#       script:
+#         - echo "Deploying image"
+#         - sudo /opt/deployable/omni-backend/docker/deploy.sh
+#         - echo "Completed Deployment"
+#     when:
+#       branch:
+#         - main
+#       event:
+#         - push
+# # trigger:
+# #   branch:
+# #     - main
+# #     - feature/api_dev
+# #     - feature/openapi
+# #     - feature/oem_apis
+# #   event:
+# #     - push

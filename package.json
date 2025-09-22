@@ -1,7 +1,7 @@
 {
-  "name": "NavigoOMNIAPIs",
+  "name": "Veridius-APIs",
   "version": "0.0.1",
-  "description": "NavigoOMNIAPIs",
+  "description": "Veridius-APIs",
   "type": "commonjs",
   "scripts": {
     "start": "ts-node src/index.ts",

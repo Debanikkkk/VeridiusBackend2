@@ -1,12 +1,5 @@
 import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { Device } from './Device';
 import { Role } from './Role';
-import { ServiceTicket } from './ServiceTickets';
-import { Trip } from './Trip';
-import { Firmware } from './Firmware';
-import { File } from './File';
-import { VehiclePartsReplacement } from './VehiclePartsReplacement';
-
 @Entity()
 export class User {
   @PrimaryGeneratedColumn()
@@ -43,16 +36,6 @@ export class User {
   })
   email?: string;
 
-  @OneToOne(
-    () => Device,
-    (device) => {
-      device.assigned_to;
-    },
-    { onDelete: 'CASCADE', onUpdate: 'CASCADE', nullable: true },
-  )
-  @JoinColumn({ name: 'device_id' })
-  device?: Device | null;
-
   @ManyToOne(
     () => Role,
     (role) => {
@@ -63,59 +46,7 @@ export class User {
   @JoinColumn({
     name: 'role_id',
   })
-  role?: Promise<Role>;
+  role?: Promise<Role> ;
 
-  @OneToMany(
-    () => File,
-    (file) => {
-      file.created_by;
-    },
-    { nullable: true },
-  )
-  files?: File[];
-
-  @OneToOne(
-    () => ServiceTicket,
-    (service_ticket) => {
-      service_ticket.technician;
-    },
-    { onDelete: 'CASCADE', onUpdate: 'CASCADE', nullable: true },
-  )
-  // @JoinColumn({name: 'service_ticket_id'})
-  service_ticket?: Promise<ServiceTicket>;
-
-  @OneToMany(
-    () => Trip,
-    (trip) => {
-      trip.user;
-    },
-    { nullable: true, onDelete: 'CASCADE', onUpdate: 'CASCADE' },
-  )
-  trips?: Promise<Trip[]>;
-
-  @OneToMany(
-    () => VehiclePartsReplacement,
-    (vpr) => {
-      vpr.technician;
-    },
-    { nullable: true, onDelete: 'CASCADE', onUpdate: 'CASCADE' },
-  )
-  vehicleparts?: Promise<VehiclePartsReplacement[]>;
-
-  @ManyToMany(() => User)
-  @JoinTable({
-    name: 'user_hierarchy',
-    joinColumn: { name: 'user_id', referencedColumnName: 'id' },
-    inverseJoinColumn: { name: 'under_user_id', referencedColumnName: 'id' },
-  })
-  is_under?: Promise<User[]>;
-
-  @OneToMany(
-    () => Firmware,
-    (firmware) => {
-      firmware.created_by;
-    },
-    { nullable: true },
-  )
-  firmwares?: Firmware[];
+ 
 }

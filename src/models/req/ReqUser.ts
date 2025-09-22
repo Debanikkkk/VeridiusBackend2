@@ -4,6 +4,6 @@ export interface ReqUser {
   address?: string;
   email?: string;
   phone_number?: string;
-  role?: number;
-  is_under?: number;
+  // role?: number;
+  // is_under?: number;
 }

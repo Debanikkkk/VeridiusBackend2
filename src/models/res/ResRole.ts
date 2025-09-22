@@ -1,12 +1,7 @@
-import { ResPermission } from './ResPermission';
-import { ResUser } from './ResUser';
-
-export interface ResRole {
-  id?: number;
-  name?: string;
-  description?: string;
-  createdBy?: ResUser;
-  status?: boolean;
-  permissions?: ResPermission[];
-  // subRole?: ResRole[],
+import {ResPermission} from './ResPermission'
+export interface ResRole{
+    id?: number,
+    name?: string,
+    description?: string,
+    permissions?:ResPermission
 }

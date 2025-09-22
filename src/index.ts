@@ -10,9 +10,9 @@ import { ValidateError } from 'tsoa';
 import swaggerJson from './tsoa-auto/swagger.json';
 import { ResponseError } from './models/res/ResErrors';
 import * as fs from 'fs';
-import { updateStatusCron } from './cronjob';
+// import { updateStatusCron } from './cronjob';
 // import { tcpServer } from '../tcp-server';
-import { initSocketIOFeatures } from './tcp-server';
+// import { initSocketIOFeatures } from './tcp-server';
 import http from 'http';
 
 // Initialize database and start server
@@ -32,7 +32,6 @@ AppDataSource.initialize()
       'https://chronicpestcontrolagencies.org',
     ];
     const options: cors.CorsOptions = { origin: allowedOrigins };
-    initSocketIOFeatures(server);
     // Create uploads directory if it doesn’t exist
     const dir = './public/uploads/';
     if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
@@ -71,7 +70,7 @@ AppDataSource.initialize()
       next();
     });
     // Start cron job
-    updateStatusCron.start();
+    // updateStatusCron.start();
     // Start Express server
     server.listen(envs.PORT, () => {
       console.log(`Express server has started on port ${envs.PORT}`);
