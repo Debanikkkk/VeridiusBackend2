@@ -115,7 +115,7 @@
 			},
 			"ResUserLogin": {
 				"properties": {
-					"name": {
+					"email": {
 						"type": "string"
 					},
 					"role": {
@@ -131,7 +131,7 @@
 					}
 				},
 				"required": [
-					"name",
+					"email",
 					"role"
 				],
 				"type": "object",
@@ -151,7 +151,7 @@
 			},
 			"ReqUserLogin": {
 				"properties": {
-					"username": {
+					"email": {
 						"type": "string"
 					},
 					"password": {
@@ -159,7 +159,7 @@
 					}
 				},
 				"required": [
-					"username",
+					"email",
 					"password"
 				],
 				"type": "object",

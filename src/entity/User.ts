@@ -1,5 +1,6 @@
 import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Role } from './Role';
+import { Show } from './Show';
 @Entity()
 export class User {
   @PrimaryGeneratedColumn()
@@ -48,5 +49,7 @@ export class User {
   })
   role?: Promise<Role> ;
 
+ @OneToMany(()=>(Show), (show)=>(show.publisher), {nullable: true, onDelete:'CASCADE', onUpdate:'CASCADE'})
+ shows?: Promise<Show[]>
  
 }

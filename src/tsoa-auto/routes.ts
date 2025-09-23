@@ -76,7 +76,7 @@ const models: TsoaRoute.Models = {
     "ResUserLogin": {
         "dataType": "refObject",
         "properties": {
-            "name": {"dataType":"string","required":true},
+            "email": {"dataType":"string","required":true},
             "role": {"dataType":"union","subSchemas":[{"ref":"UserLoginRole"},{"dataType":"enum","enums":[null]}],"required":true},
             "token": {"dataType":"string"},
         },
@@ -94,7 +94,7 @@ const models: TsoaRoute.Models = {
     "ReqUserLogin": {
         "dataType": "refObject",
         "properties": {
-            "username": {"dataType":"string","required":true},
+            "email": {"dataType":"string","required":true},
             "password": {"dataType":"string","required":true},
         },
         "additionalProperties": false,

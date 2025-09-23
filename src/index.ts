@@ -27,9 +27,8 @@ AppDataSource.initialize()
     const allowedOrigins = [
       ...envs.CORS_ALLOWED_ORIGINS,
       'http://localhost:3000',
-      'http://localhost:8081',
       'http://localhost:3001',
-      'https://chronicpestcontrolagencies.org',
+      'http://localhost:3010',
     ];
     const options: cors.CorsOptions = { origin: allowedOrigins };
     // Create uploads directory if it doesn’t exist

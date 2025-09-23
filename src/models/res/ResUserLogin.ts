@@ -7,7 +7,7 @@ interface UserLoginRole {
 }
 export interface ResUserLogin {
   // roles: ResRole;
-  name: string;
+  email: string;
   // permissions?: ResPermission[];
   role: UserLoginRole | null;
   token?: string;

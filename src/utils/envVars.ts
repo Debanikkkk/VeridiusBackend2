@@ -24,6 +24,6 @@ export const envs: EnvVars = {
   DB_USERNAME: process.env.DB_USERNAME || 'postgres',
   DB_PASSWORD: process.env.DB_PASSWORD || 'Password@2025',
   DB_DBNAME: process.env.DB_DBNAME || 'vbe1',
-  CORS_ALLOWED_ORIGINS: process.env.CORS_ALLOWED_ORIGINS?.split(',') || ['localhost:3010'] || ['localhost:3000'],
+  CORS_ALLOWED_ORIGINS: process.env.CORS_ALLOWED_ORIGINS?.split(',') || ['localhost:3010'] || ['localhost:3000'] || ['localhost:3001'],
   JWT_SECRET_KEY: process.env.JWT_SECRET_KEY || 'jwtsecretkey',
 };

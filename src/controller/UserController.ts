@@ -83,11 +83,11 @@ return resUser
   public async userLogin(@Body() loginBody: ReqUserLogin): Promise<ResUserLogin | ResError> {
     try {
       console.log({ MESSAGE: 'THIS API WAS FIRED' });
-      const { username, password } = loginBody;
+      const { email, password } = loginBody;
       console.log('api reached here');
       const users = await this.userrepository.find({
         where: {
-          name: username,
+          email: email,
           password: password,
         },
         relations: {
@@ -119,7 +119,7 @@ return resUser
       // console.log('here are the permissions', permissions);
       const loginUser: ResUserLogin = {
         //   name: (user.first_name ? user.first_name : '') + ' ' + (user.last_name ? user.last_name : ''),
-        name: user.name!,
+        email: user.email!,
         role: {
           id: (await user.role).id!,
           role_name: (await user.role).name!,
@@ -131,6 +131,7 @@ return resUser
 
       const tokenData: JWTTokenData = {
         id: user.id!,
+        username: user.name!,
         //   pincode: user.pincode,
        role:{
         id: (await user.role).id!,
