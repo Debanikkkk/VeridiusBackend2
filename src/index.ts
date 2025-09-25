@@ -28,7 +28,6 @@ AppDataSource.initialize()
       ...envs.CORS_ALLOWED_ORIGINS,
       'http://localhost:3000',
       'http://localhost:3001',
-      'http://localhost:3010',
     ];
     const options: cors.CorsOptions = { origin: allowedOrigins };
     // Create uploads directory if it doesn’t exist
@@ -41,11 +40,21 @@ AppDataSource.initialize()
     const bannerdir = './public/bannerUploads/';
     if (!fs.existsSync(bannerdir)) fs.mkdirSync(bannerdir, { recursive: true });
 
+
+        const tileImg = './public/tileImg/';
+    if (!fs.existsSync(tileImg)) fs.mkdirSync(tileImg, { recursive: true });
+
+
+        const descImg = './public/descImg/';
+    if (!fs.existsSync(descImg)) fs.mkdirSync(descImg, { recursive: true });
+
     app.use(cors(options));
     app.use(bodyParser.json());
     app.use('/public/uploads', express.static('./public/uploads'));
     app.use('/public/ecuUploads', express.static('./public/ecuUploads'));
     app.use('/public/bannerUploads', express.static('./public/bannerUploads'));
+    app.use('/public/tileImg', express.static('./public/tileImg'));
+    app.use('/public/descImg', express.static('./public/descImg'));
 
     // Swagger docs
     app.use('/docs', swaggerUi.serve, async (_req: Request, res: Response) => res.send(swaggerUi.generateHTML(swaggerJson)));

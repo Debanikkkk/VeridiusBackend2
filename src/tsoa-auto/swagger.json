@@ -7,41 +7,6 @@
 		"requestBodies": {},
 		"responses": {},
 		"schemas": {
-			"ResPermission": {
-				"properties": {
-					"id": {
-						"type": "number",
-						"format": "double"
-					},
-					"name": {
-						"type": "string"
-					},
-					"description": {
-						"type": "string"
-					}
-				},
-				"type": "object",
-				"additionalProperties": false
-			},
-			"ResRole": {
-				"properties": {
-					"id": {
-						"type": "number",
-						"format": "double"
-					},
-					"name": {
-						"type": "string"
-					},
-					"description": {
-						"type": "string"
-					},
-					"permissions": {
-						"$ref": "#/components/schemas/ResPermission"
-					}
-				},
-				"type": "object",
-				"additionalProperties": false
-			},
 			"ResUser": {
 				"properties": {
 					"id": {
@@ -51,23 +16,39 @@
 					"name": {
 						"type": "string"
 					},
-					"address": {
-						"type": "string"
-					},
 					"password": {
 						"type": "string"
 					},
-					"email": {
+					"address": {
+						"type": "string"
+					},
+					"phone_number": {
 						"type": "string"
 					},
 					"status": {
 						"type": "boolean"
 					},
-					"phone_number": {
+					"email": {
 						"type": "string"
 					},
 					"role": {
-						"$ref": "#/components/schemas/ResRole"
+						"properties": {
+							"description": {
+								"type": "string"
+							},
+							"name": {
+								"type": "string"
+							},
+							"id": {
+								"type": "number",
+								"format": "double"
+							}
+						},
+						"type": "object"
+					},
+					"shows_count": {
+						"type": "number",
+						"format": "double"
 					}
 				},
 				"type": "object",
@@ -176,6 +157,537 @@
 				],
 				"type": "object",
 				"additionalProperties": false
+			},
+			"ResSeasonDet": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"title": {
+						"type": "string"
+					},
+					"season_no": {
+						"type": "number",
+						"format": "double"
+					},
+					"season_desc": {
+						"type": "string"
+					},
+					"date": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"episodes_count": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ResShowDet": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"title": {
+						"type": "string"
+					},
+					"tile_img": {
+						"type": "string"
+					},
+					"desc_img": {
+						"type": "string"
+					},
+					"description": {
+						"type": "string"
+					},
+					"date": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"rating": {
+						"type": "string"
+					},
+					"show_type": {
+						"type": "string"
+					},
+					"publisher": {
+						"$ref": "#/components/schemas/ResUser"
+					},
+					"seasons_count": {
+						"type": "number",
+						"format": "double"
+					},
+					"seasons": {
+						"items": {
+							"$ref": "#/components/schemas/ResSeasonDet"
+						},
+						"type": "array"
+					}
+				},
+				"required": [
+					"seasons"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ResShow": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"title": {
+						"type": "string"
+					},
+					"tile_img": {
+						"type": "string"
+					},
+					"desc_img": {
+						"type": "string"
+					},
+					"description": {
+						"type": "string"
+					},
+					"date": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"rating": {
+						"type": "string"
+					},
+					"show_type": {
+						"type": "string"
+					},
+					"publisher": {
+						"properties": {
+							"email": {
+								"type": "string"
+							},
+							"name": {
+								"type": "string"
+							},
+							"id": {
+								"type": "number",
+								"format": "double"
+							}
+						},
+						"type": "object"
+					},
+					"seasons_count": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"required": [
+					"seasons_count"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ResShowWithDetails": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"title": {
+						"type": "string"
+					},
+					"tile_img": {
+						"type": "string"
+					},
+					"desc_img": {
+						"type": "string"
+					},
+					"description": {
+						"type": "string"
+					},
+					"date": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"rating": {
+						"type": "string"
+					},
+					"show_type": {
+						"type": "string"
+					},
+					"publisher": {
+						"properties": {
+							"email": {
+								"type": "string"
+							},
+							"name": {
+								"type": "string"
+							},
+							"id": {
+								"type": "number",
+								"format": "double"
+							}
+						},
+						"type": "object"
+					},
+					"seasons_count": {
+						"type": "number",
+						"format": "double"
+					},
+					"seasons": {
+						"items": {
+							"properties": {
+								"date": {
+									"type": "string",
+									"format": "date-time"
+								},
+								"season_desc": {
+									"type": "string"
+								},
+								"season_no": {
+									"type": "number",
+									"format": "double"
+								},
+								"title": {
+									"type": "string"
+								},
+								"id": {
+									"type": "number",
+									"format": "double"
+								}
+							},
+							"type": "object"
+						},
+						"type": "array"
+					}
+				},
+				"required": [
+					"seasons_count",
+					"seasons"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"movieRating": {
+				"enum": [
+					"G",
+					"PG",
+					"PG-13",
+					"R",
+					"NC-17",
+					"Unrated",
+					"Not Rated"
+				],
+				"type": "string"
+			},
+			"showType": {
+				"enum": [
+					"Movies",
+					"TV Shows"
+				],
+				"type": "string"
+			},
+			"Partial_ReqShow_": {
+				"properties": {
+					"title": {
+						"type": "string"
+					},
+					"tile_img": {
+						"type": "string"
+					},
+					"desc_img": {
+						"type": "string"
+					},
+					"description": {
+						"type": "string"
+					},
+					"rating": {
+						"$ref": "#/components/schemas/movieRating"
+					},
+					"show_type": {
+						"$ref": "#/components/schemas/showType"
+					},
+					"publisher_id": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"type": "object",
+				"description": "Make all properties in T optional"
+			},
+			"ResSeasonWithDetails": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"title": {
+						"type": "string"
+					},
+					"season_no": {
+						"type": "number",
+						"format": "double"
+					},
+					"season_desc": {
+						"type": "string"
+					},
+					"date": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"show": {
+						"properties": {
+							"title": {
+								"type": "string"
+							},
+							"id": {
+								"type": "number",
+								"format": "double"
+							}
+						},
+						"type": "object"
+					},
+					"episodes_count": {
+						"type": "number",
+						"format": "double"
+					},
+					"episodes": {
+						"items": {
+							"properties": {
+								"thumbnail": {
+									"type": "string"
+								},
+								"file": {
+									"type": "string",
+									"nullable": true
+								},
+								"episode_desc": {
+									"type": "string"
+								},
+								"title": {
+									"type": "string"
+								},
+								"id": {
+									"type": "number",
+									"format": "double"
+								}
+							},
+							"type": "object"
+						},
+						"type": "array"
+					}
+				},
+				"required": [
+					"episodes_count",
+					"episodes"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ResEpisodeN": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"title": {
+						"type": "string"
+					},
+					"episode_desc": {
+						"type": "string"
+					},
+					"file": {
+						"type": "string"
+					},
+					"thumbnail": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"id",
+					"title"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ResSeasonN": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"title": {
+						"type": "string"
+					},
+					"season_no": {
+						"type": "number",
+						"format": "double"
+					},
+					"season_desc": {
+						"type": "string"
+					},
+					"date": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"episodes_count": {
+						"type": "number",
+						"format": "double"
+					},
+					"episodes": {
+						"items": {
+							"$ref": "#/components/schemas/ResEpisodeN"
+						},
+						"type": "array"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ResSeason": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"title": {
+						"type": "string"
+					},
+					"season_no": {
+						"type": "number",
+						"format": "double"
+					},
+					"season_desc": {
+						"type": "string"
+					},
+					"date": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"show": {
+						"properties": {
+							"title": {
+								"type": "string"
+							},
+							"id": {
+								"type": "number",
+								"format": "double"
+							}
+						},
+						"type": "object"
+					},
+					"episodes_count": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"required": [
+					"episodes_count"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ReqSeason": {
+				"properties": {
+					"title": {
+						"type": "string"
+					},
+					"season_no": {
+						"type": "number",
+						"format": "double"
+					},
+					"season_desc": {
+						"type": "string"
+					},
+					"show_id": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"required": [
+					"show_id"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"Partial_ReqSeason_": {
+				"properties": {
+					"title": {
+						"type": "string"
+					},
+					"season_no": {
+						"type": "number",
+						"format": "double"
+					},
+					"season_desc": {
+						"type": "string"
+					},
+					"show_id": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"type": "object",
+				"description": "Make all properties in T optional"
+			},
+			"ResEpisode": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"title": {
+						"type": "string"
+					},
+					"episode_desc": {
+						"type": "string"
+					},
+					"file": {
+						"type": "string",
+						"nullable": true
+					},
+					"thumbnail": {
+						"type": "string"
+					},
+					"season": {
+						"properties": {
+							"season_no": {
+								"type": "number",
+								"format": "double"
+							},
+							"title": {
+								"type": "string"
+							},
+							"id": {
+								"type": "number",
+								"format": "double"
+							}
+						},
+						"type": "object"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"Partial_ReqEpisode_": {
+				"properties": {
+					"title": {
+						"type": "string"
+					},
+					"episode_desc": {
+						"type": "string"
+					},
+					"thumbnail": {
+						"type": "string"
+					},
+					"season_id": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"type": "object",
+				"description": "Make all properties in T optional"
 			}
 		},
 		"securitySchemes": {
@@ -196,6 +708,38 @@
 		"/user/registerViewer": {
 			"post": {
 				"operationId": "SaveUser",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ResUser"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"User"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/ReqUser"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/user/registerUploader": {
+			"post": {
+				"operationId": "SaveUserUploader",
 				"responses": {
 					"200": {
 						"description": "Ok",
@@ -296,6 +840,780 @@
 						}
 					}
 				]
+			}
+		},
+		"/shows/getAllShows": {
+			"get": {
+				"operationId": "GetAllShows",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"properties": {
+										"totalCount": {
+											"type": "number",
+											"format": "double"
+										},
+										"items": {
+											"items": {
+												"$ref": "#/components/schemas/ResShowDet"
+											},
+											"type": "array"
+										}
+									},
+									"required": [
+										"totalCount",
+										"items"
+									],
+									"type": "object"
+								}
+							}
+						}
+					}
+				},
+				"description": "Get all shows with pagination",
+				"summary": "Get all shows",
+				"tags": [
+					"Shows"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "query",
+						"name": "page",
+						"required": false,
+						"schema": {
+							"default": 1,
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"in": "query",
+						"name": "limit",
+						"required": false,
+						"schema": {
+							"default": 10,
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			}
+		},
+		"/shows/getAllShowsFilter": {
+			"get": {
+				"operationId": "GetAllShowsFilter",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"properties": {
+										"totalCount": {
+											"type": "number",
+											"format": "double"
+										},
+										"items": {
+											"items": {
+												"$ref": "#/components/schemas/ResShow"
+											},
+											"type": "array"
+										}
+									},
+									"required": [
+										"totalCount",
+										"items"
+									],
+									"type": "object"
+								}
+							}
+						}
+					}
+				},
+				"description": "Get all shows with pagination",
+				"summary": "Get all shows",
+				"tags": [
+					"Shows"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "query",
+						"name": "page",
+						"required": false,
+						"schema": {
+							"default": 1,
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"in": "query",
+						"name": "limit",
+						"required": false,
+						"schema": {
+							"default": 10,
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"in": "query",
+						"name": "showType",
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "rating",
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/shows/{showId}": {
+			"get": {
+				"operationId": "GetShowById",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ResShowWithDetails"
+								}
+							}
+						}
+					}
+				},
+				"description": "Get show by ID with details",
+				"summary": "Get show details",
+				"tags": [
+					"Shows"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "showId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			},
+			"put": {
+				"operationId": "UpdateShow",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ResShow"
+								}
+							}
+						}
+					}
+				},
+				"description": "Update show",
+				"summary": "Update show",
+				"tags": [
+					"Shows"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "showId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/Partial_ReqShow_"
+							}
+						}
+					}
+				}
+			},
+			"delete": {
+				"operationId": "DeleteShow",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"properties": {
+										"result": {
+											"type": "string"
+										}
+									},
+									"required": [
+										"result"
+									],
+									"type": "object"
+								}
+							}
+						}
+					}
+				},
+				"description": "Delete show",
+				"summary": "Delete show",
+				"tags": [
+					"Shows"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "showId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			}
+		},
+		"/shows": {
+			"post": {
+				"operationId": "CreateShow",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ResShow"
+								}
+							}
+						}
+					}
+				},
+				"description": "Create a new show",
+				"summary": "Create show",
+				"tags": [
+					"Shows"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "query",
+						"name": "userid",
+						"required": false,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"in": "query",
+						"name": "title",
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "description",
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "rating",
+						"required": false,
+						"schema": {
+							"$ref": "#/components/schemas/movieRating"
+						}
+					},
+					{
+						"in": "query",
+						"name": "show_type",
+						"required": false,
+						"schema": {
+							"$ref": "#/components/schemas/showType"
+						}
+					}
+				],
+				"requestBody": {
+					"required": false,
+					"content": {
+						"multipart/form-data": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"tile_img": {
+										"type": "string",
+										"format": "binary"
+									},
+									"desc_img": {
+										"type": "string",
+										"format": "binary"
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/seasons/getSeasonDet/{seasonId}": {
+			"post": {
+				"operationId": "GetSeasonById",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ResSeasonWithDetails"
+								}
+							}
+						}
+					}
+				},
+				"description": "Get season by ID with details",
+				"summary": "Get season details",
+				"tags": [
+					"Seasons"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "seasonId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			}
+		},
+		"/seasons/showDet/{showId}": {
+			"get": {
+				"operationId": "GetSeasonsByShow",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/ResSeasonN"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"description": "Get all seasons by show ID",
+				"summary": "Get seasons by show",
+				"tags": [
+					"Seasons"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "showId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			}
+		},
+		"/seasons": {
+			"post": {
+				"operationId": "CreateSeason",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ResSeason"
+								}
+							}
+						}
+					}
+				},
+				"description": "Create a new season",
+				"summary": "Create season",
+				"tags": [
+					"Seasons"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/ReqSeason"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/seasons/{seasonId}": {
+			"put": {
+				"operationId": "UpdateSeason",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ResSeason"
+								}
+							}
+						}
+					}
+				},
+				"description": "Update season",
+				"summary": "Update season",
+				"tags": [
+					"Seasons"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "seasonId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/Partial_ReqSeason_"
+							}
+						}
+					}
+				}
+			},
+			"delete": {
+				"operationId": "DeleteSeason",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"properties": {
+										"result": {
+											"type": "string"
+										}
+									},
+									"required": [
+										"result"
+									],
+									"type": "object"
+								}
+							}
+						}
+					}
+				},
+				"description": "Delete season",
+				"summary": "Delete season",
+				"tags": [
+					"Seasons"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "seasonId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			}
+		},
+		"/episodes/season/{seasonId}": {
+			"get": {
+				"operationId": "GetEpisodesBySeason",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"properties": {
+										"totalCount": {
+											"type": "number",
+											"format": "double"
+										},
+										"items": {
+											"items": {
+												"$ref": "#/components/schemas/ResEpisode"
+											},
+											"type": "array"
+										}
+									},
+									"required": [
+										"totalCount",
+										"items"
+									],
+									"type": "object"
+								}
+							}
+						}
+					}
+				},
+				"description": "Get all episodes by season ID",
+				"summary": "Get episodes by season",
+				"tags": [
+					"Episodes"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "seasonId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"in": "query",
+						"name": "page",
+						"required": false,
+						"schema": {
+							"default": 1,
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"in": "query",
+						"name": "limit",
+						"required": false,
+						"schema": {
+							"default": 10,
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			}
+		},
+		"/episodes/{episodeId}": {
+			"get": {
+				"operationId": "GetEpisodeById",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ResEpisode"
+								}
+							}
+						}
+					}
+				},
+				"description": "Get episode by ID",
+				"summary": "Get episode details",
+				"tags": [
+					"Episodes"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "episodeId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			},
+			"put": {
+				"operationId": "UpdateEpisode",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ResEpisode"
+								}
+							}
+						}
+					}
+				},
+				"description": "Update episode",
+				"summary": "Update episode",
+				"tags": [
+					"Episodes"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "episodeId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/Partial_ReqEpisode_"
+							}
+						}
+					}
+				}
+			},
+			"delete": {
+				"operationId": "DeleteEpisode",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"properties": {
+										"result": {
+											"type": "string"
+										}
+									},
+									"required": [
+										"result"
+									],
+									"type": "object"
+								}
+							}
+						}
+					}
+				},
+				"description": "Delete episode",
+				"summary": "Delete episode",
+				"tags": [
+					"Episodes"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "episodeId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			}
+		},
+		"/episodes/{seasonId}": {
+			"post": {
+				"operationId": "CreateEpisode",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ResEpisode"
+								}
+							}
+						}
+					}
+				},
+				"description": "Create a new episode",
+				"summary": "Create episode",
+				"tags": [
+					"Episodes"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "seasonId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				],
+				"requestBody": {
+					"required": false,
+					"content": {
+						"multipart/form-data": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"title": {
+										"type": "string"
+									},
+									"episode_desc": {
+										"type": "string"
+									},
+									"thumbnail": {
+										"type": "string"
+									},
+									"file": {
+										"type": "string",
+										"format": "binary"
+									}
+								}
+							}
+						}
+					}
+				}
 			}
 		}
 	},

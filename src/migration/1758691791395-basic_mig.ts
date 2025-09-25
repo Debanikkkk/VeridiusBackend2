@@ -1,10 +1,9 @@
 import { MigrationInterface, QueryRunner } from "typeorm";
 
-export class UserRole1758277771071 implements MigrationInterface {
+export class BasicMig1758691791395 implements MigrationInterface {
 
- public async up(queryRunner: QueryRunner): Promise<void> {
-        // Insert default roles
-        await queryRunner.query(`
+    public async up(queryRunner: QueryRunner): Promise<void> {
+         await queryRunner.query(`
             INSERT INTO "role" ("name", "description") VALUES 
             ('uploader', 'User can upload and manage files'),
             ('viewer', 'User can only view files')
@@ -12,7 +11,6 @@ export class UserRole1758277771071 implements MigrationInterface {
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
-        // Remove the seeded roles
         await queryRunner.query(`
             DELETE FROM "role" WHERE "name" IN ('uploader', 'viewer')
         `);

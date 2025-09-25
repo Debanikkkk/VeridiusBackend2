@@ -75,6 +75,57 @@ if(!db_role){
 return resUser
  }
 
+
+ 
+  @Post('/registerUploader')
+ public async saveUserUploader(@Body() req:ReqUser){
+  const {address,email,name,password,phone_number}=req
+const db_role=await this.rolerepository.findOne({
+  where:{
+    name:'uploader'
+  }
+})
+
+if(!db_role){
+  return Promise.reject(new Error('role not found'))
+}
+
+
+  const user:User={
+    address,
+    email,
+    // id,
+    name,
+    password,
+    phone_number,
+    role: Promise.resolve(db_role),
+    status: true
+  }
+
+  const userSaver=Object.assign(new User, user)
+  const savedUser=await this.userrepository.save(userSaver)
+
+  const resUser:ResUser={
+    address: savedUser.address,
+    // device,
+    email: savedUser.email,
+    id: savedUser.id,
+    // is_under,
+    name: savedUser.name,
+    password: savedUser.password,
+    phone_number: savedUser.phone_number,
+    role: {
+      description: (await savedUser.role)?.description,
+      id: (await savedUser.role)?.id,
+      name: (await savedUser.role)?.name,
+      // permissions
+    },
+    // service_ticket,
+    status: savedUser.status
+  }
+return resUser
+ }
+
   /**
    * user login
    * @summary user login
@@ -137,6 +188,7 @@ return resUser
         id: (await user.role).id!,
         permissions:(await user.role).permissions?.toString()!
        }
+      //  type: user.role
         
       };
       // let jsonWebtoken

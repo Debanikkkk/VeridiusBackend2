@@ -23,7 +23,7 @@ export const envs: EnvVars = {
   DB_PORT: parseInt(process.env.DB_PORT || '5432'),
   DB_USERNAME: process.env.DB_USERNAME || 'postgres',
   DB_PASSWORD: process.env.DB_PASSWORD || 'Password@2025',
-  DB_DBNAME: process.env.DB_DBNAME || 'vbe1',
+  DB_DBNAME: process.env.DB_DBNAME || 'vbe2',
   CORS_ALLOWED_ORIGINS: process.env.CORS_ALLOWED_ORIGINS?.split(',') || ['localhost:3010'] || ['localhost:3000'] || ['localhost:3001'],
   JWT_SECRET_KEY: process.env.JWT_SECRET_KEY || 'jwtsecretkey',
 };

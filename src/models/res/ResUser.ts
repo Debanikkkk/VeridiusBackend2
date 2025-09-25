@@ -1,14 +1,15 @@
-
-import { ResRole } from './ResRole';
-
-
 export interface ResUser {
   id?: number;
   name?: string;
-  address?: string;
   password?: string;
-  email?: string;
-  status?: boolean;
+  address?: string;
   phone_number?: string;
-  role?: ResRole;
+  status?: boolean;
+  email?: string;
+  role?: {
+    id?: number;
+    name?: string;
+    description?: string;
+  };
+  shows_count?: number; // Add this if you want to show user's shows count
 }

@@ -52,4 +52,8 @@ export class User {
  @OneToMany(()=>(Show), (show)=>(show.publisher), {nullable: true, onDelete:'CASCADE', onUpdate:'CASCADE'})
  shows?: Promise<Show[]>
  
+// change starts from here
+ 
+ @OneToMany(()=>(Show), (show)=>(show.publisher), {nullable: true, onDelete:'CASCADE', onUpdate:'CASCADE'})
+ watched?: Promise<Show[]>
 }
