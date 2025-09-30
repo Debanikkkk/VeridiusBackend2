@@ -1371,7 +1371,7 @@
 				]
 			}
 		},
-		"/episodes/season/{seasonId}": {
+		"/episodes/getEpisodeBySeason/{seasonId}": {
 			"get": {
 				"operationId": "GetEpisodesBySeason",
 				"responses": {
@@ -1587,6 +1587,30 @@
 							"format": "double",
 							"type": "number"
 						}
+					},
+					{
+						"in": "query",
+						"name": "title",
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "episode_desc",
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "thumbnail",
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
 					}
 				],
 				"requestBody": {
@@ -1596,15 +1620,6 @@
 							"schema": {
 								"type": "object",
 								"properties": {
-									"title": {
-										"type": "string"
-									},
-									"episode_desc": {
-										"type": "string"
-									},
-									"thumbnail": {
-										"type": "string"
-									},
 									"file": {
 										"type": "string",
 										"format": "binary"

@@ -16,7 +16,7 @@ export class EpisodeController extends Controller {
    * Get all episodes by season ID
    * @summary Get episodes by season
    */
-  @Get('/season/{seasonId}')
+  @Get('/getEpisodeBySeason/{seasonId}')
   public async getEpisodesBySeason(
     @Path() seasonId: number,
     @Query() page: number = 1,
@@ -95,9 +95,9 @@ export class EpisodeController extends Controller {
   public async createEpisode(
     // @Body() req: ReqEpisode
     @Path() seasonId:number,
-    @FormField() title?: string,
-    @FormField() episode_desc?: string,
-    @FormField() thumbnail?: string,
+    @Query() title?: string,
+    @Query() episode_desc?: string,
+    @Query() thumbnail?: string,
     @UploadedFile() file?: Express.Multer.File
     // @FormField() title?: string,
 ): Promise<ResEpisode> {

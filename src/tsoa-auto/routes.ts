@@ -761,7 +761,7 @@ export function RegisterRoutes(app: Router,opts?:{multer?:ReturnType<typeof mult
                 page: {"default":1,"in":"query","name":"page","dataType":"double"},
                 limit: {"default":10,"in":"query","name":"limit","dataType":"double"},
         };
-        app.get('/episodes/season/:seasonId',
+        app.get('/episodes/getEpisodeBySeason/:seasonId',
             ...(fetchMiddlewares<RequestHandler>(EpisodeController)),
             ...(fetchMiddlewares<RequestHandler>(EpisodeController.prototype.getEpisodesBySeason)),
 
@@ -820,9 +820,9 @@ export function RegisterRoutes(app: Router,opts?:{multer?:ReturnType<typeof mult
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         const argsEpisodeController_createEpisode: Record<string, TsoaRoute.ParameterSchema> = {
                 seasonId: {"in":"path","name":"seasonId","required":true,"dataType":"double"},
-                title: {"in":"formData","name":"title","dataType":"string"},
-                episode_desc: {"in":"formData","name":"episode_desc","dataType":"string"},
-                thumbnail: {"in":"formData","name":"thumbnail","dataType":"string"},
+                title: {"in":"query","name":"title","dataType":"string"},
+                episode_desc: {"in":"query","name":"episode_desc","dataType":"string"},
+                thumbnail: {"in":"query","name":"thumbnail","dataType":"string"},
                 file: {"in":"formData","name":"file","dataType":"file"},
         };
         app.post('/episodes/:seasonId',
